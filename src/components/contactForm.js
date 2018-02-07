@@ -2,8 +2,9 @@ import React, { PropTypes } from 'react';
 import { Form, Input, Tooltip, Icon, Button } from 'antd';
 
 const FormItem = Form.Item;
+const { TextArea } = Input;
 
-class Form extends React.Component {
+class ContactForm extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -19,17 +20,16 @@ class Form extends React.Component {
   }
 
   render() {
-
     const { getFieldDecorator } = this.props.form;
 
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 8 },
+        sm: { span: 4 },
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 16 },
+        sm: { span: 20 },
       },
     };
 
@@ -41,13 +41,31 @@ class Form extends React.Component {
         },
         sm: {
           span: 16,
-          offset: 8,
+          offset: 5,
         },
       },
     };
 
     return (
       <Form onSubmit={this.handleSubmit}>
+        <FormItem
+          {...formItemLayout}
+          label="Name"
+        >
+          {getFieldDecorator('name', {
+            rules: [{
+              required: true, message: 'Please input your Name!',
+            }],
+          })(<Input />)}
+        </FormItem>
+        <FormItem
+          {...formItemLayout}
+          label="Company"
+        >
+          {getFieldDecorator('company', {
+            rules: [],
+          })(<Input />)}
+        </FormItem>
         <FormItem
           {...formItemLayout}
           label="E-mail"
@@ -60,6 +78,16 @@ class Form extends React.Component {
             }],
           })(<Input />)}
         </FormItem>
+        <FormItem
+          {...formItemLayout}
+          label="Message"
+        >
+          {getFieldDecorator('message', {
+            rules: [{
+              required: true, message: 'Please input your message!',
+            }],
+          })(<TextArea rows={4} />)}
+        </FormItem>
 
         <FormItem {...tailFormItemLayout}>
           <Button type="primary" htmlType="submit">Submit</Button>
@@ -69,16 +97,11 @@ class Form extends React.Component {
   }
 }
 
-Form.propTypes={
+ContactForm.propTypes = {
   form: PropTypes.object,
-
 };
 
-Form.defaultProps={
+ContactForm.defaultProps = {
   form: undefined,
-);
-
-const ContactForm = Form.create()(Form);
-
-export default ContactForm;
-
+};
+export default Form.create()(ContactForm);

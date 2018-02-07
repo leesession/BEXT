@@ -3,9 +3,9 @@ export default {
 };
 
 const siteConfig = {
-  siteName: 'Bodhi Prediction Market',
+  siteName: 'BNF Capital',
   siteIcon: 'ion-flash',
-  footerText: 'Bodhi Prediction Market ©2017 Created by Bodhi.Network',
+  footerText: 'BNF Capital ©2018 Created by BNF.Capital',
 };
 
 const themeConfig = {

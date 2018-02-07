@@ -4,14 +4,12 @@ import React, { PropTypes } from 'react';
 import { Form, Input, Row, Col } from 'antd';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import styled from 'styled-components';
-import { cloudinaryConfig, CloudinaryImage, CloudinaryVideo } from 'react-cloudinary';
+// import { cloudinaryConfig, CloudinaryImage, CloudinaryVideo } from 'react-cloudinary';
 import GoogleMapReact from 'google-map-react';
 
-import LayoutContentWrapper from '../components/utility/layoutWrapper';
-import dashboardActions from '../redux/dashboard/actions';
-import appActions from '../redux/app/actions';
-import ContactForm from '../contactForm';
+import ContactForm from '../components/contactForm';
+import { cloudinaryConfig, CloudinaryImage, CloudinaryVideo } from '../components/react-cloudinary';
+
 
 cloudinaryConfig({ cloud_name: 'dd1ixvdxn' });
 const FormItem = Form.Item;
@@ -22,22 +20,7 @@ const TAB_VOTING = 2;
 const TAB_COMPLETED = 3;
 const DEFAULT_TAB_INDEX = TAB_BETTING;
 const NUM_SHOW_IN_OPTIONS = 3;
-const COL_PER_ROW = { // Specify how many col in each row
-  xs: 1,
-  sm: 3,
-  md: 3,
-  lg: 4,
-  xl: 4,
-  xxl: 4,
-};
-const ROW_GUTTER = {
-  xs: 0,
-  sm: 16, // Set gutter to 16 + 8 * n, with n being a natural number
-  md: 24,
-  lg: 24,
-  xl: 32,
-  xxl: 32,
-};
+
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -54,6 +37,23 @@ class Dashboard extends React.Component {
   }
 
   render() {
+    const COL_PER_ROW = { // Specify how many col in each row
+      xs: 1,
+      sm: 3,
+      md: 3,
+      lg: 4,
+      xl: 4,
+      xxl: 4,
+    };
+    const ROW_GUTTER = {
+      xs: 0,
+      sm: 16, // Set gutter to 16 + 8 * n, with n being a natural number
+      md: 24,
+      lg: 24,
+      xl: 32,
+      xxl: 32,
+    };
+
     // Calculate grid number for Col attribute
     const colWidth = {};
 
@@ -72,6 +72,28 @@ class Dashboard extends React.Component {
       <div>
 
         <section style={{ height: '100vh' }}>
+          <div className="head">
+
+            <div className="content">
+              <h1>BNF Capital</h1>
+              <h2>The hottest Fuel to blockchain industry</h2>
+            </div>
+
+            <div className="background">
+              <CloudinaryVideo
+                publicId="moving-background"
+                options={{
+                  height: '100%',
+                  autoplay: true,
+                  preload: 'auto',
+                  loop: true,
+                  playbackRate: 0.5,
+                }}
+              >
+              </CloudinaryVideo>
+            </div>
+
+          </div>
         </section>
 
         <section>
@@ -133,61 +155,7 @@ class Dashboard extends React.Component {
           </div>
         </section>
 
-        <section>
-          <div className="wrapper">
-            <div className="horizontalWrapper">
-
-              <h2>Portofolio</h2>
-              <Row>
-                <Col
-                  xs={colWidth.xs}
-                  sm={colWidth.sm}
-                  xl={colWidth.xl}
-                ><h4>MKR</h4><p>Maker</p></Col>
-                <Col
-                  xs={colWidth.xs}
-                  sm={colWidth.sm}
-                  xl={colWidth.xl}
-                ><h4>RDN</h4><p>Raiden</p></Col>
-                <Col
-                  xs={colWidth.xs}
-                  sm={colWidth.sm}
-                  xl={colWidth.xl}
-                ><h4>ADA</h4><p>Cardano</p></Col>
-                <Col
-                  xs={colWidth.xs}
-                  sm={colWidth.sm}
-                  xl={colWidth.xl}
-                ><h4>OMG</h4><p>OmiseGO</p></Col>
-                <Col
-                  xs={colWidth.xs}
-                  sm={colWidth.sm}
-                  xl={colWidth.xl}
-                ><h4>LSK</h4><p>Lisk</p></Col>
-                <Col
-                  xs={colWidth.xs}
-                  sm={colWidth.sm}
-                  xl={colWidth.xl}
-                ><h4>ADT</h4><p>adToken</p></Col>
-                <Col
-                  xs={colWidth.xs}
-                  sm={colWidth.sm}
-                  xl={colWidth.xl}
-                ><h4>REP</h4><p>Augur</p></Col>
-                <Col
-                  xs={colWidth.xs}
-                  sm={colWidth.sm}
-                  xl={colWidth.xl}
-                ><h4>RCN</h4><p>Ripio Credit Network</p></Col>
-                <Col
-                  xs={colWidth.xs}
-                  sm={colWidth.sm}
-                  xl={colWidth.xl}
-                ><h4>XEM</h4><p>New Economy Movement</p></Col>
-              </Row>
-            </div>
-          </div>
-        </section>
+        <SectionPortfolio />
 
         <section>
           <div className="wrapper dark">
@@ -199,17 +167,20 @@ class Dashboard extends React.Component {
                   xs={colWidth.xs}
                   sm={colWidth.sm}
                   xl={colWidth.xl}
-                ><h4>Chris Li</h4><p>Managing Partner</p></Col>
+                >                  <CloudinaryImage publicId="chris" />
+                  <h4>Chris Li</h4><p>Managing Partner</p></Col>
                 <Col
                   xs={colWidth.xs}
                   sm={colWidth.sm}
                   xl={colWidth.xl}
-                ><h4>Yuanbo Wang</h4><p>Founding Partner</p></Col>
+                >                  <CloudinaryImage publicId="yuanbo" />
+                  <h4>Yuanbo Wang</h4><p>Founding Partner</p></Col>
                 <Col
                   xs={colWidth.xs}
                   sm={colWidth.sm}
                   xl={colWidth.xl}
-                ><h4>Chuck Zhang</h4><p>Founding Partner</p></Col>
+                >                  <CloudinaryImage publicId="chuck" />
+                  <h4>Chuck Zhang</h4><p>Founding Partner</p></Col>
               </Row>
             </div>
           </div>
@@ -243,14 +214,14 @@ class Dashboard extends React.Component {
         </section>
 
         <section>
-          <div className="wrapper dark">
+          <div className="wrapper contact dark">
             <div className="horizontalWrapper">
 
               <h2>Contact</h2>
               <Row>
                 <Col
-                  xs={20}
-                  sm={16}
+                  offset={4}
+                  span={16}
                 >
                   <ContactForm />
                 </Col>
@@ -300,7 +271,7 @@ class Dashboard extends React.Component {
         <section>
           <div className="wrapper map">
             <div style={{ height: '100%' }}>
-              <GoogleMapReact
+              {/*              <GoogleMapReact
                 defaultCenter={{ lat: 37.784326, lng: -122.406359 }}
                 defaultZoom={17}
                 options={{
@@ -475,7 +446,7 @@ class Dashboard extends React.Component {
                   text=""
                   imageId="if_map-marker_322462_1_ipmwnh"
                 />
-              </GoogleMapReact>
+              </GoogleMapReact> */}
             </div>
           </div>
         </section>
@@ -500,3 +471,91 @@ function mapDispatchToProps(dispatch) {
 
 // Wrap the component to inject dispatch and state into it
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+
+const SectionPortfolio = React.createClass({
+  render() {
+    const COL_PER_ROW = { // Specify how many col in each row
+      xs: 2,
+      sm: 4,
+    };
+
+    // Calculate grid number for Col attribute
+    const colWidth = {};
+
+    Object.keys(COL_PER_ROW).forEach((key) => {
+      colWidth[key] = 24 / COL_PER_ROW[key];
+    });
+
+    return (
+
+      <section>
+        <div className="wrapper portfolio">
+          <div className="horizontalWrapper">
+            <h2>Portofolio</h2>
+            <Row>
+              <Col
+                xs={colWidth.xs}
+                sm={colWidth.sm}
+              >
+                <CloudinaryImage publicId="logo-mkr" />
+                <h4>MKR</h4><p>Maker</p></Col>
+              <Col
+                xs={colWidth.xs}
+                sm={colWidth.sm}
+              >
+                <CloudinaryImage publicId="logo-rdn" />
+                <h4>RDN</h4><p>Raiden</p></Col>
+              <Col
+                xs={colWidth.xs}
+                sm={colWidth.sm}
+              >
+                <CloudinaryImage publicId="logo-ada" />
+                <h4>ADA</h4><p>Cardano</p></Col>
+              <Col
+                xs={colWidth.xs}
+                sm={colWidth.sm}
+              >
+                <CloudinaryImage publicId="logo-omg" />
+                <h4>OMG</h4><p>OmiseGO</p></Col>
+              <Col
+                xs={colWidth.xs}
+                sm={colWidth.sm}
+              >
+                <CloudinaryImage publicId="logo-trx" />
+                <h4>TRX</h4><p>Tron</p></Col>
+              <Col
+                xs={colWidth.xs}
+                sm={colWidth.sm}
+              >
+                <CloudinaryImage publicId="logo-lsk" />
+                <h4>LSK</h4><p>Lisk</p></Col>
+              <Col
+                xs={colWidth.xs}
+                sm={colWidth.sm}
+              >
+                <CloudinaryImage publicId="logo-adt" />
+                <h4>ADT</h4><p>adToken</p></Col>
+              <Col
+                xs={colWidth.xs}
+                sm={colWidth.sm}
+              >
+                <CloudinaryImage publicId="logo-rep" />
+                <h4>REP</h4><p>Augur</p></Col>
+              <Col
+                xs={colWidth.xs}
+                sm={colWidth.sm}
+              >
+                <CloudinaryImage publicId="logo-rcn" />
+                <h4>RCN</h4><p>Ripio Credit Network</p></Col>
+              <Col
+                xs={colWidth.xs}
+                sm={colWidth.sm}
+              >
+                <CloudinaryImage publicId="logo-xem" />
+                <h4>XEM</h4><p>New Economy Movement</p></Col>
+            </Row>
+          </div>
+        </div>
+      </section>);
+  },
+});
