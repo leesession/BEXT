@@ -4,16 +4,15 @@ import React, { PropTypes } from 'react';
 import { Row, Col } from 'antd';
 import { connect } from 'react-redux';
 import _ from 'lodash';
+import styled from 'styled-components';
+import { cloudinaryConfig, CloudinaryImage, CloudinaryVideo } from 'react-cloudinary';
+import GoogleMapReact from 'google-map-react';
 
 import LayoutContentWrapper from '../components/utility/layoutWrapper';
-import IsoWidgetsWrapper from './Widgets/widgets-wrapper';
-import BottomButtonWidget from './Widgets/bottom-button';
-import SingleProgressWidget from './Widgets/progress/progress-single';
-import ReportsWidget from './Widgets/report/report-widget';
-import TabBtnGroup from '../components/bodhi-dls/tabBtnGroup';
 import dashboardActions from '../redux/dashboard/actions';
 import appActions from '../redux/app/actions';
-import { Token, OracleStatus } from '../constants';
+
+cloudinaryConfig({ cloud_name: 'dd1ixvdxn' });
 
 const TAB_BETTING = 0;
 const TAB_SETTING = 1;
@@ -47,333 +46,453 @@ class Dashboard extends React.Component {
   }
 
   componentWillMount() {
-    this.props.onGetTopics();
-    this.props.onGetOracles();
   }
 
   componentWillReceiveProps(nextProps) {
-    const {
-      onGetTopics,
-      onGetOracles,
-      syncProgress,
-      isSyncing,
-    } = nextProps;
-
-    if (nextProps.tabIndex !== this.props.tabIndex) {
-      onGetOracles();
-      onGetTopics();
-    }
-
-    // Refresh page if sync is complete
-    if (isSyncing && syncProgress === 100) {
-      onGetOracles();
-      onGetTopics();
-
-      this.props.toggleSyncing(false);
-    }
   }
 
   render() {
-    const { tabIndex, getTopicsSuccess, getOraclesSuccess } = this.props;
+    // Calculate grid number for Col attribute
+    const colWidth = {};
 
-    // Sorting all topics and oracles by blockNum in descending order now
-    const topicEvents = _.orderBy(getTopicsSuccess, ['blockNum'], ['desc']);
-    const allOracles = _.orderBy(getOraclesSuccess, ['blockNum'], ['desc']);
+    Object.keys(COL_PER_ROW).forEach((key) => {
+      colWidth[key] = 24 / COL_PER_ROW[key];
+    });
 
-    let rowItems;
-    switch (tabIndex) {
-      case TAB_BETTING: {
-        rowItems = buildOracleColElement(_.filter(allOracles, { token: Token.Qtum, status: OracleStatus.Voting }));
-        break;
-      }
-      case TAB_SETTING: {
-        rowItems = buildOracleColElement(_.filter(allOracles, (oracle) => oracle.token === Token.Qtum && (oracle.status === OracleStatus.WaitResult || oracle.status === OracleStatus.OpenResultSet)));
-        break;
-      }
-      case TAB_VOTING: {
-        rowItems = buildOracleColElement(_.filter(allOracles, (oracle) => oracle.token === Token.Bot && oracle.status !== OracleStatus.Withdraw));
-        break;
-      }
-      case TAB_COMPLETED: {
-        rowItems = getFinishedItems(_.filter(topicEvents, { status: OracleStatus.Withdraw }));
-        break;
-      }
-      default: {
-        throw new RangeError('Invalid tab position');
-      }
-    }
+    const AnyReactComponent = ({ imageId, text }) => (<div><CloudinaryImage
+      publicId={imageId}
+      options={{
+        width: 60, height: 60, crop: 'fit',
+      }}
+    /><p>{text}</p></div>);
 
     return (
-      <LayoutContentWrapper
-        className="horizontalWrapper"
-        style={{ minHeight: '100vh', paddingTop: '50px', paddingBottom: '50px' }}
-      >
-        <TabBtnGroup
-          buttons={[{
-            text: 'Betting',
-          }, {
-            text: 'Setting',
-          }, {
-            text: 'Voting',
-          }, {
-            text: 'Completed',
-          }]}
-        />
-        <Row
-          // style={rowStyle}
-          gutter={28}
-          justify="center"
-        >
-          {rowItems}
-        </Row>
-      </LayoutContentWrapper>
+      <div>
+
+        <section style={{ height: '100vh' }}>
+        </section>
+
+        <section>
+          <div className="wrapper">
+            <div className="horizontalWrapper">
+              <h2>Our Mission</h2>
+              <p>The Blockchain, a novel financial technology, holds the promise to disrupt legacy parts of financial services and create new markets. The firm has invested in 72 companies in the last three years, investing alongside Silicon Valley’s leading venture capital firms. We are a sector specific, but multi-stage venture capital investor that seeks to gain diverse exposure to the Blockchain economy while offering unique co-investment opportunities and proprietary deal flow to our investors.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div className="wrapper dark strength">
+            <div className="horizontalWrapper">
+
+              <h2>Strength</h2>
+              <Row>
+                <Col
+                  xs={colWidth.xs}
+                  sm={colWidth.sm}
+                  xl={colWidth.xl}
+                ><h3>Industry Experience</h3>
+                  <p>With 6 years of crypto asset investment experience, we hold a deep understanding of blockchain industry.</p>
+                </Col>
+                <Col
+                  xs={colWidth.xs}
+                  sm={colWidth.sm}
+                  xl={colWidth.xl}
+                >
+                  <h3>Abundant Resources</h3>
+                  <p>We’re vertically integrated, from incubator to venture fund to exchange, and are positioned to help projects at any stage of their development</p>
+                </Col>
+                <Col
+                  xs={colWidth.xs}
+                  sm={colWidth.sm}
+                  xl={colWidth.xl}
+                >
+                  <h3>Full Services</h3>
+                  <p>From financial advising to legal consultancy, with more than 10 years accumulated experience we are confident to assist newborns to thrive.</p>
+                </Col>
+                <Col
+                  xs={colWidth.xs}
+                  sm={colWidth.sm}
+                  xl={colWidth.xl}
+                >
+                  <h3>Entrepreneurial Practice</h3>
+                  <p>Having been through a variety of crypto projects ourselves, we understand the top priorities of different stages of a new company.</p>
+                </Col>
+                <Col
+                  xs={colWidth.xs}
+                  sm={colWidth.sm}
+                  xl={colWidth.xl}
+                >
+                  <h3>Ecosystem Approach</h3>
+                  <p>Our portfolio companies get access to the best network in China, greatly accelerating their growth and success rate.</p>
+                </Col>
+              </Row>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div className="wrapper">
+            <div className="horizontalWrapper">
+
+              <h2>Portofolio</h2>
+              <Row>
+                <Col
+                  xs={colWidth.xs}
+                  sm={colWidth.sm}
+                  xl={colWidth.xl}
+                ><h4>MKR</h4><p>Maker</p></Col>
+                <Col
+                  xs={colWidth.xs}
+                  sm={colWidth.sm}
+                  xl={colWidth.xl}
+                ><h4>RDN</h4><p>Raiden</p></Col>
+                <Col
+                  xs={colWidth.xs}
+                  sm={colWidth.sm}
+                  xl={colWidth.xl}
+                ><h4>ADA</h4><p>Cardano</p></Col>
+                <Col
+                  xs={colWidth.xs}
+                  sm={colWidth.sm}
+                  xl={colWidth.xl}
+                ><h4>OMG</h4><p>OmiseGO</p></Col>
+                <Col
+                  xs={colWidth.xs}
+                  sm={colWidth.sm}
+                  xl={colWidth.xl}
+                ><h4>LSK</h4><p>Lisk</p></Col>
+                <Col
+                  xs={colWidth.xs}
+                  sm={colWidth.sm}
+                  xl={colWidth.xl}
+                ><h4>ADT</h4><p>adToken</p></Col>
+                <Col
+                  xs={colWidth.xs}
+                  sm={colWidth.sm}
+                  xl={colWidth.xl}
+                ><h4>REP</h4><p>Augur</p></Col>
+                <Col
+                  xs={colWidth.xs}
+                  sm={colWidth.sm}
+                  xl={colWidth.xl}
+                ><h4>RCN</h4><p>Ripio Credit Network</p></Col>
+                <Col
+                  xs={colWidth.xs}
+                  sm={colWidth.sm}
+                  xl={colWidth.xl}
+                ><h4>XEM</h4><p>New Economy Movement</p></Col>
+              </Row>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div className="wrapper dark">
+            <div className="horizontalWrapper">
+
+              <h2>Team</h2>
+              <Row>
+                <Col
+                  xs={colWidth.xs}
+                  sm={colWidth.sm}
+                  xl={colWidth.xl}
+                ><h4>Chris Li</h4><p>Managing Partner</p></Col>
+                <Col
+                  xs={colWidth.xs}
+                  sm={colWidth.sm}
+                  xl={colWidth.xl}
+                ><h4>Yuanbo Wang</h4><p>Founding Partner</p></Col>
+                <Col
+                  xs={colWidth.xs}
+                  sm={colWidth.sm}
+                  xl={colWidth.xl}
+                ><h4>Chuck Zhang</h4><p>Founding Partner</p></Col>
+              </Row>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div className="wrapper advisor">
+            <div className="horizontalWrapper">
+
+              <h2>Advisors</h2>
+              <Row>
+                <Col
+                  xs={colWidth.xs}
+                  sm={colWidth.sm}
+                  xl={colWidth.xl}
+                >
+                  <CloudinaryImage publicId="justin" />
+
+                  <h4>Justin Newton</h4><p>Founder and CEO at Netki</p></Col>
+                <Col
+                  xs={colWidth.xs}
+                  sm={colWidth.sm}
+                  xl={colWidth.xl}
+                >
+                  <CloudinaryImage publicId="russ" />
+
+                  <h4>Russ Gurvits</h4><p>Founding partner at Consensys</p></Col>
+              </Row>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div className="wrapper dark">
+            <div className="horizontalWrapper">
+
+              <h2>Contact</h2>
+              <Row>
+                <Col
+                  xs={20}
+                  sm={16}
+                >
+
+                </Col>
+              </Row>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div className="wrapper dark info">
+            <div className="horizontalWrapper">
+              <Row>
+                <Col
+                  xs={24}
+                  sm={8}
+                >
+                  <ul>
+                    <li><h5>Mission</h5></li>
+                    <li><h5>Strength</h5></li>
+                    <li><h5>Portofolio</h5></li>
+                    <li><h5>Team</h5></li>
+                    <li><h5>Advisor</h5></li>
+                  </ul>
+                </Col>
+                <Col
+                  xs={24}
+                  sm={10}
+                >
+                  <p>The Blockchain, a novel financial technology, holds the promise to disrupt legacy parts of financial services and create new markets. The firm has invested in 72 companies in the last three years, investing alongside Silicon Valley’s leading venture capital firms. </p>
+                </Col>
+                <Col
+                  xs={24}
+                  sm={6}
+                >
+                  <ul>
+                    <li><p>865 Market St</p></li>
+                    <li><p>San Francisco CA, 94103</p></li>
+                    <li><p>+1 (312) 912-5775</p></li>
+                    <li><p>contract@bnf.capital</p></li>
+                  </ul>
+                </Col>
+              </Row>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div className="wrapper map">
+            <div style={{ height: '100%' }}>
+              <GoogleMapReact
+                defaultCenter={{ lat: 37.784326, lng: -122.406359 }}
+                defaultZoom={17}
+                options={{
+                  draggable: false,
+                  fullscreenControl: false,
+                  scrollwheel: false,
+                  styles: [
+                    {
+                      elementType: 'geometry',
+                      stylers: [
+                        {
+                          color: '#f5f5f5',
+                        },
+                      ],
+                    },
+                    {
+                      elementType: 'labels.icon',
+                      stylers: [
+                        {
+                          visibility: 'off',
+                        },
+                      ],
+                    },
+                    {
+                      elementType: 'labels.text.fill',
+                      stylers: [
+                        {
+                          color: '#616161',
+                        },
+                      ],
+                    },
+                    {
+                      elementType: 'labels.text.stroke',
+                      stylers: [
+                        {
+                          color: '#f5f5f5',
+                        },
+                      ],
+                    },
+                    {
+                      featureType: 'administrative.land_parcel',
+                      elementType: 'labels.text.fill',
+                      stylers: [
+                        {
+                          color: '#bdbdbd',
+                        },
+                      ],
+                    },
+                    {
+                      featureType: 'poi',
+                      elementType: 'geometry',
+                      stylers: [
+                        {
+                          color: '#eeeeee',
+                        },
+                      ],
+                    },
+                    {
+                      featureType: 'poi',
+                      elementType: 'labels.text.fill',
+                      stylers: [
+                        {
+                          color: '#757575',
+                        },
+                      ],
+                    },
+                    {
+                      featureType: 'poi.park',
+                      elementType: 'geometry',
+                      stylers: [
+                        {
+                          color: '#e5e5e5',
+                        },
+                      ],
+                    },
+                    {
+                      featureType: 'poi.park',
+                      elementType: 'labels.text.fill',
+                      stylers: [
+                        {
+                          color: '#9e9e9e',
+                        },
+                      ],
+                    },
+                    {
+                      featureType: 'road',
+                      elementType: 'geometry',
+                      stylers: [
+                        {
+                          color: '#ffffff',
+                        },
+                      ],
+                    },
+                    {
+                      featureType: 'road.arterial',
+                      elementType: 'labels.text.fill',
+                      stylers: [
+                        {
+                          color: '#757575',
+                        },
+                      ],
+                    },
+                    {
+                      featureType: 'road.highway',
+                      elementType: 'geometry',
+                      stylers: [
+                        {
+                          color: '#dadada',
+                        },
+                      ],
+                    },
+                    {
+                      featureType: 'road.highway',
+                      elementType: 'labels.text.fill',
+                      stylers: [
+                        {
+                          color: '#616161',
+                        },
+                      ],
+                    },
+                    {
+                      featureType: 'road.local',
+                      elementType: 'labels.text.fill',
+                      stylers: [
+                        {
+                          color: '#9e9e9e',
+                        },
+                      ],
+                    },
+                    {
+                      featureType: 'transit.line',
+                      elementType: 'geometry',
+                      stylers: [
+                        {
+                          color: '#e5e5e5',
+                        },
+                      ],
+                    },
+                    {
+                      featureType: 'transit.station',
+                      elementType: 'geometry',
+                      stylers: [
+                        {
+                          color: '#eeeeee',
+                        },
+                      ],
+                    },
+                    {
+                      featureType: 'water',
+                      elementType: 'geometry',
+                      stylers: [
+                        {
+                          color: '#c9c9c9',
+                        },
+                      ],
+                    },
+                    {
+                      featureType: 'water',
+                      elementType: 'labels.text.fill',
+                      stylers: [
+                        {
+                          color: '#9e9e9e',
+                        },
+                      ],
+                    },
+                  ],
+                }}
+              >
+                <AnyReactComponent
+                  lat={37.784326}
+                  lng={-122.406359}
+                  text=""
+                  imageId="if_map-marker_322462_1_ipmwnh"
+                />
+              </GoogleMapReact>
+            </div>
+          </div>
+        </section>
+      </div>
     );
   }
 }
 
-/**
- * Build Col in Betting, Setting and Voting tabs using Oracles array
- * @param  {[type]} oracles [description]
- * @return {[type]}         [description]
- */
-function buildOracleColElement(oracles) {
-  // Calculate grid number for Col attribute
-  const colWidth = {};
-
-  Object.keys(COL_PER_ROW).forEach((key) => {
-    colWidth[key] = 24 / COL_PER_ROW[key];
-  });
-
-  const rowItems = [];
-
-  _.each(oracles, (oracle) => {
-    const totalBalance = _.sum(oracle.amounts);
-
-    const raisedString = `Raised: ${totalBalance.toFixed(2)} ${oracle.token}`;
-    const endBlockString = `Ends: ${oracle.endBlock ? oracle.endBlock : '45000'}`;
-
-    let displayOptions = [];
-
-    // Determine what options showing in progress bars
-    if (oracle.token === Token.Bot) {
-      displayOptions = _.filter(oracle.options, (option, index) => {
-        // If index of option is in optionsIdx array
-        if (oracle.optionIdxs.indexOf(index) >= 0) {
-          return option;
-        }
-
-        return false;
-      });
-    } else {
-      displayOptions = _.map(oracle.options, _.clone);
-    }
-
-    // Trim options array to only NUM_SHOW_IN_OPTIONS (3) elements
-    if (!_.isEmpty(displayOptions) && displayOptions.length > NUM_SHOW_IN_OPTIONS) {
-      displayOptions = displayOptions.slice(0, NUM_SHOW_IN_OPTIONS);
-    }
-
-    const threshold = oracle.consensusThreshold;
-
-    // Constructing opitons elements
-    let optionsEle = null;
-
-    if (!_.isEmpty(displayOptions)) {
-      if (oracle.token === Token.Bot) {
-        optionsEle = displayOptions.map((result, index) => (
-          <SingleProgressWidget
-            key={`option${index}`}
-            label={result}
-            percent={threshold === 0 ? threshold : _.round((oracle.amounts[oracle.optionIdxs[index]] / threshold) * 100)}
-            barHeight={12}
-            fontColor="#4A4A4A"
-          />
-        ));
-      } else {
-        optionsEle = displayOptions.map((result, index) => (
-          <SingleProgressWidget
-            key={`option${index}`}
-            label={result}
-            percent={totalBalance === 0 ? totalBalance : _.round((oracle.amounts[index] / totalBalance) * 100)}
-            barHeight={12}
-            fontColor="#4A4A4A"
-          />
-        ));
-      }
-    }
-
-    // Make sure length of options element array is NUM_SHOW_IN_OPTIONS (3) so that every card has the same height
-    // Ideally there should a be loop in case NUM_SHOW_IN_OPTIONS is greater than 3
-    if (optionsEle && optionsEle.length < NUM_SHOW_IN_OPTIONS) {
-      for (let i = optionsEle.length; i < NUM_SHOW_IN_OPTIONS; i += 1) {
-        optionsEle.push(<div key={`option-placeholder-${i}`} style={{ height: '48px', marginTop: '18px', marginBottom: '18px' }}></div>);
-      }
-    }
-
-    // Constructing Card element on the right
-    const oracleEle = (
-      <Col
-        xs={colWidth.xs}
-        sm={colWidth.sm}
-        xl={colWidth.xl}
-        key={oracle.address}
-        style={{ marginBottom: '24px' }}
-      >
-        <IsoWidgetsWrapper>
-          {/* Report Widget */}
-          <ReportsWidget
-            label={oracle.name}
-            details={[raisedString, endBlockString]}
-          >
-            {optionsEle}
-          </ReportsWidget>
-          <BottomButtonWidget
-            pathname={`/oracle/${oracle.address}`}
-            text={oracle.token === Token.Qtum ? (oracle.status === OracleStatus.WaitResult ? 'Set Result' : 'Participate') : 'Vote'}
-          />
-        </IsoWidgetsWrapper>
-      </Col>
-    );
-
-    rowItems.push(oracleEle);
-  });
-
-  return rowItems;
-}
-
-/**
- * Build Col in Completed tab using topics array
- * @param  {[type]} topicEvents [description]
- * @return {[type]}             [description]
- */
-function getFinishedItems(topicEvents) {
-  // Calculate grid number for Col attribute
-  const colWidth = {};
-
-  Object.keys(COL_PER_ROW).forEach((key) => {
-    colWidth[key] = 24 / COL_PER_ROW[key];
-  });
-
-  const rowItems = [];
-
-  _.each(topicEvents, (topic) => {
-    const qtumTotal = _.sum(topic.qtumAmount);
-    const botTotal = _.sum(topic.botAmount);
-
-    const raisedString = `Raised: ${qtumTotal.toFixed(2)} ${Token.Qtum}, ${botTotal.toFixed(2)} ${Token.Bot}`;
-    const endBlockString = `Ends: ${topic.endBlock ? topic.endBlock : ''}`;
-
-    let optionBalances = _.map(topic.options, (opt, idx) => {
-      const qtumAmount = topic.qtumAmount[idx];
-      const botAmount = topic.botAmount[idx];
-
-      return {
-        name: opt,
-        value: `${qtumAmount} ${Token.Qtum}, ${botAmount} ${Token.Bot}`,
-        percent: qtumTotal === 0 ? qtumTotal : _.round((qtumAmount / qtumTotal) * 100),
-        secondaryPercent: botTotal === 0 ? botTotal : _.round((botAmount / botTotal) * 100),
-      };
-    });
-
-    // Trim options array to only NUM_SHOW_IN_OPTIONS (3) elements
-    if (!_.isEmpty(optionBalances) && optionBalances.length > NUM_SHOW_IN_OPTIONS) {
-      optionBalances = optionBalances.slice(0, NUM_SHOW_IN_OPTIONS);
-    }
-
-    // Constructing opitons elements
-    let optionsEle = null;
-
-    if (!_.isEmpty(optionBalances)) {
-      optionsEle = optionBalances.map((item, index) => (
-        <SingleProgressWidget
-          key={`option${index}`}
-          label={item.name}
-          percent={item.percent}
-          barHeight={12}
-          fontColor="#4A4A4A"
-          barColor={topic.resultIdx === index ? '' : 'grey'}
-          secondaryPercent={item.secondaryPercent}
-          secondaryBarHeight={item.secondaryBarHeight}
-        />
-      ));
-    }
-
-    // Make sure length of options element array is NUM_SHOW_IN_OPTIONS (3) so that every card has the same height
-    // Ideally there should a be loop in case NUM_SHOW_IN_OPTIONS is greater than 3
-    if (optionsEle && optionsEle.length < NUM_SHOW_IN_OPTIONS) {
-      for (let i = optionsEle.length; i < NUM_SHOW_IN_OPTIONS; i += 1) {
-        optionsEle.push(<div key={`option-placeholder-${i}`} style={{ height: '72px', marginTop: '18px', marginBottom: '18px' }}></div>);
-      }
-    }
-
-    const topicEle = (
-      <Col xs={colWidth.xs} sm={colWidth.sm} xl={colWidth.xl} key={topic.address} style={{ marginBottom: '24px' }}>
-        <IsoWidgetsWrapper>
-          {/* Report Widget */}
-          <ReportsWidget
-            label={topic.name}
-            details={[raisedString, endBlockString]}
-          >
-            {optionsEle}
-          </ReportsWidget>
-
-          <BottomButtonWidget pathname={`/topic/${topic.address}`} text="Check out" />
-        </IsoWidgetsWrapper>
-      </Col>
-    );
-
-    rowItems.push(topicEle);
-  });
-  return rowItems;
-}
-
 Dashboard.propTypes = {
-  getTopicsSuccess: PropTypes.oneOfType([
-    PropTypes.array, // Result array
-    PropTypes.string, // error message
-    PropTypes.bool, // No result
-  ]),
-  onGetTopics: PropTypes.func,
-  getOraclesSuccess: PropTypes.oneOfType([
-    PropTypes.array, // Result array
-    PropTypes.string, // error message
-    PropTypes.bool, // No result
-  ]),
-  // getOraclesError: PropTypes.string,
-  onGetOracles: PropTypes.func,
-  tabIndex: PropTypes.number,
-  toggleSyncing: PropTypes.func,
-  syncProgress: PropTypes.number,
-  isSyncing: PropTypes.bool,
 };
 
 Dashboard.defaultProps = {
-  getTopicsSuccess: [],
-  onGetTopics: undefined,
-  getOraclesSuccess: [],
-  // getOraclesError: '',
-  onGetOracles: undefined,
-  tabIndex: DEFAULT_TAB_INDEX,
-  toggleSyncing: undefined,
-  syncProgress: undefined,
-  isSyncing: false,
 };
 
 const mapStateToProps = (state) => ({
-  getTopicsSuccess: state.Dashboard.get('success') && state.Dashboard.get('value'),
-  getTopicsError: !state.Dashboard.get('success') && state.Dashboard.get('value'),
-  tabIndex: state.Dashboard.get('tabIndex'),
-  getOraclesSuccess: state.Dashboard.get('allOraclesSuccess') && state.Dashboard.get('allOraclesValue'),
-  getOraclesError: !state.Dashboard.get('allOraclesSuccess') && state.Dashboard.get('allOraclesValue'),
-  syncProgress: state.App.get('syncProgress'),
-  isSyncing: state.App.get('isSyncing'),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    onGetTopics: () => dispatch(dashboardActions.getTopics()),
-    onGetOracles: () => dispatch(dashboardActions.getOracles()),
-    toggleSyncing: (isSyncing) => dispatch(appActions.toggleSyncing(isSyncing)),
   };
 }
 

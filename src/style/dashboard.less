@@ -1,97 +1,158 @@
-    .cancel-ant-layout-header {
-      margin-left: -50px;
-      margin-right: -50px;
+.wrapper {
+  padding: 8em 0em 10em;
+  text-align: center;
+
+  h2 {
+    font-size: 32px;
+    font-weight: 300;
+    margin-bottom: 44px;
+  }
+
+  h3 {
+    font-size: 24px;
+    font-weight: 300;
+  }
+
+  h4 {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 30px;
+  }
+
+  p {
+    font-size: 22px;
+    font-weight: 300;
+  }
+
+  &.dark {
+
+    background: black;
+
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: url("http://res.cloudinary.com/dd1ixvdxn/image/upload/v1517993642/bg-blur_i8i7ua.jpg");
+    background-attachment: scroll;
+    min-width: 1440px;
+    left: 0px;
+    width: 1440px;
+    background-position: 50% -34px;
+
+    h2,
+    h3,
+    h4 {
+      color: white
     }
 
-    .horizontalWrapper {
+    p {
+      color: #90979e;
+    }
+  }
 
-      margin-left: auto;
-      margin-right: auto;
+  &.strength {
+    p {
+      font-size: 17px;
+      margin-top: 30px;
+      margin-bottom: 30px;
+    }
+  }
 
-      @media @phone {
-        padding-left: 16px;
-        padding-right: 16px;
-      }
-      @media @tablet-strict {
-        padding-left: 24px;
-        padding-right: 24px;
-      }
+  &.advisor {
+    p {
+      font-size: 17px;
+      line-height: 28px;
+    }
+  }
 
-      @media @desktop-strict {
-        max-width: 940px;
-        padding-left: 0px;
-        padding-right: 0px;
-      }
+  &.info {
+    background-color: #202322;
+    background-image: none;
 
-      @media @xl {
-        max-width: 80%;
-        padding-left: 0px;
-        padding-right: 0px;
-      }
-
-      @media @xxl {
-        max-width: 65%;
-        padding-left: 0px;
-        padding-right: 0px;
-      }
+    h5 {
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+      text-transform: uppercase;
+      line-height: 2.5em;
     }
 
-    .tabBtnGroup {
-      width: 100%;
-      padding-bottom: 40px;
+    .ant-row {
 
-      button {
-        height: 44px;
-        padding: 12px 16px;
-        text-align: center;
-        font-size: 16px;
+      div:nth-child(1) {
+        text-align: left;
+        ul {
+          display: block;
+        }
+      }
 
-        &.ant-btn-primary {
-          color: white;
+      div:nth-child(2) {
+        text-align: left;
+      }
+
+      div:nth-child(3) {
+
+        text-align: left;
+        padding-left: 22px;
+
+        ul {
+          display: block;
         }
 
-        &.ant-btn-default {
-          color: @fontColorGrey;
+        p {
+          margin: 0px;
         }
       }
-
-      .viewBtnGroup {
-        button {
-          margin-right: 24px;
-        }
-      }
-      .controlBtnGroup {
-        text-align: right;
-      }
     }
+  }
 
-.app-load{
-    content: '';
-    position: absolute;
-    top:0;
-    left:0;
-    height: 100%;
-    width: 100%;
-    background-color: rgba(255,255,255,0.85);
-    z-index: 99;
+  &.map {
+    height: 600px;
+    padding: 0px;
+  }
+}
 
-    .app-load-wrapper{
-      position: relative;
-      height: 100%;
-      width: 100%;
+.horizontalWrapper {
+  margin-left: auto;
+  margin-right: auto;
 
-      .app-load-container{
-        position: absolute;
-        top: 50%;
-      .transform(translate(-50%,-50%));
-      left: 50%;
-      }
+  @media @phone {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  @media @tablet-strict {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
 
-      @size: 180px;
-      .ant-progress-inner{
-        width: @size;
-        height: @size;
-        font-size: 48px;
-      }
+  @media @desktop-strict {
+    max-width: 940px;
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+
+  @media @xl {
+    max-width: 80%;
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+
+  @media @xxl {
+    max-width: 65%;
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+}
+
+ul {
+
+  display: flex;
+  text-align: left;
+
+  li {
+
+    p {
+      margin-top: 30px;
+      margin-bottom: 30px;
     }
+  }
 }

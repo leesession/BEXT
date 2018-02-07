@@ -220,7 +220,7 @@ class Topbar extends React.PureComponent {
     return (
       <TopbarWrapper>
         <Header
-          style={{ background: customizedTheme.backgroundColor }}
+          style={{ background: 'transparent' }}
           className={collapsed ? 'collapsed' : ''}
         >
           <div className="cancel-ant-layout-header">
@@ -238,15 +238,11 @@ class Topbar extends React.PureComponent {
                 </div>
 
                 <ul className="isoRight">
-                  <li><Link to="/" >Events</Link></li>
-                  <li><Link to="/create-topic" >Create an Event</Link></li>
-                  <li>{walletAddrsEle}</li>
-                  <li>
-                    <div className="block-count" style={{ color: 'white', paddingTop: '16px', textAlign: 'right' }}>
-                      <div className="label" style={{ fontSize: '10px', lineHeight: 'normal' }}><Icon type="clock-circle-o" style={{ marginRight: '6px' }}></Icon>Block Count</div>
-                      <div style={{ fontSize: '20px', lineHeight: 'normal', marginTop: '2px' }}>{blockCount}</div>
-                    </div>
-                  </li>
+                  <li><Link to="/" >Mission</Link></li>
+                  <li><Link to="/create-topic" >Strength</Link></li>
+                  <li><Link to="/create-topic" >Portfolio</Link></li>
+                  <li><Link to="/create-topic" >Team</Link></li>
+                  <li><Link to="/create-topic" >Advisor</Link></li>
                 </ul>
               </div>
             </div>

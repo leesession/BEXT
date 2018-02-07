@@ -16,25 +16,7 @@ class AppRouter extends React.Component {
         <Route
           exact
           path={`${url}/`}
-          component={asyncComponent(() => {
-            console.log('{url}/');
-            return import('../dashboard');
-          })}
-        />
-        <Route
-          exact
-          path={`${url}/oracle/:address`}
-          component={asyncComponent(() => import('../oracle'))}
-        />
-        <Route
-          exact
-          path={`${url}/topic/:address`}
-          component={asyncComponent(() => import('../topic'))}
-        />
-        <Route
-          exact
-          path={`${url}/create-topic`}
-          component={asyncComponent(() => import('../createTopic'))}
+          component={asyncComponent(() => import('../dashboard'))}
         />
       </Switch>
     );

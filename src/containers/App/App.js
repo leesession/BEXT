@@ -5,19 +5,16 @@ import { IntlProvider } from 'react-intl';
 import { Debounce } from 'react-throttle';
 import { WindowResizeListener } from 'react-window-resize-listener';
 import { ThemeProvider } from 'styled-components';
-import authAction from '../../redux/auth/actions';
 import appActions from '../../redux/app/actions';
 import Topbar from '../Topbar/Topbar';
 import AppRouter from './AppRouter';
 import { AppLocale } from '../../index';
 import themes from '../../config/themes';
-import { themeConfig /* siteConfig */ } from '../../config';
+import { themeConfig, siteConfig } from '../../config';
 import AppHolder from './commonStyle';
-import AppLoad from '../appLoad';
 import './global.css';
 
-const { Content /* Footer */ } = Layout;
-const { logout } = authAction;
+const { Content, Footer } = Layout;
 const { toggleAll } = appActions;
 
 export class App extends React.PureComponent {
@@ -42,7 +39,6 @@ export class App extends React.PureComponent {
                       )}
                   />
                 </Debounce>
-                <AppLoad />
                 <Topbar url={url} />
                 <Layout style={{ flexDirection: 'row', overflowX: 'hidden' }}>
                   <Layout
@@ -60,15 +56,15 @@ export class App extends React.PureComponent {
                     >
                       <AppRouter url={url} />
                     </Content>
-                    {/* <Footer
-                                          style={{
-                                            background: '#ffffff',
-                                            textAlign: 'center',
-                                            borderTop: '1px solid #ededed',
-                                          }}
-                                        >
-                                          {siteConfig.footerText}
-                                        </Footer> */}
+                    <Footer
+                      style={{
+                        background: '#ffffff',
+                        textAlign: 'center',
+                        borderTop: '1px solid #ededed',
+                      }}
+                    >
+                      {siteConfig.footerText}
+                    </Footer>
                   </Layout>
                 </Layout>
               </Layout>
@@ -89,5 +85,5 @@ export default connect(
   (state) => ({
     auth: state.Auth,
   }),
-  { logout, toggleAll }
+  { toggleAll }
 )(App);
