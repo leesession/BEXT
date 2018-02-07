@@ -1,7 +1,7 @@
 /* eslint react/no-array-index-key: 0, no-nested-ternary:0 */ // Disable "Do not use Array index in keys" for options since they dont have unique identifier
 
 import React, { PropTypes } from 'react';
-import { Row, Col } from 'antd';
+import { Form, Input, Row, Col } from 'antd';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import styled from 'styled-components';
@@ -11,8 +11,10 @@ import GoogleMapReact from 'google-map-react';
 import LayoutContentWrapper from '../components/utility/layoutWrapper';
 import dashboardActions from '../redux/dashboard/actions';
 import appActions from '../redux/app/actions';
+import ContactForm from '../contactForm';
 
 cloudinaryConfig({ cloud_name: 'dd1ixvdxn' });
+const FormItem = Form.Item;
 
 const TAB_BETTING = 0;
 const TAB_SETTING = 1;
@@ -250,7 +252,7 @@ class Dashboard extends React.Component {
                   xs={20}
                   sm={16}
                 >
-
+                  <ContactForm />
                 </Col>
               </Row>
             </div>
