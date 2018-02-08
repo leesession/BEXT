@@ -85,20 +85,20 @@ class Dashboard extends React.Component {
     return (
       <div>
 
-        <section style={{ height: '100vh' }}>
+        <section style={{ height: '450px' }}>
           <div className="head">
 
             <div className="content">
-              <h1>BNF Capital</h1>
-              <h2>The hottest Fuel to blockchain industry</h2>
+              <h1>Coefficient Ventures</h1>
+              <h2>Tag line</h2>
             </div>
 
             <div className="background">
-              <CloudinaryVideo
+              {/*              <CloudinaryVideo
                 publicId="moving-background"
                 options={videoOptions}
               >
-              </CloudinaryVideo>
+              </CloudinaryVideo> */}
             </div>
 
           </div>
@@ -554,24 +554,21 @@ const SectionTeam = React.createClass({
               <Col
                 xs={colWidth.xs}
                 sm={colWidth.sm}
-                xl={colWidth.xl}
               >
-                <CloudinaryImage publicId="chris" />
-                <h4>Chris Li</h4><p>Managing Partner</p></Col>
+                <CloudinaryImage publicId="woman-profile_t0kkch" />
+                <h4>Chance Du</h4><p>Managing Partner</p></Col>
               <Col
                 xs={colWidth.xs}
                 sm={colWidth.sm}
-                xl={colWidth.xl}
               >
-                <CloudinaryImage publicId="yuanbo" />
-                <h4>Yuanbo Wang</h4><p>Founding Partner</p></Col>
+                <CloudinaryImage publicId="woman-profile_t0kkch" />
+                <h4>Chance Du</h4><p>Founding Partner</p></Col>
               <Col
                 xs={colWidth.xs}
                 sm={colWidth.sm}
-                xl={colWidth.xl}
               >
-                <CloudinaryImage publicId="chuck" />
-                <h4>Chuck Zhang</h4><p>Founding Partner</p></Col>
+                <CloudinaryImage publicId="woman-profile_t0kkch" />
+                <h4>Chance Du</h4><p>Founding Partner</p></Col>
             </Row>
           </div>
         </div>
@@ -602,18 +599,16 @@ const SectionAdvisor = React.createClass({
             <Col
               xs={colWidth.xs}
               sm={colWidth.sm}
-              xl={colWidth.xl}
             >
-              <CloudinaryImage publicId="justin" />
-              <h4>Justin Newton</h4><p>Founder and CEO at Netki</p></Col>
+              <CloudinaryImage publicId="woman-profile_t0kkch" />
+              <h4>Chance Du</h4><p>Founder and CEO at </p></Col>
             <Col
               xs={colWidth.xs}
               sm={colWidth.sm}
-              xl={colWidth.xl}
             >
-              <CloudinaryImage publicId="russ" />
+              <CloudinaryImage publicId="woman-profile_t0kkch" />
 
-              <h4>Russ Gurvits</h4><p>Founding partner at Consensys</p></Col>
+              <h4>Chance Du</h4><p>Founding partner at </p></Col>
           </Row>
         </div>
       </div>
