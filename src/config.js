@@ -5,7 +5,7 @@ export default {
 const siteConfig = {
   siteName: 'BNF Capital',
   siteIcon: 'ion-flash',
-  footerText: 'BNF Capital ©2018 Created by BNF.Capital',
+  footerText: '©2018 Created by BNF.Capital',
 };
 
 const themeConfig = {

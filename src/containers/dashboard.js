@@ -68,6 +68,20 @@ class Dashboard extends React.Component {
       }}
     /><p>{text}</p></div>);
 
+    const videoOptions = {
+      autoplay: true,
+      preload: 'auto',
+      loop: true,
+      playbackRate: 0.5,
+    };
+
+    const videoRatio = 640 / 360;
+    if (window.innerWidth / window.innerHeight > videoRatio) {
+      videoOptions.width = '100%';
+    } else {
+      videoOptions.height = '100%';
+    }
+
     return (
       <div>
 
@@ -82,13 +96,7 @@ class Dashboard extends React.Component {
             <div className="background">
               <CloudinaryVideo
                 publicId="moving-background"
-                options={{
-                  width: '100%',
-                  autoplay: true,
-                  preload: 'auto',
-                  loop: true,
-                  playbackRate: 0.5,
-                }}
+                options={videoOptions}
               >
               </CloudinaryVideo>
             </div>
@@ -97,7 +105,7 @@ class Dashboard extends React.Component {
         </section>
 
         <section>
-          <div className="wrapper">
+          <div className="wrapper mission">
             <div className="horizontalWrapper">
               <h2>Our Mission</h2>
               <p>The Blockchain, a novel financial technology, holds the promise to disrupt legacy parts of financial services and create new markets. The firm has invested in 72 companies in the last three years, investing alongside Silicon Valley’s leading venture capital firms. We are a sector specific, but multi-stage venture capital investor that seeks to gain diverse exposure to the Blockchain economy while offering unique co-investment opportunities and proprietary deal flow to our investors.</p>
@@ -392,7 +400,7 @@ const SectionStrength = React.createClass({
           <div className="horizontalWrapper">
 
             <h2>Strength</h2>
-            <Row>
+            <Row gutter={16}>
               <Col
                 xs={colWidth.xs}
                 sm={colWidth.sm}
@@ -454,7 +462,7 @@ const SectionPortfolio = React.createClass({
         <div className="wrapper portfolio">
           <div className="horizontalWrapper">
             <h2>Portofolio</h2>
-            <Row>
+            <Row gutter={16}>
               <Col
                 xs={colWidth.xs}
                 sm={colWidth.sm}
@@ -542,24 +550,27 @@ const SectionTeam = React.createClass({
           <div className="horizontalWrapper">
 
             <h2>Team</h2>
-            <Row>
+            <Row gutter={16}>
               <Col
                 xs={colWidth.xs}
                 sm={colWidth.sm}
                 xl={colWidth.xl}
-              >                  <CloudinaryImage publicId="chris" />
+              >
+                <CloudinaryImage publicId="chris" />
                 <h4>Chris Li</h4><p>Managing Partner</p></Col>
               <Col
                 xs={colWidth.xs}
                 sm={colWidth.sm}
                 xl={colWidth.xl}
-              >                  <CloudinaryImage publicId="yuanbo" />
+              >
+                <CloudinaryImage publicId="yuanbo" />
                 <h4>Yuanbo Wang</h4><p>Founding Partner</p></Col>
               <Col
                 xs={colWidth.xs}
                 sm={colWidth.sm}
                 xl={colWidth.xl}
-              >                  <CloudinaryImage publicId="chuck" />
+              >
+                <CloudinaryImage publicId="chuck" />
                 <h4>Chuck Zhang</h4><p>Founding Partner</p></Col>
             </Row>
           </div>
@@ -587,14 +598,13 @@ const SectionAdvisor = React.createClass({
         <div className="horizontalWrapper">
 
           <h2>Advisors</h2>
-          <Row>
+          <Row gutter={16}>
             <Col
               xs={colWidth.xs}
               sm={colWidth.sm}
               xl={colWidth.xl}
             >
               <CloudinaryImage publicId="justin" />
-
               <h4>Justin Newton</h4><p>Founder and CEO at Netki</p></Col>
             <Col
               xs={colWidth.xs}
