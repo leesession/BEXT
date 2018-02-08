@@ -83,7 +83,7 @@ class Dashboard extends React.Component {
               <CloudinaryVideo
                 publicId="moving-background"
                 options={{
-                  height: '100%',
+                  width: '100%',
                   autoplay: true,
                   preload: 'auto',
                   loop: true,
@@ -105,113 +105,13 @@ class Dashboard extends React.Component {
           </div>
         </section>
 
-        <section>
-          <div className="wrapper dark strength">
-            <div className="horizontalWrapper">
-
-              <h2>Strength</h2>
-              <Row>
-                <Col
-                  xs={colWidth.xs}
-                  sm={colWidth.sm}
-                  xl={colWidth.xl}
-                ><h3>Industry Experience</h3>
-                  <p>With 6 years of crypto asset investment experience, we hold a deep understanding of blockchain industry.</p>
-                </Col>
-                <Col
-                  xs={colWidth.xs}
-                  sm={colWidth.sm}
-                  xl={colWidth.xl}
-                >
-                  <h3>Abundant Resources</h3>
-                  <p>We’re vertically integrated, from incubator to venture fund to exchange, and are positioned to help projects at any stage of their development</p>
-                </Col>
-                <Col
-                  xs={colWidth.xs}
-                  sm={colWidth.sm}
-                  xl={colWidth.xl}
-                >
-                  <h3>Full Services</h3>
-                  <p>From financial advising to legal consultancy, with more than 10 years accumulated experience we are confident to assist newborns to thrive.</p>
-                </Col>
-                <Col
-                  xs={colWidth.xs}
-                  sm={colWidth.sm}
-                  xl={colWidth.xl}
-                >
-                  <h3>Entrepreneurial Practice</h3>
-                  <p>Having been through a variety of crypto projects ourselves, we understand the top priorities of different stages of a new company.</p>
-                </Col>
-                <Col
-                  xs={colWidth.xs}
-                  sm={colWidth.sm}
-                  xl={colWidth.xl}
-                >
-                  <h3>Ecosystem Approach</h3>
-                  <p>Our portfolio companies get access to the best network in China, greatly accelerating their growth and success rate.</p>
-                </Col>
-              </Row>
-            </div>
-          </div>
-        </section>
+        <SectionStrength />
 
         <SectionPortfolio />
 
-        <section>
-          <div className="wrapper dark">
-            <div className="horizontalWrapper">
+        <SectionTeam />
 
-              <h2>Team</h2>
-              <Row>
-                <Col
-                  xs={colWidth.xs}
-                  sm={colWidth.sm}
-                  xl={colWidth.xl}
-                >                  <CloudinaryImage publicId="chris" />
-                  <h4>Chris Li</h4><p>Managing Partner</p></Col>
-                <Col
-                  xs={colWidth.xs}
-                  sm={colWidth.sm}
-                  xl={colWidth.xl}
-                >                  <CloudinaryImage publicId="yuanbo" />
-                  <h4>Yuanbo Wang</h4><p>Founding Partner</p></Col>
-                <Col
-                  xs={colWidth.xs}
-                  sm={colWidth.sm}
-                  xl={colWidth.xl}
-                >                  <CloudinaryImage publicId="chuck" />
-                  <h4>Chuck Zhang</h4><p>Founding Partner</p></Col>
-              </Row>
-            </div>
-          </div>
-        </section>
-
-        <section>
-          <div className="wrapper advisor">
-            <div className="horizontalWrapper">
-
-              <h2>Advisors</h2>
-              <Row>
-                <Col
-                  xs={colWidth.xs}
-                  sm={colWidth.sm}
-                  xl={colWidth.xl}
-                >
-                  <CloudinaryImage publicId="justin" />
-
-                  <h4>Justin Newton</h4><p>Founder and CEO at Netki</p></Col>
-                <Col
-                  xs={colWidth.xs}
-                  sm={colWidth.sm}
-                  xl={colWidth.xl}
-                >
-                  <CloudinaryImage publicId="russ" />
-
-                  <h4>Russ Gurvits</h4><p>Founding partner at Consensys</p></Col>
-              </Row>
-            </div>
-          </div>
-        </section>
+        <SectionAdvisor />
 
         <section>
           <div className="wrapper contact dark">
@@ -472,6 +372,68 @@ function mapDispatchToProps(dispatch) {
 // Wrap the component to inject dispatch and state into it
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
 
+const SectionStrength = React.createClass({
+  render() {
+    const COL_PER_ROW = { // Specify how many col in each row
+      xs: 2,
+      sm: 3,
+    };
+
+    // Calculate grid number for Col attribute
+    const colWidth = {};
+
+    Object.keys(COL_PER_ROW).forEach((key) => {
+      colWidth[key] = 24 / COL_PER_ROW[key];
+    });
+
+    return (
+      <section>
+        <div className="wrapper dark strength">
+          <div className="horizontalWrapper">
+
+            <h2>Strength</h2>
+            <Row>
+              <Col
+                xs={colWidth.xs}
+                sm={colWidth.sm}
+              ><h3>Industry Experience</h3>
+                <p>With 6 years of crypto asset investment experience, we hold a deep understanding of blockchain industry.</p>
+              </Col>
+              <Col
+                xs={colWidth.xs}
+                sm={colWidth.sm}
+              >
+                <h3>Abundant Resources</h3>
+                <p>We’re vertically integrated, from incubator to venture fund to exchange, and are positioned to help projects at any stage of their development</p>
+              </Col>
+              <Col
+                xs={colWidth.xs}
+                sm={colWidth.sm}
+              >
+                <h3>Full Services</h3>
+                <p>From financial advising to legal consultancy, with more than 10 years accumulated experience we are confident to assist newborns to thrive.</p>
+              </Col>
+              <Col
+                xs={colWidth.xs}
+                sm={colWidth.sm}
+              >
+                <h3>Entrepreneurial Practice</h3>
+                <p>Having been through a variety of crypto projects ourselves, we understand the top priorities of different stages of a new company.</p>
+              </Col>
+              <Col
+                xs={colWidth.xs}
+                sm={colWidth.sm}
+              >
+                <h3>Ecosystem Approach</h3>
+                <p>Our portfolio companies get access to the best network in China, greatly accelerating their growth and success rate.</p>
+              </Col>
+            </Row>
+          </div>
+        </div>
+      </section>);
+  },
+});
+
 const SectionPortfolio = React.createClass({
   render() {
     const COL_PER_ROW = { // Specify how many col in each row
@@ -557,5 +519,94 @@ const SectionPortfolio = React.createClass({
           </div>
         </div>
       </section>);
+  },
+});
+
+const SectionTeam = React.createClass({
+  render() {
+    const COL_PER_ROW = { // Specify how many col in each row
+      xs: 2,
+      sm: 3,
+    };
+
+    // Calculate grid number for Col attribute
+    const colWidth = {};
+
+    Object.keys(COL_PER_ROW).forEach((key) => {
+      colWidth[key] = 24 / COL_PER_ROW[key];
+    });
+
+    return (
+      <section>
+        <div className="wrapper dark team">
+          <div className="horizontalWrapper">
+
+            <h2>Team</h2>
+            <Row>
+              <Col
+                xs={colWidth.xs}
+                sm={colWidth.sm}
+                xl={colWidth.xl}
+              >                  <CloudinaryImage publicId="chris" />
+                <h4>Chris Li</h4><p>Managing Partner</p></Col>
+              <Col
+                xs={colWidth.xs}
+                sm={colWidth.sm}
+                xl={colWidth.xl}
+              >                  <CloudinaryImage publicId="yuanbo" />
+                <h4>Yuanbo Wang</h4><p>Founding Partner</p></Col>
+              <Col
+                xs={colWidth.xs}
+                sm={colWidth.sm}
+                xl={colWidth.xl}
+              >                  <CloudinaryImage publicId="chuck" />
+                <h4>Chuck Zhang</h4><p>Founding Partner</p></Col>
+            </Row>
+          </div>
+        </div>
+      </section>);
+  },
+});
+
+const SectionAdvisor = React.createClass({
+  render() {
+    const COL_PER_ROW = { // Specify how many col in each row
+      xs: 2,
+      sm: 3,
+    };
+
+    // Calculate grid number for Col attribute
+    const colWidth = {};
+
+    Object.keys(COL_PER_ROW).forEach((key) => {
+      colWidth[key] = 24 / COL_PER_ROW[key];
+    });
+
+    return (<section>
+      <div className="wrapper advisor">
+        <div className="horizontalWrapper">
+
+          <h2>Advisors</h2>
+          <Row>
+            <Col
+              xs={colWidth.xs}
+              sm={colWidth.sm}
+              xl={colWidth.xl}
+            >
+              <CloudinaryImage publicId="justin" />
+
+              <h4>Justin Newton</h4><p>Founder and CEO at Netki</p></Col>
+            <Col
+              xs={colWidth.xs}
+              sm={colWidth.sm}
+              xl={colWidth.xl}
+            >
+              <CloudinaryImage publicId="russ" />
+
+              <h4>Russ Gurvits</h4><p>Founding partner at Consensys</p></Col>
+          </Row>
+        </div>
+      </div>
+    </section>);
   },
 });
