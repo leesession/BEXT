@@ -34,6 +34,29 @@ Yarn
 2.`mongodump --db bodhiapi --collection <colleciton_name> --out - > <output_path>/<filename>.bson`
 Note that filename is best to be same as collection name for the ease of importing.
 
+## Set up Apache server
+1. Create apache virtual host config from template
+`sudo cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/example.com.conf`
+2. Open the new file in your editor with root privileges:
+`sudo vim /etc/apache2/sites-available/example.com.conf`
+3. The file will look something like this (I've removed the comments here to make the file more approachable):
+```<VirtualHost *:80>
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/html
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+```
+4. Update document root
+`DocumentRoot /var/www/example.com/public_html`
+5. Save and close the file.
+
+6. Enable the New Virtual Host Files using a2ensite tool 
+`sudo a2ensite example.com.conf`
+
+7. Restart apache server
+`sudo service apache2 restart`
+
 
 ## Coding
 

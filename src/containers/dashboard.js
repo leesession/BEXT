@@ -121,6 +121,8 @@ class Dashboard extends React.Component {
 
         <SectionAdvisor />
 
+        <SectionPartners />
+
         {/*        <section>
           <div className="wrapper contact dark">
             <div className="horizontalWrapper">
@@ -628,6 +630,91 @@ const SectionAdvisor = React.createClass({
             >
               <CloudinaryImage publicId="est-round_ihb4uc" options={{ width: 150, crop: 'scale' }} />
               <h4>Esteban Ordano</h4><h5>Technical Advisor</h5></Col>
+          </Row>
+        </div>
+      </div>
+    </section>);
+  },
+});
+
+const SectionPartners = React.createClass({
+  render() {
+    const COL_PER_ROW = { // Specify how many col in each row
+      xs: 2,
+      sm: 4,
+    };
+
+    // Calculate grid number for Col attribute
+    const colWidth = {};
+
+    Object.keys(COL_PER_ROW).forEach((key) => {
+      colWidth[key] = 24 / COL_PER_ROW[key];
+    });
+
+    return (<section>
+      <div className="wrapper partner">
+        <div className="horizontalWrapper">
+
+          <h2 className="underscore">Strategic Partners</h2>
+          <Row gutter={64}>
+            <Col
+              xs={colWidth.xs}
+              sm={colWidth.sm}
+            >
+              <div className="img-container">
+                <CloudinaryImage publicId="polychain_vcqfqu" options={{ height: 150, crop: 'scale' }} />
+              </div>
+            </Col>
+            <Col
+              xs={colWidth.xs}
+              sm={colWidth.sm}
+            >
+              <div className="img-container"><CloudinaryImage publicId="fbg_suhplm" options={{ height: 150, crop: 'scale' }} /></div>
+            </Col>
+            <Col
+              xs={colWidth.xs}
+              sm={colWidth.sm}
+            >
+              <div className="img-container"><CloudinaryImage publicId="neo-global-capital_bgdzin" options={{ height: 150, crop: 'scale' }} /></div>
+            </Col>
+
+            <Col
+              xs={colWidth.xs}
+              sm={colWidth.sm}
+            >
+              <div className="img-container"><CloudinaryImage publicId="kyber_pf31oj" options={{ height: 150, crop: 'scale' }} /></div>
+            </Col>
+
+            <Col
+              xs={colWidth.xs}
+              sm={colWidth.sm}
+            >
+              <div className="img-container"><CloudinaryImage publicId="struck-black_y5algk" options={{ height: 150, crop: 'scale' }} /></div>
+            </Col>
+
+            <Col
+              xs={colWidth.xs}
+              sm={colWidth.sm}
+            >
+              <div className="img-container"><CloudinaryImage publicId="gbic_xpvely" options={{ height: 150, crop: 'scale' }} /></div>
+            </Col>            <Col
+              xs={colWidth.xs}
+              sm={colWidth.sm}
+            >
+              <div className="img-container"><CloudinaryImage publicId="connect_h7rnap" options={{ height: 150, crop: 'scale' }} /></div>
+            </Col>
+            <Col
+              xs={colWidth.xs}
+              sm={colWidth.sm}
+            >
+              <div className="img-container"><CloudinaryImage publicId="genesis_o4cysg" options={{ height: 150, crop: 'scale' }} /></div>
+            </Col>
+            <Col
+              xs={colWidth.xs}
+              sm={colWidth.sm}
+            >
+              <div className="img-container"><CloudinaryImage publicId="crypto-parency_acpecy" options={{ height: 150, crop: 'scale' }} /></div>
+            </Col>
           </Row>
         </div>
       </div>
