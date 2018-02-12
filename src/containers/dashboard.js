@@ -4,12 +4,11 @@ import React, { PropTypes } from 'react';
 import { Form, Input, Row, Col } from 'antd';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-// import { cloudinaryConfig, CloudinaryImage, CloudinaryVideo } from 'react-cloudinary';
 import GoogleMapReact from 'google-map-react';
 
 import ContactForm from '../components/contactForm';
 import { cloudinaryConfig, CloudinaryImage, CloudinaryVideo } from '../components/react-cloudinary';
-
+import WaveAnimation from '../components/waveAnimation';
 
 cloudinaryConfig({ cloud_name: 'dd1ixvdxn' });
 const FormItem = Form.Item;
@@ -85,15 +84,16 @@ class Dashboard extends React.Component {
     return (
       <div>
 
-        <section style={{ height: '450px' }}>
+        <section style={{ height: '100vh' }}>
           <div className="head">
 
             <div className="content">
               <h1>Coefficient Ventures</h1>
-              <h2>Tag line</h2>
+              <h2>The true DAO of decentralized space.</h2>
             </div>
 
             <div className="background">
+              <WaveAnimation />
               {/*              <CloudinaryVideo
                 publicId="moving-background"
                 options={videoOptions}
@@ -107,7 +107,7 @@ class Dashboard extends React.Component {
         <section>
           <div className="wrapper mission">
             <div className="horizontalWrapper">
-              <h2>Our Mission</h2>
+              <h2 className="underscore">Our Mission</h2>
               <p>The Blockchain, a novel financial technology, holds the promise to disrupt legacy parts of financial services and create new markets. The firm has invested in 72 companies in the last three years, investing alongside Silicon Valley’s leading venture capital firms. We are a sector specific, but multi-stage venture capital investor that seeks to gain diverse exposure to the Blockchain economy while offering unique co-investment opportunities and proprietary deal flow to our investors.</p>
             </div>
           </div>
@@ -121,11 +121,11 @@ class Dashboard extends React.Component {
 
         <SectionAdvisor />
 
-        <section>
+        {/*        <section>
           <div className="wrapper contact dark">
             <div className="horizontalWrapper">
 
-              <h2>Contact</h2>
+              <h2 className="underscore">Contact</h2>
               <Row>
                 <Col
                   offset={4}
@@ -136,7 +136,7 @@ class Dashboard extends React.Component {
               </Row>
             </div>
           </div>
-        </section>
+        </section> */}
 
         <section>
           <div className="wrapper dark info">
@@ -147,11 +147,9 @@ class Dashboard extends React.Component {
                   sm={8}
                 >
                   <ul>
-                    <li><h5>Mission</h5></li>
-                    <li><h5>Strength</h5></li>
-                    <li><h5>Portofolio</h5></li>
-                    <li><h5>Team</h5></li>
-                    <li><h5>Advisor</h5></li>
+                    <li><h5>Home</h5></li>
+                    <li><h5>Ecosystem</h5></li>
+                    <li><h5>Become a partner</h5></li>
                   </ul>
                 </Col>
                 <Col
@@ -176,10 +174,10 @@ class Dashboard extends React.Component {
           </div>
         </section>
 
-        <section>
+        {/* <section>
           <div className="wrapper map">
             <div style={{ height: '100%' }}>
-              {/*              <GoogleMapReact
+                            <GoogleMapReact
                 defaultCenter={{ lat: 37.784326, lng: -122.406359 }}
                 defaultZoom={17}
                 options={{
@@ -354,10 +352,10 @@ class Dashboard extends React.Component {
                   text=""
                   imageId="if_map-marker_322462_1_ipmwnh"
                 />
-              </GoogleMapReact> */}
+              </GoogleMapReact>
             </div>
           </div>
-        </section>
+        </section> */}
       </div>
     );
   }
@@ -398,19 +396,12 @@ const SectionStrength = React.createClass({
       <section>
         <div className="wrapper dark strength">
           <div className="horizontalWrapper">
-
-            <h2>Strength</h2>
             <Row gutter={16}>
               <Col
                 xs={colWidth.xs}
                 sm={colWidth.sm}
-              ><h3>Industry Experience</h3>
-                <p>With 6 years of crypto asset investment experience, we hold a deep understanding of blockchain industry.</p>
-              </Col>
-              <Col
-                xs={colWidth.xs}
-                sm={colWidth.sm}
               >
+                <CloudinaryImage publicId="icon-resources" options={{ width: 150, crop: 'fit' }} />
                 <h3>Abundant Resources</h3>
                 <p>We’re vertically integrated, from incubator to venture fund to exchange, and are positioned to help projects at any stage of their development</p>
               </Col>
@@ -418,6 +409,8 @@ const SectionStrength = React.createClass({
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
+                <CloudinaryImage publicId="icon-services" options={{ width: 150, crop: 'fit' }} />
+
                 <h3>Full Services</h3>
                 <p>From financial advising to legal consultancy, with more than 10 years accumulated experience we are confident to assist newborns to thrive.</p>
               </Col>
@@ -425,13 +418,8 @@ const SectionStrength = React.createClass({
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <h3>Entrepreneurial Practice</h3>
-                <p>Having been through a variety of crypto projects ourselves, we understand the top priorities of different stages of a new company.</p>
-              </Col>
-              <Col
-                xs={colWidth.xs}
-                sm={colWidth.sm}
-              >
+                <CloudinaryImage publicId="icon-network" options={{ width: 150, crop: 'fit' }} />
+
                 <h3>Ecosystem Approach</h3>
                 <p>Our portfolio companies get access to the best network in China, greatly accelerating their growth and success rate.</p>
               </Col>
@@ -461,68 +449,56 @@ const SectionPortfolio = React.createClass({
       <section>
         <div className="wrapper portfolio">
           <div className="horizontalWrapper">
-            <h2>Portofolio</h2>
+            <h2 className="underscore">Portofolio</h2>
             <Row gutter={16}>
               <Col
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <CloudinaryImage publicId="logo-mkr" />
-                <h4>MKR</h4><p>Maker</p></Col>
+                <CloudinaryImage publicId="logo-filecoin" options={{ height: 150, crop: 'scale' }} />
+                <h4>FIL</h4><p>Filecoin</p></Col>
               <Col
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <CloudinaryImage publicId="logo-rdn" />
+                <CloudinaryImage publicId="logo-rdn" options={{ height: 150, crop: 'scale' }} />
                 <h4>RDN</h4><p>Raiden</p></Col>
               <Col
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <CloudinaryImage publicId="logo-ada" />
-                <h4>ADA</h4><p>Cardano</p></Col>
+                <CloudinaryImage publicId="logo-zeppelin" options={{ height: 150, crop: 'scale' }} />
+                <h4>ZEP</h4><p>Zeppelin_OS</p></Col>
               <Col
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <CloudinaryImage publicId="logo-omg" />
-                <h4>OMG</h4><p>OmiseGO</p></Col>
+                <CloudinaryImage publicId="logo-0x" options={{ height: 150, crop: 'scale' }} />
+                <h4>ZRX</h4><p>0x</p></Col>
               <Col
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <CloudinaryImage publicId="logo-trx" />
-                <h4>TRX</h4><p>Tron</p></Col>
+                <CloudinaryImage publicId="logo-tomochain" options={{ height: 150, crop: 'scale' }} />
+                <h4>TMC</h4><p>TomoChain</p></Col>
               <Col
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <CloudinaryImage publicId="logo-lsk" />
-                <h4>LSK</h4><p>Lisk</p></Col>
+                <CloudinaryImage publicId="logo-keep" options={{ height: 150, crop: 'scale' }} />
+                <h4>KEEP</h4><p>Keep</p></Col>
               <Col
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <CloudinaryImage publicId="logo-adt" />
-                <h4>ADT</h4><p>adToken</p></Col>
+                <CloudinaryImage publicId="kowala-color_u15mlz" options={{ height: 150, crop: 'scale' }} />
+                <h4>kUSD</h4><p>Kowala</p></Col>
               <Col
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <CloudinaryImage publicId="logo-rep" />
-                <h4>REP</h4><p>Augur</p></Col>
-              <Col
-                xs={colWidth.xs}
-                sm={colWidth.sm}
-              >
-                <CloudinaryImage publicId="logo-rcn" />
-                <h4>RCN</h4><p>Ripio Credit Network</p></Col>
-              <Col
-                xs={colWidth.xs}
-                sm={colWidth.sm}
-              >
-                <CloudinaryImage publicId="logo-xem" />
-                <h4>XEM</h4><p>New Economy Movement</p></Col>
+                <CloudinaryImage publicId="logo-iotex" options={{ height: 150, crop: 'scale' }} />
+                <h4>IoTeX</h4><p>IoTex</p></Col>
             </Row>
           </div>
         </div>
@@ -549,26 +525,55 @@ const SectionTeam = React.createClass({
         <div className="wrapper dark team">
           <div className="horizontalWrapper">
 
-            <h2>Team</h2>
+            <h2 className="underscore">Our Team</h2>
             <Row gutter={16}>
               <Col
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <CloudinaryImage publicId="woman-profile_t0kkch" />
-                <h4>Chance Du</h4><p>Managing Partner</p></Col>
+                <CloudinaryImage publicId="chance_xqsncl" options={{ width: 150, crop: 'scale' }} />
+                <h4>Chance Du</h4>
+                <h5>Managing Partner</h5>
+                {/*                <p>All in blockchain. <br />
+                Investor of Filecoin, Raiden, Zeppelin, 0x, Tari.<br />
+                First investor and advisor for Tomochain and IoTex.<br />
+                Asian market strategic partner of Filecoin and 0x. <br />
+                Chance is also a lecturer for Stanford undergraduate Beyond Bitcoin class. Investing in tokens since Jan, 2017, prior to start Coefficient, Chance is an angel investor in the valley investing in Blockchain and AI/ML. Prior to that, she started her first startup in 2011, got acquired in 2015.
+                </p> */}
+              </Col>
               <Col
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <CloudinaryImage publicId="woman-profile_t0kkch" />
-                <h4>Chance Du</h4><p>Founding Partner</p></Col>
+                <CloudinaryImage publicId="chris_aq2ozy" options={{ width: 150, crop: 'scale' }} />
+                <h4>Chris Li</h4>
+                <h5>Technical Partner</h5>
+                {/*                <p>Blockchain developer and open source contributor <br />
+                Prediction market experts <br />
+                Serial entrepreneur <br />
+                Microsoft senior software engineer (2013 - 16) <br />
+                Individual investments: REP, OMG, ADA, RDN and MKR <br />
+                M.S. in C.S., UIC
+                </p> */}
+              </Col>
               <Col
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <CloudinaryImage publicId="woman-profile_t0kkch" />
-                <h4>Chance Du</h4><p>Founding Partner</p></Col>
+                <CloudinaryImage publicId="aaron_uthemn" options={{ width: 150, crop: 'scale' }} />
+                <h4>Aaron Li</h4>
+                <h5>Technical Partner</h5>
+
+                {/*                <p>Founder of Qukka.ai <br />
+                Inference lead engineer in Scaled Inference <br />
+                (Backed by Khosla Ventures, Lux Capital) <br />
+                Google AI/ ML researcher.   <br />
+                ACM SIGKDD 2014 Best Paper Award. <br />
+                Bitcoin early adopter since 2013, blockchain and smart contracts lecturer at Big tiger. <br />
+                M.S. in C.S., CMU
+                </p> */}
+
+              </Col>
             </Row>
           </div>
         </div>
@@ -594,21 +599,35 @@ const SectionAdvisor = React.createClass({
       <div className="wrapper advisor">
         <div className="horizontalWrapper">
 
-          <h2>Advisors</h2>
+          <h2 className="underscore">Advisors</h2>
+          <Row gutter={16} type="flex" justify="center">
+            <Col
+              xs={colWidth.xs}
+              sm={colWidth.sm}
+            >
+              <CloudinaryImage publicId="ryan_yf8fv3" options={{ width: 150, crop: 'scale' }} />
+              <h4>Ryan Zurrer</h4><h5>General Advisor</h5></Col>
+          </Row>
           <Row gutter={16}>
             <Col
               xs={colWidth.xs}
               sm={colWidth.sm}
             >
-              <CloudinaryImage publicId="woman-profile_t0kkch" />
-              <h4>Chance Du</h4><p>Founder and CEO at </p></Col>
+              <CloudinaryImage publicId="jeromy_rxqrrr" options={{ width: 150, crop: 'scale' }} />
+              <h4>Jeromy</h4><h5>Technical Advisor</h5></Col>
             <Col
               xs={colWidth.xs}
               sm={colWidth.sm}
             >
-              <CloudinaryImage publicId="woman-profile_t0kkch" />
+              <CloudinaryImage publicId="daneil-round_bbfgap" options={{ width: 150, crop: 'scale' }} />
+              <h4>Daniel Ternyak</h4><h5>Technical Advisor</h5></Col>
 
-              <h4>Chance Du</h4><p>Founding partner at </p></Col>
+            <Col
+              xs={colWidth.xs}
+              sm={colWidth.sm}
+            >
+              <CloudinaryImage publicId="est-round_ihb4uc" options={{ width: 150, crop: 'scale' }} />
+              <h4>Esteban Ordano</h4><h5>Technical Advisor</h5></Col>
           </Row>
         </div>
       </div>

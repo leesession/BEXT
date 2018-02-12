@@ -54,6 +54,13 @@
 	background-clip:         padding-box; 
 }
 
+.border-gradient(@rotate, @startColor, @endColor) {
+    -webkit-border-image: -webkit-linear-gradient(@rotate, @startColor, @endColor) 1 100%;
+    -moz-border-image: -moz-linear-gradient(@rotate, @startColor, @endColor) 1 100%;
+    -o-border-image: -o-linear-gradient(@rotate, @startColor, @endColor) 1 100%;
+    border-image: linear-gradient(@rotate, @startColor, @endColor) 1 100%;
+}
+
 .opacity (@opacity: 0.5) {
 	-webkit-opacity: 	@opacity;
 	-moz-opacity: 		@opacity;

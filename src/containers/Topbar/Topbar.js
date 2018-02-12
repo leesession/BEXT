@@ -50,11 +50,9 @@ class Topbar extends React.PureComponent {
                 </div>
 
                 <ul className="isoRight">
-                  <li><Link to="/" >Mission</Link></li>
-                  <li><Link to="/" >Strength</Link></li>
-                  <li><Link to="/" >Portfolio</Link></li>
-                  <li><Link to="/" >Team</Link></li>
-                  <li><Link to="/" >Advisor</Link></li>
+                  <li><Link to="/" >Home</Link></li>
+                  <li><Link to="/ecosystem" >Ecosystem</Link></li>
+                  <li><Link to="/partner" >Become a partner</Link></li>
                 </ul>
               </div>
             </div>
