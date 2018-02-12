@@ -93,7 +93,7 @@ class Dashboard extends React.Component {
             </div>
 
             <div className="background">
-              <WaveAnimation />
+              {/*<WaveAnimation />*/}
               {/*              <CloudinaryVideo
                 publicId="moving-background"
                 options={videoOptions}
