@@ -12,7 +12,7 @@ const themeConfig = {
   topbar: 'themedefault',
   sidebar: 'themedefault',
   layout: 'themedefault',
-  theme: 'themeBodhi',
+  theme: 'themedefault',
 };
 
 const language = 'english';

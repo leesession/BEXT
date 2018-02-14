@@ -6,13 +6,12 @@ import { Debounce } from 'react-throttle';
 import { WindowResizeListener } from 'react-window-resize-listener';
 import { ThemeProvider } from 'styled-components';
 import appActions from '../../redux/app/actions';
-import Topbar from '../Topbar/Topbar';
+import Topbar from '../topbar';
 import AppRouter from './AppRouter';
 import { AppLocale } from '../../index';
 import themes from '../../config/themes';
 import { themeConfig, siteConfig } from '../../config';
 import AppHolder from './commonStyle';
-import './global.css';
 
 const { Content, Footer } = Layout;
 const { toggleAll } = appActions;
@@ -29,7 +28,7 @@ export class App extends React.PureComponent {
         >
           <ThemeProvider theme={themes[themeConfig.theme]}>
             <AppHolder>
-              <Layout style={{ height: '100vh' }}>
+              <Layout>
                 <Debounce time="1000" handler="onResize">
                   <WindowResizeListener
                     onResize={(windowSize) =>
