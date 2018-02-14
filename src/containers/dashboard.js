@@ -4,22 +4,20 @@ import React, { PropTypes } from 'react';
 import { Form, Input, Row, Col } from 'antd';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import GoogleMapReact from 'google-map-react';
+// import GoogleMapReact from 'google-map-react';
+import * as Scroll from 'react-scroll';
+// import { Link } from 'react-router-dom';
 
-import ContactForm from '../components/contactForm';
 import { cloudinaryConfig, CloudinaryImage, CloudinaryVideo } from '../components/react-cloudinary';
 import WaveAnimation from '../components/waveAnimation';
 
+import InfoSection from '../components/infoSection';
+
 cloudinaryConfig({ cloud_name: 'dd1ixvdxn' });
 const FormItem = Form.Item;
-
-const TAB_BETTING = 0;
-const TAB_SETTING = 1;
-const TAB_VOTING = 2;
-const TAB_COMPLETED = 3;
-const DEFAULT_TAB_INDEX = TAB_BETTING;
-const NUM_SHOW_IN_OPTIONS = 3;
-
+const {
+  Link, Element, Events, scroll, scrollSpy,
+} = Scroll;
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -29,11 +27,24 @@ class Dashboard extends React.Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
+    Events.scrollEvent.register('begin', (...rest) => {
+      console.log('begin', rest);
+    });
+
+    Events.scrollEvent.register('end', (...rest) => {
+      console.log('end', rest);
+    });
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillUnmount() {
+    Events.scrollEvent.remove('begin');
+    Events.scrollEvent.remove('end');
   }
+
+  // handleSetActive(to) {
+  //   console.log(to);
+  // }
 
   render() {
     const COL_PER_ROW = { // Specify how many col in each row
@@ -105,7 +116,8 @@ class Dashboard extends React.Component {
         </section>
 
         <section>
-          <div className="wrapper mission">
+          <div className="wrapper mission" id="mission">
+            {/*            <Element name="test1" className="element">element here</Element> */}
             <div className="horizontalWrapper">
               <h2 className="underscore">Our Mission</h2>
               <p>The Blockchain, a novel financial technology, holds the promise to disrupt legacy parts of financial services and create new markets. The firm has invested in 72 companies in the last three years, investing alongside Silicon Valley’s leading venture capital firms. We are a sector specific, but multi-stage venture capital investor that seeks to gain diverse exposure to the Blockchain economy while offering unique co-investment opportunities and proprietary deal flow to our investors.</p>
@@ -120,7 +132,9 @@ class Dashboard extends React.Component {
         <SectionTeam />
 
         <SectionAdvisor />
-
+        {/* <Element name="test2" className="element">
+          test 2
+        </Element> */}
         <SectionPartners />
 
         {/*        <section>
@@ -149,8 +163,15 @@ class Dashboard extends React.Component {
                   sm={8}
                 >
                   <ul>
-                    <li><h5>Home</h5></li>
-                    <li><h5>Ecosystem</h5></li>
+                    {/* <li><Link activeClass="active" to="test2" spy smooth duration={500}>Test 2</Link></li> */}
+                    <li><h5>
+                      {/* <Link to="test1" containerId="scrollContainer" spy smooth offset={50} duration={500}>Test 1
+                      </Link> */}
+                    </h5></li>
+                    {/* <li><h5>Ecosystem</h5></li> */}
+                    <li><Link to="/#portfolio"><h5>Portfolio</h5></Link></li>
+                    <li><h5>Team</h5></li>
+                    <li><h5>Partners</h5></li>
                     <li><h5>Become a partner</h5></li>
                   </ul>
                 </Col>
@@ -383,7 +404,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
 const SectionStrength = React.createClass({
   render() {
     const COL_PER_ROW = { // Specify how many col in each row
-      xs: 2,
+      xs: 1,
       sm: 3,
     };
 
@@ -449,9 +470,9 @@ const SectionPortfolio = React.createClass({
     return (
 
       <section>
-        <div className="wrapper portfolio">
+        <div className="wrapper portfolio" id="portfolio">
           <div className="horizontalWrapper">
-            <h2 className="underscore">Portofolio</h2>
+            <h2 className="underscore">Portfolio</h2>
             <Row gutter={16}>
               <Col
                 xs={colWidth.xs}
@@ -477,31 +498,37 @@ const SectionPortfolio = React.createClass({
               >
                 <CloudinaryImage publicId="logo-0x" options={{ height: 150, crop: 'scale' }} />
                 <h4>ZRX</h4><p>0x</p></Col>
-              <Col
-                xs={colWidth.xs}
-                sm={colWidth.sm}
-              >
-                <CloudinaryImage publicId="logo-tomochain" options={{ height: 150, crop: 'scale' }} />
-                <h4>TMC</h4><p>TomoChain</p></Col>
-              <Col
+
+              {/*              <Col
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
                 <CloudinaryImage publicId="logo-keep" options={{ height: 150, crop: 'scale' }} />
-                <h4>KEEP</h4><p>Keep</p></Col>
+                <h4>KEEP</h4><p>Keep</p></Col> */}
               <Col
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
                 <CloudinaryImage publicId="kowala-color_u15mlz" options={{ height: 150, crop: 'scale' }} />
                 <h4>kUSD</h4><p>Kowala</p></Col>
+
+            </Row>
+            <h2>Advisory Portfolio</h2>
+            <Row gutter={16} type="flex" justify="center">
               <Col
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
                 <CloudinaryImage publicId="logo-iotex" options={{ height: 150, crop: 'scale' }} />
                 <h4>IoTeX</h4><p>IoTex</p></Col>
+              <Col
+                xs={colWidth.xs}
+                sm={colWidth.sm}
+              >
+                <CloudinaryImage publicId="logo-tomochain" options={{ height: 150, crop: 'scale' }} />
+                <h4>TMC</h4><p>TomoChain</p></Col>
             </Row>
+
           </div>
         </div>
       </section>);
@@ -511,7 +538,7 @@ const SectionPortfolio = React.createClass({
 const SectionTeam = React.createClass({
   render() {
     const COL_PER_ROW = { // Specify how many col in each row
-      xs: 2,
+      xs: 1,
       sm: 3,
     };
 
@@ -524,7 +551,7 @@ const SectionTeam = React.createClass({
 
     return (
       <section>
-        <div className="wrapper dark team">
+        <div className="wrapper dark team" id="team">
           <div className="horizontalWrapper">
 
             <h2 className="underscore">Our Team</h2>
@@ -533,7 +560,7 @@ const SectionTeam = React.createClass({
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <CloudinaryImage publicId="chance_xqsncl" options={{ width: 150, crop: 'scale' }} />
+                <CloudinaryImage publicId="chance-bw_qv7s36" options={{ width: 300, crop: 'scale' }} />
                 <h4>Chance Du</h4>
                 <h5>Managing Partner</h5>
                 {/*                <p>All in blockchain. <br />
@@ -547,7 +574,7 @@ const SectionTeam = React.createClass({
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <CloudinaryImage publicId="chris_aq2ozy" options={{ width: 150, crop: 'scale' }} />
+                <CloudinaryImage publicId="chris-sm_fz6sq9" options={{ width: 300, crop: 'scale' }} />
                 <h4>Chris Li</h4>
                 <h5>Technical Partner</h5>
                 {/*                <p>Blockchain developer and open source contributor <br />
@@ -562,7 +589,7 @@ const SectionTeam = React.createClass({
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <CloudinaryImage publicId="aaron_uthemn" options={{ width: 150, crop: 'scale' }} />
+                <CloudinaryImage publicId="aaron-bw_gr6utp" options={{ width: 300, crop: 'scale' }} />
                 <h4>Aaron Li</h4>
                 <h5>Technical Partner</h5>
 
@@ -586,7 +613,7 @@ const SectionTeam = React.createClass({
 const SectionAdvisor = React.createClass({
   render() {
     const COL_PER_ROW = { // Specify how many col in each row
-      xs: 2,
+      xs: 1,
       sm: 3,
     };
 
@@ -598,7 +625,7 @@ const SectionAdvisor = React.createClass({
     });
 
     return (<section>
-      <div className="wrapper advisor">
+      <div className="wrapper advisor" id="advisor">
         <div className="horizontalWrapper">
 
           <h2 className="underscore">Advisors</h2>
@@ -607,10 +634,10 @@ const SectionAdvisor = React.createClass({
               xs={colWidth.xs}
               sm={colWidth.sm}
             >
-              <CloudinaryImage publicId="ryan_yf8fv3" options={{ width: 150, crop: 'scale' }} />
+              <CloudinaryImage publicId="ryan-bw_cwwrfe" options={{ width: 300, crop: 'scale' }} />
               <h4>Ryan Zurrer</h4><h5>General Advisor</h5></Col>
           </Row>
-          <Row gutter={16}>
+          {/*          <Row gutter={16}>
             <Col
               xs={colWidth.xs}
               sm={colWidth.sm}
@@ -630,7 +657,7 @@ const SectionAdvisor = React.createClass({
             >
               <CloudinaryImage publicId="est-round_ihb4uc" options={{ width: 150, crop: 'scale' }} />
               <h4>Esteban Ordano</h4><h5>Technical Advisor</h5></Col>
-          </Row>
+          </Row> */}
         </div>
       </div>
     </section>);
@@ -652,11 +679,11 @@ const SectionPartners = React.createClass({
     });
 
     return (<section>
-      <div className="wrapper partner">
+      <div className="wrapper partner" id="partner">
         <div className="horizontalWrapper">
 
           <h2 className="underscore">Strategic Partners</h2>
-          <Row gutter={64}>
+          <Row>
             <Col
               xs={colWidth.xs}
               sm={colWidth.sm}

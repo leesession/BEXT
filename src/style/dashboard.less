@@ -41,7 +41,7 @@
       margin-bottom: 0.5em;
 
       @media @phone {
-        font-size: 36px;
+        font-size: 1.6em;
       }
     }
 
@@ -51,7 +51,7 @@
       font-weight: 300;
 
       @media @phone {
-        font-size: 28px;
+        font-size: 1.2em;
       }
     }
   }
@@ -75,7 +75,7 @@
     line-height: 2em;
 
     @media @phone {
-      font-size: 24px;
+      font-size: 1.4em
     }
 
     &.underscore {
@@ -150,40 +150,68 @@
 
   &.strength {
 
-    img {
-      width: 20%;
-      min-width: 60px;
-      margin-bottom: 32px;
-    }
+    .ant-row {
+      &>div {
 
-    p {
-      font-size: 17px;
-      margin-top: 18px;
+        @media @phone {
+          &:not(:last-of-type) {
+            margin-bottom: 3em;
+          }
+        }
 
-      @media @phone {
-        font-size: 14px;
+        img {
+          width: 20%;
+          min-width: 60px;
+          margin-bottom: 32px;
+        }
+
+        p {
+          font-size: 17px;
+          margin-top: 18px;
+
+          @media @phone {
+            font-size: 1em;
+          }
+        }
       }
     }
   }
 
   &.portfolio {
 
+    @media @phone {
+      h2:nth-of-type(2) {
+        margin-top: 1em;
+        margin-bottom: 1.5em;
+      }
+    }
+
     .ant-row,
-    {
+    .ant-row-flex {
 
       padding-top: 18px;
 
       &>div {
-        margin-bottom: 44px;
+
+        margin-bottom: 3em;
 
         img {
 
-          height: 125px;
+          height: 7em;
           margin-bottom: 18px;
 
           @media @phone {
-            max-width: 100px;
+            max-width: 75px;
+            max-height: 75px;
           }
+        }
+      }
+    }
+
+    .ant-row-flex {
+      @media @phone {
+        &>div {
+          margin-bottom: 0em;
         }
       }
     }
@@ -192,37 +220,54 @@
   &.team,
   &.advisor {
 
-    h4 {
-      margin-top: 20px;
+    .ant-row,
+    {
+      &>div {
 
-      @media @phone {
-        font-size: 16px;
+        @media @phone {
+          &:not(:last-of-type) {
+            margin-bottom: 4em;
+          }
+        }
+
+
+        h4 {
+          margin-top: 20px;
+
+          @media @phone {
+            font-size: 16px;
+          }
+        }
+
+        h5 {
+          font-size: 17px;
+          line-height: 28px;
+          color: #90979e;
+
+          @media @phone {
+            font-size: 14px;
+          }
+        }
+
+        p {
+          color: white;
+          text-align: left;
+        }
+
+        img {
+          width: 75%;
+          max-width: 250px;
+        }
       }
-    }
-
-    h5 {
-      font-size: 17px;
-      line-height: 28px;
-      color: #90979e;
-
-      @media @phone {
-        font-size: 14px;
-      }
-    }
-
-    p {
-      color: white;
-      text-align: left;
-    }
-
-    img {
-      width: 80%;
-      max-width: 250px;
     }
 
     .ant-row-flex {
       &>div {
-        margin-bottom: 4em;
+        // margin-bottom: 4em;
+        img {
+          width: 80%;
+          max-width: 250px;
+        }
       }
     }
   }
@@ -231,21 +276,36 @@
     background-color: white;
 
     .ant-row>div {
-      margin-bottom: 4em;
-      height: 150px;
+      height: 6em;
+
+      &:not(:last-of-type) {
+        margin-bottom: 4em;
+
+        @media @phone{
+          margin-bottom: 1em;
+        }
+      }
+
+      padding-left: 2em;
+      padding-right: 2em;
+
+      @media @phone {
+        padding-left: 1em;
+        padding-right: 1em;
+      }
 
       .img-container {
         position: relative;
         width: 100%;
         height: 100%;
-        
+
         img {
           position: absolute;
           top: 50%;
           left: 50%;
           .translate(-50%, -50%);
-          max-width: 100%;
-          max-height: 150px;
+          max-width: 90%;
+          max-height: 100%;
         }
       }
     }
@@ -263,6 +323,7 @@
   &.info {
     background-color: #202322;
     background-image: none;
+    padding: 8em 0em 6em;
 
     h5 {
       color: white;
@@ -275,9 +336,18 @@
     p {
 
       color: white;
+      font-size: 1em;
+
       @media @phone {
         font-size: 14px;
       }
+    }
+
+    a:hover,
+    a:visited,
+    a:link,
+    a:active {
+      cursor: pointer !important;
     }
 
     .ant-row {
@@ -290,6 +360,11 @@
         text-align: left;
         ul {
           display: block;
+
+          li:hover {
+            cursor: pointer;
+            cursor: hand;
+          }
         }
       }
 
@@ -315,19 +390,16 @@
         }
       }
     }
-  }
-
-  &.map {
-    height: 400px;
-    padding: 0px;
-    background-image: url("http://res.cloudinary.com/dd1ixvdxn/image/upload/v1518006879/map_pldai5.png");
-    background-size: cover;
-    background-position: center;
-
-    @media @phone {
-      height: 250px;
-    }
-  }
+  } // &.map {
+  //   height: 400px;
+  //   padding: 0px;
+  //   background-image: url("http://res.cloudinary.com/dd1ixvdxn/image/upload/v1518006879/map_pldai5.png");
+  //   background-size: cover;
+  //   background-position: center;
+  //   @media @phone {
+  //     height: 250px;
+  //   }
+  // }
 }
 
 .horizontalWrapper {
@@ -368,7 +440,6 @@ ul {
   text-align: left;
 
   li {
-
     p {
       margin-top: 30px;
       margin-bottom: 30px;
