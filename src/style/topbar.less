@@ -16,6 +16,8 @@
   }
 }
 
+
+
 .topbarWrapper {
   font-size: 16px;
   display: flex;
@@ -44,31 +46,54 @@
 .isoRight {
 
   .triggerBtn {
-    width: 24px;
-    height: 100%;
-    display: -webkit-inline-flex;
-    display: -ms-inline-flex;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background-color: transparent;
-    border: 0;
-    outline: 0;
-    position: relative;
-    cursor: pointer;
 
-    &:before {
-      content: '\f20e';
-      font-family: 'Ionicons';
-      font-size: 26px;
-      color: inherit;
-      line-height: 0;
-      position: absolute;
+    position: relative;
+    padding: 9px 10px;
+    background-color: transparent;
+    background-image: none;
+    border: 1px solid transparent;
+
+    .icon-bar {
+      width: 22px;
+      height: 2px;
+      transition: all 0.2s;
+      background-color: @bgColor;
+      display: block;
+
+      &:not(:first-of-type) {
+        margin-top: 4px;
+      }
+    }
+
+    .top-bar {
+      transform: rotate(45deg);
+      transform-origin: 10% 10%;
+    }
+
+    .middle-bar {
+      opacity: 0;
+    }
+
+    .bottom-bar {
+      transform: rotate(-45deg);
+      transform-origin: 10% 90%;
+    }
+
+
+    &.menuCollapsed {
+      .top-bar {
+        transform: rotate(0deg);
+      }
+      .middle-bar {
+        opacity: 1;
+      }
+      .bottom-bar {
+        transform: rotate(0deg);
+      }
     }
   }
-  
-  li {
 
+  li {
     position: relative;
     padding-left: 18px;
     padding-right: 18px;
@@ -122,8 +147,32 @@
   }
 }
 
-.ant-modal-content {
-  .ant-modal-footer {
-    text-align: center;
+.menu {
+  background-color: white;
+  border: 1px solid #e7e7e7;
+  height: auto;
+  max-height: 280px;
+  font-size: 14px;
+  overflow: hidden;
+
+  -webkit-transition: max-height .5s ease;
+  -moz-transition: max-height .5s ease;
+  -ms-transition: max-height .5s ease;
+  -o-transition: max-height .5s ease;
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    li {
+      height: 4em;
+      text-align: center;
+    }
+  }
+  a {
+    color: @fontColor;
+  }
+
+  &.menuCollapsed {
+    max-height: 0px;
   }
 }

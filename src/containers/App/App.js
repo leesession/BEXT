@@ -42,9 +42,6 @@ export class App extends React.PureComponent {
                 <Layout style={{ flexDirection: 'row', overflowX: 'hidden' }}>
                   <Layout
                     className="isoContentMainLayout"
-                    style={{
-                      height: '100vh',
-                    }}
                   >
                     <Content
                       className="isomorphicContent"
