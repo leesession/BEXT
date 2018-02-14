@@ -3,9 +3,9 @@ export default {
 };
 
 const siteConfig = {
-  siteName: 'BNF Capital',
+  siteName: 'Coefficient Ventures',
   siteIcon: 'ion-flash',
-  footerText: '©2018 Created by BNF.Capital',
+  footerText: '©2018 Created by coefficient.network',
 };
 
 const themeConfig = {
