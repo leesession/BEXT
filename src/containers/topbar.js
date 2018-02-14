@@ -1,11 +1,9 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import _ from 'lodash';
 import { Layout, Menu, Dropdown, Icon, message, Button, Input, Row, Col, Tag } from 'antd';
 import { cloudinaryConfig, CloudinaryImage, CloudinaryVideo } from '../components/react-cloudinary';
 
-import appActions from '../redux/app/actions';
 import { getCurrentTheme } from './ThemeSwitcher/config';
 import { themeConfig } from '../config';
 
@@ -18,7 +16,10 @@ class Topbar extends React.PureComponent {
     super(props);
 
     this.state = {
+      collapsed: true,
     };
+
+    this.toggleCollapsed = this.toggleCollapsed.bind(this);
   }
 
   componentWillMount() {
@@ -28,12 +29,22 @@ class Topbar extends React.PureComponent {
   componentWillReceiveProps(nextProps) {
   }
 
+  toggleCollapsed() {
+    console.log('toggle', this.state.collapsed);
+
+    this.setState({
+      collapsed: !this.state.collapsed,
+    });
+  }
+
   render() {
     const customizedTheme = getCurrentTheme('topbarTheme', themeConfig.theme);
     const {
       collapsed,
-      toggleCollapsed,
-    } = this.props;
+    } = this.state;
+
+    const btnClassName = `triggerBtn  ${collapsed ? 'menuCollapsed' : 'menuOpen'}`;
+    const menuClassName = `menu  ${collapsed ? 'menuCollapsed' : 'menuOpen'}`;
 
     return (
       <div className="topbar">
@@ -53,19 +64,39 @@ class Topbar extends React.PureComponent {
                 </div>
 
                 <ul className="isoRight">
-                  <button
-                    className={
-                      collapsed ? 'triggerBtn menuCollapsed' : 'triggerBtn menuOpen'
-                    }
-                    style={{ color: customizedTheme.textColor }}
-                    onClick={toggleCollapsed}
-                  />
-                  <li><Link to="/" >Home</Link></li>
+                  <div className="hideOnLarge">
+                    <button
+                      className={btnClassName}
+                      style={{ color: customizedTheme.textColor }}
+                      onClick={this.toggleCollapsed}
+                      data-toggle="collapse"
+                      data-target="#bs-example-navbar-collapse-1"
+                    >
+                      <span className="icon-bar top-bar"></span>
+                      <span className="icon-bar middle-bar"></span>
+                      <span className="icon-bar bottom-bar"></span>
+                    </button>
+
+                  </div>
+                  <li className="hideOnMobile"><Link to="/" >Home</Link></li>
                   {/* <li><Link to="/ecosystem" >Ecosystem</Link></li> */}
-                  <li><Link to="/contact" >Become a partner</Link></li>
+                  <li className="hideOnMobile"><Link to="/contact" >Become a partner</Link></li>
                 </ul>
               </div>
             </div>
+
+            <div className={menuClassName} id="bs-example-navbar-collapse-1">
+              <ul>
+                <li role="menuitem">
+                  <a href="#">Mission</a>
+                </li>
+                <li role="menuitem"><a href="/#portfolio">Portfolio </a></li>
+                <li role="menuitem"><a href="/#team">Team</a></li>
+                <li role="menuitem"><a href="/#advisor">Advisor</a></li>
+                <li role="menuitem"><a href="#partner">Partners</a></li>
+              </ul>
+            </div>
+
           </div>
         </Header>
       </div>
@@ -74,21 +105,15 @@ class Topbar extends React.PureComponent {
 }
 
 Topbar.propTypes = {
-  collapsed: PropTypes.bool,
-  toggleCollapsed: PropTypes.func,
 };
 
 Topbar.defaultProps = {
-  collapsed: false,
-  toggleCollapsed: undefined,
 };
 
 const mapStateToProps = (state) => ({
-  collapsed: state.App.collapsed,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  toggleCollapsed: () => dispatch(appActions.toggleCollapsed()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Topbar);

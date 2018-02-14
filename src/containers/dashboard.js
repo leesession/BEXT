@@ -562,7 +562,7 @@ const SectionTeam = React.createClass({
               >
                 <CloudinaryImage publicId="chance-bw_qv7s36" options={{ width: 300, crop: 'scale' }} />
                 <h4>Chance Du</h4>
-                <h5>Managing Partner</h5>
+                <h5>Founding Partner</h5>
                 {/*                <p>All in blockchain. <br />
                 Investor of Filecoin, Raiden, Zeppelin, 0x, Tari.<br />
                 First investor and advisor for Tomochain and IoTex.<br />
@@ -635,7 +635,7 @@ const SectionAdvisor = React.createClass({
               sm={colWidth.sm}
             >
               <CloudinaryImage publicId="ryan-bw_cwwrfe" options={{ width: 300, crop: 'scale' }} />
-              <h4>Ryan Zurrer</h4><h5>General Advisor</h5></Col>
+              <h4>Ryan Zurrer</h4><h5>General Advisor</h5><h5>Partner at Polychain Capital</h5></Col>
           </Row>
           {/*          <Row gutter={16}>
             <Col
