@@ -15,6 +15,7 @@ import InfoSection from '../components/infoSection';
 
 cloudinaryConfig({ cloud_name: 'dd1ixvdxn' });
 const FormItem = Form.Item;
+
 const {
   Link, Element, Events, scroll, scrollSpy,
 } = Scroll;
@@ -560,7 +561,7 @@ const SectionTeam = React.createClass({
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <CloudinaryImage publicId="chance-bw_qv7s36" options={{ width: 300, crop: 'scale' }} />
+                <CloudinaryImage publicId="811109327_itdhnd" options={{ width: 300, crop: 'scale' }} />
                 <h4>Chance Du</h4>
                 <h5>Founding Partner</h5>
                 {/*                <p>All in blockchain. <br />
@@ -574,9 +575,9 @@ const SectionTeam = React.createClass({
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <CloudinaryImage publicId="chris-sm_fz6sq9" options={{ width: 300, crop: 'scale' }} />
+                <CloudinaryImage publicId="811108958_exvjw2" options={{ width: 300, crop: 'scale' }} />
                 <h4>Chris Li</h4>
-                <h5>Technical Partner</h5>
+                <h5>Partner</h5>
                 {/*                <p>Blockchain developer and open source contributor <br />
                 Prediction market experts <br />
                 Serial entrepreneur <br />
@@ -591,7 +592,7 @@ const SectionTeam = React.createClass({
               >
                 <CloudinaryImage publicId="aaron-bw_gr6utp" options={{ width: 300, crop: 'scale' }} />
                 <h4>Aaron Li</h4>
-                <h5>Technical Partner</h5>
+                <h5>Partner</h5>
 
                 {/*                <p>Founder of Qukka.ai <br />
                 Inference lead engineer in Scaled Inference <br />
