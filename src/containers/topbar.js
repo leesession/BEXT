@@ -87,13 +87,12 @@ class Topbar extends React.PureComponent {
 
             <div className={menuClassName} id="bs-example-navbar-collapse-1">
               <ul>
-                <li role="menuitem">
-                  <a href="#">Mission</a>
-                </li>
+                <li role="menuitem"><a href="/#">Home</a></li>
                 <li role="menuitem"><a href="/#portfolio">Portfolio </a></li>
                 <li role="menuitem"><a href="/#team">Team</a></li>
                 <li role="menuitem"><a href="/#advisor">Advisor</a></li>
-                <li role="menuitem"><a href="#partner">Partners</a></li>
+                <li role="menuitem"><a href="/#partner">Partners</a></li>
+                <li role="menuitem"><a href="/contact#">Become a Partner</a></li>
               </ul>
             </div>
 

@@ -151,7 +151,7 @@
   background-color: white;
   border: 1px solid #e7e7e7;
   height: auto;
-  max-height: 280px;
+  max-height: 340px;
   font-size: 14px;
   overflow: hidden;
 
@@ -165,7 +165,12 @@
     flex-direction: column;
     li {
       height: 4em;
+      line-height: 4em;
       text-align: center;
+
+      &:last-of-type{
+        border-top: 1px solid @bgColor;
+      }
     }
   }
   a {
