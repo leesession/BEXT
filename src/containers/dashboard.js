@@ -101,7 +101,6 @@ class Dashboard extends React.Component {
 
             <div className="content">
               <h1>Coefficient Ventures</h1>
-              <h2>The true DAO of decentralized space.</h2>
             </div>
 
             <div className="background">
@@ -120,8 +119,13 @@ class Dashboard extends React.Component {
           <div className="wrapper mission" id="mission">
             {/*            <Element name="test1" className="element">element here</Element> */}
             <div className="horizontalWrapper">
-              <h2 className="underscore">Our Mission</h2>
-              <p>The Blockchain, a novel financial technology, holds the promise to disrupt legacy parts of financial services and create new markets. The firm has invested in 72 companies in the last three years, investing alongside Silicon Valley’s leading venture capital firms. We are a sector specific, but multi-stage venture capital investor that seeks to gain diverse exposure to the Blockchain economy while offering unique co-investment opportunities and proprietary deal flow to our investors.</p>
+              <Row type="flex" justify="center">
+                <Col span={18}>
+                  <h2 className="underscore">Our Mission</h2>
+                  <p>Coefficient Ventures is a next generation crypto hedge fund. We are crypto hedge fund 2.0. We are a global support network for blockchain projects and are leveraging this novel technology to present ourselves as the coefficient to organizations, unique ecosystems, and the world. </p>
+                  <p>We value founding teams that have a track record of following through, are passionate about the blockchain philosophy, and are capable of changing the world for the better. We mainly focus on instrastructure-level blockchain projects in the decentralization 1.0 stage.</p>
+                </Col>
+              </Row>
             </div>
           </div>
         </section>
@@ -155,48 +159,7 @@ class Dashboard extends React.Component {
           </div>
         </section> */}
 
-        <section>
-          <div className="wrapper dark info">
-            <div className="horizontalWrapper">
-              <Row>
-                <Col
-                  xs={24}
-                  sm={8}
-                >
-                  <ul>
-                    {/* <li><Link activeClass="active" to="test2" spy smooth duration={500}>Test 2</Link></li> */}
-                    <li><h5>
-                      {/* <Link to="test1" containerId="scrollContainer" spy smooth offset={50} duration={500}>Test 1
-                      </Link> */}
-                    </h5></li>
-                    {/* <li><h5>Ecosystem</h5></li> */}
-                    <li><Link to="/#portfolio"><h5>Portfolio</h5></Link></li>
-                    <li><h5>Team</h5></li>
-                    <li><h5>Partners</h5></li>
-                    <li><h5>Become a partner</h5></li>
-                  </ul>
-                </Col>
-                <Col
-                  xs={24}
-                  sm={10}
-                >
-                  <p>The Blockchain, a novel financial technology, holds the promise to disrupt legacy parts of financial services and create new markets. The firm has invested in 72 companies in the last three years, investing alongside Silicon Valley’s leading venture capital firms. </p>
-                </Col>
-                <Col
-                  xs={24}
-                  sm={6}
-                >
-                  <ul>
-                    <li><p>865 Market St</p></li>
-                    <li><p>San Francisco CA, 94103</p></li>
-                    <li><p>+1 (312) 912-5775</p></li>
-                    <li><p>contract@bnf.capital</p></li>
-                  </ul>
-                </Col>
-              </Row>
-            </div>
-          </div>
-        </section>
+        <InfoSection />
 
         {/* <section>
           <div className="wrapper map">
@@ -426,8 +389,8 @@ const SectionStrength = React.createClass({
                 sm={colWidth.sm}
               >
                 <CloudinaryImage publicId="icon-resources" options={{ width: 150, crop: 'fit' }} />
-                <h3>Abundant Resources</h3>
-                <p>We’re vertically integrated, from incubator to venture fund to exchange, and are positioned to help projects at any stage of their development</p>
+                <h3>Developer Community</h3>
+                <p>Working with global partners, we facilitate robust developer community growth through meetups, conferences, and hackathons.</p>
               </Col>
               <Col
                 xs={colWidth.xs}
@@ -435,8 +398,8 @@ const SectionStrength = React.createClass({
               >
                 <CloudinaryImage publicId="icon-services" options={{ width: 150, crop: 'fit' }} />
 
-                <h3>Full Services</h3>
-                <p>From financial advising to legal consultancy, with more than 10 years accumulated experience we are confident to assist newborns to thrive.</p>
+                <h3>Network and Resources</h3>
+                <p>We are building the next generation DAO. In line with the principles of “The DAO” of 2016, we aim to build a global, decentralized collaboration-based network to leverage resources for building our portfolio projects through core strategic partner introductions, local community building and market breakout.</p>
               </Col>
               <Col
                 xs={colWidth.xs}
@@ -445,7 +408,7 @@ const SectionStrength = React.createClass({
                 <CloudinaryImage publicId="icon-network" options={{ width: 150, crop: 'fit' }} />
 
                 <h3>Ecosystem Approach</h3>
-                <p>Our portfolio companies get access to the best network in China, greatly accelerating their growth and success rate.</p>
+                <p>We engage in blockchain ecosystem incubation and investing, keeping a close involvement with exchanges, public relations firms, law firms, developer education projects, media, and recruiting companies. A project should focus on its innovation and product, we will deal with the rest.</p>
               </Col>
             </Row>
           </div>

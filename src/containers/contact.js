@@ -8,6 +8,7 @@ import InfoSection from '../components/infoSection';
 import { cloudinaryConfig, CloudinaryImage, CloudinaryVideo } from '../components/react-cloudinary';
 
 cloudinaryConfig({ cloud_name: 'dd1ixvdxn' });
+const FormItem = Form.Item;
 
 class Contact extends React.Component {
   constructor(props) {
@@ -22,10 +23,16 @@ class Contact extends React.Component {
       <div>
 
         <section>
-          <div className="wrapper mission" id="mission">
+          <div className="wrapper contact">
             <div className="horizontalWrapper">
-              <h2 className="underscore">Our Mission</h2>
-              <p>The Blockchain, a novel financial technology, holds the promise to disrupt legacy parts of financial services and create new markets. The firm has invested in 72 companies in the last three years, investing alongside Silicon Valley’s leading venture capital firms. We are a sector specific, but multi-stage venture capital investor that seeks to gain diverse exposure to the Blockchain economy while offering unique co-investment opportunities and proprietary deal flow to our investors.</p>
+              <h2 className="underscore">Become a Partner</h2>
+              <p></p>
+              <Row type="flex" justify="center">
+                <Col span={16}>
+                  <ContactForm />
+                </Col>
+              </Row>
+
             </div>
           </div>
         </section>

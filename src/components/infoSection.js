@@ -22,37 +22,29 @@ class InfoSection extends React.Component {
                 sm={8}
               >
                 <ul>
-                  <li><Link
-                    to={{
-                      pathname: '/',
-                      hash: '#portfolio',
-                    }}
-                  >Portfolio</Link></li>
-                  <li><Link
-                    to={{
-                      pathname: '/',
-                      hash: '#team',
-                    }}
-                  ><h5>Team</h5></Link></li>
-                  <li><h5>Partners</h5></li>
-                  <li><h5>Become a partner</h5></li>
+                  <li ><a href="/#">Home</a></li>
+                  <li ><a href="/#portfolio">Portfolio </a></li>
+                  <li ><a href="/#team">Team</a></li>
+                  <li ><a href="/#advisor">Advisor</a></li>
+                  <li ><a href="/#partner">Partners</a></li>
+                  <li ><a href="/contact#">Become a Partner</a></li>
                 </ul>
               </Col>
               <Col
                 xs={24}
                 sm={10}
               >
-                <p>The Blockchain, a novel financial technology, holds the promise to disrupt legacy parts of financial services and create new markets. The firm has invested in 72 companies in the last three years, investing alongside Silicon Valley’s leading venture capital firms. </p>
+                <p>We welcome global partners to join coefficient network to provide help for the global blockchain ecosystem. </p>
               </Col>
               <Col
                 xs={24}
                 sm={6}
               >
                 <ul>
-                  <li><p>865 Market St</p></li>
-                  <li><p>San Francisco CA, 94103</p></li>
-                  <li><p>+1 (312) 912-5775</p></li>
-                  <li><p>contract@bnf.capital</p></li>
+                  <li><p>424 Clay St, Lower Level</p></li>
+                  <li><p>San Francisco CA, 94111</p></li>
+                  <li><p>&nbsp;</p></li>
+                  <li><p>chance@coefficientventures.com</p></li>
                 </ul>
               </Col>
             </Row>
