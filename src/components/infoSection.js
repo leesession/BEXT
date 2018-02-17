@@ -44,7 +44,7 @@ class InfoSection extends React.Component {
                   <li><p>424 Clay St, Lower Level</p></li>
                   <li><p>San Francisco CA, 94111</p></li>
                   <li><p>&nbsp;</p></li>
-                  <li><p>chance@coefficientventures.com</p></li>
+                  <li><p>info@coefficientventures.com</p></li>
                 </ul>
               </Col>
             </Row>
