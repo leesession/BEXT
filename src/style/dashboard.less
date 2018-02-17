@@ -142,6 +142,11 @@
 
   &.mission {
     p {
+
+      &:not(:last-of-type){
+        margin-bottom: 1em;
+      }
+
       @media @phone {
         font-size: 16px;
       }
@@ -324,7 +329,7 @@
     background-image: none;
     padding: 8em 0em 6em;
 
-    h5 {
+    li a{
       color: white;
       font-size: 14px;
       font-weight: 500;
