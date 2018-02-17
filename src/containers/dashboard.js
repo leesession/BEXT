@@ -601,27 +601,27 @@ const SectionAdvisor = React.createClass({
               <CloudinaryImage publicId="ryan-bw_cwwrfe" options={{ width: 300, crop: 'scale' }} />
               <h4>Ryan Zurrer</h4><h5>General Advisor</h5><h5>Partner at Polychain Capital</h5></Col>
           </Row>
-          {/*          <Row gutter={16}>
+          <Row gutter={16} type="flex" justify="center">
             <Col
               xs={colWidth.xs}
               sm={colWidth.sm}
             >
-              <CloudinaryImage publicId="jeromy_rxqrrr" options={{ width: 150, crop: 'scale' }} />
+              <CloudinaryImage publicId="jeromy-bw_aamnes" options={{ width: 300, crop: 'scale' }} />
               <h4>Jeromy</h4><h5>Technical Advisor</h5></Col>
             <Col
               xs={colWidth.xs}
               sm={colWidth.sm}
             >
-              <CloudinaryImage publicId="daneil-round_bbfgap" options={{ width: 150, crop: 'scale' }} />
+              <CloudinaryImage publicId="daneil-round_bbfgap" options={{ width: 300, crop: 'scale' }} />
               <h4>Daniel Ternyak</h4><h5>Technical Advisor</h5></Col>
-
+            {/*
             <Col
               xs={colWidth.xs}
               sm={colWidth.sm}
             >
-              <CloudinaryImage publicId="est-round_ihb4uc" options={{ width: 150, crop: 'scale' }} />
-              <h4>Esteban Ordano</h4><h5>Technical Advisor</h5></Col>
-          </Row> */}
+              <CloudinaryImage publicId="est-round_ihb4uc" options={{ width: 300, crop: 'scale' }} />
+              <h4>Esteban Ordano</h4><h5>Technical Advisor</h5></Col> */}
+          </Row>
         </div>
       </div>
     </section>);
@@ -652,9 +652,7 @@ const SectionPartners = React.createClass({
               xs={colWidth.xs}
               sm={colWidth.sm}
             >
-              <div className="img-container">
-                <CloudinaryImage publicId="polychain_vcqfqu" options={{ height: 150, crop: 'scale' }} />
-              </div>
+              <div className="img-container"><CloudinaryImage publicId="polychain_vcqfqu" options={{ height: 150, crop: 'scale' }} /></div>
             </Col>
             <Col
               xs={colWidth.xs}
@@ -676,36 +674,6 @@ const SectionPartners = React.createClass({
               <div className="img-container"><CloudinaryImage publicId="kyber_pf31oj" options={{ height: 150, crop: 'scale' }} /></div>
             </Col>
 
-            <Col
-              xs={colWidth.xs}
-              sm={colWidth.sm}
-            >
-              <div className="img-container"><CloudinaryImage publicId="struck-black_y5algk" options={{ height: 150, crop: 'scale' }} /></div>
-            </Col>
-
-            <Col
-              xs={colWidth.xs}
-              sm={colWidth.sm}
-            >
-              <div className="img-container"><CloudinaryImage publicId="gbic_xpvely" options={{ height: 150, crop: 'scale' }} /></div>
-            </Col>            <Col
-              xs={colWidth.xs}
-              sm={colWidth.sm}
-            >
-              <div className="img-container"><CloudinaryImage publicId="connect_h7rnap" options={{ height: 150, crop: 'scale' }} /></div>
-            </Col>
-            <Col
-              xs={colWidth.xs}
-              sm={colWidth.sm}
-            >
-              <div className="img-container"><CloudinaryImage publicId="genesis_o4cysg" options={{ height: 150, crop: 'scale' }} /></div>
-            </Col>
-            <Col
-              xs={colWidth.xs}
-              sm={colWidth.sm}
-            >
-              <div className="img-container"><CloudinaryImage publicId="crypto-parency_acpecy" options={{ height: 150, crop: 'scale' }} /></div>
-            </Col>
           </Row>
         </div>
       </div>

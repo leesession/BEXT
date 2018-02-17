@@ -143,7 +143,7 @@
   &.mission {
     p {
 
-      &:not(:last-of-type){
+      &:not(:last-of-type) {
         margin-bottom: 1em;
       }
 
@@ -225,8 +225,8 @@
   &.team,
   &.advisor {
 
-    .ant-row, .ant-row-flex
-    {
+    .ant-row,
+    .ant-row-flex {
       &>div {
 
         @media @phone {
@@ -266,7 +266,11 @@
     }
 
     .ant-row-flex {
+      &:not(:last-of-type) {
+        margin-bottom: 4em;
+      }
       &>div {
+
         // margin-bottom: 4em;
         img {
           width: 80%;
@@ -285,7 +289,7 @@
       &:not(:last-of-type) {
         margin-bottom: 4em;
 
-        @media @phone{
+        @media @phone {
           margin-bottom: 1em;
         }
       }
@@ -329,7 +333,7 @@
     background-image: none;
     padding: 8em 0em 6em;
 
-    li a{
+    li a {
       color: white;
       font-size: 14px;
       font-weight: 500;
