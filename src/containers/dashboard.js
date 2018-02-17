@@ -524,7 +524,7 @@ const SectionTeam = React.createClass({
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <CloudinaryImage publicId="811109327_itdhnd" options={{ width: 300, crop: 'scale' }} />
+                <CloudinaryImage publicId="chance-bw_qv7s36" options={{ width: 300, crop: 'scale' }} />
                 <h4>Chance Du</h4>
                 <h5>Founding Partner</h5>
                 {/*                <p>All in blockchain. <br />
@@ -538,7 +538,7 @@ const SectionTeam = React.createClass({
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <CloudinaryImage publicId="811108958_exvjw2" options={{ width: 300, crop: 'scale' }} />
+                <CloudinaryImage publicId="chris-sm_fz6sq9" options={{ width: 300, crop: 'scale' }} />
                 <h4>Chris Li</h4>
                 <h5>Partner</h5>
                 {/*                <p>Blockchain developer and open source contributor <br />
