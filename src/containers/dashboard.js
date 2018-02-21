@@ -607,13 +607,13 @@ const SectionAdvisor = React.createClass({
               sm={colWidth.sm}
             >
               <CloudinaryImage publicId="jeromy-bw_aamnes" options={{ width: 300, crop: 'scale' }} />
-              <h4>Jeromy</h4><h5>Technical Advisor</h5></Col>
+              <h4>Jeromy</h4><h5>Technical Advisor</h5><h5>Core developer of IPFS</h5></Col>
             <Col
               xs={colWidth.xs}
               sm={colWidth.sm}
             >
               <CloudinaryImage publicId="daneil-round_bbfgap" options={{ width: 300, crop: 'scale' }} />
-              <h4>Daniel Ternyak</h4><h5>Technical Advisor</h5></Col>
+              <h4>Daniel Ternyak</h4><h5>Technical Advisor</h5><h5>CTO of MyCrypto</h5></Col>
             {/*
             <Col
               xs={colWidth.xs}
@@ -672,6 +672,13 @@ const SectionPartners = React.createClass({
               sm={colWidth.sm}
             >
               <div className="img-container"><CloudinaryImage publicId="kyber_pf31oj" options={{ height: 150, crop: 'scale' }} /></div>
+            </Col>
+
+            <Col
+              xs={colWidth.xs}
+              sm={colWidth.sm}
+            >
+              <div className="img-container"><CloudinaryImage publicId="signum_ppnx2z" options={{ height: 150, crop: 'scale' }} /></div>
             </Col>
 
           </Row>
