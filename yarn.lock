@@ -1813,8 +1813,8 @@ clone@^2.1.1:
   resolved "https://registry.yarnpkg.com/clone/-/clone-2.1.1.tgz#d217d1e961118e3ac9a4b8bba3285553bf647cdb"
 
 cloudinary-core@^2.1.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/cloudinary-core/-/cloudinary-core-2.4.0.tgz#d58edf2349bbb0d3ea5834e597b0004a6f7b9775"
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/cloudinary-core/-/cloudinary-core-2.5.0.tgz#580d7255a394f0900879e7eee0d6f3072df99ac5"
   dependencies:
     lodash ">=3.0"
 
@@ -5036,7 +5036,7 @@ lodash.templatesettings@^4.0.0:
   dependencies:
     lodash._reinterpolate "~3.0.0"
 
-lodash.throttle@^4.0.0:
+lodash.throttle@^4.0.0, lodash.throttle@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/lodash.throttle/-/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
 
@@ -5044,9 +5044,9 @@ lodash.uniq@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
 
-lodash@>=3.0:
-  version "4.17.5"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.5.tgz#99a92d65c0272debe8c96b6057bc8fbfa3bed511"
+lodash@>=3.0, lodash@^3.10.0, lodash@^3.2.0, lodash@^3.9.3:
+  version "3.10.1"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
 
 "lodash@>=3.5 <5", lodash@^4.14.0, lodash@^4.15.0, lodash@^4.16.5, lodash@^4.17.2, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0:
   version "4.17.4"
@@ -5292,8 +5292,8 @@ mute-stream@0.0.7:
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.7.tgz#3075ce93bc21b8fab43e1bc4da7e8115ed1e7bab"
 
 nan@^2.0.5:
-  version "2.8.0"
-  resolved "https://registry.yarnpkg.com/nan/-/nan-2.8.0.tgz#ed715f3fe9de02b57a5e6252d90a96675e1f085a"
+  version "2.9.2"
+  resolved "https://registry.yarnpkg.com/nan/-/nan-2.9.2.tgz#f564d75f5f8f36a6d9456cca7a6c4fe488ab7866"
 
 nan@^2.3.0:
   version "2.7.0"
@@ -6910,6 +6910,13 @@ react-router@^4.1.1, react-router@^4.2.0:
     prop-types "^15.5.4"
     warning "^3.0.0"
 
+react-scroll@^1.7.6:
+  version "1.7.7"
+  resolved "https://registry.yarnpkg.com/react-scroll/-/react-scroll-1.7.7.tgz#948c40c9a189b62bf4a53ee0fd50e5d89d37260a"
+  dependencies:
+    lodash.throttle "^4.1.1"
+    prop-types "^15.5.8"
+
 react-scrollbar-js@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/react-scrollbar-js/-/react-scrollbar-js-1.0.1.tgz#c13fd5d76c5bb858f94fb320f054f5db2b0eadce"
@@ -8457,8 +8464,8 @@ wbuf@^1.1.0, wbuf@^1.7.2:
     minimalistic-assert "^1.0.0"
 
 web3-utils@^1.0.0-beta.27:
-  version "1.0.0-beta.29"
-  resolved "https://registry.yarnpkg.com/web3-utils/-/web3-utils-1.0.0-beta.29.tgz#899925ed15b20d5f70814df8a35262e4d6fca6a9"
+  version "1.0.0-beta.30"
+  resolved "https://registry.yarnpkg.com/web3-utils/-/web3-utils-1.0.0-beta.30.tgz#eae408cc8d6d6fecc8d5097cfead51773f231ff9"
   dependencies:
     bn.js "4.11.6"
     eth-lib "^0.1.27"
