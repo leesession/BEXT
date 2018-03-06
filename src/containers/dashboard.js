@@ -140,7 +140,9 @@ class Dashboard extends React.Component {
         {/* <Element name="test2" className="element">
           test 2
         </Element> */}
-        <SectionPartners />
+        {/* <SectionPartners /> */}
+
+        {/* <SectionServices /> */}
 
         {/*        <section>
           <div className="wrapper contact dark">
@@ -681,6 +683,44 @@ const SectionPartners = React.createClass({
               <div className="img-container"><CloudinaryImage publicId="signum_ppnx2z" options={{ height: 150, crop: 'scale' }} /></div>
             </Col>
 
+          </Row>
+        </div>
+      </div>
+    </section>);
+  },
+});
+
+const SectionServices = React.createClass({
+  render() {
+    const COL_PER_ROW = { // Specify how many col in each row
+      xs: 2,
+      sm: 4,
+    };
+
+    // Calculate grid number for Col attribute
+    const colWidth = {};
+
+    Object.keys(COL_PER_ROW).forEach((key) => {
+      colWidth[key] = 24 / COL_PER_ROW[key];
+    });
+
+    return (<section>
+      <div className="wrapper services" id="services">
+        <div className="horizontalWrapper">
+          <h2 className="underscore">Services Provided</h2>
+          <Row gutter={16} type="flex" justify="center">
+            <Col
+              xs={colWidth.xs}
+              sm={colWidth.sm}
+            >
+              <CloudinaryImage publicId="logo-filecoin" options={{ height: 150, crop: 'scale' }} />
+              <h4>Filecoin</h4><p>Asian Market Strategy</p></Col>
+            <Col
+              xs={colWidth.xs}
+              sm={colWidth.sm}
+            >
+              <CloudinaryImage publicId="ontology_ktenpj" options={{ height: 150, crop: 'scale' }} />
+              <h4>Ontology</h4><p>Global Expansion Partner</p></Col>
           </Row>
         </div>
       </div>

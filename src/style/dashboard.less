@@ -182,7 +182,8 @@
     }
   }
 
-  &.portfolio {
+  &.portfolio,
+  &.services {
 
     @media @phone {
       h2:nth-of-type(2) {
@@ -210,6 +211,14 @@
             max-height: 75px;
           }
         }
+
+        p {
+          font-size: 1em;
+
+          @media @phone {
+            font-size: 14px;
+          }
+        }
       }
     }
 
@@ -220,6 +229,10 @@
         }
       }
     }
+  }
+
+  &.services {
+    background-color: white;
   }
 
   &.team,
