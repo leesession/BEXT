@@ -521,7 +521,7 @@ const SectionTeam = React.createClass({
           <div className="horizontalWrapper">
 
             <h2 className="underscore">Our Team</h2>
-            <Row gutter={16}>
+            <Row gutter={16} type="flex" justify="center">
               <Col
                 xs={colWidth.xs}
                 sm={colWidth.sm}
@@ -550,24 +550,6 @@ const SectionTeam = React.createClass({
                 Individual investments: REP, OMG, ADA, RDN and MKR <br />
                 M.S. in C.S., UIC
                 </p> */}
-              </Col>
-              <Col
-                xs={colWidth.xs}
-                sm={colWidth.sm}
-              >
-                <CloudinaryImage publicId="aaron-bw_gr6utp" options={{ width: 300, crop: 'scale' }} />
-                <h4>Aaron Li</h4>
-                <h5>Partner</h5>
-
-                {/*                <p>Founder of Qukka.ai <br />
-                Inference lead engineer in Scaled Inference <br />
-                (Backed by Khosla Ventures, Lux Capital) <br />
-                Google AI/ ML researcher.   <br />
-                ACM SIGKDD 2014 Best Paper Award. <br />
-                Bitcoin early adopter since 2013, blockchain and smart contracts lecturer at Big tiger. <br />
-                M.S. in C.S., CMU
-                </p> */}
-
               </Col>
             </Row>
           </div>
