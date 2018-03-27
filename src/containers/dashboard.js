@@ -134,9 +134,9 @@ class Dashboard extends React.Component {
 
         <SectionPortfolio />
 
-        <SectionTeam />
+        {/* <SectionTeam />
 
-        <SectionAdvisor />
+        <SectionAdvisor /> */}
         {/* <Element name="test2" className="element">
           test 2
         </Element> */}
