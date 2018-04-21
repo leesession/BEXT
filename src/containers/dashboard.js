@@ -93,7 +93,7 @@ class Dashboard extends React.Component {
     }
 
     const backgroundElement = window.innerWidth < 640
-      ? <CloudinaryImage publicId="bg_strength_whusmv" style={{ height: '100%' }} />
+      ? <CloudinaryImage publicId="bg_strength_whusmv" style={{ height: '100%', minWidth: '100%' }} />
       : <CloudinaryVideo publicId="moving-background" options={videoOptions}></CloudinaryVideo>;
     return (
       <div>
@@ -481,7 +481,7 @@ const SectionPortfolio = React.createClass({
                 sm={colWidth.sm}
               >
                 <div className="img-container">
-                  <a href="https://www.nucypher.com/" target="_blank"><CloudinaryImage publicId="nucypher_gmwoi0" style={{ height: '70%' }} options={{ height: 150, crop: 'scale' }} /></a></div>
+                  <a href="https://www.nucypher.com/" target="_blank"><CloudinaryImage publicId="nucypher_gmwoi0" style={{ height: '55%' }} options={{ height: 150, crop: 'scale' }} /></a></div>
                 <h4>NKMS</h4><p>Nucypher</p></Col>
               <Col
                 xs={colWidth.xs}
@@ -495,14 +495,14 @@ const SectionPortfolio = React.createClass({
                 sm={colWidth.sm}
               >
                 <div className="img-container">
-                  <a href="https://urbit.org/" target="_blank"><CloudinaryImage publicId="urbit_rqjrew" options={{ height: 150, crop: 'scale' }} /></a></div>
+                  <a href="https://urbit.org/" target="_blank"><CloudinaryImage publicId="urbit_zkzxgh" options={{ height: 150, crop: 'scale' }} /></a></div>
                 <h4>URB</h4><p>Urbit</p></Col>
               <Col
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
                 <div className="img-container">
-                  <a href="" target="_blank"><CloudinaryImage publicId="logo-keep" style={{ height: '65%' }} options={{ height: 150, crop: 'scale' }} /></a></div>
+                  <a href="" target="_blank"><CloudinaryImage publicId="logo-keep" style={{ height: '50%' }} options={{ height: 150, crop: 'scale' }} /></a></div>
                 <h4>KEEP</h4><p>Keep</p></Col>
             </Row>
             <h2 style={{ marginTop: '2.5em', marginBottom: '1.5em' }}>Advisory Portfolio</h2>
@@ -521,7 +521,7 @@ const SectionPortfolio = React.createClass({
                 sm={colWidthAdvisory.sm}
               >
                 <div className="img-container">
-                  <a href="https://havven.io/" target="_blank"><CloudinaryImage publicId="havven_attu3x" style={{ height: '65%' }} options={{ height: 150, crop: 'scale' }} /></a></div>
+                  <a href="https://havven.io/" target="_blank"><CloudinaryImage publicId="havven_attu3x" style={{ height: '50%' }} options={{ height: 150, crop: 'scale' }} /></a></div>
                 <h4>HAV</h4><p>Havven</p></Col>
 
               <Col
