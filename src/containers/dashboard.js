@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 // import GoogleMapReact from 'google-map-react';
 import * as Scroll from 'react-scroll';
-// import { Link } from 'react-router-dom';
 
 import { cloudinaryConfig, CloudinaryImage, CloudinaryVideo } from '../components/react-cloudinary';
 import WaveAnimation from '../components/waveAnimation';
@@ -93,6 +92,9 @@ class Dashboard extends React.Component {
       videoOptions.height = '100%';
     }
 
+    const backgroundElement = window.innerWidth < 640
+      ? <CloudinaryImage publicId="bg_strength_whusmv" style={{ height: '100%' }} />
+      : <CloudinaryVideo publicId="moving-background" options={videoOptions}></CloudinaryVideo>;
     return (
       <div>
 
@@ -105,11 +107,7 @@ class Dashboard extends React.Component {
 
             <div className="background">
               {/* <WaveAnimation /> */}
-              {/*              <CloudinaryVideo
-                publicId="moving-background"
-                options={videoOptions}
-              >
-              </CloudinaryVideo> */}
+              {backgroundElement}
             </div>
 
           </div>
@@ -137,29 +135,8 @@ class Dashboard extends React.Component {
         {/* <SectionTeam />
 
         <SectionAdvisor /> */}
-        {/* <Element name="test2" className="element">
-          test 2
-        </Element> */}
-        {/* <SectionPartners /> */}
 
-        {/* <SectionServices /> */}
-
-        {/*        <section>
-          <div className="wrapper contact dark">
-            <div className="horizontalWrapper">
-
-              <h2 className="underscore">Contact</h2>
-              <Row>
-                <Col
-                  offset={4}
-                  span={16}
-                >
-                  <ContactForm />
-                </Col>
-              </Row>
-            </div>
-          </div>
-        </section> */}
+        <SectionFeatured />
 
         <InfoSection />
 
@@ -381,9 +358,14 @@ const SectionStrength = React.createClass({
       colWidth[key] = 24 / COL_PER_ROW[key];
     });
 
+    const isSmall = window.innerWidth < 640;
+    console.log(`window is ${window.innerWidth}px`);
+    const backgroundImageDark = isSmall
+      ? 'http://res.cloudinary.com/dd1ixvdxn/image/upload/v1524278625/bg_strength_whusmv.png'
+      : 'http://res.cloudinary.com/dd1ixvdxn/image/upload/v1524274803/background_contact_lfaazt.png';
     return (
       <section>
-        <div className="wrapper dark strength">
+        <div className="wrapper dark strength" style={{ backgroundImage: `url(${backgroundImageDark})` }}>
           <div className="horizontalWrapper">
             <Row gutter={16}>
               <Col
@@ -433,10 +415,28 @@ const SectionPortfolio = React.createClass({
       colWidth[key] = 24 / COL_PER_ROW[key];
     });
 
+    const COL_PER_ROW_ADVISORY = { // Specify how many col in each row
+      xs: 2,
+      sm: 3,
+    };
+
+    // Calculate grid number for Col attribute
+    const colWidthAdvisory = {};
+
+    Object.keys(COL_PER_ROW_ADVISORY).forEach((key) => {
+      colWidthAdvisory[key] = 24 / COL_PER_ROW_ADVISORY[key];
+    });
+
     return (
 
       <section>
         <div className="wrapper portfolio" id="portfolio">
+          <div className="bg-top-right">
+            <CloudinaryImage publicId="upper_right_joutn0" options={{ height: 450, crop: 'scale' }} />
+          </div>
+          <div className="bg-bot-left">
+            <CloudinaryImage publicId="lower_left_3x_glzqxh" options={{ height: 450, crop: 'scale' }} />
+          </div>
           <div className="horizontalWrapper">
             <h2 className="underscore">Portfolio</h2>
             <Row gutter={16}>
@@ -444,55 +444,93 @@ const SectionPortfolio = React.createClass({
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <CloudinaryImage publicId="logo-filecoin" options={{ height: 150, crop: 'scale' }} />
+                <div className="img-container">
+                  <a href="https://filecoin.io/" target="_blank"><CloudinaryImage publicId="logo-filecoin" options={{ height: 150, crop: 'scale' }} /></a></div>
                 <h4>FIL</h4><p>Filecoin</p></Col>
               <Col
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <CloudinaryImage publicId="logo-rdn" options={{ height: 150, crop: 'scale' }} />
-                <h4>RDN</h4><p>Raiden</p></Col>
+                <div className="img-container">
+                  <a href="https://raiden.network/" target="_blank"><CloudinaryImage publicId="logo-rdn" options={{ height: 150, crop: 'scale' }} /></a></div>
+                <h4>RDN</h4><p>Raiden Network</p></Col>
               <Col
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <CloudinaryImage publicId="logo-zeppelin" options={{ height: 150, crop: 'scale' }} />
+                <div className="img-container">
+                  <a href="https://zeppelinos.org/" target="_blank"><CloudinaryImage publicId="logo-zeppelin" options={{ height: 150, crop: 'scale' }} /></a></div>
                 <h4>ZEP</h4><p>Zeppelin_OS</p></Col>
-              <Col
+              {/* <Col
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <CloudinaryImage publicId="logo-0x" options={{ height: 150, crop: 'scale' }} />
-                <h4>ZRX</h4><p>0x</p></Col>
+                <div className="img-container"><CloudinaryImage publicId="logo-0x" options={{ height: 150, crop: 'scale' }} /></div>
+                <h4>ZRX</h4><p>0x</p></Col> */}
 
-              {/*              <Col
-                xs={colWidth.xs}
-                sm={colWidth.sm}
-              >
-                <CloudinaryImage publicId="logo-keep" options={{ height: 150, crop: 'scale' }} />
-                <h4>KEEP</h4><p>Keep</p></Col> */}
+
               <Col
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <CloudinaryImage publicId="kowala-color_u15mlz" options={{ height: 150, crop: 'scale' }} />
+                <div className="img-container">
+                  <a href="https://www.kowala.tech/" target="_blank"><CloudinaryImage publicId="kowala-color_u15mlz" options={{ height: 150, crop: 'scale' }} /></a></div>
                 <h4>kUSD</h4><p>Kowala</p></Col>
-
+              <Col
+                xs={colWidth.xs}
+                sm={colWidth.sm}
+              >
+                <div className="img-container">
+                  <a href="https://www.nucypher.com/" target="_blank"><CloudinaryImage publicId="nucypher_gmwoi0" style={{ height: '70%' }} options={{ height: 150, crop: 'scale' }} /></a></div>
+                <h4>NKMS</h4><p>Nucypher</p></Col>
+              <Col
+                xs={colWidth.xs}
+                sm={colWidth.sm}
+              >
+                <div className="img-container">
+                  <a href="https://www.thundertoken.com/" target="_blank"><CloudinaryImage publicId="thunder_kytpku" options={{ height: 150, crop: 'scale' }} /></a></div>
+                <h4>Thunder Token</h4><p>Thunder</p></Col>
+              <Col
+                xs={colWidth.xs}
+                sm={colWidth.sm}
+              >
+                <div className="img-container">
+                  <a href="https://urbit.org/" target="_blank"><CloudinaryImage publicId="urbit_rqjrew" options={{ height: 150, crop: 'scale' }} /></a></div>
+                <h4>URB</h4><p>Urbit</p></Col>
+              <Col
+                xs={colWidth.xs}
+                sm={colWidth.sm}
+              >
+                <div className="img-container">
+                  <a href="" target="_blank"><CloudinaryImage publicId="logo-keep" style={{ height: '65%' }} options={{ height: 150, crop: 'scale' }} /></a></div>
+                <h4>KEEP</h4><p>Keep</p></Col>
             </Row>
-            <h2>Advisory Portfolio</h2>
-            <Row gutter={16} type="flex" justify="center">
+            <h2 style={{ marginTop: '2.5em', marginBottom: '1.5em' }}>Advisory Portfolio</h2>
+            <Row gutter={16} type="flex">
+
               <Col
-                xs={colWidth.xs}
-                sm={colWidth.sm}
+                xs={colWidthAdvisory.xs}
+                sm={colWidthAdvisory.sm}
               >
-                <CloudinaryImage publicId="logo-iotex" options={{ height: 150, crop: 'scale' }} />
-                <h4>IoTeX</h4><p>IoTex</p></Col>
-              <Col
-                xs={colWidth.xs}
-                sm={colWidth.sm}
-              >
-                <CloudinaryImage publicId="logo-tomochain" options={{ height: 150, crop: 'scale' }} />
+                <div className="img-container">
+                  <a href="https://tomochain.com/" target="_blank"><CloudinaryImage publicId="logo-tomochain" options={{ height: 150, crop: 'scale' }} /></a></div>
                 <h4>TMC</h4><p>TomoChain</p></Col>
+
+              <Col
+                xs={colWidthAdvisory.xs}
+                sm={colWidthAdvisory.sm}
+              >
+                <div className="img-container">
+                  <a href="https://havven.io/" target="_blank"><CloudinaryImage publicId="havven_attu3x" style={{ height: '65%' }} options={{ height: 150, crop: 'scale' }} /></a></div>
+                <h4>HAV</h4><p>Havven</p></Col>
+
+              <Col
+                xs={colWidthAdvisory.xs}
+                sm={colWidthAdvisory.sm}
+              >
+                <div className="img-container">
+                  <a href="https://iotex.io/" target="_blank"><CloudinaryImage publicId="logo-iotex" options={{ height: 150, crop: 'scale' }} /></a></div>
+                <h4>IOTX</h4><p>IoTex</p></Col>
             </Row>
 
           </div>
@@ -550,6 +588,45 @@ const SectionTeam = React.createClass({
                 Individual investments: REP, OMG, ADA, RDN and MKR <br />
                 M.S. in C.S., UIC
                 </p> */}
+              </Col>
+            </Row>
+          </div>
+        </div>
+      </section>);
+  },
+});
+
+const SectionFeatured = React.createClass({
+  render() {
+    const COL_PER_ROW = { // Specify how many col in each row
+      xs: 1,
+      sm: 3,
+    };
+
+    // Calculate grid number for Col attribute
+    const colWidth = {};
+
+    Object.keys(COL_PER_ROW).forEach((key) => {
+      colWidth[key] = 24 / COL_PER_ROW[key];
+    });
+
+    return (
+      <section>
+        <div className="wrapper featured" id="featured">
+          <div className="horizontalWrapper">
+
+            <h2 className="underscore">Featured by</h2>
+            <Row gutter={16} type="flex" justify="center">
+
+              <Col
+                xs={colWidth.xs}
+                sm={colWidth.sm}
+              >
+                <div className="img-container">
+                  <a href="https://finance.yahoo.com/news/interview-chance-du-founding-partner-074654445.html" target="_blank">
+                    <CloudinaryImage publicId="yahoo-finance_vlc3wi" options={{ height: 150, crop: 'scale' }} />
+                  </a>
+                </div>
               </Col>
             </Row>
           </div>
