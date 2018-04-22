@@ -496,7 +496,7 @@ const SectionPortfolio = React.createClass({
               >
                 <div className="img-container">
                   <a href="https://urbit.org/" target="_blank"><CloudinaryImage publicId="urbit_zkzxgh" options={{ height: 150, crop: 'scale' }} /></a></div>
-                <h4>URB</h4><p>Urbit</p></Col>
+                <h4>USP (Urbit Sparks)</h4><p>Urbit</p></Col>
               <Col
                 xs={colWidth.xs}
                 sm={colWidth.sm}
@@ -600,7 +600,7 @@ const SectionFeatured = React.createClass({
   render() {
     const COL_PER_ROW = { // Specify how many col in each row
       xs: 1,
-      sm: 3,
+      sm: 4,
     };
 
     // Calculate grid number for Col attribute
@@ -615,7 +615,7 @@ const SectionFeatured = React.createClass({
         <div className="wrapper featured" id="featured">
           <div className="horizontalWrapper">
 
-            <h2 className="underscore">Featured by</h2>
+            <h2 className="underscore">News</h2>
             <Row gutter={16} type="flex" justify="center">
 
               <Col
@@ -627,6 +627,23 @@ const SectionFeatured = React.createClass({
                     <CloudinaryImage publicId="yahoo-finance_vlc3wi" options={{ height: 150, crop: 'scale' }} />
                   </a>
                 </div>
+              </Col>
+
+              <Col
+                xs={colWidth.xs}
+                sm={colWidth.sm}
+              >
+                <div className="img-container">
+                  <a href="http://res.cloudinary.com/dd1ixvdxn/raw/upload/v1524374457/press-kit_zgxusc.zip" target="_blank" style={{ display: 'block', height: '100%' }} >
+                    <CloudinaryImage publicId="icon-download-outline-128_gst5gj" options={{ height: 150, crop: 'scale' }} />
+                  </a>
+                  <h4>Press Kit</h4>
+                </div>
+              </Col>
+              <Col
+                xs={colWidth.xs}
+                sm={colWidth.sm}
+              >
               </Col>
             </Row>
           </div>
