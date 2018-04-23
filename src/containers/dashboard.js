@@ -94,7 +94,7 @@ class Dashboard extends React.Component {
 
     const backgroundElement = window.innerWidth < 640
       ? <CloudinaryImage publicId="bg_strength_whusmv" style={{ height: '100%', minWidth: '100%' }} />
-      : <CloudinaryVideo publicId="moving-background" options={videoOptions}></CloudinaryVideo>;
+      : <CloudinaryVideo publicId="moving-background" style={{ height: '100%', minWidth: '100%' }} options={videoOptions}></CloudinaryVideo>;
     return (
       <div>
 
