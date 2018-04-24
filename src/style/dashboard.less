@@ -101,7 +101,7 @@
         }
     }
     &.dark {
-        background-size: cover; 
+        background-size: cover;
         background-position: center center;
         h2,
         h3,
@@ -119,6 +119,18 @@
             }
             @media @phone {
                 font-size: 16px;
+            }
+            &.quote {
+                background: url(http://res.cloudinary.com/dd1ixvdxn/image/upload/v1524556569/left_quote_v53anv.png) no-repeat;
+                background-position: top left;
+                background-size: 2em;
+                font-style: italic;
+                margin-bottom: 2em;
+                font-size: 1.5em;
+                font-weight: 500;
+                @media @phone {
+                    font-size: 16px;
+                }
             }
         }
     }
@@ -176,8 +188,7 @@
                         left: 50%;
                         top: 50%;
                         height: 70%;
-                        .translate(-50%,
-                        -50%);
+                        .translate(-50%, -50%);
                     }
                     @media @phone {
                         max-width: 75px;
@@ -196,11 +207,9 @@
         .bg-bot-left {
             position: absolute;
             width: 30%;
-
-            @media @phone{
-              width: 50%;
+            @media @phone {
+                width: 50%;
             }
-
             img {
                 width: 100%;
                 vertical-align: bottom;
@@ -290,10 +299,10 @@
                     position: absolute;
                     top: 50%;
                     left: 50%;
-                    .translate(-50%,
-                    -50%);
+                    .translate(-50%, -50%);
                     max-width: 90%;
                     max-height: 100%;
+                    .transition('width 1s, height 1s');
                 }
             }
         }

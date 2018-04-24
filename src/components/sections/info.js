@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router-dom';
 import { Row, Col } from 'antd';
+import { cloudinaryConfig, CloudinaryImage, CloudinaryVideo } from '../../components/react-cloudinary';
 
 class InfoSection extends React.Component {
   constructor(props) {
@@ -35,7 +36,7 @@ class InfoSection extends React.Component {
                 xs={24}
                 sm={10}
               >
-                <p>We welcome global partners to join coefficient network to provide help for the global blockchain ecosystem. </p>
+                <p>Coefficient Ventures is a multi-strategy crypto fund with strong presence in North America, Asia and Europe. We`re constantly growing the community and welcome everyone with huge passion for blockchain to join us on this unprecedented journey.</p>
               </Col>
               <Col
                 xs={24}
