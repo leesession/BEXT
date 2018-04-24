@@ -164,7 +164,7 @@ class PortfolioSection extends React.Component {
 
               </Col>
             </Row>
-            <h2 style={{ marginTop: '2.5em', marginBottom: '1.5em' }}>Advisory Portfolio</h2>
+            <h2 style={{ marginTop: '2.5em', marginBottom: '1.5em' }} className="underscore">Advisory Portfolio</h2>
             <Row gutter={16} type="flex">
 
               <Col
