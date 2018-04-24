@@ -69,7 +69,6 @@ class PartnerSection extends React.Component {
       </div>
     </section>);
   }
-
 }
 
 PartnerSection.propTypes = {

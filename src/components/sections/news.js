@@ -1,6 +1,9 @@
 import React, { PropTypes } from 'react';
 import { Row, Col } from 'antd';
+import _ from 'lodash';
+import ScrollReveal from '../scrollReveal';
 import { cloudinaryConfig, CloudinaryImage } from '../../components/react-cloudinary';
+import ImageContainer from '../imageContainer';
 
 cloudinaryConfig({ cloud_name: 'dd1ixvdxn' });
 
@@ -12,9 +15,31 @@ class NewsSection extends React.Component {
     };
   }
 
+  /**
+  * Add event listener
+  */
+  componentDidMount() {
+    // Slide in from right distanct offset
+    const isSmall = window.innerWidth < 640;
+    const offset = isSmall ? 30 : 40;
+    const delay = 200;
+
+    // SlideIn from right
+    const revealTop = {
+      origin: 'top',
+      duration: isSmall ? 800 : 600,
+      scale: 1,
+      easing: 'ease',
+      distance: `${offset * 2}px`,
+    };
+
+    ScrollReveal.reveal(this.part1, _.extend(revealTop, { delay: isSmall ? 0 : delay * 1 }));
+    ScrollReveal.reveal(this.part2, _.extend(revealTop, { delay: isSmall ? delay : delay * 2 }));
+  }
+
   render() {
     const COL_PER_ROW = { // Specify how many col in each row
-      xs: 1,
+      xs: 2,
       sm: 4,
     };
 
@@ -37,10 +62,8 @@ class NewsSection extends React.Component {
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <div className="img-container">
-                  <a href="https://finance.yahoo.com/news/interview-chance-du-founding-partner-074654445.html" target="_blank">
-                    <CloudinaryImage publicId="yahoo-finance_vlc3wi" options={{ height: 150, crop: 'scale' }} />
-                  </a>
+                <div ref={(c) => { this.part1 = c; }}>
+                  <ImageContainer href="https://finance.yahoo.com/news/interview-chance-du-founding-partner-074654445.html" cloudinaryId="yahoo-finance_vlc3wi" />
                 </div>
               </Col>
 
@@ -48,10 +71,8 @@ class NewsSection extends React.Component {
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <div className="img-container">
-                  <a href="http://res.cloudinary.com/dd1ixvdxn/raw/upload/v1524374457/press-kit_zgxusc.zip" target="_blank" style={{ display: 'block', height: '100%' }} >
-                    <CloudinaryImage publicId="icon-download-outline-128_gst5gj" options={{ height: 150, crop: 'scale' }} />
-                  </a>
+                <div ref={(c) => { this.part2 = c; }}>
+                  <ImageContainer href="http://res.cloudinary.com/dd1ixvdxn/raw/upload/v1524374457/press-kit_zgxusc.zip" cloudinaryId="icon-download-outline-128_gst5gj" />
                   <h4>Press Kit</h4>
                 </div>
               </Col>

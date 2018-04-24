@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react';
 import { Row, Col } from 'antd';
+import _ from 'lodash';
 import { cloudinaryConfig, CloudinaryImage } from '../../components/react-cloudinary';
+import ScrollReveal from '../scrollReveal';
 
 cloudinaryConfig({ cloud_name: 'dd1ixvdxn' });
 
@@ -10,6 +12,28 @@ class StrengthSection extends React.Component {
 
     this.state = {
     };
+  }
+
+  /**
+ * Add event listener
+ */
+  componentDidMount() {
+    // Slide in from top distanct offset
+    const isSmall = window.innerWidth < 640;
+    const offset = isSmall ? 30 : 40;
+    const delay = 300;
+
+    const revealTop = {
+      origin: 'top',
+      duration: isSmall ? 1000 : 600,
+      distance: `${offset}px`,
+      scale: 1,
+      easing: 'ease',
+    };
+
+    ScrollReveal.reveal(this.part1, _.extend(revealTop, { delay: isSmall ? 0 : delay * 1 }));
+    ScrollReveal.reveal(this.part2, _.extend(revealTop, { delay: isSmall ? 0 : delay * 2 }));
+    ScrollReveal.reveal(this.part3, _.extend(revealTop, { delay: isSmall ? 0 : delay * 3 }));
   }
 
   render() {
@@ -38,27 +62,31 @@ class StrengthSection extends React.Component {
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <CloudinaryImage publicId="icon-resources" options={{ width: 150, crop: 'fit' }} />
-                <h3>Developer Community</h3>
-                <p>Working with global partners, we facilitate robust developer community growth through meetups, conferences, and hackathons.</p>
+                <div ref={(c) => { this.part1 = c; }}>
+                  <CloudinaryImage publicId="icon-resources" options={{ width: 150, crop: 'fit' }} />
+                  <h3 >Developer Community</h3>
+                  <p >Working with global partners, we facilitate robust developer community growth through meetups, conferences, and hackathons.</p>
+                </div>
               </Col>
               <Col
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <CloudinaryImage publicId="icon-services" options={{ width: 150, crop: 'fit' }} />
-
-                <h3>Network and Resources</h3>
-                <p>We have built a global decentralized collaborative network for our portfolio projects to leverage.</p>
+                <div ref={(c) => { this.part2 = c; }}>
+                  <CloudinaryImage publicId="icon-services" options={{ width: 150, crop: 'fit' }} />
+                  <h3 >Network and Resources</h3>
+                  <p >We have built a global decentralized collaborative network for our portfolio projects to leverage.</p>
+                </div>
               </Col>
               <Col
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <CloudinaryImage publicId="icon-network" options={{ width: 150, crop: 'fit' }} />
-
-                <h3>Ecosystem Approach</h3>
-                <p>We invest and incubate, keeping a close relationship with exchange, media and recruiting agency. A project should focus on innovation and product, and we deal with the rest.</p>
+                <div ref={(c) => { this.part3 = c; }}>
+                  <CloudinaryImage publicId="icon-network" options={{ width: 150, crop: 'fit' }} />
+                  <h3 >Ecosystem Approach</h3>
+                  <p >We invest and incubate, keeping a close relationship with exchange, media and recruiting agency. A project should focus on innovation and product, and we deal with the rest.</p>
+                </div>
               </Col>
             </Row>
           </div>
