@@ -79,7 +79,7 @@ class Topbar extends React.PureComponent {
 
                   </div>
                   <li className="hideOnMobile"><Link to="/" >Home</Link></li>
-                  {/* <li><Link to="/ecosystem" >Ecosystem</Link></li> */}
+                  <li className="hideOnMobile"><Link to="/jobs" >Jobs</Link></li>
                   <li className="hideOnMobile"><Link to="/contact" >Become a partner</Link></li>
                 </ul>
               </div>
@@ -88,12 +88,11 @@ class Topbar extends React.PureComponent {
             <div className={menuClassName} id="bs-example-navbar-collapse-1">
               <ul>
                 <li role="menuitem"><a href="/#">Home</a></li>
-                <li role="menuitem"><a href="/#mission">Misson </a></li>
-                <li role="menuitem"><a href="/#portfolio">Portfolio </a></li>
                 {/* <li role="menuitem"><a href="/#team">Team</a></li>
                 <li role="menuitem"><a href="/#advisor">Advisor</a></li> */}
                 {/* <li role="menuitem"><a href="/#partner">Partners</a></li> */}
-                <li role="menuitem"><a href="/contact#">Become a Partner</a></li>
+                <li role="menuitem"><a href="/jobs">Jobs</a></li>
+                <li role="menuitem"><a href="/contact">Become a Partner</a></li>
               </ul>
             </div>
 

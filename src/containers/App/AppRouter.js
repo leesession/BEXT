@@ -20,9 +20,15 @@ class AppRouter extends React.Component {
         />
         <Route
           exact
+          path={`${url}/jobs`}
+          component={asyncComponent(() => import('../jobs'))}
+        />
+        <Route
+          exact
           path={`${url}/contact`}
           component={asyncComponent(() => import('../contact'))}
-        />        <Route
+        />
+        <Route
           exact
           path={`${url}/test`}
           component={asyncComponent(() => import('../test'))}

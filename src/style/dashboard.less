@@ -93,7 +93,8 @@
             font-size: 16px;
         }
     }
-    p {
+    p,
+    ul {
         font-size: 22px;
         font-weight: 300;
         @media @phone {
@@ -184,26 +185,22 @@
                     margin-bottom: 18px;
                     position: relative;
                     display: table;
-
                     .inner {
                         display: table-cell;
                         vertical-align: middle;
                         height: 100%;
-
                         img {
-                            height: 70%; 
+                            height: 70%;
                             .transition(all 0.3s ease);
                             &:hover {
                                 @scaleFactor: 1.2;
                                 transform: scale(@scaleFactor, @scaleFactor);
                             }
-
-                            @media @phone{
+                            @media @phone {
                                 height: 45%;
                             }
                         }
                     }
-
                     @media @phone {
                         max-width: 75px;
                         max-height: 75px;
@@ -396,6 +393,40 @@
     //     height: 250px;
     //   }
     // }
+    &.jobs {
+        .postWrapper {
+            background: white;
+            border: 1px solid @borderColor;
+            border-radius: 12px;
+            padding: 4em 6em;
+            @media @phone {
+                padding: 2em 1.5em;
+            }
+            .title {
+                padding: 2em 0em;
+                h2 {
+                    margin-bottom: auto;
+                }
+            }
+            .body {
+                text-align: left;
+                ul {
+                    display: block;
+                    margin-bottom: 1.2em;
+                    li {
+                        list-style-type: square;
+                        list-style-position: inside;
+                        text-indent: -1.4em;
+                        padding-left: 1.4em;
+                        margin-bottom: 0.5em;
+                    }
+                }
+                p {
+                    margin-bottom: 1em;
+                }
+            }
+        }
+    }
 }
 
 .horizontalWrapper {

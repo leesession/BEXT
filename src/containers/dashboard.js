@@ -15,7 +15,6 @@ import PortfolioSection from '../components/sections/portfolio';
 import NewsSection from '../components/sections/news';
 import StrengthSection from '../components/sections/strength';
 
-
 cloudinaryConfig({ cloud_name: 'dd1ixvdxn' });
 const FormItem = Form.Item;
 

@@ -26,9 +26,7 @@ class InfoSection extends React.Component {
                   <li ><a href="/#">Home</a></li>
                   <li ><a href="/#mission">Mission </a></li>
                   <li ><a href="/#portfolio">Portfolio </a></li>
-                  {/* <li ><a href="/#team">Team</a></li>
-                  <li ><a href="/#advisor">Advisor</a></li>
-                  <li ><a href="/#partner">Partners</a></li> */}
+                  <li ><a href="/jobs">Jobs</a></li>
                   <li ><a href="/contact#">Become a Partner</a></li>
                 </ul>
               </Col>
