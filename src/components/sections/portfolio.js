@@ -178,7 +178,7 @@ class PortfolioSection extends React.Component {
 
               </Col>
 
-              <Col
+              {/* <Col
                 xs={colWidthAdvisory.xs}
                 sm={colWidthAdvisory.sm}
               >
@@ -186,7 +186,7 @@ class PortfolioSection extends React.Component {
                   <ImageContainer href="https://havven.io/" cloudinaryId="havven_attu3x" style={{ height: isSmall ? '30%' : '50%' }} />
                   <h4>HAV</h4><p>Havven</p>
                 </div>
-              </Col>
+              </Col> */}
 
               <Col
                 xs={colWidthAdvisory.xs}
