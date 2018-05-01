@@ -332,18 +332,33 @@
         background-color: #202322;
         background-image: none;
         padding: 8em 0em 6em;
-        li a {
-            color: white;
-            font-size: 14px;
-            font-weight: 500;
-            text-transform: uppercase;
-            line-height: 2.5em;
+        li {
+            a {
+                color: white;
+                font-size: 14px;
+                font-weight: 500;
+                text-transform: uppercase;
+                line-height: 2.5em;
+            }
+            p{
+                margin-top: 0;
+                margin-bottom: 0;
+            }
         }
         p {
             color: white;
-            font-size: 18px;
+            font-size: 14px;
             @media @phone {
                 font-size: 14px;
+            }
+            &.footer {
+                color: #ddd;
+                font-size: 12px;
+                margin-top: 3em;
+                @media @phone {
+                    margin-top: 0em;
+                    font-size: 12px;
+                }
             }
         }
         a:hover,
