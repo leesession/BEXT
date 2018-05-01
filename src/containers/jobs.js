@@ -63,8 +63,8 @@ class Jobs extends React.Component {
                         <li><strong>Deep technical challenges.</strong> This entire ecosystem is about 10 years old. Ethereum itself is still a toddler. There is much work to be done before these platforms can scale to the order of millions or billions of users. Coefficient is building the technology platforms that can get us to those next thresholds of scale.</li>
                       </ul>
 
-                      <p>This is a 6-week internship with the opportunity to be hired full-time upon completion. Through the 6 weeks candidates are paid hourly and performance is reviewed on a weekly basis. We are hoping you are the best opportunity for hire.</p>
-                      <p>If you feel like you are a good fit, you must include any relevant projects, LinkedIn, and your cover letter where you tell us a little about yourself and why you think you’d be a great addition to our team!</p>
+                      <p>This is a 6-week hourly paid job with the opportunity to be hired full-time upon completion. Through the 6 weeks candidates performance is reviewed on a weekly basis. We are hoping you are the best opportunity for hire.</p>
+                      <p>If you feel like you are a good fit, you must send us your LinkedIn url and an up-to-date resume including any relative experience, and tell us a little about yourself as well as why you think you’d be a great addition to our team!</p>
                       <p>Please contact us at <a href="mailto:info@coefficientventures.com?Subject=Coefficient+Application%3A+Associate+Partner" target="_top">info@coefficientventures.com</a></p>
                     </div>
                   </div>
