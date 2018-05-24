@@ -232,7 +232,7 @@ class PortfolioSection extends React.Component {
                 xs={colWidthAdvisory.xs}
                 sm={colWidthAdvisory.sm}
               >
-                <div ref={(c) => { this.advisory3 = c; }}>
+                <div ref={(c) => { this.advisory2 = c; }}>
                   <ImageContainer href="https://iotex.io" cloudinaryId="logo-iotex" />
                   <h4>IOTX</h4><p>IoTex</p>
                 </div>
