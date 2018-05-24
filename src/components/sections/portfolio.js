@@ -44,6 +44,10 @@ class PortfolioSection extends React.Component {
     ScrollReveal.reveal(this.port7, _.extend(revealTop, { delay: isSmall ? 0 : delay * 3 }));
     ScrollReveal.reveal(this.port8, _.extend(revealTop, { delay: isSmall ? delay : delay * 4 }));
 
+    ScrollReveal.reveal(this.port9, _.extend(revealTop, { delay: isSmall ? 0 : delay * 1 }));
+    ScrollReveal.reveal(this.port10, _.extend(revealTop, { delay: isSmall ? delay : delay * 2 }));
+    ScrollReveal.reveal(this.port11, _.extend(revealTop, { delay: isSmall ? 0 : delay * 3 }));
+
     ScrollReveal.reveal(this.advisory1, _.extend(revealTop, { delay: isSmall ? 0 : delay * 1 }));
     ScrollReveal.reveal(this.advisory2, _.extend(revealTop, { delay: isSmall ? delay : delay * 2 }));
     ScrollReveal.reveal(this.advisory3, _.extend(revealTop, { delay: isSmall ? 0 : delay * 3 }));
@@ -101,7 +105,7 @@ class PortfolioSection extends React.Component {
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <div ref={(c) => { this.port2 = c; }}>
+                <div ref={(c) => { this.port1 = c; }}>
                   <ImageContainer href="https://raiden.network/" cloudinaryId="logo-rdn" />
                   <h4>RDN</h4><p>Raiden Network</p>
                 </div>
@@ -110,7 +114,7 @@ class PortfolioSection extends React.Component {
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <div ref={(c) => { this.port3 = c; }}>
+                <div ref={(c) => { this.port2 = c; }}>
                   <ImageContainer href="https://zeppelinos.org/" cloudinaryId="logo-zeppelin" />
                   <h4>ZEP</h4><p>Zeppelin_OS</p>
                 </div>
@@ -119,7 +123,7 @@ class PortfolioSection extends React.Component {
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <div ref={(c) => { this.port4 = c; }}>
+                <div ref={(c) => { this.port3 = c; }}>
                   <ImageContainer href="https://mycrypto.com/" cloudinaryId="mycrypto_mcu83z" />
                   <h4>&nbsp;</h4><p>MyCrypto</p>
                 </div>
@@ -137,7 +141,7 @@ class PortfolioSection extends React.Component {
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <div ref={(c) => { this.port4 = c; }}>
+                <div ref={(c) => { this.port5 = c; }}>
                   <ImageContainer href="http://www.ttc.eco/" cloudinaryId="ttc_ravbgx" />
                   <h4>TTC</h4><p>TTC Protocol</p>
                 </div>
@@ -146,7 +150,7 @@ class PortfolioSection extends React.Component {
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <div ref={(c) => { this.port4 = c; }}>
+                <div ref={(c) => { this.port6 = c; }}>
                   <ImageContainer href="https://www.libracredit.io/" cloudinaryId="libra-credit_fgpddn" />
                   <h4>LBA</h4><p>Libra Credit</p>
                 </div>
@@ -155,7 +159,7 @@ class PortfolioSection extends React.Component {
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <div ref={(c) => { this.port4 = c; }}>
+                <div ref={(c) => { this.port7 = c; }}>
                   <ImageContainer href="https://www.irisnet.org/" cloudinaryId="iris_r2ov9u" />
                   <h4>IRIS Token</h4><p>IRIS Network</p>
                 </div>
@@ -164,7 +168,7 @@ class PortfolioSection extends React.Component {
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <div ref={(c) => { this.port5 = c; }}>
+                <div ref={(c) => { this.port8 = c; }}>
 
                   <ImageContainer href="https://www.nucypher.com/" cloudinaryId="nucypher_gmwoi0" style={{ height: isSmall ? '35%' : '55%' }} />
                   <h4>NKMS</h4><p>Nucypher</p>
@@ -174,7 +178,7 @@ class PortfolioSection extends React.Component {
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <div ref={(c) => { this.port6 = c; }}>
+                <div ref={(c) => { this.port9 = c; }}>
                   <ImageContainer href="https://www.thundertoken.com/" cloudinaryId="thunder_kytpku" />
                   <h4>Thunder Token</h4><p>Thunder</p>
                 </div>
@@ -183,7 +187,7 @@ class PortfolioSection extends React.Component {
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <div ref={(c) => { this.port7 = c; }}>
+                <div ref={(c) => { this.port10 = c; }}>
                   <ImageContainer href="https://urbit.org/" cloudinaryId="urbit_zkzxgh" />
                   <h4>USP (Urbit Sparks)</h4><p>Urbit</p>
                 </div>
@@ -193,7 +197,7 @@ class PortfolioSection extends React.Component {
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
-                <div ref={(c) => { this.port8 = c; }}>
+                <div ref={(c) => { this.port11 = c; }}>
                   <ImageContainer href="https://keep.network/" cloudinaryId="logo-keep" style={{ height: isSmall ? '35%' : '50%' }} />
                   <h4>KEEP</h4><p>Keep Network</p>
                 </div>
