@@ -28,7 +28,7 @@ class Jobs extends React.Component {
                   <div className="postWrapper">
                     <div className="title">
                       <h2>Associate Partner</h2>
-                      <h3>San Francisco California, Full Time</h3>
+                      <h3>Remote, Full Time</h3>
                     </div>
                     <div className="body">
                       <p>Coefficient Ventures is a multi-strategy crypto fund with strong presence in North America, Asia and Europe. Founded in 2017, it has invested in 30+ projects including Filecoin, Raiden, Zeppelin, Urbit, Tari, Thunder, Nucypher and Keep. Founding partner Chance Du is advisor of Tomo, IoTex and Havven, guest lecturer at Stanford Beyond Bitcoin class as well as a thought leader in global conferences.</p>
@@ -63,9 +63,83 @@ class Jobs extends React.Component {
                         <li><strong>Deep technical challenges.</strong> This entire ecosystem is about 10 years old. Ethereum itself is still a toddler. There is much work to be done before these platforms can scale to the order of millions or billions of users. Coefficient is building the technology platforms that can get us to those next thresholds of scale.</li>
                       </ul>
 
-                      <p>This is a 6-week hourly paid job with the opportunity to be hired full-time upon completion. Through the 6 weeks candidates performance is reviewed on a weekly basis. We are hoping you are the best opportunity for hire.</p>
-                      <p>If you feel like you are a good fit, you must send us your LinkedIn url and an up-to-date resume including any relative experience, and tell us a little about yourself as well as why you think you’d be a great addition to our team!</p>
+                      <p>If you feel like you are a good fit, you must include any relevant projects, LinkedIn, or your cover letter where you tell us a little about yourself and why you think you’d be a great addition to our team! </p>
                       <p>Please contact us at <a href="mailto:jobs@coefficientventures.com?Subject=Coefficient+Application%3A+Associate+Partner" target="_top">jobs@coefficientventures.com</a></p>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+
+              <Row type="flex" justify="center">
+                <Col span={24}>
+                  <div className="postWrapper" id="executive">
+                    <div className="title">
+                      <h2>Executive Assistant</h2>
+                      <h3>Remote, Full Time</h3>
+                    </div>
+                    <div className="body">
+                      <p>Coefficient Ventures is a decentralized crypto fund with global presence supporting the global blockchain ecosystem. Its decentralized team locates across the world at San Francisco, Beijing, Singapore, Berlin, Seoul and more coming soon. In the past 8 months, Coefficient has invested in 30+ portfolios including Zeppelin, MyCrypto, Numerai, Nucypher, Thunder, Keep, Urbit and TTC, and is advising Tomo and IoTex.</p>
+                      <p>We are are seeking an executive assistant to provide administrative support to founding partner remotely.</p>
+                      <p><strong>About the role:</strong></p>
+                      <ul>
+                        <li>Gmail calendar management and scheduling for CEO.</li>
+                        <li>Business communications (email drafts, letters, etc.)</li>
+                        <li>Dropbox document management.</li>
+                        <li>Editing writing projects.</li>
+                        <li>Expense reporting.</li>
+                        <li>Assists by answering partner’s phone and helps with messages, etc.</li>
+                        <li>Daily tasks as requested by founding partner.</li>
+                        <li>Contact database management.</li>
+                        <li>“Startup” environment.  Must be willing and able to do whatever it takes to get the job.</li>
+                      </ul>
+                      <p><strong>About you:</strong></p>
+                      <ul>
+                        <li>Strong written and verbal communication skills.</li>
+                        <li>Extremely organized with keen attention to detail.  Ability to multi-task effectively and switch focus with ease.</li>
+                        <li>Highly proficient computer skills (Gmail, Calendar, Dropbox, Google Sheets).</li>
+                        <li>Ability to handle confidential company and personal information with the utmost.</li>
+                        <li>Genuine curiosity/understanding of cryptocurrency/blockchain.</li>
+                        <li>Proactive and self-motivated.</li>
+                        <li>At least 2-year experience supporting C-Level executives preferred.</li>
+                      </ul>
+                      <p>If you feel like you are a good fit, you must include any relevant projects, LinkedIn, or your cover letter where you tell us a little about yourself and why you think you’d be a great addition to our team! </p>
+                      <p>Please contact us at <a href="mailto:jobs@coefficientventures.com?Subject=Coefficient+Application%3A+Executive+Assistant" target="_top">jobs@coefficientventures.com</a></p>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+
+              <Row type="flex" justify="center">
+                <Col span={24}>
+                  <div className="postWrapper">
+                    <div className="title">
+                      <h2>Software Engineer</h2>
+                      <h3>Remote, Full Time</h3>
+                    </div>
+                    <div className="body">
+                      <p>Coefficient Ventures is a decentralized crypto fund with global presence supporting the global blockchain ecosystem. Its decentralized team locates across the world at San Francisco, Beijing, Singapore, Berlin, Seoul and more coming soon. In the past 8 months, Coefficient has invested in 30+ portfolios including Zeppelin, MyCrypto, Numerai, Nucypher, Thunder, Keep, Urbit and TTC, and is advising Tomo and IoTex.</p>
+                      <p>Coefficient is building a robust trading system capable of trading on many exchanges and with automation. We are looking for a software engineer to help build out and maintain our trading infrastructure.</p>
+                      <p><strong>About the role:</strong></p>
+                      <ul>
+                        <li>Help with the design, development and monitoring of our core infrastructure.</li>
+                        <li>Development of trading bot to assist traders on a need basis.</li>
+                        <li>Monitoring and metrics for the non-trading, operational side of the fund.</li>
+                        <li>Solid coding skills, preferably in Javascript.</li>
+                        <li>Experience in system design and architecture.</li>
+                        <li>Experience with deployment in cloud services.</li>
+                        <li>Generate reporting summary on a monthly basis.</li>
+                        <li>Performe parameter searches via simulations.</li>
+                      </ul>
+                      <p><strong>About you:</strong></p>
+                      <ul>
+                        <li>BS/MS degree in Computer Science, Math or Physics.</li>
+                        <li>Strong interest in cryptocurrencies and crypto-assets.</li>
+                        <li>Familiar with crypto trading and exchanges.</li>
+                        <li>Experience in Javascript, Node.js, MongoDB and Mocha(or other testing framework).</li>
+                        <li>Experience with Linux operating system.</li>
+                      </ul>
+                      <p>If you feel like you are a good fit, you must include any relevant projects, LinkedIn, or your cover letter where you tell us a little about yourself and why you think you’d be a great addition to our team! </p>
+                      <p>Please contact us at <a href="mailto:jobs@coefficientventures.com?Subject=Coefficient+Application%3A+Software+Engineer" target="_top">jobs@coefficientventures.com</a></p>
                     </div>
                   </div>
                 </Col>
