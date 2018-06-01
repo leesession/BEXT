@@ -101,7 +101,7 @@ class PortfolioSection extends React.Component {
                   <h4>FIL</h4><p>Filecoin</p>
                 </div>
               </Col> */}
-              <Col
+              {/* <Col
                 xs={colWidth.xs}
                 sm={colWidth.sm}
               >
@@ -109,7 +109,7 @@ class PortfolioSection extends React.Component {
                   <ImageContainer href="https://raiden.network/" cloudinaryId="logo-rdn" />
                   <h4>RDN</h4><p>Raiden Network</p>
                 </div>
-              </Col>
+              </Col> */}
               <Col
                 xs={colWidth.xs}
                 sm={colWidth.sm}
@@ -161,7 +161,7 @@ class PortfolioSection extends React.Component {
               >
                 <div ref={(c) => { this.port7 = c; }}>
                   <ImageContainer href="https://www.irisnet.org/" cloudinaryId="iris_r2ov9u" />
-                  <h4>IRIS Token</h4><p>IRIS Network</p>
+                  <h4>IRIS</h4><p>IRIS Network</p>
                 </div>
               </Col>
               <Col

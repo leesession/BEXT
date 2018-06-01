@@ -41,6 +41,15 @@ class MissionSection extends React.Component {
       scale: 1,
       easing: 'ease',
     }, { distance: `${offset * 2}px` }));
+
+    ScrollReveal.reveal(this.para3, _.extend({
+      origin: 'bottom',
+      duration: 1000,
+      delay: isSmall ? 0 : 300 * 2,
+      distance: '0px',
+      scale: 1,
+      easing: 'ease',
+    }, { distance: `${offset * 2}px` }));
   }
 
   render() {
@@ -59,9 +68,19 @@ class MissionSection extends React.Component {
           <Row type="flex" justify="center">
             <Col xs={20} sm={18}>
               {/* <h2 className="underscore">Our Mission</h2> */}
-              {quote}
+              {/* {quote} */}
 
               <p ref={(c) => { this.para2 = c; }}>Coefficient Ventures is a multi-strategy crypto fund with strong presence in North America, Asia and Europe. We believe the revolution that blockchain brings us upon has just begun. The applications for blockchain technology are endless. We are proud to be part of this age, and are constantly seeking like-minds with passion and determination. Together, we change the world for the better.</p>
+              <div ref={(c) => { this.para3 = c; }} id="locations">
+                <Row type="flex" justify="center" >
+                  <Col xs={12} sm={6}>San Francisco</Col>
+                  <Col xs={12} sm={6}>Beijing</Col>
+                  <Col xs={12} sm={6}>Singapore</Col>
+                  <Col xs={12} sm={6}>Berlin</Col>
+                  <Col xs={12} sm={6}>Seoul</Col>
+                  <Col xs={12} sm={6}>More coming soon ...</Col>
+                </Row>
+              </div>
             </Col>
           </Row>
         </div>
