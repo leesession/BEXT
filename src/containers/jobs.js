@@ -25,7 +25,7 @@ class Jobs extends React.Component {
               <h2 className="underscore">Jobs</h2>
               <Row type="flex" justify="center">
                 <Col span={24}>
-                  <div className="postWrapper">
+                  <div className="postWrapper" id="associate-partner">
                     <div className="title">
                       <h2>Associate Partner</h2>
                       <h3>Remote, Full Time</h3>
@@ -72,7 +72,7 @@ class Jobs extends React.Component {
 
               <Row type="flex" justify="center">
                 <Col span={24}>
-                  <div className="postWrapper" id="executive">
+                  <div className="postWrapper" id="executive-assistant">
                     <div className="title">
                       <h2>Executive Assistant</h2>
                       <h3>Remote, Full Time</h3>
@@ -111,7 +111,7 @@ class Jobs extends React.Component {
 
               <Row type="flex" justify="center">
                 <Col span={24}>
-                  <div className="postWrapper">
+                  <div className="postWrapper" id="software-engineer">
                     <div className="title">
                       <h2>Software Engineer</h2>
                       <h3>Remote, Full Time</h3>
