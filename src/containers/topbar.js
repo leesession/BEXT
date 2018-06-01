@@ -58,7 +58,7 @@ class Topbar extends React.PureComponent {
                 <div className="isoLeft">
                   <div className="logo-container" style={{ margin: '0px' }}>
                     <Link to="/">
-                      <CloudinaryImage publicId="white-background-strong_nycmee" options={{ height: 150, crop: 'scale' }} />
+                      <CloudinaryImage publicId="white_background_oduxna" options={{ height: 150, crop: 'scale' }} />
                     </Link>
                   </div>
                 </div>
