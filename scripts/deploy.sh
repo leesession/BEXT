@@ -27,7 +27,7 @@ sudo kill -9 \$(lsof -i tcp:5000 | grep root | gawk '{print \$2}')
 yarn
 yarn build
 yarn global add serve
-nohup serve -l 5000 -s build \&
+nohup serve -l 5000 -s build &
 !
 
 # expected results:
