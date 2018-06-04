@@ -31,7 +31,7 @@ class Jobs extends React.Component {
                       <h3>Remote, Full Time</h3>
                     </div>
                     <div className="body">
-                      <p>Coefficient Ventures is a multi-strategy crypto fund with strong presence in North America, Asia and Europe. Founded in 2017, it has invested in 30+ projects including Filecoin, Raiden, Zeppelin, Urbit, Tari, Thunder, Nucypher and Keep. Founding partner Chance Du is advisor of Tomo, IoTex and Havven, guest lecturer at Stanford Beyond Bitcoin class as well as a thought leader in global conferences.</p>
+                      <p>Coefficient Ventures is a multi-strategy crypto fund with strong presence in North America, Asia and Europe. Founded in 2017, it has invested in 30+ projects including Filecoin, Raiden, Zeppelin, Urbit, Tari, Thunder, Nucypher and Keep. Founding partner Chance Du is advisor of Tomo and IoTex, guest lecturer at Stanford Beyond Bitcoin class as well as a thought leader in global conferences.</p>
                       <p>We are hiring an associate partner to work with the core team at San Francisco or remotely. You will be an integral part of our team, tasked with blockchain project research and analysis, deal sourcing, event organizing and marketing.</p>
                       <p><strong>About the role:</strong></p>
                       <ul>
