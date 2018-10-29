@@ -38,48 +38,29 @@ class NewsSection extends React.Component {
   }
 
   render() {
-    const COL_PER_ROW = { // Specify how many col in each row
-      xs: 2,
-      sm: 4,
-    };
-
-    // Calculate grid number for Col attribute
-    const colWidth = {};
-
-    Object.keys(COL_PER_ROW).forEach((key) => {
-      colWidth[key] = 24 / COL_PER_ROW[key];
-    });
-
     return (
       <section>
         <div className="wrapper featured" id="featured">
           <div className="horizontalWrapper">
-
-            <h2 className="underscore">News</h2>
-            <Row gutter={16} type="flex" justify="center">
+            <Row gutter={32} type="flex" justify="center">
 
               <Col
-                xs={colWidth.xs}
-                sm={colWidth.sm}
+                span={10}
               >
-                <div ref={(c) => { this.part1 = c; }}>
-                  <ImageContainer href="https://finance.yahoo.com/news/interview-chance-du-founding-partner-074654445.html" cloudinaryId="yahoo-finance_vlc3wi" />
+                <div ref={(c) => { this.part1 = c; }} className="left">
+                  <CloudinaryImage publicId="reward-icons" options={{ height: 500, crop: 'scale' }} />
                 </div>
               </Col>
 
               <Col
-                xs={colWidth.xs}
-                sm={colWidth.sm}
+                span={14}
               >
-                <div ref={(c) => { this.part2 = c; }}>
-                  <ImageContainer href="http://res.cloudinary.com/dd1ixvdxn/raw/upload/v1524374457/press-kit_zgxusc.zip" cloudinaryId="icon-download-outline-128_gst5gj" />
-                  <h4>Press Kit</h4>
+                <div ref={(c) => { this.part2 = c; }} className="right">
+                  <h2>Unlock up to 420 Free Spins*</h2>
+                  <p>For only 2 deposits of €20 played in the Casino, unlock an exciting
+ journey filled with thrills, rewards and plenty of fun. Join the award winning online casino and experience the best online slot machines, table games and progressive jackpots.</p>
+                  <CloudinaryImage publicId="join-button" options={{ height: 100, crop: 'scale' }} />
                 </div>
-              </Col>
-              <Col
-                xs={colWidth.xs}
-                sm={colWidth.sm}
-              >
               </Col>
             </Row>
           </div>

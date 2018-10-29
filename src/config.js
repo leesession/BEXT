@@ -1,11 +1,11 @@
 export default {
-  apiUrl: 'http://yoursite.com/api/',
+  // apiUrl: 'http://yoursite.com/api/',
 };
 
 const siteConfig = {
-  siteName: 'Coefficient Ventures',
+  siteName: 'BETX',
   siteIcon: 'ion-flash',
-  footerText: '©2018 Created by coefficient.network',
+  footerText: '©2018 Created by BETX',
 };
 
 const themeConfig = {

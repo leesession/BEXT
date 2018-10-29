@@ -9,7 +9,7 @@ import { themeConfig } from '../config';
 
 const { Header } = Layout;
 
-cloudinaryConfig({ cloud_name: 'dd1ixvdxn' });
+cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
 class Topbar extends React.PureComponent {
   constructor(props) {
@@ -58,7 +58,8 @@ class Topbar extends React.PureComponent {
                 <div className="isoLeft">
                   <div className="logo-container" style={{ margin: '0px' }}>
                     <Link to="/">
-                      <CloudinaryImage publicId="white_background_oduxna" options={{ height: 150, crop: 'scale' }} />
+                      <CloudinaryImage publicId="dice-logo" options={{ height: 100, crop: 'scale' }} />
+                      <span>BETX Dice</span>
                     </Link>
                   </div>
                 </div>
@@ -78,21 +79,21 @@ class Topbar extends React.PureComponent {
                     </button>
 
                   </div>
-                  <li className="hideOnMobile"><Link to="/" >Home</Link></li>
-                  <li className="hideOnMobile"><Link to="/jobs" >Jobs</Link></li>
-                  <li className="hideOnMobile"><Link to="/contact" >Become a partner</Link></li>
+                  <li className="hideOnMobile"><Link to="/" >Roadmap</Link></li>
+                  <li className="hideOnMobile"><Link to="/faq" >FAQ</Link></li>
+                  <li className="hideOnMobile"><Link to="/contact" >Contact</Link></li>
                 </ul>
               </div>
             </div>
 
             <div className={menuClassName} id="bs-example-navbar-collapse-1">
               <ul>
-                <li role="menuitem"><a href="/#">Home</a></li>
+                <li role="menuitem"><a href="/#">Roadmap</a></li>
                 {/* <li role="menuitem"><a href="/#team">Team</a></li>
                 <li role="menuitem"><a href="/#advisor">Advisor</a></li> */}
                 {/* <li role="menuitem"><a href="/#partner">Partners</a></li> */}
-                <li role="menuitem"><a href="/jobs">Jobs</a></li>
-                <li role="menuitem"><a href="/contact">Become a Partner</a></li>
+                <li role="menuitem"><a href="/faq">FAQ</a></li>
+                <li role="menuitem"><a href="/contact">Contact</a></li>
               </ul>
             </div>
 

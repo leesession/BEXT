@@ -2,11 +2,12 @@
 ALL VARIABLE & MIXING
 * * * * * * * * * * * * * * */
 
-// @import url('https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700');
-// @isoFontFamily: 'Roboto', sans-serif;
-// @isoFontSize: 14px;
+@import url('https://fonts.googleapis.com/css?family=Montserrat:100,300,400,500,700');
+@fontFamily: 'Montserrat', sans-serif;
+@fontSize: 14px;
+
 @primaryColor: #212121;
-@fontColor: #212121;
+@fontColor: white;
 @bgColor: #212121;
 @borderColor: #ddd;
 
@@ -34,7 +35,8 @@ ALL VARIABLE & MIXING
 
 // Basic font size
 body {
-  font-size: 16px;
+  font-size: fontSize;
+  font-family: @fontFamily;
 }
 
 // Remove <a> underline

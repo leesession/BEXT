@@ -99,3 +99,6 @@ There are 2 ways to achieve responsive layout
 npm run extract-intl (not tested yet)
 
 # Known Bugs
+
+
+1. User Montserrat font

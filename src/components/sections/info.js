@@ -20,40 +20,59 @@ class InfoSection extends React.Component {
             <Row>
               <Col
                 xs={24}
-                sm={8}
+                md={7}
               >
-                <ul>
-                  <li ><a href="/#">Home</a></li>
-                  <li ><a href="/#mission">Mission </a></li>
-                  <li ><a href="/#portfolio">Portfolio </a></li>
-                  <li ><a href="/jobs">Jobs</a></li>
-                  <li ><a href="/contact#">Become a Partner</a></li>
-                </ul>
+                <h4>Join the Winners</h4>
+
+                <div className="list">
+                  <p className="purple">Latest Weekly Winners</p>
+                  <ul>
+                    <li ><span>djcosmy - $499</span></li>
+                    <li ><span>KevinJamsons - $1028</span></li>
+                    <li ><span>Ercikamobs - $498</span></li>
+                    <li ><span>Ercikamobs - $498</span></li>
+                    <li ><span>Ercikamobs - $498</span></li>
+                  </ul>
+                </div>
               </Col>
-              <Col xs={24} sm={16}>
-                <Row gutter={24}>
-                  <Col
-                    xs={24}
-                    sm={16}
-                  >
-                    <p>Coefficient Ventures is a multi-strategy crypto fund with strong presence in North America, Asia and Europe. We`re constantly growing the community and welcome everyone with huge passion for blockchain to join us on this unprecedented journey.</p>
-                  </Col>
-                  <Col
-                    xs={24}
-                    sm={8}
-                  >
-                    <ul>
-                      <li><p>424 Clay St, Lower Level</p></li>
-                      <li><p>San Francisco CA, 94111</p></li>
-                      <li><p>&nbsp;</p></li>
-                      <li><p>info@coefficientventures.com</p></li>
-                    </ul>
-                  </Col>
-                </Row>
-                <Row>
-                  <p className="footer">
-                    Coefficient Ventures does not solicit, offer, or sell securities via the Internet. Any representations to the contrary and websites other than www.coefficientventures.com are not endorsed by Coefficient Ventures.</p>
-                </Row>
+              <Col
+                xs={24}
+                md={7}
+              >
+                <h4>Website 100% Secure</h4>
+                <div className="list">
+                  <ul>
+                    <li className="purple">Casino with DGOJ license</li>
+                    <li className="purple">Software Certificated</li>
+                    <li className="purple">Secure Transactions</li>
+                    <li className="purple">Live Scores</li>
+                    <li className="purple">Bonus Upon Registration</li>
+                  </ul>
+                </div>
+              </Col>
+              <Col xs={24} md={10}>
+                <h4>Payments Accepted</h4>
+                <div className="payments">
+                  <Row type="flex" gutter="24">
+                    <Col span={6}>
+                      <a href={null}>
+                  EOS
+                      </a>
+                    </Col>
+                    <Col span={6}>
+                      <a href={null}>
+                  ETH
+                      </a>
+                    </Col>
+                    <Col span={6}>
+                    </Col>
+                  </Row>
+
+
+                </div>
+                <h4>Subscribe for offers</h4>
+                <div>
+                </div>
               </Col>
             </Row>
           </div>

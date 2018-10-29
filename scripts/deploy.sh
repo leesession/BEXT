@@ -20,7 +20,7 @@ set -x #echo on
 # 6. yarn build and serve with nohup
 sshpass -e ssh -T -o StrictHostKeyChecking=no $USERNAME@$HOSTNAME << !
 set -x #echo on
-cd /var/www/coefficient/
+cd /var/www/betx/
 git pull
 echo \$(lsof -i tcp:5000 | grep root | gawk '{print $2}')
 sudo kill -9 \$(lsof -i tcp:5000 | grep root | gawk '{print \$2}')

@@ -15,7 +15,7 @@ import PortfolioSection from '../components/sections/portfolio';
 import NewsSection from '../components/sections/news';
 import StrengthSection from '../components/sections/strength';
 
-cloudinaryConfig({ cloud_name: 'dd1ixvdxn' });
+cloudinaryConfig({ cloud_name: 'forgelab-io' });
 const FormItem = Form.Item;
 
 const {
@@ -95,29 +95,27 @@ class Dashboard extends React.Component {
       videoOptions.height = '100%';
     }
 
-    const backgroundElement = window.innerWidth < 640
-      ? <CloudinaryImage publicId="bg_mobile_wknqcs" style={{ height: '100%', minWidth: '100%' }} />
-      : <CloudinaryVideo publicId="Abstract-moving-background-720p" style={{ height: '100%', minWidth: '100%' }} options={videoOptions}></CloudinaryVideo>;
+    const backgroundElement = (<CloudinaryImage publicId="bg_mobile_wknqcs" style={{ height: '100%', minWidth: '100%' }} />);
 
     return (
       <div>
-        <section style={{ height: '100vh' }}>
+        <section style={{ height: '80vh' }}>
           <div className="head">
 
             <div className="content">
-              <h1>Coefficient Ventures</h1>
+              <h1>BETX</h1>
             </div>
 
             <div className="background">
               {/* <WaveAnimation /> */}
-              {backgroundElement}
-            </div>
+              {/*              {backgroundElement}
+*/}            </div>
 
           </div>
         </section>
 
-        <MissionSection />
-
+        {/*        <MissionSection />
+*/}
         <StrengthSection />
 
         <PortfolioSection />

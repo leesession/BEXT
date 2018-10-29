@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { cloudinaryConfig, CloudinaryImage } from '../../components/react-cloudinary';
 import ScrollReveal from '../scrollReveal';
 
-cloudinaryConfig({ cloud_name: 'dd1ixvdxn' });
+cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
 class StrengthSection extends React.Component {
   constructor(props) {
@@ -50,12 +50,13 @@ class StrengthSection extends React.Component {
     });
 
     const isSmall = window.innerWidth < 640;
-    const backgroundImageDark = isSmall
-      ? 'http://res.cloudinary.com/dd1ixvdxn/image/upload/v1524278625/bg_strength_whusmv.png'
-      : 'http://res.cloudinary.com/dd1ixvdxn/image/upload/v1524274803/background_contact_lfaazt.png';
+    // const backgroundImageDark = isSmall
+    //   ? 'http://res.cloudinary.com/dd1ixvdxn/image/upload/v1524278625/bg_strength_whusmv.png'
+    //   : 'http://res.cloudinary.com/dd1ixvdxn/image/upload/v1524274803/background_contact_lfaazt.png';
+
     return (
       <section>
-        <div className="wrapper dark strength" style={{ backgroundImage: `url(${backgroundImageDark})` }}>
+        <div className="wrapper dark strength">
           <div className="horizontalWrapper">
             <Row gutter={16}>
               <Col
@@ -63,9 +64,15 @@ class StrengthSection extends React.Component {
                 sm={colWidth.sm}
               >
                 <div ref={(c) => { this.part1 = c; }}>
-                  <CloudinaryImage publicId="icon-resources" options={{ width: 150, crop: 'fit' }} />
-                  <h3 >Developer Community</h3>
-                  <p >Working with global partners, we facilitate robust developer community growth through meetups, conferences, and hackathons.</p>
+                  <Row gutter={24}>
+                    <Col span={12} className="left">
+                      <CloudinaryImage publicId="strength-1" options={{ height: 120, crop: 'fit' }} />
+                    </Col>
+                    <Col span={12} className="right">
+                      <h3 >Register Today</h3>
+                      <p >Fill in some simple details and you’ll be ready to go.</p>
+                    </Col>
+                  </Row>
                 </div>
               </Col>
               <Col
@@ -73,9 +80,15 @@ class StrengthSection extends React.Component {
                 sm={colWidth.sm}
               >
                 <div ref={(c) => { this.part2 = c; }}>
-                  <CloudinaryImage publicId="icon-services" options={{ width: 150, crop: 'fit' }} />
-                  <h3 >Network and Resources</h3>
-                  <p >We have built a global decentralized collaborative network for our portfolio projects to leverage.</p>
+                  <Row gutter={24}>
+                    <Col span={12} className="left">
+                      <CloudinaryImage publicId="strength-2" options={{ height: 120, crop: 'fit' }} />
+                    </Col>
+                    <Col span={12} className="right">
+                      <h3 >Deposit Cash</h3>
+                      <p >It’s your choice to deposit up to $1000.</p>
+                    </Col>
+                  </Row>
                 </div>
               </Col>
               <Col
@@ -83,9 +96,16 @@ class StrengthSection extends React.Component {
                 sm={colWidth.sm}
               >
                 <div ref={(c) => { this.part3 = c; }}>
-                  <CloudinaryImage publicId="icon-network" options={{ width: 150, crop: 'fit' }} />
-                  <h3 >Ecosystem Approach</h3>
-                  <p >We invest and incubate, keeping a close relationship with exchange, media and recruiting agency. A project should focus on innovation and product, and we deal with the rest.</p>
+                  <Row gutter={24}>
+                    <Col span={12} className="left">
+                      <CloudinaryImage publicId="strength-3" options={{ height: 120, crop: 'fit' }} />
+                    </Col>
+                    <Col span={12} className="right">
+                      <h3 >Get a Bonus</h3>
+                      <p >We will give you some intro $300 money.</p>
+                    </Col>
+                  </Row>
+
                 </div>
               </Col>
             </Row>
