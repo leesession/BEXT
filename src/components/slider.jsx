@@ -2,34 +2,44 @@ import { Slider, InputNumber, Row, Col } from 'antd';
 import React, { PropTypes } from 'react';
 
 class IntegerStep extends React.Component {
-  state = {
-    inputValue: 1,
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      inputValue: props.defaultValue,
+    };
+
+    this.onChange = this.onChange.bind(this);
   }
 
-  onChange = (value) => {
+  onChange(value) {
+    const { getValue } = this.props;
     this.setState({
       inputValue: value,
     });
+
+    getValue(value);
   }
 
   render() {
     const { inputValue } = this.state;
+    const { min, max, defaultValue } = this.props;
     return (
       <div className="slider">
-        <Row>
-          <Col span={12}>
+        <Row gutter={32}>
+          <Col span={16}>
             <Slider
-              min={1}
-              max={20}
+              min={min}
+              max={max}
               onChange={this.onChange}
               value={typeof inputValue === 'number' ? inputValue : 0}
             />
           </Col>
-          <Col span={4}>
+          <Col span={8}>
             <InputNumber
-              min={1}
-              max={20}
-              style={{ marginLeft: 16 }}
+              min={min}
+              max={max}
+              style={{ width: '100%', height: '40px' }}
               value={inputValue}
               onChange={this.onChange}
             />
@@ -39,5 +49,16 @@ class IntegerStep extends React.Component {
     );
   }
 }
+
+IntegerStep.propTypes = {
+  getValue: PropTypes.func.isRequired,
+  min: PropTypes.number.isRequired,
+  max: PropTypes.number.isRequired,
+  defaultValue: PropTypes.number.isRequired,
+};
+
+IntegerStep.defaultProps = {
+};
+
 
 export default IntegerStep;

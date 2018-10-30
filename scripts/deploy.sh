@@ -21,12 +21,15 @@ set -x #echo on
 sshpass -e ssh -T -o StrictHostKeyChecking=no $USERNAME@$HOSTNAME << !
 set -x #echo on
 cd /var/www/betx/
+git checkout master
 git pull
-echo \$(lsof -i tcp:5000 | grep root | gawk '{print $2}')
-sudo kill -9 \$(lsof -i tcp:5000 | grep root | gawk '{print \$2}')
+git checkout ubuntu-16.04
+git rebase master
 yarn
 yarn build
 yarn global add serve
+echo \$(lsof -i tcp:5000 | grep root | gawk '{print $2}')
+sudo kill -9 \$(lsof -i tcp:5000 | grep root | gawk '{print \$2}')
 nohup serve -l 5000 -s build &
 !
 

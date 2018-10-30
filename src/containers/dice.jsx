@@ -17,15 +17,39 @@ cloudinaryConfig({ cloud_name: 'forgelab-io' });
 const FormItem = Form.Item;
 const InputGroup = Input.Group;
 const { TabPane } = Tabs;
+const MAX_BALANCE_STR = 'MAX';
+const MIN_ROLL_NUMBER = 1;
+const MIN_SELECT_ROLL_NUMBER = 2;
+const MAX_ROLL_NUMBER = 100;
+const MAX_SELECT_ROLL_NUMBER = 96;
+const DEFAULT_ROLL_NUMBER = 50;
+const DIVIDEND = 0.98;
 
 const {
   Link, Element, Events, scroll, scrollSpy,
 } = Scroll;
 
+function calculateWinChance(rollNumber) {
+  return (rollNumber - MIN_ROLL_NUMBER) / ((MAX_ROLL_NUMBER - MIN_ROLL_NUMBER) + 1);
+}
+
+function calculatePayout(winChance) {
+  return DIVIDEND / winChance;
+}
+
+function calculatePayoutOnWin(betAmount, payout) {
+  return betAmount * payout;
+}
 
 class DicePage extends React.Component {
   constructor(props) {
     super(props);
+
+    const betAmount = 1;
+    const rollNumber = DEFAULT_ROLL_NUMBER;
+    const winChance = calculateWinChance(rollNumber);
+    const payout = calculatePayout(winChance);
+    const payoutOnWin = calculatePayoutOnWin(betAmount, payout);
 
     this.state = {
       dataSource: [{
@@ -39,26 +63,48 @@ class DicePage extends React.Component {
         age: 42,
         address: '10 Downing Street',
       }],
+
+      betAmount,
+      rollNumber,
+      payout,
+      payoutOnWin,
+      balance: 0,
     };
 
     this.columns = [{
-      title: 'Name',
+      title: 'Time',
       dataIndex: 'name',
       key: 'name',
     }, {
-      title: 'Age',
-      dataIndex: 'age',
-      key: 'age',
+      title: 'Bettor',
+      dataIndex: 'bettor',
+      key: 'bettor',
     }, {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
-
-
-    }];
+      title: 'Roll Under',
+      dataIndex: 'rollunder',
+      key: 'rollunder',
+    },
+    {
+      title: 'Bet',
+      dataIndex: 'bet',
+      key: 'bet',
+    },
+    {
+      title: 'Roll',
+      dataIndex: 'roll',
+      key: 'roll',
+    },
+    {
+      title: 'Payout',
+      dataIndex: 'payout',
+      key: 'payout',
+    },
+    ];
 
     this.onTabClicked = this.onTabClicked.bind(this);
     this.onInputNumberChange = this.onInputNumberChange.bind(this);
+    this.onBetAmountButtonClick = this.onBetAmountButtonClick.bind(this);
+    this.getSliderValue = this.getSliderValue.bind(this);
   }
 
   componentDidMount() {
@@ -83,13 +129,60 @@ class DicePage extends React.Component {
 
   }
 
-  onInputNumberChange() {
+  onInputNumberChange(value) {
+    const { payout } = this.state;
+    const betAmount = value;
+    const payoutOnWin = calculatePayoutOnWin(betAmount, payout);
 
+    this.setState({
+      betAmount,
+      payoutOnWin,
+    });
+  }
+
+  onBetAmountButtonClick(e) {
+    const { balance, betAmount, payout } = this.state;
+    const targetValue = e.currentTarget.getAttribute('data-value');
+    if (_.isNumber(targetValue)) {
+      const newBetAmount = _.max(betAmount * targetValue, balance);
+      const payoutOnWin = calculatePayoutOnWin(newBetAmount, payout);
+
+
+      this.setState({
+        betAmount: newBetAmount,
+        payoutOnWin,
+      });
+    } else if (targetValue === MAX_BALANCE_STR) {
+      const newBetAmount = balance;
+
+      const payoutOnWin = calculatePayoutOnWin(newBetAmount, payout);
+      this.setState({
+        betAmount: newBetAmount,
+        payoutOnWin,
+      });
+    }
+  }
+
+  getSliderValue(value) {
+    const { betAmount } = this.state;
+
+    const winChance = calculateWinChance(value);
+    const payout = calculatePayout(winChance);
+    const payoutOnWin = calculatePayoutOnWin(betAmount, payout);
+
+    this.setState({
+      rollNumber: value,
+      winChance,
+      payout,
+      payoutOnWin,
+    });
   }
 
   render() {
     const { columns } = this;
-    const { dataSource } = this.state;
+    const {
+      dataSource, betAmount, payoutOnWin, winChance, payout, rollNumber,
+    } = this.state;
 
     return (
       <div id="dicepage">
@@ -103,13 +196,13 @@ class DicePage extends React.Component {
                     <div className="inputgroup">
                       <span className="label">Bet Amount</span>
                       <InputGroup compact>
-                        <Button size="large" type="default">1/2
+                        <Button size="large" type="default" onClick={this.onBetAmountButtonClick} data-value={0.5} >1/2
                         </Button>
-                        <Button size="large" type="default">2X
+                        <Button size="large" type="default" onClick={this.onBetAmountButtonClick} data-value={2} >2X
                         </Button>
-                        <Button size="large" type="default">MAX
+                        <Button size="large" type="default" onClick={this.onBetAmountButtonClick} data-value={MAX_BALANCE_STR} >{MAX_BALANCE_STR}
                         </Button>
-                        <InputNumber size="large" defaultValue="1" onChange={this.onInputNumberChange} />
+                        <InputNumber size="large" defaultValue="1" onChange={this.onInputNumberChange} value={betAmount} />
                       </InputGroup>
                     </div>
                   </Col>
@@ -117,7 +210,7 @@ class DicePage extends React.Component {
                     <div className="box">
                       <span className="label">Payout on win
                       </span>
-                      <div className="value">
+                      <div className="value">{_.floor(payoutOnWin, 4)}
                       </div>
                     </div>
                   </Col>
@@ -128,7 +221,7 @@ class DicePage extends React.Component {
                         <div className="box">
                           <span className="label">Roll under to win
                           </span>
-                          <div className="value">50↓
+                          <div className="value">{rollNumber}↓
                           </div>
                         </div>
                       </Col>
@@ -136,7 +229,7 @@ class DicePage extends React.Component {
                         <div className="box">
                           <span className="label">Payout
                           </span>
-                          <div className="value">2.00x
+                          <div className="value">{_.floor(payout, 2)}X
                           </div>
                         </div>
 
@@ -145,7 +238,7 @@ class DicePage extends React.Component {
                         <div className="box">
                           <span className="label">Win chance
                           </span>
-                          <div className="value">49%
+                          <div className="value">{(_.ceil(winChance, 2) * 100).toFixed(2)}%
                           </div>
                         </div>
                       </Col>
@@ -169,7 +262,7 @@ class DicePage extends React.Component {
               <div className="history">
                 <Row type="flex" justify="center">
                   <Col span={12}>
-                    <Slider />
+                    <Slider getValue={this.getSliderValue} defaultValue={DEFAULT_ROLL_NUMBER} min={MIN_SELECT_ROLL_NUMBER} max={MAX_SELECT_ROLL_NUMBER} />
                   </Col>
                 </Row>
               </div>
