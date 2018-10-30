@@ -52,13 +52,7 @@ export class App extends React.PureComponent {
                     >
                       <AppRouter url={url} />
                     </Content>
-                    <Footer
-                      style={{
-                        background: '#ffffff',
-                        textAlign: 'center',
-                        borderTop: '1px solid #ededed',
-                      }}
-                    >
+                    <Footer>
                       {siteConfig.footerText}
                     </Footer>
                   </Layout>

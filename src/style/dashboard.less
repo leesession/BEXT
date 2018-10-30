@@ -13,15 +13,9 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: @headColor; // background-image: -webkit-linear-gradient(135deg, #003073, #029797);
-        // background-image: -moz-linear-gradient(45deg, #003073, #029797);
-        // background-image: -ms-linear-gradient(45deg, #003073 0, #029797 100%);
-        // background-image: -o-linear-gradient(45deg, #003073, #029797);
-        // background-image: linear-gradient(135deg, #003073, #029797);
-        // text-align: center;
-        // margin: 0px;
-        // overflow: hidden;
+        background-color: @headColor;
     }
+
     .content {
         position: absolute;
         top: 50%;
@@ -84,6 +78,7 @@
             }
         }
     }
+
     h3 {
         font-size: 24px;
         font-weight: 300;
@@ -107,6 +102,7 @@
             font-size: 14px;
         }
     }
+
     &.dark {
         background-size: cover;
         background-position: center center;
@@ -119,36 +115,37 @@
             color: #90979e;
         }
     }
-    &.mission {
-        p {
-            &:not(:last-of-type) {
-                margin-bottom: 1em;
-            }
-            @media @phone {
-                font-size: 16px;
-            }
-            &.quote {
-                background: url(http://res.cloudinary.com/dd1ixvdxn/image/upload/v1524556569/left_quote_v53anv.png) no-repeat;
-                background-position: top left;
-                background-size: 2em;
-                font-style: italic;
-                margin-bottom: 2em;
-                font-size: 1.5em;
-                font-weight: 500;
-                @media @phone {
-                    font-size: 16px;
-                }
-            }
-        }
-        #locations {
-            margin-top: 3em;
-            line-height: 2em;
-            font-size: 1.1em;
-            @media @phone {
-                font-size: 1em;
-            }
-        }
-    }
+    // &.mission {
+    //     p {
+    //         &:not(:last-of-type) {
+    //             margin-bottom: 1em;
+    //         }
+    //         @media @phone {
+    //             font-size: 16px;
+    //         }
+    //         &.quote {
+    //             background: url(http://res.cloudinary.com/dd1ixvdxn/image/upload/v1524556569/left_quote_v53anv.png) no-repeat;
+    //             background-position: top left;
+    //             background-size: 2em;
+    //             font-style: italic;
+    //             margin-bottom: 2em;
+    //             font-size: 1.5em;
+    //             font-weight: 500;
+    //             @media @phone {
+    //                 font-size: 16px;
+    //             }
+    //         }
+    //     }
+    //     #locations {
+    //         margin-top: 3em;
+    //         line-height: 2em;
+    //         font-size: 1.1em;
+    //         @media @phone {
+    //             font-size: 1em;
+    //         }
+    //     }
+    // }
+    
     &.strength {
 
         background-color: #2e216c;
@@ -465,149 +462,7 @@
         }  
         }
 
-
-
-
-        // p {
-        //     color: white;
-        //     font-size: 14px;
-        //     @media @phone {
-        //         font-size: 14px;
-        //     }
-        //     &.footer {
-        //         color: #ddd;
-        //         font-size: 12px;
-        //         margin-top: 3em;
-        //         @media @phone {
-        //             margin-top: 0em;
-        //             font-size: 12px;
-        //         }
-        //     }
-        // }
-        // a:hover,
-        // a:visited,
-        // a:link,
-        // a:active {
-        //     cursor: pointer !important;
-        // }
-        // .ant-row {
-        //     &>div {
-        //         margin-bottom: 18px;
-        //     }
-        //     div:nth-child(1) {
-        //         text-align: left;
-        //         ul {
-        //             display: block;
-        //             li:hover {
-        //                 cursor: pointer;
-        //                 cursor: hand;
-        //             }
-        //         }
-        //     }
-        //     div:nth-child(2) {
-        //         text-align: left;
-        //     }
-        //     div:nth-child(3) {
-        //         text-align: left;
-        //         padding-left: 4em;
-        //         @media @phone {
-        //             padding-left: 0px;
-        //         }
-        //         ul {
-        //             display: block;
-        //         }
-        //         p {
-        //             margin: 0px;
-        //         }
-        //     }
-        // }
-    } // &.map {
-    //   height: 400px;
-    //   padding: 0px;
-    //   background-image: url("http://res.cloudinary.com/dd1ixvdxn/image/upload/v1518006879/map_pldai5.png");
-    //   background-size: cover;
-    //   background-position: center;
-    //   @media @phone {
-    //     height: 250px;
-    //   }
-    // }
-    &.jobs {
-        .postWrapper {
-            background: white;
-            border: 1px solid @borderColor;
-            border-radius: 12px;
-            padding: 2em 6em;
-            margin-bottom: 3em;
-            @media @phone {
-                padding: 2em 1.5em;
-                font-size: 12px;
-            }
-            .title {
-                padding: 2em 0em;
-                h2 {
-                    margin-bottom: auto;
-                    font-size: 1.6em;
-                }
-                h3 {
-                    font-size: 1.2em;
-                }
-            }
-            .body {
-                text-align: left;
-                ul {
-                    display: block;
-                    margin-bottom: 1.2em;
-                    li {
-                        list-style-type: square;
-                        list-style-position: inside;
-                        text-indent: -1.4em;
-                        padding-left: 1.4em;
-                        margin-bottom: 0.5em;
-                    }
-                }
-                p,
-                ul {
-                    font-size: 1.1em;
-                }
-                p {
-                    margin-bottom: 1em;
-                }
-            }
-        }
-    }
-}
-
-.ant-layout-footer{
-    background-color:#2f2078;
-    color:@purpleColor;
-}
-
-.horizontalWrapper {
-    margin-left: auto;
-    margin-right: auto;
-    @media @phone {
-        padding-left: 16px;
-        padding-right: 16px;
-    }
-    @media @tablet-strict {
-        padding-left: 24px;
-        padding-right: 24px;
-    }
-    @media @desktop-strict {
-        max-width: 940px;
-        padding-left: 0px;
-        padding-right: 0px;
-    }
-    @media @xl {
-        max-width: 80%;
-        padding-left: 0px;
-        padding-right: 0px;
-    }
-    @media @xxl {
-        max-width: 65%;
-        padding-left: 0px;
-        padding-right: 0px;
-    }
+    } 
 }
 
 ul {

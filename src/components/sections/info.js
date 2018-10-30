@@ -53,7 +53,7 @@ class InfoSection extends React.Component {
               <Col xs={24} md={10}>
                 <h4>Payments Accepted</h4>
                 <div className="payments">
-                  <Row type="flex" gutter="24">
+                  <Row type="flex" gutter={24}>
                     <Col span={6}>
                       <a href={null}>
                   EOS
