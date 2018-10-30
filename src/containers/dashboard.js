@@ -3,6 +3,8 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import * as Scroll from 'react-scroll';
+import { Button } from 'antd';
+import { Link } from 'react-router-dom';
 
 import { cloudinaryConfig, CloudinaryImage } from '../components/react-cloudinary';
 
@@ -14,7 +16,7 @@ import StrengthSection from '../components/sections/strength';
 cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
 const {
-  Link, Events, scroll, scrollSpy,
+  Link: ScrollLink, Events, scroll, scrollSpy,
 } = Scroll;
 
 class Dashboard extends React.Component {
@@ -68,7 +70,7 @@ class Dashboard extends React.Component {
           <div className="head">
 
             <div className="content">
-              <h1>BETX</h1>
+              <h1><Link to="/dice"><Button type="primary" size="large">Start Play Now</Button></Link></h1>
             </div>
 
             <div className="background">
