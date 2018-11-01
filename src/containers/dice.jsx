@@ -6,11 +6,12 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import * as Scroll from 'react-scroll';
 import moment from 'moment';
-
 import { cloudinaryConfig, CloudinaryImage } from '../components/react-cloudinary';
 
 import InfoSection from '../components/sections/info';
 import Slider from '../components/slider';
+import Chatroom from '../components/chatroom';
+import betActions from '../redux/bet/actions';
 
 cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
@@ -28,6 +29,9 @@ const DIVIDEND = 0.98;
 const {
   Link, Element, Events, scroll, scrollSpy,
 } = Scroll;
+
+const { initSocketConnection, sendTransaction } = betActions;
+
 
 function calculateWinChance(rollNumber) {
   return (rollNumber - MIN_ROLL_NUMBER) / ((MAX_ROLL_NUMBER - MIN_ROLL_NUMBER) + 1);
@@ -68,21 +72,23 @@ class DicePage extends React.Component {
       rollNumber,
       payout,
       payoutOnWin,
-      balance: 0,
+      winChance,
+      balance: 10,
+      username: `Guest-${_.random(100000, 999999, false)}`,
     };
 
     this.columns = [{
       title: 'Time',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'time',
+      key: 'time',
     }, {
       title: 'Bettor',
       dataIndex: 'bettor',
       key: 'bettor',
     }, {
       title: 'Roll Under',
-      dataIndex: 'rollunder',
-      key: 'rollunder',
+      dataIndex: 'rollUnder',
+      key: 'rollUnder',
     },
     {
       title: 'Bet',
@@ -105,9 +111,11 @@ class DicePage extends React.Component {
     this.onInputNumberChange = this.onInputNumberChange.bind(this);
     this.onBetAmountButtonClick = this.onBetAmountButtonClick.bind(this);
     this.getSliderValue = this.getSliderValue.bind(this);
+    this.onBetClicked = this.onBetClicked.bind(this);
   }
 
   componentDidMount() {
+    const { initSocketConnectionReq } = this.props;
     Events.scrollEvent.register('begin', (...rest) => {
       console.log('begin', rest);
     });
@@ -115,6 +123,8 @@ class DicePage extends React.Component {
     Events.scrollEvent.register('end', (...rest) => {
       console.log('end', rest);
     });
+
+    initSocketConnectionReq({ collection: 'Bet' });
   }
 
   componentWillUnmount() {
@@ -142,11 +152,12 @@ class DicePage extends React.Component {
 
   onBetAmountButtonClick(e) {
     const { balance, betAmount, payout } = this.state;
-    const targetValue = e.currentTarget.getAttribute('data-value');
-    if (_.isNumber(targetValue)) {
-      const newBetAmount = _.max(betAmount * targetValue, balance);
-      const payoutOnWin = calculatePayoutOnWin(newBetAmount, payout);
 
+    const targetValue = e.currentTarget.getAttribute('data-value');
+
+    if (_.isNumber(targetValue)) {
+      const newBetAmount = _.min(betAmount * targetValue, balance);
+      const payoutOnWin = calculatePayoutOnWin(newBetAmount, payout);
 
       this.setState({
         betAmount: newBetAmount,
@@ -156,6 +167,7 @@ class DicePage extends React.Component {
       const newBetAmount = balance;
 
       const payoutOnWin = calculatePayoutOnWin(newBetAmount, payout);
+
       this.setState({
         betAmount: newBetAmount,
         payoutOnWin,
@@ -178,119 +190,164 @@ class DicePage extends React.Component {
     });
   }
 
+  onBetClicked() {
+    const { rollNumber, username, betAmount } = this.state;
+    const { sendTransactionReq } = this.props;
+
+    sendTransactionReq({
+      bettor: username,
+      betAmount,
+      rollUnder: rollNumber,
+    });
+  }
+
   render() {
     const { columns } = this;
     const {
       dataSource, betAmount, payoutOnWin, winChance, payout, rollNumber,
     } = this.state;
 
+    const { betHistory } = this.props;
+
+    const betData = _.isEmpty(betHistory.all()) ? [] : _.map(betHistory.all(), (bet) => ({
+      key: bet.id,
+      time: moment(bet.time).format('HH:mm:ss'),
+      bettor: bet.bettor,
+      rollUnder: bet.rollUnder,
+      bet: _.floor(bet.bet,3),
+      roll: bet.roll,
+      payout: _.floor(bet.payout,4),
+    }));
+
     return (
-      <div id="dicepage">
-        <section>
-          <div className="horizontalWrapper">
+      <div>
+        <div id="dicepage">
+          <div className="wrapper">
+            <Row gutter={80}>
+              <Col xs={24} lg={12}>
+                <section>
+                  {/* <div className="horizontalWrapper"> */}
+                  <div className="container">
+                    <div className="action">
+                      <Row type="flex" gutter={0}>
+                        <Col span={8}>
+                          <div className="box">
+                            <span className="label">Roll under to win
+                            </span>
+                            <div className="value">{rollNumber}↓
+                            </div>
+                          </div>
+                        </Col>
+                        <Col span={8}>
+                          <div className="box">
+                            <span className="label">Payout
+                            </span>
+                            <div className="value">{_.floor(payout, 2)}X
+                            </div>
+                          </div>
 
-            <div className="container">
-              <div className="action">
-                <Row type="flex" gutter={36}>
-                  <Col span={12}>
-                    <div className="inputgroup">
-                      <span className="label">Bet Amount</span>
-                      <InputGroup compact>
-                        <Button size="large" type="default" onClick={this.onBetAmountButtonClick} data-value={0.5} >1/2
-                        </Button>
-                        <Button size="large" type="default" onClick={this.onBetAmountButtonClick} data-value={2} >2X
-                        </Button>
-                        <Button size="large" type="default" onClick={this.onBetAmountButtonClick} data-value={MAX_BALANCE_STR} >{MAX_BALANCE_STR}
-                        </Button>
-                        <InputNumber size="large" defaultValue="1" onChange={this.onInputNumberChange} value={betAmount} />
-                      </InputGroup>
+                        </Col>
+                        <Col span={8}>
+                          <div className="box">
+                            <span className="label">Win chance
+                            </span>
+                            <div className="value">{(_.ceil(winChance, 2) * 100).toFixed(2)}%
+                            </div>
+                          </div>
+                        </Col>
+                      </Row>
+                      <Row type="flex" gutter={36}>
+
+                        <Col span={12}>
+                          <div className="inputgroup">
+                            <div className="inner">
+
+                              <span className="label">Bet Amount</span>
+                              <InputGroup compact>
+                                <Button size="large" type="default" onClick={this.onBetAmountButtonClick} data-value={0.5} >1/2
+                                </Button>
+                                <Button size="large" type="default" onClick={this.onBetAmountButtonClick} data-value={2} >2X
+                                </Button>
+                                <Button size="large" type="default" onClick={this.onBetAmountButtonClick} data-value={MAX_BALANCE_STR} >{MAX_BALANCE_STR}
+                                </Button>
+                                <InputNumber size="large" defaultValue="1" onChange={this.onInputNumberChange} value={betAmount} />
+                              </InputGroup>
+                            </div>
+
+                          </div>
+                        </Col>
+                        <Col span={12} >
+                          <div className="inputgroup">
+                            <div className="box">
+                              <span className="label">Payout on win
+                              </span>
+                              <div className="value">{_.floor(payoutOnWin, 4)}
+                              </div>
+                            </div>
+                          </div>
+                        </Col>
+                      </Row>
+                      <Row type="flex" gutter={36}>
+
+                        <Col span={24}>
+                          {/* <div className="timer">
+                      56
+                          </div> */}
+
+                          <div className="history">
+                            <Row type="flex" justify="center">
+                              <Col span={16}>
+                                <Slider getValue={this.getSliderValue} defaultValue={DEFAULT_ROLL_NUMBER} min={MIN_SELECT_ROLL_NUMBER} max={MAX_SELECT_ROLL_NUMBER} />
+                              </Col>
+                            </Row>
+                          </div>
+                        </Col>
+                      </Row>
+                      <Row type="flex" gutter={36}>
+                        <Col span={8}>
+                        </Col>
+                        <Col span={8}>
+                          <Button className="btn-login" size="large" type="primary" onClick={this.onBetClicked}>Bet</Button>
+                        </Col>
+                        <Col span={8}>
+                        </Col>
+                      </Row>
                     </div>
-                  </Col>
-                  <Col span={12}>
-                    <div className="box">
-                      <span className="label">Payout on win
-                      </span>
-                      <div className="value">{_.floor(payoutOnWin, 4)}
-                      </div>
-                    </div>
-                  </Col>
+                  </div>
+                  {/* </div> */}
+                </section>
+              </Col>
+              <Col xs={24} lg={12}>
 
-                  <Col span={24}>
-                    <Row type="flex">
-                      <Col span={8}>
-                        <div className="box">
-                          <span className="label">Roll under to win
-                          </span>
-                          <div className="value">{rollNumber}↓
-                          </div>
-                        </div>
-                      </Col>
-                      <Col span={8}>
-                        <div className="box">
-                          <span className="label">Payout
-                          </span>
-                          <div className="value">{_.floor(payout, 2)}X
-                          </div>
-                        </div>
+                <section>
+                  <div className="container">
+                    <Chatroom />
+                  </div>
+                </section>
+              </Col>
+              <Col xs={24} lg={24}>
 
-                      </Col>
-                      <Col span={8}>
-                        <div className="box">
-                          <span className="label">Win chance
-                          </span>
-                          <div className="value">{(_.ceil(winChance, 2) * 100).toFixed(2)}%
-                          </div>
-                        </div>
-                      </Col>
-
-
-                    </Row>
-                  </Col>
-                  <Col span={24}>
-                    <Row type="flex">
-                      <Col span={8}>
-                      </Col>
-                      <Col span={8}>
-                        <Button className="button" size="large" type="primary">Login</Button>
-                      </Col>
-                      <Col span={8}>
-                      </Col>
-                    </Row>
-                  </Col>
-                </Row>
-              </div>
-              <div className="history">
-                <Row type="flex" justify="center">
-                  <Col span={12}>
-                    <Slider getValue={this.getSliderValue} defaultValue={DEFAULT_ROLL_NUMBER} min={MIN_SELECT_ROLL_NUMBER} max={MAX_SELECT_ROLL_NUMBER} />
-                  </Col>
-                </Row>
-              </div>
-            </div>
+                <section id="tables" >
+                  {/* <div className="horizontalWrapper"> */}
+                  <Tabs defaultActiveKey="1" onChange={this.onTabClicked} size="large">
+                    <TabPane tab="All Bets" key="1">
+                      <Table
+                        columns={columns}
+                        dataSource={betData}
+                        bordered={false}
+                        showHeader
+                        pagination={false}
+                      />
+                    </TabPane>
+                    <TabPane tab="My Bets" key="2">Content of Tab Pane 2</TabPane>
+                    <TabPane tab="Huge Wins" key="3">Content of Tab Pane 3</TabPane>
+                  </Tabs>
+                  {/* </div> */}
+                </section>
+              </Col>
+            </Row>
           </div>
-        </section>
-
-        <section >
-          <div className="horizontalWrapper">
-
-            <Tabs defaultActiveKey="1" onChange={this.onTabClicked} size="large">
-              <TabPane tab="All Bets" key="1">
-                <Table
-                  columns={columns}
-                  dataSource={dataSource}
-                  bordered
-                  showHeader
-                  pagination={false}
-                />
-              </TabPane>
-              <TabPane tab="My Bets" key="2">Content of Tab Pane 2</TabPane>
-              <TabPane tab="Huge Wins" key="3">Content of Tab Pane 3</TabPane>
-            </Tabs>
-
-
-          </div>
-        </section>
-
+        </div>
         <InfoSection />
       </div>
     );
@@ -298,15 +355,27 @@ class DicePage extends React.Component {
 }
 
 DicePage.propTypes = {
+  sendTransactionReq: PropTypes.func,
+  initSocketConnectionReq: PropTypes.func,
+  betHistory: PropTypes.object,
+  refresh: PropTypes.bool,
 };
 
 DicePage.defaultProps = {
+  sendTransactionReq: undefined,
+  initSocketConnectionReq: undefined,
+  betHistory: undefined,
+  refresh: false,
 };
 
 const mapStateToProps = (state) => ({
+  betHistory: state.Bet.get('history'),
+  refresh: state.Bet.get('refresh'),
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  sendTransactionReq: (obj) => dispatch(sendTransaction(obj)),
+  initSocketConnectionReq: (obj) => dispatch(initSocketConnection(obj)),
 });
 
 // Wrap the component to inject dispatch and state into it

@@ -110,7 +110,7 @@ class Topbar extends React.PureComponent {
                 <div className="isoLeft">
                   <div className="logo-container" style={{ margin: '0px' }}>
                     <Link to="/">
-                      <CloudinaryImage publicId="dice-logo" options={{ height: 100, crop: 'scale' }} />
+                      <CloudinaryImage publicId="betx-logo-gradient" options={{ height: 100, crop: 'scale' }} />
                       <span>BETX Dice</span>
                     </Link>
                   </div>
@@ -132,7 +132,7 @@ class Topbar extends React.PureComponent {
 
                   </div>
 
-                  {_.map(items, (item) => (<li className="hideOnMobile"><Link to={item.path} ><IntlMessages id={item.id} /></Link></li>))}
+                  {_.map(items, (item) => (<li className="hideOnMobile" key={item.id}><Link to={item.path} ><IntlMessages id={item.id} /></Link></li>))}
 
                 </ul>
               </div>
@@ -140,7 +140,7 @@ class Topbar extends React.PureComponent {
 
             <div className={menuClassName} id="bs-example-navbar-collapse-1">
               <ul>
-                {_.map(items, (item) => (<li role="menuitem"><Link to={item.path} ><IntlMessages id={item.id} /></Link></li>))}
+                {_.map(items, (item) => (<li role="menuitem" key={item.id}><Link to={item.path} ><IntlMessages id={item.id} /></Link></li>))}
               </ul>
             </div>
             {/*            <div className="lang">

@@ -1,24 +1,72 @@
 @bgColorBlack: #010015;
 @bgColorPurple: #2e216c;
+@btnColor: white;
+@btnBgColor: #ca890f;
 
 #dicepage {
     background-color: @bgColorBlack;
+    padding-top: 80px;
+    padding-bottom: 80px;
+
+    .wrapper {
+        margin-left: auto;
+        margin-right: auto;
+        padding: 0px;
+
+        @media @phone {
+            padding-left: 16px;
+            padding-right: 16px;
+        }
+
+        @media @tablet-strict {
+            padding-left: 24px;
+            padding-right: 24px;
+        }
+
+        @media @desktop-strict {
+            max-width: 940px;
+            padding-left: 0px;
+            padding-right: 0px;
+        }
+
+        @media @xl {
+            max-width: 90%;
+            padding-left: 0px;
+            padding-right: 0px;
+        }
+
+        @media @xxl {
+            max-width: 90%;
+            padding-left: 0px;
+            padding-right: 0px;
+        }
+
+    }
 
     .container {
-        padding: 200px 60px 80px;
+        padding: 100px 0px 80px;
         text-align: center;
 
         .action {
             background-color: @bgColorPurple;
-            border-radius: 15px;
+            border-radius: 10px;
             color: white;
             padding: 60px;
 
             .label {
                 color: #beb2ff;
                 text-transform: uppercase;
-                font-size: 1.8em;
+                display: block;
+                overflow: hidden;
+                word-break: break-word;
                 font-weight: 500;
+                font-size: 1.2em;
+
+                @media @desktop {
+                    font-size: 1em;
+                    height: 32px;
+                }
+
             }
 
             .box {
@@ -28,24 +76,48 @@
                 margin: 20px 20px;
                 padding: 30px 20px;
 
+                @media @desktop {
+                    margin: 0px 12px;
+                }
+
                 .value {
                     color: white;
                     font-size: 2em;
+
+                    @media @desktop {
+                        font-size: 1.8em;
+                    }
+
                 }
 
             }
 
-            .button {
-                width: 200px;
+            .btn-login {
+                width: 100%;
                 height: 50px;
                 margin-top: 20px;
+                font-size: 1.5em;
+                text-transform: uppercase;
+                background-color: @btnBgColor;
+                color: @btnColor;
+                border-color: @btnColor;
+                border: none;
             }
 
             .inputgroup {
                 padding: 40px 20px;
 
+                @media @desktop {
+                    padding-left: 0px;
+                    padding-right: 0px;
+                }
+
+                .inner {
+                    padding-top: 30px;
+                }
+
                 .ant-input-group {
-                    padding-top: 20px;
+                    display: flex;
 
                     &>* {
                         height: 50px;
@@ -54,29 +126,35 @@
 
                 }
 
-                .ant-input-number {
-                    width: 50%;
+            }
 
-                    .ant-input-number-input-wrap {
-                        height: 100%;
+        }
 
-                        .ant-input-number-input{
-                            height: 100%;
-                            font-size: 1.8em;
-                            font-weight: 500;
-                            text-align: center;
-                        }
-                    }
+        // General style for input number
+        .ant-input-number {
+            width: 50%;
 
+            .ant-input-number-input-wrap {
+                .ant-input-number-input {
+                    height: 40px;
+                    font-size: 1.8em;
+                    font-weight: 500;
+                    text-align: center;
                 }
 
             }
 
         }
 
+        .timer {
+            font-size: 3em;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
         .slider {
-            padding-top: 80px;
-            padding-bottom: 80px;
+            padding-top: 20px;
+            padding-bottom: 20px;
         }
 
         .history {
@@ -86,6 +164,88 @@
                 text-align: center;
             }
 
+        }
+
+    }
+
+    #chatroom {
+        @fontSize: 1.2em;
+
+        ul {
+            padding: 40px;
+            display: block;
+            background-color: #2b294a;
+            color: white;
+            height: 480px;
+            margin: 0;
+            overflow-y: scroll;
+            border-radius: 10px;
+            font-size: @fontSize;
+            list-style: none;
+            word-wrap: break-word;
+            font-size: 1.2em;
+
+            li.user {
+                .username {
+                    font-size: @fontSize;
+                    font-weight: 700;
+                    overflow: hidden;
+                    padding-right: 15px;
+                    text-align: right;
+                }
+
+                /* Input */
+                .body {
+                    font-size: @fontSize;
+                }
+
+            }
+
+            li.system {
+                color: #eee;
+                margin: 5px;
+                text-align: center;
+            }
+
+        }
+
+        .form {
+            padding-top: 20px;
+            padding-bottom: 20px;
+            @height: 60px;
+
+            input {
+                border: 1px solid #000;
+                height: @height;
+                outline: none;
+                padding-left: 12px;
+                width: 100%;
+                font-size: 1.5em;
+            }
+
+            button {
+                width: 100%;
+                background-color: @btnBgColor;
+                color: @btnColor;
+                text-transform: uppercase;
+                font-weight: 500;
+                height: @height;
+                font-size: 1.5em;
+                border: none;
+            }
+
+        }
+
+        .info {
+            color: white;
+        }
+
+    }
+
+    #tables {
+        .ant-table {
+            color: white;
+            background-color: #2b294a;
         }
 
     }

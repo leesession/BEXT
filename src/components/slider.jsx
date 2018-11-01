@@ -33,6 +33,7 @@ class IntegerStep extends React.Component {
               max={max}
               onChange={this.onChange}
               value={typeof inputValue === 'number' ? inputValue : 0}
+              tipFormatter={null}
             />
           </Col>
           <Col span={8}>
