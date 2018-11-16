@@ -1,7 +1,9 @@
 build
 yarn-error.log
 nohup.out
-
+firebase.json
+nohup.out
+warning.md
 # Created by https://www.gitignore.io/api/node,macos,linux,windows,firebase,reactnative
 
 ### Firebase ###
