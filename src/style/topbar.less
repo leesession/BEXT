@@ -74,7 +74,7 @@ ul.menu-list {
         padding-right: 18px;
 
         a {
-            color: @fontColor;
+            color: @topbarFontColor;
 
             i {
                 padding-left: 6px;
@@ -92,7 +92,6 @@ ul.menu-list {
 
 
         // Underline style for topbar right
-        &:not(:last-of-type) {
             &:after {
                 content: "";
                 display: block;
@@ -110,45 +109,9 @@ ul.menu-list {
             }
 
             &:hover:after {
-                background-color: @fontColor;
+                background-color: @borderColor;
                 width: 100%;
             }
-
-        }
-
-        &.lang {
-            margin-top: 12px;
-            .transition(all 0.3s ease 0s);
-
-            .selected {
-                display: inline-block;
-                height: 36px;
-                border: 1px solid #fff;
-                .border-radius(100px);
-                padding-left: 15px;
-                padding-right: 15px;
-                cursor: pointer;
-
-                img {
-                    float: left;
-                    height: 20px;
-                    width: auto;
-                    margin-top: 8px;
-                    margin-right: 8px;
-                    .opacity(0.7);
-                }
-
-                i {
-                    float: left;
-                    height: 36px;
-                    line-height: 35px;
-                    color: #fff;
-                    .transition(all 0.3s ease 0s);
-                }
-
-            }
-
-        }
 
     }
 
@@ -166,7 +129,7 @@ ul.menu-list {
             width: 22px;
             height: 2px;
             transition: all 0.2s;
-            background-color: @bgColor;
+            background-color: @borderColor;
             display: block;
 
             &:not(:first-of-type) {
@@ -291,7 +254,7 @@ ul.menu-list {
     }
 
     a {
-        color: @fontColor;
+        color: @topbarFontColor;
     }
 
     &.menuCollapsed {

@@ -12,14 +12,19 @@ import { AppLocale } from '../../index';
 import themes from '../../config/themes';
 import { themeConfig, siteConfig } from '../../config';
 import AppHolder from './commonStyle';
-
+import FooterComponent  from "../../components/footer";
 const { Content, Footer } = Layout;
 const { toggleAll } = appActions;
 
 export class App extends React.PureComponent {
   render() {
-    const { url } = this.props.match;
-    const currentAppLocale = AppLocale.en;
+    const {
+      match: { url }, locale, toggleAll,
+    } = this.props;
+
+    const currentAppLocale = AppLocale[locale];
+    const appHeight = window.innerHeight;
+
     return (
       <LocaleProvider locale={currentAppLocale.antd}>
         <IntlProvider
@@ -28,11 +33,11 @@ export class App extends React.PureComponent {
         >
           <ThemeProvider theme={themes[themeConfig.theme]}>
             <AppHolder>
-              <Layout>
+              <Layout style={{ height: appHeight }}>
                 <Debounce time="1000" handler="onResize">
                   <WindowResizeListener
                     onResize={(windowSize) =>
-                      this.props.toggleAll(
+                      toggleAll(
                         windowSize.windowWidth,
                         windowSize.windowHeight
                       )}
@@ -40,20 +45,16 @@ export class App extends React.PureComponent {
                 </Debounce>
                 <Topbar url={url} />
                 <Layout style={{ flexDirection: 'row', overflowX: 'hidden' }}>
-                  <Layout
-                    className="isoContentMainLayout"
-                  >
+                  <Layout>
                     <Content
-                      className="isomorphicContent"
                       style={{
                         flexShrink: '0',
-                        background: '#f9f9f9',
                       }}
                     >
                       <AppRouter url={url} />
                     </Content>
                     <Footer>
-                      {siteConfig.footerText}
+                      <FooterComponent />
                     </Footer>
                   </Layout>
                 </Layout>
@@ -69,11 +70,13 @@ export class App extends React.PureComponent {
 App.propTypes = {
   toggleAll: PropTypes.func.isRequired,
   match: PropTypes.object.isRequired,
+  locale: PropTypes.string.isRequired,
 };
 
 export default connect(
   (state) => ({
     auth: state.Auth,
+    locale: state.LanguageSwitcher.language.locale,
   }),
   { toggleAll }
 )(App);

@@ -21,7 +21,8 @@ cloudinaryConfig({ cloud_name: 'forgelab-io' });
 const items = [
   { path: '/', id: 'topbar.home' },
   { path: '/dice', id: 'topbar.dice' },
-  { path: '/dealer', id: 'topbar.dealer' },
+  { path: '/stake', id: 'topbar.stake' },
+  // { path: '/dealer', id: 'topbar.dealer' },
   { path: '/faq', id: 'topbar.faq' },
   // { path: '/contact', id: 'topbar.contact' },
   { path: '/whitepaper', id: 'topbar.whitepaper' },
@@ -94,8 +95,6 @@ class Topbar extends React.PureComponent {
     } = this.state;
 
     const { locale } = this.props;
-
-    console.log("render.locale", locale);
 
     const btnClassName = `triggerBtn  ${collapsed ? 'menuCollapsed' : 'menuOpen'}`;
     const menuClassName = `menu  ${collapsed ? 'menuCollapsed' : 'menuOpen'}`;

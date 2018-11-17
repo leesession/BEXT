@@ -174,3 +174,170 @@
 	clip-path: @style;
 	-webkit-clip-path: @style;
 }
+
+/*----------------------------flexbox----------------------*/
+.flex {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: flex;
+}
+
+/*.inline-flex { display: -webkit-inline-box; display: -moz-inline-box;display: -webkit-inline-flex;display:-moz-inline-flex;display:inline-flex;}*/
+
+/*横向或纵向: row column*/
+.flex-direction(@style) {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: @style;
+    -moz-flex-direction: @style;
+    flex-direction: @style;
+}
+
+// Wrap: wrap no-wrap wrap-reverse
+.flex-wrap(@style) {
+    // -webkit-box-lines: multiple;
+    -webkit-flex-wrap: @style;
+    -moz-flex-wrap: @style;
+    flex-wrap: @style;
+}
+
+/*主轴对齐方式: start end betwen areound center*/
+.flex-justify(@style) when (@style='start'),(@style='end'){
+	-webkit-box-pack: @style;
+    -moz-justify-content: flex-@style;
+    -webkit-justify-content: flex-@style;
+    justify-content: flex-@style;
+}
+
+.flex-justify(@style) when (@style='between'),(@style='around'){
+	-webkit-box-pack: @style;
+    -moz-justify-content: space-@style;
+    -webkit-justify-content: space-@style;
+    justify-content: space-@style;
+}
+
+.flex-justify(@style){
+    -webkit-box-pack: @style;
+    -moz-justify-content: @style;
+    -webkit-justify-content: @style;
+    justify-content: @style;
+}
+
+/*侧轴对齐方式 start end center baseline stretch*/
+.flex-align(@style) when (@style='start'),(@style='end'){
+	-webkit-box-align: @style;
+    -moz-align-items: flex-@style;
+    -webkit-align-items: flex-@style;
+    align-items: flex-@style;
+}
+
+.flex-align(@style){
+	-webkit-box-align: @style;
+    -moz-align-items: @style;
+    -webkit-align-items: @style;
+    align-items: @style;
+}
+
+/*主轴换行时行在侧轴的对齐方式，必须定义flex-wrap为换行: start end center between around strech*/
+
+.flex-content(@style) when (@style='start'),(@style='end'){
+    -webkit-align-content: flex-@style;
+    -moz-align-content: flex-@style;
+    align-content: flex-@style;
+}
+
+.flex-content(@style) when (@style='between'),(@style='around'){
+	-webkit-align-content: space-@style;
+    -moz-align-content: space-@style;
+    align-content: space-@style;
+}
+
+.flex-content(@style){
+	-webkit-align-content: @style;
+    -moz-align-content: @style;
+    align-content: @style;
+}
+
+/*不允许子元素收缩*/
+.flex-child-no-grow {
+    -webkit-box-flex: 0;
+    -moz-flex-grow: 0;
+    -webkit-flex-grow: 0;
+    flex-grow: 0;
+}
+
+/*允许拉伸*/
+.flex-child-no-shrink {
+    -webkit-box-flex: 0;
+    -moz-flex-shrink: 0;
+    -webkit-flex-shrink: 0;
+    flex-shrink: 0;
+}
+
+/*允许收缩*/
+.flex-child-no-average { /*旧版需定宽度*/
+    -webkit-box-flex: 0;
+    -moz-flex: 0;
+    -webkit-flex: 0;
+    flex: 0;
+}
+
+/*平均分布，兼容旧版必须给宽度*/
+.flex-child-no-first {
+    -webkit-box-ordinal-group: 0;
+    -moz-order: 0;
+    -webkit-order: 0;
+    order: 0;
+}
+
+/*排第一个*/
+
+/*允许子元素收缩*/
+.flex-child-grow {
+    -webkit-box-flex: 1.0;
+    -moz-flex-grow: 1;
+    -webkit-flex-grow: 1;
+    flex-grow: 1;
+}
+
+/*允许拉伸*/
+.flex-child-shrink {
+    -webkit-box-flex: 1.0;
+    -moz-flex-shrink: 1;
+    -webkit-flex-shrink: 1;
+    flex-shrink: 1;
+}
+
+/*允许收缩*/
+.flex-child-average { /*旧版需定宽度*/
+    -webkit-box-flex: 1.0;
+    -moz-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+}
+
+/*平均分布，兼容旧版必须给宽度*/
+.flex-child-first {
+    -webkit-box-ordinal-group: 1;
+    -moz-order: 1;
+    -webkit-order: 1;
+    order: 1;
+}
+
+/*排第一个*/
+
+/*子元素在侧轴的对齐方式 start end center baseline strech*/
+
+.flex-child-align(@style) when (@style='start'),(@style='end'){
+    -moz-align-self: flex-@style;
+    -webkit-align-self: flex-@style;
+    align-self: flex-@style;
+}
+
+.flex-child-align(@style){
+	-moz-align-self: @style;
+    -webkit-align-self: @style;
+    align-self: @style;
+}

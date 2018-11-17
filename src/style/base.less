@@ -6,11 +6,12 @@ ALL VARIABLE & MIXING
 @fontFamily: 'Montserrat', sans-serif;
 @fontSize: 14px;
 
-@primaryColor: #e4cb81;
-@fontColor: #e4cb81;
+@primaryColor: #e8b32f;
+@borderColor: #e6c36b;
+@panelGrey: #3b3b3d;
+@fontColor: #939393;
 @bgColor: #212121;
-@containerBgColor: #3c3b3c;
-@borderColor: #aa9864;
+@topbarFontColor:#ab9e89;
 
 /****** Media screen size *****/
 
@@ -89,9 +90,16 @@ a:active {
     }
 }
 
+.ant-layout-content{
+    background-color: @bgColor;  
+}
+
 .ant-layout-footer{
-    border-top: 1px solid #433975;
-    background-color: #2f2078;
-    text-align: center;
-    color:@purpleColor;
+     background-color: @bgColor;
+     border: none;   
+
+    #footer{
+        text-align: center;
+        color: @fontColor;
+    }
 }
