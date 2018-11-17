@@ -2,9 +2,11 @@
 @bgColorPurple: #2e216c;
 @btnColor: white;
 @btnBgColor: #ca890f;
+@fontColor: #939393;
+@sliderRest: #e74f4b;
 
 #dicepage {
-    background-color: @bgColorBlack;
+    background-color: @bgColor;
     padding-top: 80px;
     padding-bottom: 80px;
 
@@ -44,37 +46,39 @@
     }
 
     .container {
-        padding: 100px 0px 80px;
+        margin: 50px 0px 80px;
         text-align: center;
+        position: relative;
+
+        .holderBorder{
+            border-radius: 20px;
+            background-color: @panelGrey;
+            border: 1px solid @borderColor;
+            overflow: hidden;
+        }
 
         .action {
-            background-color: @bgColorPurple;
-            border-radius: 10px;
             color: white;
             padding: 60px;
 
             .label {
-                color: #beb2ff;
+                color: @fontColor;
                 text-transform: uppercase;
                 display: block;
                 overflow: hidden;
                 word-break: break-word;
                 font-weight: 500;
-                font-size: 1.2em;
+                font-size: 1.5em;
 
                 @media @desktop {
-                    font-size: 1em;
                     height: 32px;
                 }
-
             }
 
             .box {
-                background-color: #312472;
-                border: 2px solid #382c76;
                 border-radius: 10px;
                 margin: 20px 20px;
-                padding: 30px 20px;
+                padding: 30px 20px 0 20px;
 
                 @media @desktop {
                     margin: 0px 12px;
@@ -82,50 +86,82 @@
 
                 .value {
                     color: white;
-                    font-size: 2em;
+                    font-size: 3em;
+                    margin-top: 20px;
+                }
 
-                    @media @desktop {
-                        font-size: 1.8em;
-                    }
-
+                .ratio{
+                    margin-top: 0;
+                    font-size: 5em;
+                    font-style: italic;
+                    font-weight: 600;
+                    color:@borderColor;
+                    filter:drop-shadow(3px 3px 0px #a27d34);
                 }
 
             }
 
             .btn-login {
-                width: 100%;
+                width: 70%;
                 height: 50px;
                 margin-top: 20px;
                 font-size: 1.5em;
                 text-transform: uppercase;
-                background-color: @btnBgColor;
-                color: @btnColor;
+                background-color: @borderColor;
+                color: black;
                 border-color: @btnColor;
                 border: none;
+                border-radius: 20px;
+                margin-bottom: 12px;
             }
 
-            .inputgroup {
-                padding: 40px 20px;
+            .bet_description{
+                font-size: 1.5em;
+                color:@fontColor;
+                letter-spacing: 2px;
+            }
 
-                @media @desktop {
-                    padding-left: 0px;
-                    padding-right: 0px;
+            .bet_value{
+                font-size: 1.5em;
+                font-weight: 400;
+                color:white;
+                letter-spacing: 2px;
+
+                .highlight{
+                    color: @primaryColor;
+                    font-size: 0.8em;
                 }
+            }
 
-                .inner {
-                    padding-top: 30px;
+            .inputBorder{
+                background-color: transparent;
+                border: 2px solid @borderColor;
+                color: white;
+                border-radius: 10px;
+                font-size: 2em;
+                height: 45px;
+                text-align: center;
+            }
+
+            .ant-input-number-handler{
+                display: none;
+            }
+
+            .change_value_button{
+                height: 40px;
+                width: 40px;
+                background-color: @borderColor;
+                color:black;
+                border: none;
+                border-radius: 50%;
+                font-size: 2em;
+                font-weight: 100;
+                margin: 5px 0px;
+                transition:0.3s all;
+
+                &:focus{
+                    outline: none;
                 }
-
-                .ant-input-group {
-                    display: flex;
-
-                    &>* {
-                        height: 50px;
-                        line-height: 50px;
-                    }
-
-                }
-
             }
 
         }
@@ -155,6 +191,33 @@
         .slider {
             padding-top: 20px;
             padding-bottom: 20px;
+
+            .ant-slider-rail{
+                height: 8px;
+                border-radius: 4px;
+                background-color: @sliderRest;
+            }
+
+            .ant-slider-track{
+                height: 8px;
+                background-color: @borderColor;
+            }
+
+            .ant-slider-handle{
+                width: 25px;
+                height: 25px;
+                background-color: @primaryColor;
+                border:none;
+                transform: translateY(-3px);
+            }
+
+        }
+
+        .bet_button{
+            border:none;
+            background-color: transparent;
+            font-size:1em;
+            color:white;
         }
 
         .history {
@@ -166,6 +229,33 @@
 
         }
 
+        .currency_change{
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            width: 200px;
+            height:50px;
+            border: 2px solid @borderColor;
+            font-size: 2em;
+            border-radius: 28px;
+            overflow: hidden;
+
+            .bet_button{
+                height:100%;
+                width:50%;
+                border-radius: 0;
+                color: @fontColor;
+            
+                &:first-child{
+                    border-right: 2px solid @borderColor
+                }
+
+                &.active{
+                    color: @borderColor;
+                    background-color:#313131;
+                }
+            }
+        }
     }
 
     #chatroom {
@@ -174,7 +264,6 @@
         ul {
             padding: 40px;
             display: block;
-            background-color: #2b294a;
             color: white;
             height: 480px;
             margin: 0;
@@ -210,12 +299,15 @@
         }
 
         .form {
-            padding-top: 20px;
+            padding-top: 26px;
             padding-bottom: 20px;
-            @height: 60px;
+            @height: 30px;
 
             input {
-                border: 1px solid #000;
+                border: none;
+                border-bottom: 1px solid @borderColor;
+                border-radius: 0;
+                background-color: transparent;
                 height: @height;
                 outline: none;
                 padding-left: 12px;
@@ -225,13 +317,15 @@
 
             button {
                 width: 100%;
-                background-color: @btnBgColor;
+                background-color: @borderColor;
+                border-radius: 20px;
                 color: @btnColor;
                 text-transform: uppercase;
-                font-weight: 500;
+                font-weight: 300;
                 height: @height;
                 font-size: 1.5em;
                 border: none;
+                color:black;
             }
 
         }
@@ -243,9 +337,71 @@
     }
 
     #tables {
-        .ant-table {
+        .ant-table,
+         {
             color: white;
-            background-color: #2b294a;
+            background-color: @panelGrey;
+
+            & *{
+                background-color: transparent;
+            }
+
+            .ant-table-placeholder{
+                border-bottom: none;
+            }
+            
+            .ant-table-body::after{
+                content:' ';
+                height:1px;
+                color:white;
+                background: #fff;
+                width:300px;
+            }
+
+            .ant-table-thead th {
+                color: white;
+                text-align: center;
+                font-size: 1.5em;
+            }
+        }
+
+        .ant-tabs-nav-scroll{
+            border-bottom: none;
+        }
+
+        .ant-tabs-ink-bar{
+            display: none !important;
+        }
+
+        .ant-tabs-tab{
+            color:@borderColor;
+            font-size: 1.2em;
+        }
+
+        .ant-tabs-tab-active{
+            color:@panelGrey;
+            background: @borderColor;
+            border-radius: 20px;
+        }
+        
+        .ant-table-placeholder{
+            border-top:1px solid white;
+            margin: 0 30px;
+        }
+
+        .ant-table-row{
+            &>*{
+                border:none;
+            }
+
+            td{
+                text-align: center;
+                font-size: 1.5em;
+            }
+        }
+
+        .ant-tabs-bar{
+            border-bottom: none;
         }
 
     }

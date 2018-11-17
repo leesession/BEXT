@@ -27,22 +27,14 @@ class IntegerStep extends React.Component {
     return (
       <div className="slider">
         <Row gutter={32}>
-          <Col span={16}>
+          <Col span={24}>
             <Slider
+              className='slider_self'
               min={min}
               max={max}
               onChange={this.onChange}
               value={typeof inputValue === 'number' ? inputValue : 0}
               tipFormatter={null}
-            />
-          </Col>
-          <Col span={8}>
-            <InputNumber
-              min={min}
-              max={max}
-              style={{ width: '100%', height: '40px' }}
-              value={inputValue}
-              onChange={this.onChange}
             />
           </Col>
         </Row>
