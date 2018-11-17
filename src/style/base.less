@@ -10,8 +10,12 @@ ALL VARIABLE & MIXING
 @borderColor: #e6c36b;
 @panelGrey: #3b3b3d;
 @bgColor: #212121;
+<<<<<<< HEAD
 
 
+=======
+@topbarFontColor:#ab9e89;
+>>>>>>> 785a9947237d28b7a692ffb28e463f7ae0e8ce30
 
 /****** Media screen size *****/
 
@@ -90,9 +94,16 @@ a:active {
     }
 }
 
+.ant-layout-content{
+    background-color: @bgColor;  
+}
+
 .ant-layout-footer{
-    border-top: 1px solid #433975;
-    background-color: #2f2078;
-    text-align: center;
-    color:@purpleColor;
+     background-color: @bgColor;
+     border: none;   
+
+    #footer{
+        text-align: center;
+        color: @fontColor;
+    }
 }

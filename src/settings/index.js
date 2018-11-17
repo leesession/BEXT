@@ -3,45 +3,29 @@ export default {
 };
 
 const siteConfig = {
-  siteName: 'BMEX',
-  siteIcon: 'BMEX-logo-trans',
-  footerText: 'BMEX ©2018 All rights reserved',
-  telegramANN: 'https://t.me/bmexnotice',
-  telegramZH: 'https://t.me/bmexofficial',
-  telegramEN: 'https://t.me/bmexgroup',
-  contactEmail: 'operation@bmex.com',
-  website: 'www.bmex.com',
-  medium: 'https://medium.com/bmex',
-  facebook: 'https://www.facebook.com/bmexofficial',
+  siteName: 'BETX',
+  siteIcon: 'BETX-logo-trans',
+  footerText: 'BETX ©2018 All rights reserved',
+  telegramANN: 'https://t.me/betxnotice',
+  telegramZH: 'https://t.me/betxofficial',
+  telegramEN: 'https://t.me/betxgroup',
+  contactEmail: 'operation@betx.com',
+  website: 'www.betx.com',
+  medium: 'https://medium.com/betx',
+  facebook: 'https://www.facebook.com/betxofficial',
   twitter: 'https://twitter.com/BmexOfficial',
-  announcement: 'https://bmexhelp.zendesk.com/hc/zh-cn/sections/360002532612-%E5%85%AC%E5%91%8A%E4%B8%AD%E5%BF%83',
-  terms: 'https://bmexhelp.zendesk.com/hc/zh-cn/articles/360018256011',
+  announcement: 'https://betxhelp.zendesk.com/hc/zh-cn/sections/360002532612-%E5%85%AC%E5%91%8A%E4%B8%AD%E5%BF%83',
+  terms: 'https://betxhelp.zendesk.com/hc/zh-cn/articles/360018256011',
   ethscan: 'https://rinkeby.etherscan.io/',
-  bbs: 'https://bbs.bmex.com/',
+  bbs: 'https://bbs.betx.com/',
 };
 
 const appConfig = {
-  allowedDeposit: [
-    // {
-    //   key: 'BTC',
-    //   name: {
-    //     en: 'Bitcoin',
-    //     zh: '比特币',
-    //   },
-    // },
-    {
-      key: 'ETH',
-      name: {
-        en: 'Ethereum',
-        zh: '以太坊',
-      },
-    },
-  ],
 };
 
 const parseConfig = {
   serverURL: 'http://localhost:1338/parse',
-  appId: 'BMEX-APP',
+  appId: 'BETX-APP',
   javascriptKey: 'javascriptKey',
 };
 
