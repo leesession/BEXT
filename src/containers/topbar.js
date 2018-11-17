@@ -20,7 +20,7 @@ cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
 const items = [
   { path: '/', id: 'topbar.home' },
-  { path: '/dice', id: 'topbar.dice' },
+  // { path: '/dice', id: 'topbar.dice' },
   { path: '/stake', id: 'topbar.stake' },
   // { path: '/dealer', id: 'topbar.dealer' },
   { path: '/faq', id: 'topbar.faq' },

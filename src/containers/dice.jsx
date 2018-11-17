@@ -441,7 +441,6 @@ class DicePage extends React.Component {
             </Row>
           </div>
         </div>
-        <InfoSection />
       </div>
     );
   }
