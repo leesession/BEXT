@@ -7,7 +7,7 @@
   "topbar.home": "Home",
   "topbar.dice": "Game",
   "topbar.dealer": "Dealer",
-  "topbar.stake": "Stake",
+  "topbar.stake": "Dividends",
   "topbar.faq": "FAQ",
   "topbar.contact": "Contact Us",
   "topbar.whitepaper": "Whitepaper",
@@ -69,5 +69,8 @@
   "faq.term.body":"博彩控制建议：\n我们认为博彩应该一直是一种娱乐性的社交活动。记住这些简单的小建议能帮助您确保自身的博彩不成为问题。\n1. 博彩只是一种娱乐项目，不应被视为赚钱的方法。\n2. 参与博彩需理智投注并避免想赢回所输的钱。\n3. 只投注您有能力支付的金额。\n4. 控制您花费在博彩上的时间。\n5. 博彩需定时休息。持续博彩将导致您在博彩时间和认知上产生偏差。\n6. 请不要在酒后或您心烦沮丧时进行博彩。",
 
   "stake.title":"BETX Staking & Dividend",
-  "stake.subtitle":"Dividend in current period"
+  "stake.subtitle":"Dividend in current period",
+  "stake.rule.title":"精选规则说明t",
+  "stake.rule.body":"分红规则说明:\n平台所有收入的50%直接流入红利池，平台每小时进行一次分红结算，用户所得的利润将自动累积到您的余额上。\n用户收益说明:\n用户所得分红=质押代币数/总质押代币数*平台50%利润"
+
 }
