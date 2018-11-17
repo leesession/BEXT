@@ -4,9 +4,11 @@
   "page.signInButton": "登录",
   "page.signInForgotPass": "忘记密码",
   "page.signInCreateAccount": "创建帐户",
-    "topbar.home": "主页",
-    "topbar.dice": "骰子",
+  "topbar.home": "主页",
+  "topbar.dice": "游戏",
   "topbar.dealer": "庄家玩法",
   "topbar.faq": "常见问答",
-  "topbar.contact": "联系我们"
+  "topbar.contact": "联系我们",
+  "topbar.whitepaper": "白皮书",
+  "topbar.login": "登录"
 }

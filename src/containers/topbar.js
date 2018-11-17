@@ -23,7 +23,8 @@ const items = [
   { path: '/dice', id: 'topbar.dice' },
   { path: '/dealer', id: 'topbar.dealer' },
   { path: '/faq', id: 'topbar.faq' },
-  { path: '/contact', id: 'topbar.contact' },
+  // { path: '/contact', id: 'topbar.contact' },
+  { path: '/whitepaper', id: 'topbar.whitepaper' },
 ];
 
 const langSettings = [
@@ -51,10 +52,18 @@ class Topbar extends React.PureComponent {
 
     this.toggleCollapsed = this.toggleCollapsed.bind(this);
     this.onLanguageDropdownClicked = this.onLanguageDropdownClicked.bind(this);
+    this.onLoginClicked = this.onLoginClicked.bind(this);
   }
 
   componentWillMount() {
 
+  }
+
+  componentDidMount() {
+    // preload language flag img
+    langSettings.forEach((item) => {
+      document.createElement('img').src = item.imgSrc;
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -62,6 +71,7 @@ class Topbar extends React.PureComponent {
 
   onLanguageDropdownClicked({ key }) {
     const { changeLanguage } = this.props;
+    console.log("onLanguageDropdownClicked.key" , key);
     changeLanguage(key);
   }
 
@@ -73,6 +83,10 @@ class Topbar extends React.PureComponent {
     });
   }
 
+  onLoginClicked() {
+
+  }
+
   render() {
     const customizedTheme = getCurrentTheme('topbarTheme', themeConfig.theme);
     const {
@@ -81,21 +95,22 @@ class Topbar extends React.PureComponent {
 
     const { locale } = this.props;
 
+    console.log("render.locale", locale);
+
     const btnClassName = `triggerBtn  ${collapsed ? 'menuCollapsed' : 'menuOpen'}`;
     const menuClassName = `menu  ${collapsed ? 'menuCollapsed' : 'menuOpen'}`;
 
     const languageDropdown = (
-      <DropdownMenu onClick={this.onLanguageDropdownClicked}>
-
+      <Menu onClick={this.onLanguageDropdownClicked} className="lang-menu">
         {_.map(langSettings, (lang) => (
-          <MenuItem key={lang.key}>
+          <Menu.Item key={lang.key}>
             <img src={lang.imgSrc} alt="" />
             <span style={{ paddingLeft: '12px' }}>
               {lang.text}
             </span>
-          </MenuItem>
+          </Menu.Item>
         ))}
-      </DropdownMenu>
+      </Menu>
     );
 
     return (
@@ -111,9 +126,11 @@ class Topbar extends React.PureComponent {
                   <div className="logo-container" style={{ margin: '0px' }}>
                     <Link to="/">
                       <CloudinaryImage publicId="betx-logo-gradient" options={{ height: 100, crop: 'scale' }} />
-                      <span>BETX Dice</span>
                     </Link>
                   </div>
+                  <ul className="menu-list">
+                    {_.map(items, (item) => (<li className="hideOnMobile" key={item.id}><Link to={item.path} ><IntlMessages id={item.id} /></Link></li>))}
+                  </ul>
                 </div>
 
                 <ul className="isoRight">
@@ -129,11 +146,20 @@ class Topbar extends React.PureComponent {
                       <span className="icon-bar middle-bar"></span>
                       <span className="icon-bar bottom-bar"></span>
                     </button>
-
                   </div>
 
-                  {_.map(items, (item) => (<li className="hideOnMobile" key={item.id}><Link to={item.path} ><IntlMessages id={item.id} /></Link></li>))}
-
+                  <li className="nav-btn" role="menuitem" key="login">
+                    <Button type="primary" size="large" onClick={this.onLoginClicked}><IntlMessages id="topbar.login" />
+                    </Button>
+                  </li>
+                  <li className="lang-menu-trigger" role="menuitem" key="lang">
+                    <Dropdown overlay={languageDropdown}>
+                      <div className="selected">
+                        <img src={_.find(langSettings, { locale }).imgSrc} alt="" />
+                        <i className="fa fa-angle-down" />
+                      </div>
+                    </Dropdown>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -143,14 +169,7 @@ class Topbar extends React.PureComponent {
                 {_.map(items, (item) => (<li role="menuitem" key={item.id}><Link to={item.path} ><IntlMessages id={item.id} /></Link></li>))}
               </ul>
             </div>
-            {/*            <div className="lang">
-              <Dropdown overlay={languageDropdown}>
-                <div className="selected">
-                  <img src={_.find(langSettings, { locale }).imgSrc} alt="" />
-                  <i className="fa fa-angle-down" />
-                </div>
-              </Dropdown>
-            </div> */}
+
           </div>
         </Header>
       </div>
@@ -174,7 +193,6 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   changeLanguage: (lanId) => dispatch(languageSwitcherActions.changeLanguage(lanId)),
-
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Topbar);

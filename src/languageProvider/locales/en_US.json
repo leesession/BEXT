@@ -5,8 +5,10 @@
   "page.signInForgotPass": "Forgot password",
   "page.signInCreateAccount": "Create an account",
   "topbar.home": "Home",
-  "topbar.dice": "Dice",
+  "topbar.dice": "Game",
   "topbar.dealer": "Dealer",
   "topbar.faq": "FAQ",
-  "topbar.contact": "Contact Us"
+  "topbar.contact": "Contact Us",
+  "topbar.whitepaper": "Whitepaper",
+  "topbar.login": "Log In"
 }
