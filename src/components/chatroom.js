@@ -59,11 +59,16 @@ class ChatRoom extends React.Component {
     const { history, messageNum, refresh } = this.props;
     const { value } = this.state;
 
-    const leftSpan = 20;
-    const rightSpan = 24 - leftSpan;
-
     return (
       <div id="chatroom">
+        {/* <Row>
+          <Col span={24}>
+          聊天室
+          </Col>
+          <Col span={10} offset={14}>
+          <Button>English</Button>
+          </Col>
+        </Row> */}
         <ul ref={(ele) => { this.myRef = ele; }}>
           {
             !_.isEmpty(history.all()) &&
@@ -72,12 +77,12 @@ class ChatRoom extends React.Component {
           }
         </ul>
         <form className="form" onSubmit={this.handleSubmit}>
-          <Row gutter={20}>
-            <Col span={leftSpan}>
-              <Input type="text" placeholder="Type something here" onChange={this.handleChange} value={value} />
+          <Row gutter={20} type='flex' justify='center'>
+            <Col span={16}>
+              <Input type="text" placeholder="" onChange={this.handleChange} value={value} />
             </Col>
-            <Col span={rightSpan}>
-              <Button type="default" htmlType="submit" size="large">Send</Button>
+            <Col span={6}>
+              <Button  type="default" htmlType="submit" size="large">发送</Button>
             </Col>
           </Row>
           {/* <div className="info"><span>{messageNum} messages, refresh: {refresh}</span></div> */}
