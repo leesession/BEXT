@@ -31,8 +31,8 @@ const {
   Link, Element, Events, scroll, scrollSpy,
 } = Scroll;
 
-const { initSocketConnection, sendTransaction } = betActions;
-const {initScatter} = appActions;
+const { initSocketConnection } = betActions;
+const { getIdentity, transfer } = appActions;
 
 function calculateWinChance(rollNumber) {
   return (rollNumber - MIN_ROLL_NUMBER) / ((MAX_ROLL_NUMBER - MIN_ROLL_NUMBER) + 1);
@@ -74,7 +74,7 @@ class DicePage extends React.Component {
       payout,
       payoutOnWin,
       winChance,
-      balance: 1000,
+      balance: 0,
       username: `Guest-${_.random(100000, 999999, false)}`,
     };
 
@@ -100,25 +100,23 @@ class DicePage extends React.Component {
       title: '开奖号码',
       dataIndex: 'roll',
       key: 'roll',
-      render:text=>(
-        <span style={{color:'#e6c36b'}}>{text}</span>
-      )
+      render: (text) => (
+        <span style={{ color: '#e6c36b' }}>{text}</span>
+      ),
     },
     {
       title: '奖金',
       dataIndex: 'payout',
       key: 'payout',
-      render:text=>{
-        return text == 0 ? <span style={{color:'red'}}>{text}</span> : <span style={{color:'lightgreen'}}>{text}</span>
-      }
+      render: (text) => text == 0 ? <span style={{ color: 'red' }}>{text}</span> : <span style={{ color: 'lightgreen' }}>{text}</span>,
     },
     {
       title: '',
-      key:'',
-      render:item => (
+      key: '',
+      render: (item) => (
         <Icon type="right" />
-      )
-    }
+      ),
+    },
     ];
 
     this.onTabClicked = this.onTabClicked.bind(this);
@@ -126,14 +124,11 @@ class DicePage extends React.Component {
     this.onBetAmountButtonClick = this.onBetAmountButtonClick.bind(this);
     this.getSliderValue = this.getSliderValue.bind(this);
     this.onBetClicked = this.onBetClicked.bind(this);
+    this.onLogInClicked = this.onLogInClicked.bind(this);
   }
 
   componentWillMount() {
-
-    const { initScatterReq} = this.props;
-
-    initScatterReq();
-}
+  }
 
   componentDidMount() {
     const { initSocketConnectionReq } = this.props;
@@ -148,6 +143,24 @@ class DicePage extends React.Component {
     initSocketConnectionReq({ collection: 'Bet' });
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { username, balance } = nextProps;
+
+    if (username) {
+      console.log('componentWillReceiveProps.username', username);
+      this.setState({
+        username,
+      });
+    }
+
+    if (_.isNumber(balance)) {
+      console.log('componentWillReceiveProps.balance', balance);
+      this.setState({
+        balance,
+      });
+    }
+  }
+
   componentWillUnmount() {
     Events.scrollEvent.remove('begin');
     Events.scrollEvent.remove('end');
@@ -160,9 +173,16 @@ class DicePage extends React.Component {
 
   }
 
-  onInputNumberChange(value) {
+  onInputNumberChange(evt) {
     const { payout } = this.state;
-    const betAmount = value;
+
+    // Make sure evt target is a number
+    const betAmount = _.toNumber(evt.target && evt.target.value);
+
+    if(betAmount === null){
+      return;
+    }
+
     const payoutOnWin = calculatePayoutOnWin(betAmount, payout);
 
     this.setState({
@@ -175,31 +195,23 @@ class DicePage extends React.Component {
     const { balance, betAmount, payout } = this.state;
 
     const targetValue = e.currentTarget.getAttribute('data-value');
-    let newBetAmount = 0;
 
-    if (targetValue === MAX_BALANCE_STR) {
-      const newBetAmount = balance;
+    let newBetAmount = betAmount;
 
-      const payoutOnWin = calculatePayoutOnWin(newBetAmount, payout);
-
-      this.setState({
-        betAmount: newBetAmount,
-        payoutOnWin,
-      });
-    }else{
-      if(targetValue==1|| targetValue==-1){
-        newBetAmount = parseFloat(betAmount)+parseFloat(targetValue) ;
-        newBetAmount = newBetAmount < 0 ? 0 : newBetAmount > balance ? balance : newBetAmount;
-      }else{
-        newBetAmount = _.min(betAmount * targetValue, balance);
-      }
-      const payoutOnWin = calculatePayoutOnWin(newBetAmount, payout);
-
-      this.setState({
-        betAmount: newBetAmount,
-        payoutOnWin,
-      });
+    if (targetValue === MAX_BALANCE_STR) { // For "MAX" case
+      newBetAmount = balance;
+    } else if (targetValue === '1' || targetValue === '-1') { // For +1 and -1 cases
+      newBetAmount = _.clamp(betAmount + _.toNumber(targetValue), 0, balance);
+    } else if (targetValue === '0.5' || targetValue === '2') { // For 0.5x and 2x cases
+      newBetAmount = _.clamp(betAmount * _.toNumber(targetValue), 0, balance);
     }
+
+    const payoutOnWin = calculatePayoutOnWin(newBetAmount, payout);
+
+    this.setState({
+      betAmount: newBetAmount,
+      payoutOnWin,
+    });
   }
 
   getSliderValue(value) {
@@ -217,11 +229,16 @@ class DicePage extends React.Component {
     });
   }
 
+  onLogInClicked() {
+    const { getIdentityReq } = this.props;
+    getIdentityReq();
+  }
+
   onBetClicked() {
     const { rollNumber, username, betAmount } = this.state;
-    const { sendTransactionReq } = this.props;
+    const { transferReq } = this.props;
 
-    sendTransactionReq({
+    transferReq({
       bettor: username,
       betAmount,
       rollUnder: rollNumber,
@@ -234,7 +251,7 @@ class DicePage extends React.Component {
       dataSource, betAmount, payoutOnWin, winChance, payout, rollNumber,
     } = this.state;
 
-    const { betHistory } = this.props;
+    const { user, betHistory } = this.props;
 
     // const betData = _.isEmpty(betHistory.all()) ? [] : _.map(betHistory.all(), (bet) => ({
     //   key: bet.id,
@@ -246,16 +263,16 @@ class DicePage extends React.Component {
     //   payout: _.floor(bet.payout,4),
     // }));
 
-    //test data
+    // test data
     const betData = [
       {
-      key: '123',
-      time: '123',
-      bettor: 'sss',
-      rollUnder: 'bet.rollUnder',
-      bet: 100,
-      roll: 88,
-      payout: 120
+        key: '123',
+        time: '123',
+        bettor: 'sss',
+        rollUnder: 'bet.rollUnder',
+        bet: 100,
+        roll: 88,
+        payout: 120,
       },
       {
         key: '124',
@@ -264,11 +281,9 @@ class DicePage extends React.Component {
         rollUnder: 'bet.rollUnder',
         bet: 100,
         roll: 88,
-        payout: 0
-        }
-    ]
-    
-
+        payout: 0,
+      },
+    ];
 
     return (
       <div>
@@ -279,12 +294,12 @@ class DicePage extends React.Component {
                 <section>
                   {/* <div className="horizontalWrapper"> */}
                   <div className="container">
-                    <div className='currency_change'>
-                      <Row type='flex' justify='space-around' align='middle' style={{height:'100%'}}>
-                          <Button size="large" className='bet_button active' type="default" data-value='EOS'>EOS
-                          </Button>
-                          <Button size="large" className='bet_button' type="default" data-value='BETX' >BETX
-                          </Button>
+                    <div className="currency_change">
+                      <Row type="flex" justify="space-around" align="middle" style={{ height: '100%' }}>
+                        <Button size="large" className="bet_button active" type="default" data-value="EOS">EOS
+                        </Button>
+                        <Button size="large" className="bet_button" type="default" data-value="BETX" >BETX
+                        </Button>
                       </Row>
                     </div>
                     <div className="action holderBorder">
@@ -301,7 +316,7 @@ class DicePage extends React.Component {
                           <div className="box">
                             <span className="label">赔率
                             </span>
-                            <div className="value ratio">1.01X
+                            <div className="value ratio">{_.floor(payout, 3)}X
                             </div>
                           </div>
 
@@ -316,53 +331,53 @@ class DicePage extends React.Component {
                         </Col>
                       </Row>
                       <Row type="flex" justify="center">
-                              <Col span={24}>
-                                <Slider getValue={this.getSliderValue} defaultValue={DEFAULT_ROLL_NUMBER} min={MIN_SELECT_ROLL_NUMBER} max={MAX_SELECT_ROLL_NUMBER} />
-                              </Col>
+                        <Col span={24}>
+                          <Slider getValue={this.getSliderValue} defaultValue={DEFAULT_ROLL_NUMBER} min={MIN_SELECT_ROLL_NUMBER} max={MAX_SELECT_ROLL_NUMBER} />
+                        </Col>
                       </Row>
-                      <Row type="flex" gutter={36} justify='center' align='middle'>
+                      <Row type="flex" gutter={36} justify="center" align="middle">
 
                         <Col span={24}>
                           <div className="inputgroup">
                             <div className="inner">
-                              <Row type='flex' justify='center' align='middle'>
-                                  <Col span={8}>
-                                  <Row type='flex' justify='center' align='middle'>
-                                    <Col span={16} style={{transform:'translateY(-15px)'}}>
-                                        <span className="label">抵押金额</span>
-                                        <Input size='large' className='inputBorder' onChange={this.onInputNumberChange} value={betAmount} />
+                              <Row type="flex" justify="center" align="middle">
+                                <Col span={8}>
+                                  <Row type="flex" justify="center" align="middle">
+                                    <Col span={16} style={{ transform: 'translateY(-15px)' }}>
+                                      <span className="label">抵押金额</span>
+                                      <Input size="large" className="inputBorder" onChange={this.onInputNumberChange} value={betAmount} />
                                     </Col>
                                     <Col span={8}>
-                                      <Row type='flex' justify='center' align='middle'>
+                                      <Row type="flex" justify="center" align="middle">
                                         <Col span={24}>
-                                        <button className='change_value_button' onClick={this.onBetAmountButtonClick} data-value={1}>+</button>
+                                          <button className="change_value_button" onClick={this.onBetAmountButtonClick} data-value="1">+</button>
                                         </Col>
                                         <Col span={24}>
-                                        <button className='change_value_button' onClick={this.onBetAmountButtonClick} data-value={-1}>-</button>
+                                          <button className="change_value_button" onClick={this.onBetAmountButtonClick} data-value="-1">-</button>
                                         </Col>
                                       </Row>
                                     </Col>
                                   </Row>
-                                  </Col>
-                                  <Col span={8}>
-                                  <Row className='inputBorder' type='flex' justify='space-around' align='middle'>
-                                    <Button size="large" className='bet_button' type="default" onClick={this.onBetAmountButtonClick} data-value={0.5} >1/2
+                                </Col>
+                                <Col span={8}>
+                                  <Row className="inputBorder" type="flex" justify="space-around" align="middle">
+                                    <Button size="large" className="bet_button" type="default" onClick={this.onBetAmountButtonClick} data-value="0.5" >1/2
                                     </Button>
-                                    <Button size="large" className='bet_button' type="default" onClick={this.onBetAmountButtonClick} data-value={2} >2X
+                                    <Button size="large" className="bet_button" type="default" onClick={this.onBetAmountButtonClick} data-value="2" >2X
                                     </Button>
-                                    <Button size="large" className='bet_button' type="default" onClick={this.onBetAmountButtonClick} data-value={MAX_BALANCE_STR} >{MAX_BALANCE_STR}
+                                    <Button size="large" className="bet_button" type="default" onClick={this.onBetAmountButtonClick} data-value={MAX_BALANCE_STR} >{MAX_BALANCE_STR}
                                     </Button>
                                   </Row>
-                                  </Col>
-                                  <Col span={8} >
-                                  <Row type='flex' justify='center' align='middle'>
-                                    <Col span={16} offset={8} style={{transform:'translateY(-15px)'}}>
-                                    <span className="label">赢得奖金</span>
-                                    <Input size='large' disabled='true' className='inputBorder' value={_.floor(payoutOnWin, 4)} />
+                                </Col>
+                                <Col span={8} >
+                                  <Row type="flex" justify="center" align="middle">
+                                    <Col span={16} offset={8} style={{ transform: 'translateY(-15px)' }}>
+                                      <span className="label">赢得奖金</span>
+                                      <Input size="large" disabled className="inputBorder" value={_.floor(payoutOnWin, 4)} />
                                     </Col>
                                   </Row>
-                                  </Col>
-                                </Row>
+                                </Col>
+                              </Row>
                             </div>
 
                           </div>
@@ -376,18 +391,19 @@ class DicePage extends React.Component {
                           </div> */}
                         </Col>
                       </Row>
-                      <Row type="flex" justify='center' align='middle' gutter={36}>
+                      <Row type="flex" justify="center" align="middle" gutter={36}>
                         <Col span={6}>
-                        <div className='bet_description'>EOS余额</div>
-                        <div className='bet_value'>3.9402<span className='highlight'> EOS</span></div>
+                          <div className="bet_description">EOS余额</div>
+                          <div className="bet_value">3.9402<span className="highlight"> EOS</span></div>
                         </Col>
                         <Col span={12}>
-                          <Button className="btn-login" size="large" type="primary" onClick={this.onBetClicked}>下注</Button>
-                          <div className='bet_description'><Icon type="question-circle" />投注奖励20000BETX</div>
+
+                          {user ? <Button className="btn-login" size="large" type="primary" onClick={this.onBetClicked}>下注</Button> : <Button className="btn-login" size="large" type="primary" onClick={this.onLogInClicked}>Log In</Button>}
+                          <div className="bet_description"><Icon type="question-circle" />投注奖励20000BETX</div>
                         </Col>
                         <Col span={6}>
-                        <div className='bet_description'>BETX余额</div>
-                        <div className='bet_value'>3.9402<span className='highlight'> BETX</span></div>
+                          <div className="bet_description">BETX余额</div>
+                          <div className="bet_value">3.9402<span className="highlight"> BETX</span></div>
                         </Col>
                       </Row>
                     </div>
@@ -399,7 +415,7 @@ class DicePage extends React.Component {
 
                 <section>
                   <div className="container">
-                    <div className='holderBorder'>
+                    <div className="holderBorder">
                       <Chatroom />
                     </div>
                   </div>
@@ -409,39 +425,39 @@ class DicePage extends React.Component {
 
                 <section id="tables" >
                   {/* <div className="horizontalWrapper"> */}
-                  <div className='container'>
-                  <Tabs defaultActiveKey="1" onChange={this.onTabClicked} size="large">
-                    <TabPane tab="所有投注" key="1">
-                      <Table
-                        className = 'holderBorder' 
-                        columns={columns}
-                        dataSource={betData}
-                        bordered={false}
-                        showHeader
-                        pagination={false}
-                      />
-                    </TabPane>
-                    <TabPane tab="我的投注" key="2">
-                    <Table
-                        className = 'holderBorder' 
-                        columns={columns}
-                        dataSource={betData}
-                        bordered={false}
-                        showHeader
-                        pagination={false}
-                      />
-                    </TabPane>
-                    <TabPane tab="Huge Wins" key="3">
-                    <Table
-                        className = 'holderBorder' 
-                        columns={columns}
-                        dataSource={betData}
-                        bordered={false}
-                        showHeader
-                        pagination={false}
-                      />
-                    </TabPane>
-                  </Tabs>
+                  <div className="container">
+                    <Tabs defaultActiveKey="1" onChange={this.onTabClicked} size="large">
+                      <TabPane tab="所有投注" key="1">
+                        <Table
+                          className="holderBorder"
+                          columns={columns}
+                          dataSource={betData}
+                          bordered={false}
+                          showHeader
+                          pagination={false}
+                        />
+                      </TabPane>
+                      <TabPane tab="我的投注" key="2">
+                        <Table
+                          className="holderBorder"
+                          columns={columns}
+                          dataSource={betData}
+                          bordered={false}
+                          showHeader
+                          pagination={false}
+                        />
+                      </TabPane>
+                      <TabPane tab="Huge Wins" key="3">
+                        <Table
+                          className="holderBorder"
+                          columns={columns}
+                          dataSource={betData}
+                          bordered={false}
+                          showHeader
+                          pagination={false}
+                        />
+                      </TabPane>
+                    </Tabs>
                   </div>
                   {/* </div> */}
                 </section>
@@ -455,30 +471,36 @@ class DicePage extends React.Component {
 }
 
 DicePage.propTypes = {
-  sendTransactionReq: PropTypes.func,
+  transferReq: PropTypes.func,
   initSocketConnectionReq: PropTypes.func,
   betHistory: PropTypes.object,
   refresh: PropTypes.bool,
-  initScatterReq: PropTypes.func,
+  getIdentityReq: PropTypes.func,
+  username: PropTypes.string,
+  balance: PropTypes.number,
 };
 
 DicePage.defaultProps = {
-  sendTransactionReq: undefined,
+  transferReq: undefined,
   initSocketConnectionReq: undefined,
-  betHistory:undefined,
+  betHistory: undefined,
   refresh: false,
-  initScatterReq: undefined
+  username: undefined,
+  balance: undefined,
+  getIdentityReq: undefined,
 };
 
 const mapStateToProps = (state) => ({
   betHistory: state.Bet.get('history'),
   refresh: state.Bet.get('refresh'),
+  username: state.App.get('username'),
+  balance: state.App.get('balance'),
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  sendTransactionReq: (obj) => dispatch(sendTransaction(obj)),
+  transferReq: (obj) => dispatch(transfer(obj)),
   initSocketConnectionReq: (obj) => dispatch(initSocketConnection(obj)),
-  initScatterReq: () => dispatch(initScatter()),
+  getIdentityReq: () => dispatch(getIdentity()),
 });
 
 // Wrap the component to inject dispatch and state into it

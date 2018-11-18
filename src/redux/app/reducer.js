@@ -12,6 +12,8 @@ const initState = new Map({
   view: getView(window.innerWidth),
   height: window.innerHeight,
   current: preKeys,
+  username: undefined,
+  balance: undefined,
 });
 
 export default function appReducer(state = initState, action) {
@@ -25,8 +27,14 @@ export default function appReducer(state = initState, action) {
           .set('height', height);
       }
       break;
-
-
+    case actions.GET_USERNAME_RESULT:
+      return state.set('username', action.value);
+    case actions.GET_EOS_BALANCE_RESULT:
+      return state.set('eosBalance', action.value);
+    case actions.GET_BETX_BALANCE_RESULT:
+      return state.set('betxBalance', action.value);
+    case actions.TRANSER_RESULT:
+      return state.set('transferResult', action.value);
     default:
       return state;
   }

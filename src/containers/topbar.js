@@ -18,14 +18,14 @@ const { Header } = Layout;
 
 cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
-const items = [
+const menuItems = [
   { path: '/', id: 'topbar.home' },
   // { path: '/dice', id: 'topbar.dice' },
   { path: '/stake', id: 'topbar.stake' },
   // { path: '/dealer', id: 'topbar.dealer' },
   { path: '/faq', id: 'topbar.faq' },
   // { path: '/contact', id: 'topbar.contact' },
-  { path: '/whitepaper', id: 'topbar.whitepaper' },
+  { url: 'https://res.cloudinary.com/forgelab-io/image/upload/v1542534137/BETX-whitepaper-1.0.pdf', id: 'topbar.whitepaper' },
 ];
 
 const langSettings = [
@@ -72,7 +72,7 @@ class Topbar extends React.PureComponent {
 
   onLanguageDropdownClicked({ key }) {
     const { changeLanguage } = this.props;
-    console.log("onLanguageDropdownClicked.key" , key);
+    console.log('onLanguageDropdownClicked.key', key);
     changeLanguage(key);
   }
 
@@ -98,6 +98,22 @@ class Topbar extends React.PureComponent {
 
     const btnClassName = `triggerBtn  ${collapsed ? 'menuCollapsed' : 'menuOpen'}`;
     const menuClassName = `menu  ${collapsed ? 'menuCollapsed' : 'menuOpen'}`;
+
+    const menuItemElements = _.map(menuItems, (item) => {
+      if (item.url) {
+        return <li className="hideOnMobile" key={item.id}><a href={item.url} target="_blank"><IntlMessages id={item.id} /></a></li>;
+      }
+
+      return <li className="hideOnMobile" key={item.id}><Link to={item.path} ><IntlMessages id={item.id} /></Link></li>;
+    });
+
+    const menuItemElementsMobile = _.map(menuItems, (item) => {
+      if (item.url) {
+        return <li role="menuitem" key={item.id}><a href={item.url} target="_blank"><IntlMessages id={item.id} /></a></li>;
+      }
+
+      return <li role="menuitem" key={item.id}><Link to={item.path} ><IntlMessages id={item.id} /></Link></li>;
+    });
 
     const languageDropdown = (
       <Menu onClick={this.onLanguageDropdownClicked} className="lang-menu">
@@ -128,7 +144,7 @@ class Topbar extends React.PureComponent {
                     </Link>
                   </div>
                   <ul className="menu-list">
-                    {_.map(items, (item) => (<li className="hideOnMobile" key={item.id}><Link to={item.path} ><IntlMessages id={item.id} /></Link></li>))}
+                    {menuItemElements}
                   </ul>
                 </div>
 
@@ -165,7 +181,7 @@ class Topbar extends React.PureComponent {
 
             <div className={menuClassName} id="bs-example-navbar-collapse-1">
               <ul>
-                {_.map(items, (item) => (<li role="menuitem" key={item.id}><Link to={item.path} ><IntlMessages id={item.id} /></Link></li>))}
+                {menuItemElementsMobile}
               </ul>
             </div>
 

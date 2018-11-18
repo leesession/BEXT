@@ -10,6 +10,12 @@ export function getView(width) {
 
 const actions = {
   TOGGLE_ALL: 'TOGGLE_ALL',
+  GET_IDENTITY: 'GET_IDENTITY',
+  GET_IDENTITY_RESULT: 'GET_IDENTITY_RESULT',
+  GET_USERNAME_RESULT: 'GET_USERNAME_RESULT',
+  GET_EOS_BALANCE_RESULT: 'GET_EOS_BALANCE_RESULT',
+  TRANSFER_REQUEST: 'TRANSFER_REQUEST',
+  TRANSFER_RESULT: 'TRANSFER_RESULT',
   toggleAll: (width, height) => {
     const view = getView(width);
     const collapsed = view !== 'DesktopView';
@@ -20,6 +26,13 @@ const actions = {
       height,
     };
   },
+  getIdentity: () => ({
+    type: actions.GET_IDENTITY,
+  }),
+  transfer: (params) => ({
+    type: actions.TRANSFER_REQUEST,
+    payload: params,
+  }),
 };
 
 export default actions;
