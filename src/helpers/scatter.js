@@ -28,6 +28,9 @@ const eosSettings = {
     endpoint: 'https://api.eosnewyork.io:443',
   },
 };
+
+const BETX_TOKEN_CONTRACT = "thebetxtoken";
+
 const network = {
   blockchain: 'eos',
   protocol: 'https',
@@ -125,8 +128,20 @@ class ScatterHelper {
     });
   }
 
-  getBETXBalance() {
+  getBETXBalance(name) {
+    const { readEos, Eos } = this;
+    return readEos.getCurrencyBalance(BETX_TOKEN_CONTRACT, name, 'BETX').then((result) => {
+      if (!_.isEmpty(result)) {
+        console.log('getBETXBalance.result', result);
 
+        const balObj = Eos.modules.format.parseAsset(result[0]);
+        if (balObj && balObj.amount) {
+          return Promise.resolve(_.toNumber(balObj.amount));
+        }
+      }
+
+      return Promise.resolve();
+    });
   }
 
   handleScatterError(err) {

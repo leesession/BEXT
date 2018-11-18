@@ -12,6 +12,15 @@
   "topbar.contact": "Contact Us",
   "topbar.whitepaper": "Whitepaper",
   "topbar.login": "Log In",
+  "topbar.welcome": "Welcome",
+
+  "dice.asset.eos":"EOS",
+  "dice.asset.betx":"BETX",
+  "dice.balance.eos":"EOS Balance",
+  "dice.balance.betx":"BETX Balance",
+  "dice.reward.firstbet":"First Bet Reward",
+  "dice.button.login":"Log In",
+  "dice.button.bet":"Bet",
 
   "faq.title":"FAQ",
 

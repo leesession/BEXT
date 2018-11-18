@@ -6,7 +6,7 @@ import _ from 'lodash';
 import actions from './actions';
 import ScatterHelper from '../../helpers/scatter';
 const {
-  handleScatterError, getIdentity, transfer, getBalance, getEOSBalance,
+  handleScatterError, getIdentity, transfer, getBalance, getEOSBalance, getBETXBalance
 } = ScatterHelper;
 
 function* getIdentityRequest(action) {
@@ -18,12 +18,20 @@ function* getIdentityRequest(action) {
     console.log('saga.getIdentityRequest.response', response);
     yield put({ type: actions.GET_USERNAME_RESULT, value: response.name });
 
-    const balance = yield call(getEOSBalance, response.name);
-    console.log('getIdentityRequest.balance', balance);
+    const eosBalance = yield call(getEOSBalance, response.name);
+    console.log('getIdentityRequest.eosBalance', eosBalance);
 
     yield put({ 
       type: actions.GET_EOS_BALANCE_RESULT, 
-      value: balance,
+      value: eosBalance,
+    });
+
+    const betxBalance = yield call(getBETXBalance, response.name);
+    console.log('getIdentityRequest.betxBalance', betxBalance);
+
+    yield put({ 
+      type: actions.GET_BETX_BALANCE_RESULT, 
+      value: betxBalance,
     });
   } catch (err) {
     yield call(handleScatterError, err);

@@ -74,9 +74,11 @@ function websocketInitChannel(payload) {
 }
 
 export function* initLiveMessages(action) {
-  const channel = yield call(websocketInitChannel, action.payload);
 
   try {
+
+    const channel = yield call(websocketInitChannel, action.payload);
+    
     while (true) {
       const payload = yield take(channel);
 

@@ -13,8 +13,10 @@ import Dropdown, {
 import { getCurrentTheme } from './ThemeSwitcher/config';
 import { themeConfig } from '../config';
 import IntlMessages from '../components/utility/intlMessages';
+import appActions from "../redux/app/actions";
 
 const { Header } = Layout;
+const {getIdentity} = appActions;
 
 cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
@@ -60,6 +62,10 @@ class Topbar extends React.PureComponent {
 
   }
 
+  componentWillReceiveProps(nextProps) {
+  }
+
+
   componentDidMount() {
     // preload language flag img
     langSettings.forEach((item) => {
@@ -85,7 +91,9 @@ class Topbar extends React.PureComponent {
   }
 
   onLoginClicked() {
+    const {getIdentityReq} = this.props;
 
+    getIdentityReq();
   }
 
   render() {
@@ -94,7 +102,7 @@ class Topbar extends React.PureComponent {
       collapsed,
     } = this.state;
 
-    const { locale } = this.props;
+    const { locale, username } = this.props;
 
     const btnClassName = `triggerBtn  ${collapsed ? 'menuCollapsed' : 'menuOpen'}`;
     const menuClassName = `menu  ${collapsed ? 'menuCollapsed' : 'menuOpen'}`;
@@ -164,8 +172,8 @@ class Topbar extends React.PureComponent {
                   </div>
 
                   <li className="nav-btn" role="menuitem" key="login">
-                    <Button type="primary" size="large" onClick={this.onLoginClicked}><IntlMessages id="topbar.login" />
-                    </Button>
+                  {username? (<IntlMessages id="topbar.welcome"> {username}</IntlMessages>):<Button type="primary" size="large" onClick={this.onLoginClicked}><IntlMessages id="topbar.login" />
+                    </Button>}
                   </li>
                   <li className="lang-menu-trigger" role="menuitem" key="lang">
                     <Dropdown overlay={languageDropdown}>
@@ -195,19 +203,25 @@ class Topbar extends React.PureComponent {
 Topbar.propTypes = {
   locale: PropTypes.string,
   changeLanguage: PropTypes.func,
+  getIdentityReq: PropTypes.func,
+  username: PropTypes.string,
 };
 
 Topbar.defaultProps = {
   locale: 'en',
   changeLanguage: undefined,
+  getIdentityReq: undefined,
+  username: undefined,
 };
 
 const mapStateToProps = (state) => ({
   locale: state.LanguageSwitcher.language.locale,
+  username: state.App.get('username'),
 });
 
 const mapDispatchToProps = (dispatch) => ({
   changeLanguage: (lanId) => dispatch(languageSwitcherActions.changeLanguage(lanId)),
+  getIdentityReq: () => dispatch(getIdentity()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Topbar);

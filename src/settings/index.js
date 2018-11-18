@@ -20,8 +20,9 @@ const siteConfig = {
   bbs: 'https://bbs.betx.com/',
 };
 
-const appConfig = {
-};
+const appConfig= {
+  firstBetReward: 500,
+}
 
 const parseConfig = {
   serverURL: 'http://localhost:1338/parse',

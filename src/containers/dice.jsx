@@ -13,6 +13,8 @@ import Slider from '../components/slider';
 import Chatroom from '../components/chatroom';
 import betActions from '../redux/bet/actions';
 import appActions from '../redux/app/actions';
+import IntlMessages from '../components/utility/intlMessages';
+import {appConfig} from "../settings";
 
 cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
@@ -74,7 +76,8 @@ class DicePage extends React.Component {
       payout,
       payoutOnWin,
       winChance,
-      balance: 0,
+      eosBalance: 0,
+      betxBalance: 0,
       username: `Guest-${_.random(100000, 999999, false)}`,
     };
 
@@ -144,7 +147,7 @@ class DicePage extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { username, balance } = nextProps;
+    const { username, eosBalance, betxBalance } = nextProps;
 
     if (username) {
       console.log('componentWillReceiveProps.username', username);
@@ -153,10 +156,17 @@ class DicePage extends React.Component {
       });
     }
 
-    if (_.isNumber(balance)) {
-      console.log('componentWillReceiveProps.balance', balance);
+    if (_.isNumber(eosBalance)) {
+      console.log('componentWillReceiveProps.eosBalance', eosBalance);
       this.setState({
-        balance,
+        eosBalance,
+      });
+    }
+
+    if (_.isNumber(betxBalance)) {
+      console.log('componentWillReceiveProps.betxBalance', betxBalance);
+      this.setState({
+        betxBalance,
       });
     }
   }
@@ -192,7 +202,7 @@ class DicePage extends React.Component {
   }
 
   onBetAmountButtonClick(e) {
-    const { balance, betAmount, payout } = this.state;
+    const { eosBalance: balance, betAmount, payout } = this.state;
 
     const targetValue = e.currentTarget.getAttribute('data-value');
 
@@ -200,10 +210,10 @@ class DicePage extends React.Component {
 
     if (targetValue === MAX_BALANCE_STR) { // For "MAX" case
       newBetAmount = balance;
-    } else if (targetValue === '1' || targetValue === '-1') { // For +1 and -1 cases
-      newBetAmount = _.clamp(betAmount + _.toNumber(targetValue), 0, balance);
-    } else if (targetValue === '0.5' || targetValue === '2') { // For 0.5x and 2x cases
-      newBetAmount = _.clamp(betAmount * _.toNumber(targetValue), 0, balance);
+    } else if (targetValue === '1' || targetValue === '-1') { // For +1 and -1 cases; don't set upper limit with balance;
+      newBetAmount = _.max([betAmount + _.toNumber(targetValue), 0]);
+    } else if (targetValue === '0.5' || targetValue === '2') { // For 0.5x and 2x cases; don't set upper limit with balance;
+      newBetAmount = _.max([betAmount * _.toNumber(targetValue), 0]);
     }
 
     const payoutOnWin = calculatePayoutOnWin(newBetAmount, payout);
@@ -248,7 +258,7 @@ class DicePage extends React.Component {
   render() {
     const { columns } = this;
     const {
-      dataSource, betAmount, payoutOnWin, winChance, payout, rollNumber,
+      dataSource, betAmount, payoutOnWin, winChance, payout, rollNumber, eosBalance, betxBalance, username
     } = this.state;
 
     const { user, betHistory } = this.props;
@@ -325,7 +335,7 @@ class DicePage extends React.Component {
                           <div className="box">
                             <span className="label">中奖概率
                             </span>
-                            <div className="value">{(_.ceil(winChance, 2) * 100).toFixed(2)}%
+                            <div className="value">{(_.floor(winChance, 4) * 100).toFixed(2)}%
                             </div>
                           </div>
                         </Col>
@@ -393,17 +403,17 @@ class DicePage extends React.Component {
                       </Row>
                       <Row type="flex" justify="center" align="middle" gutter={36}>
                         <Col span={6}>
-                          <div className="bet_description">EOS余额</div>
-                          <div className="bet_value">3.9402<span className="highlight"> EOS</span></div>
+                          <div className="bet_description"><IntlMessages id="dice.balance.eos" /></div>
+                          <div className="bet_value">{_.floor(eosBalance,2)}<span className="highlight"> <IntlMessages id="dice.asset.eos" /></span></div>
                         </Col>
                         <Col span={12}>
 
-                          {user ? <Button className="btn-login" size="large" type="primary" onClick={this.onBetClicked}>下注</Button> : <Button className="btn-login" size="large" type="primary" onClick={this.onLogInClicked}>Log In</Button>}
-                          <div className="bet_description"><Icon type="question-circle" />投注奖励20000BETX</div>
+                          {username ? <Button className="btn-login" size="large" type="primary" onClick={this.onBetClicked}><IntlMessages id="dice.button.bet" /></Button> : <Button className="btn-login" size="large" type="primary" onClick={this.onLogInClicked}><IntlMessages id="dice.button.login" /></Button>}
+                          <div className="bet_description"><Icon type="question-circle" /><IntlMessages id="dice.reward.firstbet" /> {appConfig.firstBetReward} <IntlMessages id="dice.asset.betx" /></div>
                         </Col>
                         <Col span={6}>
-                          <div className="bet_description">BETX余额</div>
-                          <div className="bet_value">3.9402<span className="highlight"> BETX</span></div>
+                          <div className="bet_description"><IntlMessages id="dice.balance.eos" /></div>
+                          <div className="bet_value">{_.floor(betxBalance,2)}<span className="highlight"> <IntlMessages id="dice.asset.betx" /></span></div>
                         </Col>
                       </Row>
                     </div>
@@ -477,7 +487,8 @@ DicePage.propTypes = {
   refresh: PropTypes.bool,
   getIdentityReq: PropTypes.func,
   username: PropTypes.string,
-  balance: PropTypes.number,
+  eosBalance: PropTypes.number,
+  betxBalance: PropTypes.number,
 };
 
 DicePage.defaultProps = {
@@ -486,7 +497,8 @@ DicePage.defaultProps = {
   betHistory: undefined,
   refresh: false,
   username: undefined,
-  balance: undefined,
+  eosBalance: undefined,
+  betxBalance: undefined,
   getIdentityReq: undefined,
 };
 
@@ -494,7 +506,8 @@ const mapStateToProps = (state) => ({
   betHistory: state.Bet.get('history'),
   refresh: state.Bet.get('refresh'),
   username: state.App.get('username'),
-  balance: state.App.get('balance'),
+  eosBalance: state.App.get('eosBalance'),
+  betxBalance: state.App.get('betxBalance'),
 });
 
 const mapDispatchToProps = (dispatch) => ({
