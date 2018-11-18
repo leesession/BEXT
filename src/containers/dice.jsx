@@ -12,6 +12,7 @@ import InfoSection from '../components/sections/info';
 import Slider from '../components/slider';
 import Chatroom from '../components/chatroom';
 import betActions from '../redux/bet/actions';
+import appActions from '../redux/app/actions';
 
 cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
@@ -31,7 +32,7 @@ const {
 } = Scroll;
 
 const { initSocketConnection, sendTransaction } = betActions;
-
+const {initScatter} = appActions;
 
 function calculateWinChance(rollNumber) {
   return (rollNumber - MIN_ROLL_NUMBER) / ((MAX_ROLL_NUMBER - MIN_ROLL_NUMBER) + 1);
@@ -126,6 +127,13 @@ class DicePage extends React.Component {
     this.getSliderValue = this.getSliderValue.bind(this);
     this.onBetClicked = this.onBetClicked.bind(this);
   }
+
+  componentWillMount() {
+
+    const { initScatterReq} = this.props;
+
+    initScatterReq();
+}
 
   componentDidMount() {
     const { initSocketConnectionReq } = this.props;
@@ -451,6 +459,7 @@ DicePage.propTypes = {
   initSocketConnectionReq: PropTypes.func,
   betHistory: PropTypes.object,
   refresh: PropTypes.bool,
+  initScatterReq: PropTypes.func,
 };
 
 DicePage.defaultProps = {
@@ -458,6 +467,7 @@ DicePage.defaultProps = {
   initSocketConnectionReq: undefined,
   betHistory:undefined,
   refresh: false,
+  initScatterReq: undefined
 };
 
 const mapStateToProps = (state) => ({
@@ -468,6 +478,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   sendTransactionReq: (obj) => dispatch(sendTransaction(obj)),
   initSocketConnectionReq: (obj) => dispatch(initSocketConnection(obj)),
+  initScatterReq: () => dispatch(initScatter()),
 });
 
 // Wrap the component to inject dispatch and state into it
