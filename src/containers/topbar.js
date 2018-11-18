@@ -2,6 +2,8 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
+import { injectIntl, intlShape } from 'react-intl';
+
 import { Layout, Menu, Icon, message, Button, Input, Row, Col, Tag } from 'antd';
 import { cloudinaryConfig, CloudinaryImage } from '../components/react-cloudinary';
 import languageSwitcherActions from '../redux/languageSwitcher/actions';
@@ -13,10 +15,10 @@ import Dropdown, {
 import { getCurrentTheme } from './ThemeSwitcher/config';
 import { themeConfig } from '../config';
 import IntlMessages from '../components/utility/intlMessages';
-import appActions from "../redux/app/actions";
+import appActions from '../redux/app/actions';
 
 const { Header } = Layout;
-const {getIdentity} = appActions;
+const { getIdentity } = appActions;
 
 cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
@@ -63,6 +65,12 @@ class Topbar extends React.PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
+    const { errorMessage } = nextProps;
+    const { intl } = this.props;
+
+    if (errorMessage) {
+      message.error(intl.formatMessage({ id: errorMessage }));
+    }
   }
 
 
@@ -91,7 +99,7 @@ class Topbar extends React.PureComponent {
   }
 
   onLoginClicked() {
-    const {getIdentityReq} = this.props;
+    const { getIdentityReq } = this.props;
 
     getIdentityReq();
   }
@@ -172,7 +180,7 @@ class Topbar extends React.PureComponent {
                   </div>
 
                   <li className="nav-btn" role="menuitem" key="login">
-                  {username? (<IntlMessages id="topbar.welcome"> {username}</IntlMessages>):<Button type="primary" size="large" onClick={this.onLoginClicked}><IntlMessages id="topbar.login" />
+                    {username ? (<IntlMessages id="topbar.welcome"> {username}</IntlMessages>) : <Button type="primary" size="large" onClick={this.onLoginClicked}><IntlMessages id="topbar.login" />
                     </Button>}
                   </li>
                   <li className="lang-menu-trigger" role="menuitem" key="lang">
@@ -205,6 +213,8 @@ Topbar.propTypes = {
   changeLanguage: PropTypes.func,
   getIdentityReq: PropTypes.func,
   username: PropTypes.string,
+  errorMessage: PropTypes.string,
+  intl: intlShape.isRequired,
 };
 
 Topbar.defaultProps = {
@@ -212,11 +222,13 @@ Topbar.defaultProps = {
   changeLanguage: undefined,
   getIdentityReq: undefined,
   username: undefined,
+  errorMessage: undefined,
 };
 
 const mapStateToProps = (state) => ({
   locale: state.LanguageSwitcher.language.locale,
   username: state.App.get('username'),
+  errorMessage: state.App.get('errorMessage'),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -224,4 +236,4 @@ const mapDispatchToProps = (dispatch) => ({
   getIdentityReq: () => dispatch(getIdentity()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Topbar);
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(Topbar));
