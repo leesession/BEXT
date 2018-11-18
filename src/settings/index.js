@@ -36,7 +36,7 @@ const themeConfig = {
   theme: 'themedefault',
 };
 
-const language = 'chinese';
+const language = (window.navigator.userLanguage || window.navigator.language)==='zh-CN' ? 'chinese' : 'english';
 
 const infuraConfig = {
   wssEndpoint: 'wss://rinkeby.infura.io/ws',

@@ -6,7 +6,7 @@ import actions from './actions';
 
 const initState = {
   isActivated: false,
-  language: getCurrentLanguage(config.defaultLanguage || 'english'),
+  language: getCurrentLanguage(config.defaultLanguage),
 };
 
 export default function (state = initState, action) {

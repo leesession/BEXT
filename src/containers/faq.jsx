@@ -19,9 +19,10 @@ const {
 
 const content = [{
   header: 'faq.account.header',
-  body: [{
-    title: 'faq.account.title.1',
-    text: 'faq.account.text.1',
+  body: [
+  {
+  title: 'faq.account.title.1',
+  text: 'faq.account.text.1',
   },
   {
     title: 'faq.account.title.2',
@@ -59,7 +60,12 @@ const content = [{
   }],
 }, {
   header: 'faq.token.header',
-  body: [{
+  body: [
+    {
+      title: 'faq.token.title.0',
+      text: 'faq.token.text.0',
+    },
+  {
     title: 'faq.token.title.1',
     text: 'faq.token.text.1',
   },

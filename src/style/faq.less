@@ -1,4 +1,9 @@
 @borderRadius: 20px;
+@fontColor: #939393;
+@titleSize: 3em;
+@subTitleSize:2em;
+@thirdTitleSize:1.5em;
+@borderColor:#d5bd7a;
 
 #faq-page{
 	
@@ -12,8 +17,144 @@
 	.page-title{
 		text-align: left;
 		margin-bottom: 32px;
-		color: @topbarFontColor;
-		font-size: 3em;
+		color: @fontColor;
+		font-size: @titleSize;
+		font-weight: 200;
+	}
+
+	.page-sub-title{
+		text-align: center;
+		margin: 15px 0;
+		color: @borderColor;
+		font-size: @subTitleSize;
+		font-weight: 100;
+		letter-spacing: 1px;
+	}
+
+	.page-third-title{
+		text-align: center;
+		margin: 15px 0;
+		color: @borderColor;
+		font-size: @thirdTitleSize;
+		font-weight: 100;
+		letter-spacing: 1px;
+	}
+
+	//-------ANTD clear group------
+	.clear-btn{
+		background-color: transparent;
+		color:@bgColor;
+		border:none;
+		font-size: @thirdTitleSize;
+	}
+	.clear-input{
+		background-color: transparent;
+		border:none;
+		outline:none;
+
+		&:focus{
+			outline:none;
+		}
+	}
+
+	.ant-input:focus, {
+		outline: none;
+		border:none;
+	}
+	//-------ANTD clear group------
+
+	.border-top{
+		border-top: 2px solid @borderColor;
+	}
+
+	.border-bottom{
+		border-bottom: 2px solid @borderColor;
+	}
+
+	.border-left{
+		border-left: 2px solid @borderColor;
+	}
+
+	.border-right{
+		border-right: 2px solid @borderColor;
+	}
+
+	.margin-top(@value){
+		margin-top: @value;
+	}
+
+	.text-left{
+		text-align: left;
+	}
+
+	.text-right{
+		text-align: right;
+	}
+
+	.text-center{
+		text-align: center;
+	}
+
+	.panel{
+		border: 1px solid @borderColor;
+		background-color: @panelGrey;	
+		border-radius: @borderRadius;
+		overflow: hidden;
+	}
+
+	.panel-trans{
+		border: 1px solid @borderColor;
+		background-color: transparent;	
+		border-radius: @borderRadius;
+		overflow: hidden;
+	}
+
+	.getStake-btn-holder{
+		padding:15px 0;
+		background-color: @borderColor;
+
+		.getStake-btn{
+			background-color: transparent;
+			color:@bgColor;
+			border:none;
+			font-size: @thirdTitleSize;
+		}
+	}
+
+	.pledge-container{
+
+		.panel-trans{
+
+			.panel-trans{
+				border-radius: 10px;
+			}
+		}
+
+		.page-third-title{
+			margin: 5px 0;
+		}
+
+		.pledge-btn{
+			background-color: @borderColor;
+			border-radius: 30px;
+			color:@bgColor;
+			font-size: 0.8em;
+			margin: 5px 0;
+			transform: translateX(-5px);
+			
+		}
+
+		.pledge-input{
+			color:white;
+			font-size: 1em;
+			margin: 5px 0;
+			padding-left: 5px;
+			outline:none;
+
+			&:focus{
+				outline:none;
+			}
+		}
 	}
 
 	.faq-tabs{
@@ -78,17 +219,14 @@
 
 		.page-term-title{
 			text-align: center;
-			color: @primaryColor;
-							font-size: 2em;
-				margin-bottom: 1em;
+			color: @borderColor;
+			font-size: 2em;
+			margin-bottom: 1em;
 		}
 
 		.page-term-body{
 			text-align: left;
-			border: 1px solid @borderColor;
-			background-color: @panelGrey;	
 			padding: 30px 60px;
-			.border-radius(@borderRadius);
 			color: white;
 
 			p{
