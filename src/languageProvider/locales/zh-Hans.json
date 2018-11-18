@@ -39,6 +39,8 @@
   "faq.dividend.text.2":"平台所有收入的50%直接流入红利池，平台分红每小时进行一次结算\n用户所得分红=质押代币数/总质押代币数*平台50%利润",
 
   "faq.token.header":"BETX代币分配",
+  "faq.token.title.0":"BETX介绍",
+  "faq.token.text.0":"BETX代币是BETX.FUN平台的股权凭证。",
   "faq.token.title.1":"BETX发行量",
   "faq.token.text.1":"6,600,000,000 (66亿)",
   "faq.token.title.2":"代币分配方案",
@@ -69,6 +71,22 @@
 
   "stake.title":"BETX质押分红",
   "stake.subtitle":"本时段剩余分红",
-  "stake.rule.title":"精选规则说明t",
-  "stake.rule.body":"分红规则说明:\n平台所有收入的50%直接流入红利池，平台每小时进行一次分红结算，用户所得的利润将自动累积到您的余额上。\n用户收益说明:\n用户所得分红=质押代币数/总质押代币数*平台50%利润"
+  "stake.rule.title":"竞选规则说明",
+  "stake.rule.body":"分红规则说明:\n平台所有收入的50%直接流入红利池，平台每小时进行一次分红结算，用户所得的利润将自动累积到您的余额上。\n用户收益说明:\n用户所得分红=质押代币数/总质押代币数*平台50%利润",
+  "stake.dividend.rest":"本时段剩余分红时间",
+  "stake.dividend.total":"本时段累计分红",
+  "stake.dividend.allday":"24小时内段累计分红",
+  "stake.dividend.my":"我的分红",
+  "stake.income.predicate":"我的预估收益",
+  "stake.income.betx":"每万BETX预期收益",
+  "stake.income.rest":"我的分红余额",
+  "stake.income.get":"领取",
+  "stake.betx.pledge":"BETX质押总量",
+  "stake.betx.circulate":"BETX流通总量",
+  "stake.betx.redemption":"赎回BETX代币",
+  "stake.token.pledge":"质押代币",
+  "stake.token.betx":"质押BETX代币",
+  "stake.action.pledge":"质押",
+  "stake.action.redemption":"赎回",
+  "stake.available":"可用"
 }
