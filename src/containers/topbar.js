@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import { injectIntl, intlShape } from 'react-intl';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 
-import { Layout, Menu, Icon, message, Button, Input, Row, Col, Tag } from 'antd';
+import { Layout, Menu, Icon, message, Button, Input, Row, Col, Tag, Modal } from 'antd';
 import { cloudinaryConfig, CloudinaryImage } from '../components/react-cloudinary';
 import languageSwitcherActions from '../redux/languageSwitcher/actions';
 import Dropdown, {
@@ -16,9 +17,10 @@ import { getCurrentTheme } from './ThemeSwitcher/config';
 import { themeConfig } from '../config';
 import IntlMessages from '../components/utility/intlMessages';
 import appActions from '../redux/app/actions';
+import { parseQuery } from '../helpers/utility';
 
 const { Header } = Layout;
-const { getIdentity } = appActions;
+const { getIdentity, setRef } = appActions;
 
 cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
@@ -30,6 +32,8 @@ const menuItems = [
   { path: '/faq', id: 'topbar.faq' },
   // { path: '/contact', id: 'topbar.contact' },
   { url: 'https://res.cloudinary.com/forgelab-io/image/upload/v1542534137/BETX-whitepaper-1.0.pdf', id: 'topbar.whitepaper' },
+  // Referrals
+  { id:'topbar.referrals'}
 ];
 
 const langSettings = [
@@ -53,11 +57,14 @@ class Topbar extends React.PureComponent {
 
     this.state = {
       collapsed: true,
+      refModalVisible: false,
     };
 
     this.toggleCollapsed = this.toggleCollapsed.bind(this);
     this.onLanguageDropdownClicked = this.onLanguageDropdownClicked.bind(this);
     this.onLoginClicked = this.onLoginClicked.bind(this);
+    
+    this.refLoc = this.props.location.search && parseQuery(this.props.location.search).ref;
   }
 
   componentWillMount() {
@@ -79,6 +86,9 @@ class Topbar extends React.PureComponent {
     langSettings.forEach((item) => {
       document.createElement('img').src = item.imgSrc;
     });
+    
+    if(this.refLoc) this.props.setRefAction(this.refLoc);
+    
   }
 
   componentWillReceiveProps(nextProps) {
@@ -103,6 +113,10 @@ class Topbar extends React.PureComponent {
 
     getIdentityReq();
   }
+  
+  setRefModalVisible(refModalVisible) {
+    this.setState({ refModalVisible });
+  }
 
   render() {
     const customizedTheme = getCurrentTheme('topbarTheme', themeConfig.theme);
@@ -118,17 +132,21 @@ class Topbar extends React.PureComponent {
     const menuItemElements = _.map(menuItems, (item) => {
       if (item.url) {
         return <li className="hideOnMobile" key={item.id}><a href={item.url} target="_blank"><IntlMessages id={item.id} /></a></li>;
+      }else if(item.path){
+        return <li className="hideOnMobile" key={item.id}><Link to={item.path} ><IntlMessages id={item.id} /></Link></li>;
+      }else{
+        return <li className="hideOnMobile" key={item.id}><a href={item.url} onClick={() => this.setRefModalVisible(true)} target="_blank"><IntlMessages id={item.id} /></a></li>;
       }
-
-      return <li className="hideOnMobile" key={item.id}><Link to={item.path} ><IntlMessages id={item.id} /></Link></li>;
     });
 
     const menuItemElementsMobile = _.map(menuItems, (item) => {
       if (item.url) {
         return <li role="menuitem" key={item.id}><a href={item.url} target="_blank"><IntlMessages id={item.id} /></a></li>;
+      }else if(item.path){
+        return <li role="menuitem"  key={item.id}><Link to={item.path} ><IntlMessages id={item.id} /></Link></li>;
+      }else{
+        return <li role="menuitem"  key={item.id}><a href={item.url} onClick={() => this.setRefModalVisible(true)} target="_blank"><IntlMessages id={item.id} /></a></li>;
       }
-
-      return <li role="menuitem" key={item.id}><Link to={item.path} ><IntlMessages id={item.id} /></Link></li>;
     });
 
     const languageDropdown = (
@@ -203,6 +221,33 @@ class Topbar extends React.PureComponent {
 
           </div>
         </Header>
+        
+        {/* Ref Modal */}
+        <Modal
+          className='refModal'
+          title={<IntlMessages id="topbar.copy.title"/>}
+          style={{ top: '40vh'}}
+          centered
+          visible={this.state.refModalVisible}
+          onOk={() => this.setRefModalVisible(false)}
+          onCancel={() => {
+            this.setRefModalVisible(false);
+            this.refs.refText.style.background = 'transparent';
+          }}
+          footer={null}
+        >
+          <Row type='flex' gutter={20} justify='center' align='middle'>
+             <Col span={18} style={{marginBottom:20}}><div className='refWraper'><span className='refHolder' ref='refText'>{this.props.location.href}</span></div></Col>
+             <Col span={6} style={{marginBottom:20}}>
+             <CopyToClipboard text={this.props.location.href} onCopy={()=>{
+               this.refs.refText.style.background = 'blue';
+             }}>
+             <Button style={{width:'100%', fontSize:'1.2em'}} size='large' type="primary"><IntlMessages id="topbar.copy"/></Button>
+             </CopyToClipboard>
+             </Col>
+             <Col span={24} style={{fontSize:'1.2em'}}><span><IntlMessages id="topbar.copy.description"/></span></Col>
+          </Row>
+        </Modal>
       </div>
     );
   }
@@ -212,17 +257,21 @@ Topbar.propTypes = {
   locale: PropTypes.string,
   changeLanguage: PropTypes.func,
   getIdentityReq: PropTypes.func,
+  setRefAction: PropTypes.func,
   username: PropTypes.string,
   errorMessage: PropTypes.string,
   intl: intlShape.isRequired,
+  location: PropTypes.object.isRequired,
 };
 
 Topbar.defaultProps = {
   locale: 'en',
   changeLanguage: undefined,
   getIdentityReq: undefined,
+  setRefAction: undefined,
   username: undefined,
   errorMessage: undefined,
+  location: window.location,
 };
 
 const mapStateToProps = (state) => ({
@@ -232,6 +281,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  setRefAction: (ref) => dispatch(setRef(ref)),
   changeLanguage: (lanId) => dispatch(languageSwitcherActions.changeLanguage(lanId)),
   getIdentityReq: () => dispatch(getIdentity()),
 });

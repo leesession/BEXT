@@ -14,6 +14,7 @@ const initState = new Map({
   current: preKeys,
   username: undefined,
   balance: undefined,
+  ref: undefined,
 });
 
 export default function appReducer(state = initState, action) {
@@ -35,6 +36,8 @@ export default function appReducer(state = initState, action) {
       return state.set('betxBalance', action.value);
     case actions.TRANSER_RESULT:
       return state.set('transferResult', action.value);
+    case actions.SET_REF:
+      return state.set('ref', action.ref);
     default:
       return state;
   }

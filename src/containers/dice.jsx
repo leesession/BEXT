@@ -317,21 +317,18 @@ class DicePage extends React.Component {
                       </Row>
                     </div>
                     <div className="action holderBorder">
+
                       <Row type="flex" gutter={0}>
                         <Col span={8}>
                           <div className="box">
                             <span className="label"><IntlMessages id="dice.play.notice" />
                             </span>
-                            <div className="value">{rollNumber}↓
-                            </div>
                           </div>
                         </Col>
                         <Col span={8}>
                           <div className="box">
                             <span className="label"><IntlMessages id="dice.play.payout" />
                             </span>
-                            <div className="value ratio">{_.floor(payout, 3)}X
-                            </div>
                           </div>
 
                         </Col>
@@ -339,11 +336,32 @@ class DicePage extends React.Component {
                           <div className="box">
                             <span className="label"><IntlMessages id="dice.play.win" />
                             </span>
+                          </div>
+                        </Col>
+                      </Row>
+
+                      <Row type="flex" gutter={0}>
+                        <Col span={8}>
+                          <div className="box">
+                            <div className="value">{rollNumber}↓
+                            </div>
+                          </div>
+                        </Col>
+                        <Col span={8}>
+                          <div className="box">
+                            <div className="value ratio">{_.floor(payout, 3)}X
+                            </div>
+                          </div>
+
+                        </Col>
+                        <Col span={8}>
+                          <div className="box">
                             <div className="value">{(_.floor(winChance, 4) * 100).toFixed(2)}%
                             </div>
                           </div>
                         </Col>
                       </Row>
+
                       <Row type="flex" justify="center">
                         <Col span={24}>
                           <Slider getValue={this.getSliderValue} defaultValue={DEFAULT_ROLL_NUMBER} min={MIN_SELECT_ROLL_NUMBER} max={MAX_SELECT_ROLL_NUMBER} />
@@ -427,7 +445,7 @@ class DicePage extends React.Component {
               </Col>
               <Col xs={24} lg={8}>
 
-                <section>
+                <section className='hideOnMobile'>
                   <div className="container">
                     <div className="holderBorder">
                       <Chatroom />
