@@ -57,11 +57,8 @@ class Topbar extends React.PureComponent {
 
     this.state = {
       collapsed: true,
-<<<<<<< HEAD
       isLoggedIn: false,
-=======
       refModalVisible: false,
->>>>>>> ba50dfb669479fae70810b48c85979facefcb685
     };
 
     this.toggleCollapsed = this.toggleCollapsed.bind(this);
