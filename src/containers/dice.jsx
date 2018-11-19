@@ -1,12 +1,13 @@
 /* eslint react/no-array-index-key: 0, no-nested-ternary:0 */ // Disable "Do not use Array index in keys" for options since they dont have unique identifier
 
 import React, { PropTypes } from 'react';
-import { Icon, Form, Row, Col, Table, Input, InputNumber, Button, Tabs, message } from 'antd';
+import { Icon, Form, Row, Col, Table, Input, Button, Tabs, Popover, message } from 'antd';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import * as Scroll from 'react-scroll';
 import moment from 'moment';
 import { cloudinaryConfig, CloudinaryImage } from '../components/react-cloudinary';
+import { injectIntl, intlShape } from 'react-intl';
 
 import InfoSection from '../components/sections/info';
 import Slider from '../components/slider';
@@ -58,6 +59,7 @@ class DicePage extends React.Component {
     const winChance = calculateWinChance(rollNumber);
     const payout = calculatePayout(winChance);
     const payoutOnWin = calculatePayoutOnWin(betAmount, payout);
+    const { intl } = this.props;
 
     this.defaultUsername = `Guest-${_.random(100000, 999999, false)}`;
     this.state = {
@@ -87,25 +89,25 @@ class DicePage extends React.Component {
     };
 
     this.columns = [{
-      title: '时间',
+      title: intl.formatMessage({ id: 'dice.history.form.time' }),
       dataIndex: 'time',
       key: 'time',
     }, {
-      title: '玩家',
+      title: intl.formatMessage({ id: 'dice.history.form.bettor' }),
       dataIndex: 'bettor',
       key: 'bettor',
     }, {
-      title: '投注号码',
+      title: intl.formatMessage({ id: 'dice.history.form.unber' }),
       dataIndex: 'rollUnder',
       key: 'rollUnder',
     },
     {
-      title: '赌注',
+      title: intl.formatMessage({ id: 'dice.history.form.bet' }),
       dataIndex: 'bet',
       key: 'bet',
     },
     {
-      title: '开奖号码',
+      title: intl.formatMessage({ id: 'dice.history.form.roll' }),
       dataIndex: 'roll',
       key: 'roll',
       render: (text) => (
@@ -113,7 +115,7 @@ class DicePage extends React.Component {
       ),
     },
     {
-      title: '奖金',
+      title: intl.formatMessage({ id: 'dice.history.form.payout' }),
       dataIndex: 'payout',
       key: 'payout',
       render: (text) => text == 0 ? <span style={{ color: 'red' }}>{text}</span> : <span style={{ color: 'lightgreen' }}>{text}</span>,
@@ -191,31 +193,26 @@ class DicePage extends React.Component {
     if ((!isNaN(value) && reg.test(value)) || value === '') {
       // this.props.onChange(value);
 
-      if (value < MIN_INPUT_BET_AMOUNT) {
+      console.log(_.toNumber(value));
+
+      if (_.toNumber(value) !== 0 && _.toNumber(value) < MIN_INPUT_BET_AMOUNT) {
         message.warning(intl.formatMessage({
           id: 'dice.error.lessThanMinBet',
+
+        }, {
           amount: MIN_INPUT_BET_AMOUNT.toFixed(4),
           asset: betAsset,
         }));
       }
 
       const betAmount = value;
-      console.log(betAmount);
       const payoutOnWin = calculatePayoutOnWin(betAmount, payout);
-      console.log(payoutOnWin);
 
       this.setState({
         betAmount,
         payoutOnWin,
       });
     }
-
-    // // Make sure evt target is a number
-    // var isValid = /^[0-9,.]*$/.test(evt.target.value);
-
-    // if (!isValid) {
-    //   return;
-    // }
   }
 
   onBetAmountButtonClick(e) {
@@ -335,15 +332,17 @@ class DicePage extends React.Component {
                       <Row type="flex" justify="space-around" align="middle" style={{ height: '100%' }}>
                         <Button size="large" className="bet_button active" type="default" data-value="EOS">EOS
                         </Button>
-                        <Button size="large" className="bet_button" type="default" data-value="BETX" >BETX
-                        </Button>
+                        <Popover content={(<IntlMessages id="dice.alert.comingsoon" />)}>
+                          <Button size="large" className="bet_button" type="default" data-value="BETX" >BETX
+                          </Button>
+                        </Popover>
                       </Row>
                     </div>
                     <div className="action holderBorder">
                       <Row type="flex" gutter={0}>
                         <Col span={8}>
                           <div className="box">
-                            <span className="label">小于该点数获胜
+                            <span className="label"><IntlMessages id="dice.play.notice" />
                             </span>
                             <div className="value">{rollNumber}↓
                             </div>
@@ -351,7 +350,7 @@ class DicePage extends React.Component {
                         </Col>
                         <Col span={8}>
                           <div className="box">
-                            <span className="label">赔率
+                            <span className="label"><IntlMessages id="dice.play.payout" />
                             </span>
                             <div className="value ratio">{_.floor(payout, 3)}X
                             </div>
@@ -360,7 +359,7 @@ class DicePage extends React.Component {
                         </Col>
                         <Col span={8}>
                           <div className="box">
-                            <span className="label">中奖概率
+                            <span className="label"><IntlMessages id="dice.play.win" />
                             </span>
                             <div className="value">{(_.floor(winChance, 4) * 100).toFixed(2)}%
                             </div>
@@ -381,7 +380,7 @@ class DicePage extends React.Component {
                                 <Col span={8}>
                                   <Row type="flex" justify="center" align="middle">
                                     <Col span={16} style={{ transform: 'translateY(-15px)' }}>
-                                      <span className="label">抵押金额</span>
+                                      <span className="label"><IntlMessages id="dice.play.amount" /></span>
                                       <Input size="large" className="inputBorder" onChange={this.onInputNumberChange} value={betAmount} />
                                     </Col>
                                     <Col span={8}>
@@ -409,7 +408,7 @@ class DicePage extends React.Component {
                                 <Col span={8} >
                                   <Row type="flex" justify="center" align="middle">
                                     <Col span={16} offset={8} style={{ transform: 'translateY(-15px)' }}>
-                                      <span className="label">赢得奖金</span>
+                                      <span className="label"><IntlMessages id="dice.reward.total" /></span>
                                       <Input size="large" disabled className="inputBorder" value={_.floor(payoutOnWin, 4)} />
                                     </Col>
                                   </Row>
@@ -439,7 +438,7 @@ class DicePage extends React.Component {
                           <div className="bet_description"><Icon type="question-circle" /><IntlMessages id="dice.reward.firstbet" /> {appConfig.firstBetReward} <IntlMessages id="dice.asset.betx" /></div>
                         </Col>
                         <Col span={6}>
-                          <div className="bet_description"><IntlMessages id="dice.balance.eos" /></div>
+                          <div className="bet_description"><IntlMessages id="dice.balance.betx" /></div>
                           <div className="bet_value">{_.floor(betxBalance, 2)}<span className="highlight"> <IntlMessages id="dice.asset.betx" /></span></div>
                         </Col>
                       </Row>
@@ -464,7 +463,7 @@ class DicePage extends React.Component {
                   {/* <div className="horizontalWrapper"> */}
                   <div className="container">
                     <Tabs defaultActiveKey="1" onChange={this.onTabClicked} size="large">
-                      <TabPane tab="所有投注" key="1">
+                      <TabPane tab={<IntlMessages id="dice.history.all" />} key="1">
                         <Table
                           className="holderBorder"
                           columns={columns}
@@ -474,7 +473,7 @@ class DicePage extends React.Component {
                           pagination={false}
                         />
                       </TabPane>
-                      <TabPane tab="我的投注" key="2">
+                      <TabPane tab={<IntlMessages id="dice.history.my" />} key="2">
                         <Table
                           className="holderBorder"
                           columns={columns}
@@ -484,7 +483,7 @@ class DicePage extends React.Component {
                           pagination={false}
                         />
                       </TabPane>
-                      <TabPane tab="Huge Wins" key="3">
+                      <TabPane tab={<IntlMessages id="dice.history.huge" />} key="3">
                         <Table
                           className="holderBorder"
                           columns={columns}
@@ -517,6 +516,7 @@ DicePage.propTypes = {
   username: PropTypes.string,
   eosBalance: PropTypes.number,
   betxBalance: PropTypes.number,
+  intl: intlShape.isRequired,
 };
 
 DicePage.defaultProps = {
@@ -547,4 +547,4 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 // Wrap the component to inject dispatch and state into it
-export default connect(mapStateToProps, mapDispatchToProps)(DicePage);
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(DicePage));

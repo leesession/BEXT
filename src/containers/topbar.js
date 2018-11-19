@@ -65,8 +65,12 @@ class Topbar extends React.PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { errorMessage } = nextProps;
+    const { errorMessage, username } = nextProps;
     const { intl } = this.props;
+
+    if(username){
+      message.success(intl.formatMessage({ id: "topbar.message.welcome" }, {name:username}));
+    }
 
     if (errorMessage) {
       switch (errorMessage) {
