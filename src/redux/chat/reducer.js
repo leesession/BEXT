@@ -25,10 +25,10 @@ const initState = new Map({
 export default function (state = initState, action) {
   switch (action.type) {
     case actions.INIT_SOCKET_CONNECTION_MESSAGE:
-      state.get('history').enq({
-        type: messageType.system,
-        body: 'Established connection with server',
-      });
+      // state.get('history').enq({
+      //   type: messageType.system,
+      //   body: 'Established connection with server',
+      // });
 
       return state
         .set('refresh', !state.get('refresh'));
@@ -41,6 +41,18 @@ export default function (state = initState, action) {
     case actions.MESSAGE_CHANNEL_UPDATE:
         console.log('MESSAGE_CHANNEL_UPDATE.payload', action.payload);
         break;
+    case actions.MESSAGE_SUBSCRIBED:
+        let lastMessage = state.get('history').peek();
+        let successMessage = {
+          type: messageType.system,
+          body: 'Established connection with server',
+        }
+        if(JSON.stringify(lastMessage)!==JSON.stringify(successMessage)){
+          state.get('history').enq(successMessage);
+          return state
+            .set('refresh', !state.get('refresh'));
+        }
+    break;
     default:
       return state;
   }

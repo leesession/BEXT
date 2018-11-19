@@ -6,6 +6,7 @@ import _ from 'lodash';
 import { cloudinaryConfig, CloudinaryImage } from '../components/react-cloudinary';
 import chatActions from '../redux/chat/actions';
 import Message from './message';
+import IntlMessages from '../components/utility/intlMessages';
 
 cloudinaryConfig({ cloud_name: 'dd1ixvdxn' });
 
@@ -73,7 +74,7 @@ class ChatRoom extends React.Component {
           {
             !_.isEmpty(history.all()) &&
             _.map(history.all(), (message) =>
-              <Message message={message} key={message.id || (message.type + message.body)} />)
+              <Message message={message} key={message.id || history.elements.length-1} />)
           }
         </ul>
         <form className="form" onSubmit={this.handleSubmit}>
@@ -82,7 +83,7 @@ class ChatRoom extends React.Component {
               <Input type="text" placeholder="" onChange={this.handleChange} value={value} />
             </Col>
             <Col span={6}>
-              <Button  type="default" htmlType="submit" size="large">发送</Button>
+              <Button  type="default" htmlType="submit" style={{fontSize:'1.2em',fontWeight:800}} size="large"><IntlMessages id="dice.send" /></Button>
             </Col>
           </Row>
           {/* <div className="info"><span>{messageNum} messages, refresh: {refresh}</span></div> */}
