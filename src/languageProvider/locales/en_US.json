@@ -19,8 +19,26 @@
   "dice.balance.eos":"EOS Balance",
   "dice.balance.betx":"BETX Balance",
   "dice.reward.firstbet":"First Bet Reward",
+  "dice.reward.total":"Reward",
   "dice.button.login":"Log In",
   "dice.button.bet":"Bet",
+  "dice.history.all":"All Bet",
+  "dice.history.my":"My Bet",
+  "dice.history.huge":"Huge Wins",
+  "dice.history.form.time":"Time",
+  "dice.history.form.bettor":"Player",
+  "dice.history.form.unber":"Roll Unber",
+  "dice.history.form.bet":"Bet",
+  "dice.history.form.roll":"Roll",
+  "dice.history.form.payout":"Payout",
+  "dice.play.notice":"Roll Under to Win",
+  "dice.play.payout":"Payout",
+  "dice.play.win":"Win Chance",
+  "dice.play.amount":"Play amount",
+  "dice.alert.comingsoon":"Coming soon",
+  "dice.send":"Send",
+  
+
 
   "faq.title":"FAQ",
 
