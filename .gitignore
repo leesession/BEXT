@@ -291,4 +291,6 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+yarn.lock
+
 # End of https://www.gitignore.io/api/node,macos,linux,windows,firebase,reactnative
