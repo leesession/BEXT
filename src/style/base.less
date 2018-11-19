@@ -38,8 +38,15 @@ ALL VARIABLE & MIXING
 body {
   font-size: fontSize;
   font-family: @fontFamily;
-}
 
+  @media @tablet-strict{
+      font-size: 11px;
+  }
+
+  @media @phone{
+    font-size: 8px;
+  }
+}
 // Remove <a> underline
 a:hover,
 a:visited,
@@ -101,4 +108,10 @@ a:active {
         text-align: center;
         color: @fontColor;
     }
+}
+
+//ant font size overwrite
+.ant-table,
+.ant-tabs-nav-container{
+    font-size: 1em !important;
 }

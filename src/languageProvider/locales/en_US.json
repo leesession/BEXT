@@ -11,8 +11,12 @@
   "topbar.faq": "FAQ",
   "topbar.contact": "Contact Us",
   "topbar.whitepaper": "Whitepaper",
+  "topbar.referrals": "Referrals",
   "topbar.login": "Log In",
   "topbar.welcome": "Welcome",
+  "topbar.copy":"Copy",
+  "topbar.copy.title":"Get Rewarded With Referrals!",
+  "topbar.copy.description":"Refer a friend and receive 0.5% of their bets! Additionally, the receiver of the referral will get a 0.5% bonus towards their win. ",
 
   "dice.asset.eos":"EOS",
   "dice.asset.betx":"BETX",

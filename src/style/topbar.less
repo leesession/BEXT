@@ -1,5 +1,49 @@
 @height: 80px;
 
+.refModal{
+
+    .ant-modal-title{
+        font-size: 1.5em;
+        text-align: center;
+        color:white;
+    }
+
+    .ant-modal-header,
+    .ant-modal-body{
+        background-color: grey;
+        color:white;
+        padding-top: 30px;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .ant-modal-body{
+        padding-bottom: 30px;
+    }
+
+    & *{
+        border: none;
+    }
+
+    .refWraper{
+        background-color: #444444;
+        padding: 0px 0 0px 10px;
+        border-radius: 5px;
+        font-size: 1.5em;
+        height:32px;
+
+        .refHolder{
+            text-align: center;
+            width: 100%;
+            line-height: 32px;
+    
+            &:hover{
+                cursor: pointer;
+            }
+        }
+    }
+}
+
 .topbar {
     position: fixed;
     width: 100%;
@@ -32,7 +76,7 @@
 }
 
 .topbarWrapper {
-    font-size: 16px;
+    font-size: 1em;
     display: flex;
 }
 
@@ -78,7 +122,7 @@ ul.menu-list {
 
             i {
                 padding-left: 6px;
-                font-size: 16px;
+                font-size: 1em;
             }
 
         }
@@ -176,10 +220,16 @@ ul.menu-list {
 
         &.nav-btn {
             button {
-                height: 40px;
+                height: 38px;
                 .border-radius(20px);
-                font-size: 1em;
+                font-size: 1.2em;
                 width: 100px;
+                border-color: white;
+                background-color: transparent;
+
+                &:hover{
+                    background-color: #444444;
+                }
             }
 
         }
@@ -229,7 +279,7 @@ ul.menu-list {
     border: 1px solid #e7e7e7;
     height: auto;
     max-height: 340px;
-    font-size: 14px;
+    font-size: 1em;
     overflow: hidden;
     -webkit-transition: max-height .5s ease;
     -moz-transition: max-height .5s ease;
