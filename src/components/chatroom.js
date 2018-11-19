@@ -73,8 +73,8 @@ class ChatRoom extends React.Component {
         <ul ref={(ele) => { this.myRef = ele; }}>
           {
             !_.isEmpty(history.all()) &&
-            _.map(history.all(), (message) =>
-              <Message message={message} key={message.id || history.elements.length-1} />)
+            _.map(history.all(), (message,index) =>
+              <Message message={message} key={message.id || index} />)
           }
         </ul>
         <form className="form" onSubmit={this.handleSubmit}>

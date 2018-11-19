@@ -346,7 +346,7 @@ class DicePage extends React.Component {
                       </Row>
                       <Row type="flex" justify="center">
                         <Col span={24}>
-                          <Slider getValue={this.getSliderValue} step={0.01} defaultValue={DEFAULT_ROLL_NUMBER} min={MIN_SELECT_ROLL_NUMBER} max={MAX_SELECT_ROLL_NUMBER} />
+                          <Slider getValue={this.getSliderValue} defaultValue={DEFAULT_ROLL_NUMBER} min={MIN_SELECT_ROLL_NUMBER} max={MAX_SELECT_ROLL_NUMBER} />
                         </Col>
                       </Row>
                       <Row type="flex" gutter={36} justify="center" align="middle">
