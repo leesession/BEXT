@@ -16,6 +16,7 @@ const initState = new Map({
   eosBalance: undefined,
   betxBalance: undefined,
   errorMessage: undefined,
+  ref: undefined,
 });
 
 export default function appReducer(state = initState, action) {
@@ -41,6 +42,8 @@ export default function appReducer(state = initState, action) {
       return state.set('errorMessage', action.message);
     case actions.CLEAR_ERROR_MESSAGE:
       return state.set('errorMessage', undefined);
+    case actions.SET_REF:
+      return state.set('ref', action.ref);
     default:
       return state;
   }

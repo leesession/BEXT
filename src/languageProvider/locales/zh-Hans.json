@@ -14,6 +14,10 @@
   "topbar.login": "登录",
   "topbar.welcome": "欢迎您",
   "topbar.message.welcome": "欢迎登录 BETX.fun, {name}!",
+  "topbar.referrals": "邀请奖励",
+  "topbar.copy":"复制",
+  "topbar.copy.title":"通过推荐获得奖励！",
+  "topbar.copy.description":"推荐朋友，终身获得其0.5％的投注! 此外，被推广者将获得多加0.5％的奖金",
 
   "dice.asset.eos":"EOS",
   "dice.asset.betx":"BETX",

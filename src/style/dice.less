@@ -60,6 +60,11 @@
         .action {
             color: white;
             padding: 60px;
+            padding-top: 90px;
+
+            @media @phone {
+                padding: 10px;
+            }
 
             .label {
                 color: @fontColor;
@@ -78,10 +83,14 @@
             .box {
                 border-radius: 10px;
                 margin: 20px 20px;
-                padding: 30px 20px 0 20px;
+                padding: 0px 20px 0 20px;
 
                 @media @desktop {
                     margin: 0px 12px;
+                }
+
+                @media @phone {
+                    padding: 0px;
                 }
 
                 .value {
@@ -98,6 +107,8 @@
                     color:@borderColor;
                     filter:drop-shadow(3px 3px 0px #a27d34);
                 }
+
+                
 
             }
 
@@ -159,9 +170,19 @@
                 margin: 5px 0px;
                 transition:0.3s all;
                 cursor: pointer;
+                transition: all 0.2s;
+
+                @media @phone{
+                    height: 30px;
+                    width: 30px;
+                }
 
                 &:focus{
                     outline: none;
+                }
+
+                &:hover{
+                    background-color: @primaryColor;
                 }
             }
 

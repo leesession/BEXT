@@ -20,6 +20,7 @@ const actions = {
   SET_ERROR_MESSAGE: 'SET_ERROR_MESSAGE',
   ERROR_MESSAGE: 'ERROR_MESSAGE',
   CLEAR_ERROR_MESSAGE: 'CLEAR_ERROR_MESSAGE',
+  SET_REF: 'SET_REF',
   toggleAll: (width, height) => {
     const view = getView(width);
     const collapsed = view !== 'DesktopView';
@@ -41,6 +42,10 @@ const actions = {
     type: actions.SET_ERROR_MESSAGE,
     message,
   })
+  setRef: (params)=>({
+    type: actions.SET_REF,
+    ref: params,
+  }),
 };
 
 export default actions;
