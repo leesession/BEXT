@@ -53,6 +53,7 @@ class Topbar extends React.PureComponent {
 
     this.state = {
       collapsed: true,
+      isLoggedIn: false,
     };
 
     this.toggleCollapsed = this.toggleCollapsed.bind(this);
@@ -67,9 +68,15 @@ class Topbar extends React.PureComponent {
   componentWillReceiveProps(nextProps) {
     const { errorMessage, username } = nextProps;
     const { intl } = this.props;
+    const { isLoggedIn } = this.state;
 
-    if(username){
+    if(username && !isLoggedIn){
       message.success(intl.formatMessage({ id: "topbar.message.welcome" }, {name:username}));
+
+      // Make sure login in success only show up once
+      this.setState({
+        isLoggedIn: true,
+      });
     }
 
     if (errorMessage) {

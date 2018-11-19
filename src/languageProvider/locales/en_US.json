@@ -119,5 +119,7 @@
   "stake.available":"Available",
 
   "error.scatter.locked":"Scatter is locked. Please unlock it and refresh page.",
-  "error.page.usernamenotfound":"EOS username not found."
+  "error.scatter.rejected":"Signature request is rejected in Scatter.",
+  "error.page.usernamenotfound":"EOS username not found.",
+  "error.account.cpuInsufficient":"EOS account CPU time insufficient."
 }

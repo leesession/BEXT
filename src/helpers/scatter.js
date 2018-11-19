@@ -1,31 +1,31 @@
 import ScatterJS from 'scatterjs-core';
 import ScatterEOS from 'scatterjs-plugin-eosjs';
-import Eos, { format } from 'eosjs';
+import Eos from 'eosjs';
 const EosApi = require('eosjs-api');
 
 // Don't forget to tell ScatterJS which plugins you are using.
 ScatterJS.plugins(new ScatterEOS());
 
 const eosSettings = {
-  testnet: {
-    network: {
-      blockchain: 'eos',
-      protocol: 'https',
-      host: 'api.jungle.alohaeos.com',
-      port: 443,
-      chainId: '038f4b0fc8ff18a4f0842a8f0564611f6e96e8535901dd45e43ac8691a1c4dca',
-    },
-    endpoint: 'https://api.jungle.alohaeos.com:443',
-  },
+  // testnet: {
+  //   network: {
+  //     blockchain: 'eos',
+  //     protocol: 'https',
+  //     host: 'api.jungle.alohaeos.com',
+  //     port: 443,
+  //     chainId: '038f4b0fc8ff18a4f0842a8f0564611f6e96e8535901dd45e43ac8691a1c4dca',
+  //   },
+  //   endpoint: 'https://api.jungle.alohaeos.com:443',
+  // },
   mainnet: {
     network: {
       blockchain: 'eos',
       protocol: 'https',
-      host: 'nodes.get-scatter.com',
+      host: 'eos.greymass.com',
       port: 443,
       chainId: 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906',
     },
-    endpoint: 'https://api.eosnewyork.io:443',
+    // endpoint: 'https://api.eosnewyork.io:443',
   },
 };
 
@@ -45,8 +45,9 @@ class ScatterHelper {
     console.log('ScatterHelper.constructor');
 
     this.env = 'mainnet';
-    this.settings = eosSettings[this.env];
-    this.readEos = EosApi({ httpEndpoint: this.settings.endpoint });
+    this.network = eosSettings[this.env].network;
+    console.log("endpoint is", `${this.network.protocol}://${this.network.host}:${this.network.port}`);
+    this.readEos = EosApi({ httpEndpoint: `${this.network.protocol}://${this.network.host}:${this.network.port}` });
     this.Eos = Eos;
 
     this.connect();
@@ -84,7 +85,7 @@ class ScatterHelper {
 
   getIdentity() {
     const {
-      scatter, settings: { network }, Eos, connect,
+      scatter, network, Eos, connect,
     } = this;
     const that = this;
 
@@ -175,14 +176,28 @@ class ScatterHelper {
   }
 
   handleScatterError(err) {
-    let { message } = err;
-    switch (err.code) {
-      case 423: // Scatter is locked
+    let { message, code, error } = err;
 
-        message = 'error.scatter.locked';
-        console.log('Scatter is locked. Please unlock it and refresh the page.');
+    if (_.isString(err)) {
+      const errObject = JSON.parse(err);
+
+      if (errObject.error) {
+        code = errObject.error.code;
+      }
+    }
+
+    switch (code) {
+      case 402: // Scatter is locked
+        message = 'error.scatter.rejected';
         break;
 
+      case 423: // Scatter is locked
+        message = 'error.scatter.locked';
+        break;
+
+      case 3080004: // tx_cpu_usage_exceeded
+        message = 'error.account.cpuInsufficient';
+        break;
       default:
         console.error(message);
         break;
