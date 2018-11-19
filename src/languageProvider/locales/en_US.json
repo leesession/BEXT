@@ -21,6 +21,7 @@
   "dice.reward.firstbet":"First Bet Reward",
   "dice.button.login":"Log In",
   "dice.button.bet":"Bet",
+  "dice.error.lessThanMinBet":"The minimum bet amount is {amount} {asset}.",
 
   "faq.title":"FAQ",
 
@@ -98,6 +99,8 @@
   "stake.token.betx":"质押BETX代币",
   "stake.action.pledge":"质押",
   "stake.action.redemption":"赎回",
-  "stake.available":"Available"
+  "stake.available":"Available",
 
+  "error.scatter.locked":"Scatter is locked. Please unlock it and refresh page.",
+  "error.page.usernamenotfound":"EOS username not found."
 }

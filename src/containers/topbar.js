@@ -69,7 +69,17 @@ class Topbar extends React.PureComponent {
     const { intl } = this.props;
 
     if (errorMessage) {
-      message.error(intl.formatMessage({ id: errorMessage }));
+      switch (errorMessage) {
+        case 'error.scatter.locked':
+          const hide = message.loading(intl.formatMessage({ id: errorMessage }), 0);
+          // Dismiss manually and asynchronously
+          setTimeout(hide, 3000);
+          break;
+
+        default:
+          message.error(intl.formatMessage({ id: errorMessage }));
+          break;
+      }
     }
   }
 
@@ -79,9 +89,6 @@ class Topbar extends React.PureComponent {
     langSettings.forEach((item) => {
       document.createElement('img').src = item.imgSrc;
     });
-  }
-
-  componentWillReceiveProps(nextProps) {
   }
 
   onLanguageDropdownClicked({ key }) {
@@ -180,7 +187,7 @@ class Topbar extends React.PureComponent {
                   </div>
 
                   <li className="nav-btn" role="menuitem" key="login">
-                    {username ? (<IntlMessages id="topbar.welcome"> {username}</IntlMessages>) : <Button type="primary" size="large" onClick={this.onLoginClicked}><IntlMessages id="topbar.login" />
+                    {username ? (<div className="message"><IntlMessages id="topbar.welcome"></IntlMessages><span>, {username}</span></div>) : <Button type="primary" size="large" onClick={this.onLoginClicked}><IntlMessages id="topbar.login" />
                     </Button>}
                   </li>
                   <li className="lang-menu-trigger" role="menuitem" key="lang">

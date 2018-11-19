@@ -17,6 +17,9 @@ const actions = {
   GET_BETX_BALANCE_RESULT: 'GET_BETX_BALANCE_RESULT',
   TRANSFER_REQUEST: 'TRANSFER_REQUEST',
   TRANSFER_RESULT: 'TRANSFER_RESULT',
+  SET_ERROR_MESSAGE: 'SET_ERROR_MESSAGE',
+  ERROR_MESSAGE: 'ERROR_MESSAGE',
+  CLEAR_ERROR_MESSAGE: 'CLEAR_ERROR_MESSAGE',
   toggleAll: (width, height) => {
     const view = getView(width);
     const collapsed = view !== 'DesktopView';
@@ -34,6 +37,10 @@ const actions = {
     type: actions.TRANSFER_REQUEST,
     payload: params,
   }),
+  setErrorMessage: (message) => ({
+    type: actions.SET_ERROR_MESSAGE,
+    message,
+  })
 };
 
 export default actions;

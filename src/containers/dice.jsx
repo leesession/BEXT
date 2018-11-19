@@ -1,7 +1,7 @@
 /* eslint react/no-array-index-key: 0, no-nested-ternary:0 */ // Disable "Do not use Array index in keys" for options since they dont have unique identifier
 
 import React, { PropTypes } from 'react';
-import { Icon, Form, Row, Col, Table, Input, InputNumber, Button, Tabs } from 'antd';
+import { Icon, Form, Row, Col, Table, Input, InputNumber, Button, Tabs, message } from 'antd';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import * as Scroll from 'react-scroll';
@@ -14,7 +14,7 @@ import Chatroom from '../components/chatroom';
 import betActions from '../redux/bet/actions';
 import appActions from '../redux/app/actions';
 import IntlMessages from '../components/utility/intlMessages';
-import {appConfig} from "../settings";
+import { appConfig } from '../settings';
 
 cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
@@ -28,13 +28,14 @@ const MAX_ROLL_NUMBER = 100;
 const MAX_SELECT_ROLL_NUMBER = 96;
 const DEFAULT_ROLL_NUMBER = 50;
 const DIVIDEND = 0.98;
+const MIN_INPUT_BET_AMOUNT = 0.1;
 
 const {
   Link, Element, Events, scroll, scrollSpy,
 } = Scroll;
 
 const { initSocketConnection } = betActions;
-const { getIdentity, transfer } = appActions;
+const { getIdentity, transfer, setErrorMessage } = appActions;
 
 function calculateWinChance(rollNumber) {
   return (rollNumber - MIN_ROLL_NUMBER) / ((MAX_ROLL_NUMBER - MIN_ROLL_NUMBER) + 1);
@@ -58,6 +59,7 @@ class DicePage extends React.Component {
     const payout = calculatePayout(winChance);
     const payoutOnWin = calculatePayoutOnWin(betAmount, payout);
 
+    this.defaultUsername = `Guest-${_.random(100000, 999999, false)}`;
     this.state = {
       dataSource: [{
         key: '1',
@@ -78,7 +80,10 @@ class DicePage extends React.Component {
       winChance,
       eosBalance: 0,
       betxBalance: 0,
-      username: `Guest-${_.random(100000, 999999, false)}`,
+      username: this.defaultUsername,
+      betAsset: 'EOS',
+      referrer: '',
+      seed: '',
     };
 
     this.columns = [{
@@ -149,26 +154,22 @@ class DicePage extends React.Component {
   componentWillReceiveProps(nextProps) {
     const { username, eosBalance, betxBalance } = nextProps;
 
+    const fieldsToUpdate = {};
+
+    // Update username in state if we received one from props; this means Scatter login succeeded
     if (username) {
-      console.log('componentWillReceiveProps.username', username);
-      this.setState({
-        username,
-      });
+      fieldsToUpdate.username = username;
     }
 
     if (_.isNumber(eosBalance)) {
-      console.log('componentWillReceiveProps.eosBalance', eosBalance);
-      this.setState({
-        eosBalance,
-      });
+      fieldsToUpdate.eosBalance = eosBalance;
     }
 
     if (_.isNumber(betxBalance)) {
-      console.log('componentWillReceiveProps.betxBalance', betxBalance);
-      this.setState({
-        betxBalance,
-      });
+      fieldsToUpdate.betxBalance = betxBalance;
     }
+
+    this.setState(fieldsToUpdate);
   }
 
   componentWillUnmount() {
@@ -176,29 +177,45 @@ class DicePage extends React.Component {
     Events.scrollEvent.remove('end');
   }
 
-  // handleSetActive(to) {
-  //   console.log(to);
-  // }
   onTabClicked() {
 
   }
 
   onInputNumberChange(evt) {
-    const { payout } = this.state;
+    const { payout, betAsset } = this.state;
+    const { intl } = this.props;
 
-    // Make sure evt target is a number
-    const betAmount = _.toNumber(evt.target && evt.target.value);
+    const { value } = evt.target;
+    const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
 
-    if(betAmount === null){
-      return;
+    if ((!isNaN(value) && reg.test(value)) || value === '') {
+      // this.props.onChange(value);
+
+      if (value < MIN_INPUT_BET_AMOUNT) {
+        message.warning(intl.formatMessage({
+          id: 'dice.error.lessThanMinBet',
+          amount: MIN_INPUT_BET_AMOUNT.toFixed(4),
+          asset: betAsset,
+        }));
+      }
+
+      const betAmount = value;
+      console.log(betAmount);
+      const payoutOnWin = calculatePayoutOnWin(betAmount, payout);
+      console.log(payoutOnWin);
+
+      this.setState({
+        betAmount,
+        payoutOnWin,
+      });
     }
 
-    const payoutOnWin = calculatePayoutOnWin(betAmount, payout);
+    // // Make sure evt target is a number
+    // var isValid = /^[0-9,.]*$/.test(evt.target.value);
 
-    this.setState({
-      betAmount,
-      payoutOnWin,
-    });
+    // if (!isValid) {
+    //   return;
+    // }
   }
 
   onBetAmountButtonClick(e) {
@@ -245,20 +262,30 @@ class DicePage extends React.Component {
   }
 
   onBetClicked() {
-    const { rollNumber, username, betAmount } = this.state;
-    const { transferReq } = this.props;
+    const {
+      rollNumber, username, betAmount, betAsset, referrer, seed,
+    } = this.state;
+    const { transferReq, setErrorMessageReq } = this.props;
+
+    if (username === this.defaultUsername) {
+      setErrorMessageReq('error.page.usernamenotfound');
+      return;
+    }
 
     transferReq({
       bettor: username,
       betAmount,
+      betAsset,
       rollUnder: rollNumber,
+      referrer,
+      seed,
     });
   }
 
   render() {
     const { columns } = this;
     const {
-      dataSource, betAmount, payoutOnWin, winChance, payout, rollNumber, eosBalance, betxBalance, username
+      dataSource, betAmount, payoutOnWin, winChance, payout, rollNumber, eosBalance, betxBalance, username,
     } = this.state;
 
     const { user, betHistory } = this.props;
@@ -404,16 +431,16 @@ class DicePage extends React.Component {
                       <Row type="flex" justify="center" align="middle" gutter={36}>
                         <Col span={6}>
                           <div className="bet_description"><IntlMessages id="dice.balance.eos" /></div>
-                          <div className="bet_value">{_.floor(eosBalance,2)}<span className="highlight"> <IntlMessages id="dice.asset.eos" /></span></div>
+                          <div className="bet_value">{_.floor(eosBalance, 2)}<span className="highlight"> <IntlMessages id="dice.asset.eos" /></span></div>
                         </Col>
                         <Col span={12}>
 
-                          {username ? <Button className="btn-login" size="large" type="primary" onClick={this.onBetClicked}><IntlMessages id="dice.button.bet" /></Button> : <Button className="btn-login" size="large" type="primary" onClick={this.onLogInClicked}><IntlMessages id="dice.button.login" /></Button>}
+                          {username === this.defaultUsername ? <Button className="btn-login" size="large" type="primary" onClick={this.onLogInClicked}><IntlMessages id="dice.button.login" /></Button> : <Button className="btn-login" size="large" type="primary" onClick={this.onBetClicked}><IntlMessages id="dice.button.bet" /></Button> }
                           <div className="bet_description"><Icon type="question-circle" /><IntlMessages id="dice.reward.firstbet" /> {appConfig.firstBetReward} <IntlMessages id="dice.asset.betx" /></div>
                         </Col>
                         <Col span={6}>
                           <div className="bet_description"><IntlMessages id="dice.balance.eos" /></div>
-                          <div className="bet_value">{_.floor(betxBalance,2)}<span className="highlight"> <IntlMessages id="dice.asset.betx" /></span></div>
+                          <div className="bet_value">{_.floor(betxBalance, 2)}<span className="highlight"> <IntlMessages id="dice.asset.betx" /></span></div>
                         </Col>
                       </Row>
                     </div>
@@ -486,6 +513,7 @@ DicePage.propTypes = {
   betHistory: PropTypes.object,
   refresh: PropTypes.bool,
   getIdentityReq: PropTypes.func,
+  setErrorMessageReq: PropTypes.func,
   username: PropTypes.string,
   eosBalance: PropTypes.number,
   betxBalance: PropTypes.number,
@@ -500,6 +528,7 @@ DicePage.defaultProps = {
   eosBalance: undefined,
   betxBalance: undefined,
   getIdentityReq: undefined,
+  setErrorMessageReq: undefined,
 };
 
 const mapStateToProps = (state) => ({
@@ -514,6 +543,7 @@ const mapDispatchToProps = (dispatch) => ({
   transferReq: (obj) => dispatch(transfer(obj)),
   initSocketConnectionReq: (obj) => dispatch(initSocketConnection(obj)),
   getIdentityReq: () => dispatch(getIdentity()),
+  setErrorMessageReq: (message) => dispatch(setErrorMessage(message)),
 });
 
 // Wrap the component to inject dispatch and state into it

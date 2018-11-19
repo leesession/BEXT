@@ -29,7 +29,8 @@ const eosSettings = {
   },
 };
 
-const BETX_TOKEN_CONTRACT = "thebetxtoken";
+const BETX_TOKEN_CONTRACT = 'thebetxtoken';
+const BETX_DICE_CONTRACT = 'thebetxowner';
 
 const network = {
   blockchain: 'eos',
@@ -43,14 +44,33 @@ class ScatterHelper {
   constructor() {
     console.log('ScatterHelper.constructor');
 
-    const that = this;
-    that.env = 'mainnet';
-    that.settings = eosSettings[that.env];
-    that.readEos = EosApi({ httpEndpoint: that.settings.endpoint });
-    that.Eos = Eos;
+    this.env = 'mainnet';
+    this.settings = eosSettings[this.env];
+    this.readEos = EosApi({ httpEndpoint: this.settings.endpoint });
+    this.Eos = Eos;
 
-    // Connect to scatter
-    ScatterJS.scatter.connect('betx.fun').then((connected) => {
+    this.connect();
+
+    this.connect = this.connect.bind(this);
+    this.getIdentity = this.getIdentity.bind(this);
+    this.getEOSBalance = this.getEOSBalance.bind(this);
+    this.getBETXBalance = this.getBETXBalance.bind(this);
+    this.transfer = this.transfer.bind(this);
+    this.handleScatterError = this.handleScatterError.bind(this);
+  }
+
+  static async createInstance() {
+    const scatterHelper = new ScatterHelper();
+    await scatterHelper.connect();
+
+    console.log('ScatterHelper.createInstance.scatter', scatterHelper.scatter);
+    return scatterHelper;
+  }
+
+  async connect() {
+    const that = this;
+
+    return ScatterJS.scatter.connect('betx.fun').then((connected) => {
     // User does not have Scatter Desktop, Mobile or Classic installed.
       if (!connected) {
         return false;
@@ -59,24 +79,18 @@ class ScatterHelper {
       console.log('ScatterJS is connected!');
       that.scatter = ScatterJS.scatter;
       window.ScatterJS = null;
-
-      return Promise.resolve();
-    }, (error) => {
-      that.handleScatterError(error);
     });
-
-    this.getIdentity = this.getIdentity.bind(this);
-    this.getEOSBalance = this.getEOSBalance.bind(this);
-    this.getBETXBalance = this.getBETXBalance.bind(this);
-    this.handleScatterError = this.handleScatterError.bind(this);
   }
 
   getIdentity() {
-    const { scatter, settings: { network }, Eos } = this;
+    const {
+      scatter, settings: { network }, Eos, connect,
+    } = this;
     const that = this;
 
     if (_.isUndefined(scatter)) {
-      throw Error('scatter not connected yet.');
+      connect();
+      return Promise.reject('error.scatter.notconnected');
     }
 
     const requiredFields = { accounts: [network] };
@@ -96,17 +110,33 @@ class ScatterHelper {
     });
   }
 
-  transfer() {
+  transfer(params) {
     const { api, account } = this;
 
+    const {
+      bettor, betAmount, betAsset, rollUnder, referrer, seed,
+    } = params;
+
+    const amount = _.floor(betAmount, 4).toFixed(4);
+
+    // Construct json params
+    const options = {
+      from: bettor,
+      to: BETX_DICE_CONTRACT,
+      quantity: `${amount} ${betAsset}`,
+      memo: `${rollUnder}-${referrer}-${seed}`,
+    };
+
+    console.log('transfer.options', options);
+
     if (_.isUndefined(api)) {
-      throw Error('Scatter is not authenticated yet.');
+      return Promise.reject('error.scatter.notAuthenticated');
     }
 
     // Never assume the account's permission/authority. Always take it from the returned account.
     const transactionOptions = { authorization: [`${account.name}@${account.authority}`] };
 
-    return api.transfer(account.name, 'helloworld', '1.0000 EOS', 'memo', transactionOptions).then((trx) => {
+    return api.transfer(options.from, options.to, options.quantity, options.memo, transactionOptions).then((trx) => {
       // That's it!
       console.log(`Transaction ID: ${trx.transaction_id}`);
     });
@@ -145,16 +175,24 @@ class ScatterHelper {
   }
 
   handleScatterError(err) {
+    let { message } = err;
     switch (err.code) {
       case 423: // Scatter is locked
+
+        message = 'error.scatter.locked';
         console.log('Scatter is locked. Please unlock it and refresh the page.');
         break;
 
       default:
-        console.error(err.message);
+        console.error(message);
         break;
     }
+
+    return Promise.resolve(message);
   }
 }
 
+// const scatterHelper = await ScatterHelper.createInstance();
+
+// console.log("scatterHelper is ", scatterHelper);
 export default new ScatterHelper();

@@ -21,6 +21,7 @@
   "dice.reward.firstbet":"首次投注奖励",
   "dice.button.login":"登录",
   "dice.button.bet":"下注",
+  "dice.error.lessThanMinBet":"下注允许的最小值为 {amount} {asset}.",
 
   "faq.title":"常见问题",
   "faq.account.header":"账户",
@@ -97,5 +98,8 @@
   "stake.token.betx":"质押BETX代币",
   "stake.action.pledge":"质押",
   "stake.action.redemption":"赎回",
-  "stake.available":"可用"
+  "stake.available":"可用",
+
+  "error.scatter.locked":"Scatter未解锁，请先解锁并刷新页面重试",
+  "error.page.usernamenotfound":"EOS用户名不存在"
 }
