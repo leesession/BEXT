@@ -22,12 +22,17 @@ const siteConfig = {
 
 const appConfig= {
   firstBetReward: 500,
+  betHistoryMemorySize: 500,
+  betHistoryTableSize: 20,
+  hugeBetAmount: 1000,
+
+  chatHistoryMemorySize: 500,
 }
 
 const parseConfig = {
   serverURL: 'http://localhost:1338/parse',
   appId: 'BETX-APP',
-  javascriptKey: 'javascriptKey',
+  javascriptKey: 'betx-js-key',
 };
 
 const themeConfig = {
