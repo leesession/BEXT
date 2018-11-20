@@ -10,7 +10,7 @@ import IntlMessages from '../components/utility/intlMessages';
 
 cloudinaryConfig({ cloud_name: 'dd1ixvdxn' });
 
-const { initSocketConnection, sendMessage } = chatActions;
+const { initSocketConnection, sendMessage, fetchChatHistory } = chatActions;
 
 class ChatRoom extends React.Component {
   constructor(props) {
@@ -19,10 +19,13 @@ class ChatRoom extends React.Component {
     this.state = {
     };
 
-    this.username = `Guest-${_.random(100000, 999999, false)}`;
-
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentWillMount(){
+    const {fetchChatHistoryReq} = this.props;
+    fetchChatHistoryReq();
   }
 
   componentDidMount() {
@@ -39,14 +42,14 @@ class ChatRoom extends React.Component {
   }
 
   handleSubmit(event) {
-    const { sendMessageReq } = this.props;
+    const { sendMessageReq, username } = this.props;
     const { value } = this.state;
 
     console.log('sending message', value);
     event.preventDefault();
 
     sendMessageReq({
-      username: this.username,
+      username,
       body: value,
     });
 
@@ -73,7 +76,7 @@ class ChatRoom extends React.Component {
         <ul ref={(ele) => { this.myRef = ele; }}>
           {
             !_.isEmpty(history.all()) &&
-            _.map(history.all(), (message,index) =>
+            _.map(history.all(), (message, index) =>
               <Message message={message} key={message.id || index} />)
           }
         </ul>
@@ -99,6 +102,8 @@ ChatRoom.propTypes = {
   initSocketConnectionReq: PropTypes.func,
   sendMessageReq: PropTypes.func,
   refresh: PropTypes.bool,
+  fetchChatHistoryReq: PropTypes.func,
+  username: PropTypes.string,
 };
 
 ChatRoom.defaultProps = {
@@ -107,6 +112,8 @@ ChatRoom.defaultProps = {
   initSocketConnectionReq: undefined,
   sendMessageReq: undefined,
   refresh: undefined,
+  fetchChatHistoryReq: undefined,
+  username: undefined,
 };
 
 const mapStateToProps = (state) => ({
@@ -118,6 +125,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   initSocketConnectionReq: (obj) => dispatch(initSocketConnection(obj)),
   sendMessageReq: (obj) => dispatch(sendMessage(obj)),
+  fetchChatHistoryReq: () =>dispatch(fetchChatHistory()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatRoom);

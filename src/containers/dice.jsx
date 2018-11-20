@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import * as Scroll from 'react-scroll';
 import moment from 'moment';
+import 'moment/locale/zh-cn';
+
 import { cloudinaryConfig, CloudinaryImage } from '../components/react-cloudinary';
 import { injectIntl, intlShape } from 'react-intl';
 
@@ -30,12 +32,14 @@ const MAX_SELECT_ROLL_NUMBER = 96;
 const DEFAULT_ROLL_NUMBER = 50;
 const DIVIDEND = 0.98;
 const MIN_INPUT_BET_AMOUNT = 0.1;
+const HUGE_BET_PAYOUT = 0.05;
+const TABLE_BET_HISTORY_SIZE = 20;
 
 const {
   Link, Element, Events, scroll, scrollSpy,
 } = Scroll;
 
-const { initSocketConnection } = betActions;
+const { initSocketConnection, fetchBetHistory } = betActions;
 const { getIdentity, transfer, setErrorMessage } = appActions;
 
 function calculateWinChance(rollNumber) {
@@ -103,8 +107,8 @@ class DicePage extends React.Component {
     },
     {
       title: intl.formatMessage({ id: 'dice.history.form.bet' }),
-      dataIndex: 'bet',
-      key: 'bet',
+      dataIndex: 'betAmount',
+      key: 'betAmount',
     },
     {
       title: intl.formatMessage({ id: 'dice.history.form.roll' }),
@@ -118,13 +122,14 @@ class DicePage extends React.Component {
       title: intl.formatMessage({ id: 'dice.history.form.payout' }),
       dataIndex: 'payout',
       key: 'payout',
-      render: (text) => text == 0 ? <span style={{ color: 'red' }}>{text}</span> : <span style={{ color: 'lightgreen' }}>{text}</span>,
+      render: (text) => text ? <span style={{ color: 'lightgreen' }}>{text}</span>: "",
     },
     {
       title: '',
-      key: '',
-      render: (item) => (
-        <Icon type="right" />
+      dataIndex: 'trxUrl',
+      key: 'trxUrl',
+      render: (text, row, index) => (
+        <a href={text} target="_blank" style={{color: "white"}}><Icon type="right" /></a>
       ),
     },
     ];
@@ -138,6 +143,9 @@ class DicePage extends React.Component {
   }
 
   componentWillMount() {
+    const { fetchBetHistoryReq } = this.props;
+
+    fetchBetHistoryReq();
   }
 
   componentDidMount() {
@@ -154,7 +162,10 @@ class DicePage extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { username, eosBalance, betxBalance } = nextProps;
+    const {
+      username, eosBalance, betxBalance, successMessage,
+    } = nextProps;
+    const { intl } = this.props;
 
     const fieldsToUpdate = {};
 
@@ -172,6 +183,12 @@ class DicePage extends React.Component {
     }
 
     this.setState(fieldsToUpdate);
+
+    if (successMessage) {
+      message.success(intl.formatMessage({
+        id: successMessage,
+      }));
+    }
   }
 
   componentWillUnmount() {
@@ -198,7 +215,6 @@ class DicePage extends React.Component {
       if (_.toNumber(value) !== 0 && _.toNumber(value) < MIN_INPUT_BET_AMOUNT) {
         message.warning(intl.formatMessage({
           id: 'dice.error.lessThanMinBet',
-
         }, {
           amount: MIN_INPUT_BET_AMOUNT.toFixed(4),
           asset: betAsset,
@@ -285,39 +301,27 @@ class DicePage extends React.Component {
       dataSource, betAmount, payoutOnWin, winChance, payout, rollNumber, eosBalance, betxBalance, username,
     } = this.state;
 
-    const { user, betHistory } = this.props;
+    const { user, betHistory, locale } = this.props;
 
-    // const betData = _.isEmpty(betHistory.all()) ? [] : _.map(betHistory.all(), (bet) => ({
-    //   key: bet.id,
-    //   time: moment(bet.time).format('HH:mm:ss'),
-    //   bettor: bet.bettor,
-    //   rollUnder: bet.rollUnder,
-    //   bet: _.floor(bet.bet,3),
-    //   roll: bet.roll,
-    //   payout: _.floor(bet.payout,4),
-    // }));
+    const momentLocale = (locale === 'en') ? 'en' : 'zh-cn';
 
-    // test data
-    const betData = [
-      {
-        key: '123',
-        time: '123',
-        bettor: 'sss',
-        rollUnder: 'bet.rollUnder',
-        bet: 100,
-        roll: 88,
-        payout: 120,
-      },
-      {
-        key: '124',
-        time: '123',
-        bettor: 'sss',
-        rollUnder: 'bet.rollUnder',
-        bet: 100,
-        roll: 88,
-        payout: 0,
-      },
-    ];
+    const rawBetData = _.isEmpty(betHistory.all()) ? [] : _.reverse(_.map(betHistory.all(), (bet) => ({
+      key: bet.id,
+      time: moment(bet.time).locale(momentLocale).format('HH:mm:ss'),
+      bettor: bet.bettor,
+      rollUnder: bet.rollUnder,
+      betAmount: bet.betAmount,
+      roll: bet.roll,
+      payout: bet.payout,
+      payoutAsset: bet.payoutAsset,
+      trxUrl: bet.trxUrl,
+    })));
+
+    // console.log(rawBetData);
+    const allBetData = _.slice(rawBetData, 0, appConfig.betHistoryTableSize);
+
+    const myBetData = _.slice(_.filter(rawBetData, (o) => o.bettor === username), 0, appConfig.betHistoryTableSize);
+    const hugeBetData = _.slice(_.filter(rawBetData, (o) => o.payoutAsset.amount >= appConfig.hugeBetAmount), 0, appConfig.betHistoryTableSize);
 
     return (
       <div>
@@ -465,10 +469,10 @@ class DicePage extends React.Component {
               </Col>
               <Col xs={24} lg={8}>
 
-                <section className='hideOnMobile'>
+                <section className="hideOnMobile">
                   <div className="container">
                     <div className="holderBorder">
-                      <Chatroom />
+                      <Chatroom username={username} />
                     </div>
                   </div>
                 </section>
@@ -483,7 +487,7 @@ class DicePage extends React.Component {
                         <Table
                           className="holderBorder"
                           columns={columns}
-                          dataSource={betData}
+                          dataSource={allBetData}
                           bordered={false}
                           showHeader
                           pagination={false}
@@ -493,7 +497,7 @@ class DicePage extends React.Component {
                         <Table
                           className="holderBorder"
                           columns={columns}
-                          dataSource={betData}
+                          dataSource={myBetData}
                           bordered={false}
                           showHeader
                           pagination={false}
@@ -503,7 +507,7 @@ class DicePage extends React.Component {
                         <Table
                           className="holderBorder"
                           columns={columns}
-                          dataSource={betData}
+                          dataSource={hugeBetData}
                           bordered={false}
                           showHeader
                           pagination={false}
@@ -533,6 +537,8 @@ DicePage.propTypes = {
   eosBalance: PropTypes.number,
   betxBalance: PropTypes.number,
   intl: intlShape.isRequired,
+  successMessage: PropTypes.string,
+  fetchBetHistoryReq: PropTypes.func,
 };
 
 DicePage.defaultProps = {
@@ -545,6 +551,8 @@ DicePage.defaultProps = {
   betxBalance: undefined,
   getIdentityReq: undefined,
   setErrorMessageReq: undefined,
+  successMessage: undefined,
+  fetchBetHistoryReq: undefined,
 };
 
 const mapStateToProps = (state) => ({
@@ -553,6 +561,7 @@ const mapStateToProps = (state) => ({
   username: state.App.get('username'),
   eosBalance: state.App.get('eosBalance'),
   betxBalance: state.App.get('betxBalance'),
+  successMessage: state.App.get('successMessage'),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -560,6 +569,7 @@ const mapDispatchToProps = (dispatch) => ({
   initSocketConnectionReq: (obj) => dispatch(initSocketConnection(obj)),
   getIdentityReq: () => dispatch(getIdentity()),
   setErrorMessageReq: (message) => dispatch(setErrorMessage(message)),
+  fetchBetHistoryReq: () => dispatch(fetchBetHistory()),
 });
 
 // Wrap the component to inject dispatch and state into it
