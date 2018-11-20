@@ -3,7 +3,7 @@ import { all, take, takeEvery, put, fork, call, cancelled } from 'redux-saga/eff
 import { eventChannel } from 'redux-saga';
 import actions from './actions';
 import ParseHelper from '../../helpers/parse';
-const { subscribe, unsubscribe, sendMessage } = ParseHelper;
+const { subscribe, unsubscribe, sendMessage, fetchChatHistory, handleParseError } = ParseHelper;
 
 function websocketInitChannel(payload) {
   return eventChannel((emitter) => {
@@ -44,8 +44,9 @@ function websocketInitChannel(payload) {
     const errorHandler = (errorEvent) => {
       console.log('errorHandler.event', errorEvent);
       // create an Error object and put it into the channel
-      emitter({type: MESSAGE_CHANNEL_ERROR,
-        error:new Error(errorEvent.reason)
+      emitter({
+        type: actions.MESSAGE_CHANNEL_ERROR,
+        error: new Error(errorEvent.reason),
       });
     };
 
@@ -73,7 +74,6 @@ function websocketInitChannel(payload) {
 
 export function* initLiveMessages(action) {
   try {
-
     const channel = yield call(websocketInitChannel, action.payload);
 
     while (true) {
@@ -93,17 +93,42 @@ export function* initLiveMessages(action) {
 }
 
 export function* sendMessageRequest(action) {
+
+  try{
+
   const res = yield call(sendMessage, action.payload);
-  console.log(res);
-  // yield put({
-  //   type:'',
-  //   value: res,
-  // });
+  
+  }
+  catch(e){
+    const message = handleParseError(e);
+    
+    console.error(message);
+  }
+}
+
+
+export function* fetchChatHistoryRequest() {
+  
+  try{
+    const response = yield call (fetchChatHistory);
+
+    yield put({
+      type: actions.FETCH_CHAT_HISTORY_RESULT,
+      data: response,
+    });
+  }
+  catch(e){
+    const message = handleParseError(e);
+
+    console.error(message);
+  }
+
 }
 
 export default function* topicSaga() {
   yield all([
     takeEvery(actions.INIT_SOCKET_CONNECTION_MESSAGE, initLiveMessages),
     takeEvery(actions.SEND_MESSAGE, sendMessageRequest),
+    takeEvery(actions.FETCH_CHAT_HISTORY, fetchChatHistoryRequest),
   ]);
 }

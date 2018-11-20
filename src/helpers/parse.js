@@ -1,9 +1,8 @@
-// import firebase from '../../thirdparty/firebase/packages/firebase/dist/index.esm';
-// import firebase from '../../thirdparty/firebase-js-sdk/packages/firebase/src/index.ts';
 import Parse from 'parse';
 import _ from 'lodash';
+import Eos from 'eosjs';
 
-import { parseConfig } from '../settings';
+import { appConfig, parseConfig } from '../settings';
 
 Parse.initialize(parseConfig.appId, parseConfig.javascriptKey, '0x2d2e81f6db11144f9a51c1bac41b4ebffecec391c19d74322b2a8917da357208');
 Parse.serverURL = parseConfig.serverURL;
@@ -27,11 +26,43 @@ class ParseHelper {
     this.getCurrentUser = this.getCurrentUser.bind(this);
     this.getProjectData = this.getProjectData.bind(this);
     this.getProjectList = this.getProjectList.bind(this);
-    // this.isAuthenticated = this.isAuthenticated.bind(this);
-    // this.database = this.isValid && firebase.firestore();
     this.sendEmailVerification = this.sendEmailVerification.bind(this);
     this.sendMessage = this.sendMessage.bind(this);
-    // this.checkAuthState = this.checkAuthState.bind(this);
+    this.fetchBetHistory = this.fetchBetHistory.bind(this);
+    this.fetchChatHistory = this.fetchChatHistory.bind(this);
+    this.handleParseError = this.handleParseError.bind(this);
+    this.parseBetReceipt = this.parseBetReceipt.bind(this);
+  }
+
+  /**
+   * Prepare receipt data for view to render
+   * @param  {[type]} parseObject [description]
+   * @return {[type]}             [description]
+   */
+  parseBetReceipt(parseObject) {
+  // Skip any bet that doesn't have a receipt object
+    if (_.isUndefined(parseObject.get('receipt'))) {
+      return undefined;
+    }
+
+    const payoutAsset = Eos.modules.format.parseAsset(parseObject.get('payout'));
+    const resolveTrxId = parseObject.get("receipt") && parseObject.get("receipt").trx_id;
+
+    return {
+      id: parseObject.id,
+      time: parseObject.get('resolved_block_time'),
+      bettor: parseObject.get('bettor'),
+      rollUnder: parseObject.get('roll_under'),
+      betAmount: parseObject.get('bet_amt'),
+      roll: parseObject.get('roll'),
+      payout: _.toNumber(payoutAsset.amount) === 0 ? "": parseObject.get('payout'),
+      payoutAsset: {
+        amount: _.toNumber(payoutAsset.amount),
+        symbol: payoutAsset.symbol,
+      },
+      resolvedBlockNum: parseObject.get('resolved_block_num'),
+      trxUrl: `https://eostracker.io/transactions/${parseObject.get('resolved_block_num')}/${resolveTrxId}`,
+    };
   }
 
 
@@ -202,6 +233,41 @@ class ParseHelper {
     // bet.set('payoutOnWin', betObj.payout);
 
     return bet.save({}, { useMasterKey: true });
+  }
+
+  fetchBetHistory() {
+    const { parseBetReceipt } = this;
+    const query = new Parse.Query(ParseBet);
+    query.exists('receipt');
+    query.limit(appConfig.betHistoryMemorySize);
+    query.ascending('resolved_block_num');
+
+    return query.find().then((results) => Promise.resolve(_.filter(
+      _.map(results, (entry) => parseBetReceipt(entry)),
+      (o) => !_.isUndefined(o)
+    )));
+  }
+
+  fetchChatHistory() {
+    const query = new Parse.Query(ParseMessage);
+    query.ascending("createdAt");
+    query.limit(appConfig.chatHistoryMemorySize);
+
+    return query.find();
+  }
+
+  handleParseError(err) {
+    const message = 'error.parse.default';
+
+    switch (err.code) {
+      case Parse.Error.INVALID_SESSION_TOKEN:
+        return Parse.User.logOut();
+        // Other Parse API errors that you want to explicitly handle
+      default:
+        break;
+    }
+
+    return message;
   }
 }
 

@@ -3,7 +3,9 @@ import { all, take, takeEvery, put, fork, call, cancelled } from 'redux-saga/eff
 import { eventChannel } from 'redux-saga';
 import actions from './actions';
 import ParseHelper from '../../helpers/parse';
-const { subscribe, unsubscribe, sendBet } = ParseHelper;
+const {
+  subscribe, unsubscribe, sendBet, fetchBetHistory, handleParseError,
+} = ParseHelper;
 
 
 function websocketInitChannel(payload) {
@@ -46,8 +48,8 @@ function websocketInitChannel(payload) {
       console.log('errorHandler.event', errorEvent);
       // create an Error object and put it into the channel
       emitter({
-        type: BET_CHANNEL_ERROR,
-        error:new Error(errorEvent.reason),
+        type: actions.BET_CHANNEL_ERROR,
+        error: new Error(errorEvent.reason),
       });
     };
 
@@ -74,11 +76,9 @@ function websocketInitChannel(payload) {
 }
 
 export function* initLiveMessages(action) {
-
   try {
-
     const channel = yield call(websocketInitChannel, action.payload);
-    
+
     while (true) {
       const payload = yield take(channel);
 
@@ -95,6 +95,25 @@ export function* initLiveMessages(action) {
   }
 }
 
+export function* fetchBetHistoryRequest() {
+  try {
+    const response = yield call(fetchBetHistory);
+
+    yield put({
+      type: actions.FETCH_BET_HISTORY_RESULT,
+      value: response,
+    });
+  } catch (err) {
+    console.log(err);
+    const message = yield call(handleParseError, err);
+
+    yield put({
+      type: actions.SET_ERROR_MESSAGE,
+      message,
+    });
+  }
+}
+
 export function* sendBetRequest(action) {
   const res = yield call(sendBet, action.payload);
   console.log(res);
@@ -107,6 +126,7 @@ export function* sendBetRequest(action) {
 export default function* topicSaga() {
   yield all([
     takeEvery(actions.INIT_SOCKET_CONNECTION_BET, initLiveMessages),
+    takeEvery(actions.FETCH_BET_HISTORY, fetchBetHistoryRequest),
     takeEvery(actions.SEND_BET, sendBetRequest),
   ]);
 }

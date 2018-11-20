@@ -11,6 +11,8 @@ const actions = {
   MESSAGE_OBJECT_ENTERED: 'MESSAGE_OBJECT_ENTERED',
   MESSAGE_OBJECT_LEFT: 'MESSAGE_OBJECT_LET',
   SEND_MESSAGE: 'SEND_MESSAGE',
+  FETCH_CHAT_HISTORY: 'FETCH_CHAT_HISTORY',
+  FETCH_CHAT_HISTORY_RESULT: 'FETCH_CHAT_HISTORY_RESULT',
   messageType: {
     system: 'system',
     user: 'user',
@@ -26,6 +28,9 @@ const actions = {
     type: actions.SEND_MESSAGE,
     payload: obj,
   }),
+  fetchChatHistory: ()=>({
+    type: actions.FETCH_CHAT_HISTORY,
+  })
 };
 
 export default actions;

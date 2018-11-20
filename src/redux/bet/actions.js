@@ -2,6 +2,8 @@ const actions = {
   SEND_BET: 'SEND_BET',
   INIT_SOCKET_CONNECTION_BET: 'INIT_SOCKET_CONNECTION_BET',
   CLOSE_SOCKET_CONNECTION_BET: 'CLOSE_SOCKET_CONNECTION_BET',
+  FETCH_BET_HISTORY: 'FETCH_BET_HISTORY',
+  FETCH_BET_HISTORY_RESULT: 'FETCH_BET_HISTORY_RESULT',
   BET_SUBSCRIBED: 'BET_SUBSCRIBED',
   BET_UNSUBSCRIBED: 'BET_UNSUBSCRIBED',
   BET_CHANNEL_UPDATE: 'BET_CHANNEL_UPDATE',
@@ -18,6 +20,9 @@ const actions = {
   sendTransaction: (obj) => ({
     type: actions.SEND_BET,
     payload: obj,
+  }),
+  fetchBetHistory: () => ({
+    type: actions.FETCH_BET_HISTORY,
   }),
 };
 
