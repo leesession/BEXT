@@ -38,24 +38,27 @@ function* getIdentityRequest(action) {
 
     yield put({
       type: actions.SET_ERROR_MESSAGE,
-      message, 
+      message,
     });
   }
 }
 
 function* transferRequest(action) {
-
   const params = action.payload;
 
   try {
     const response = yield call(transfer, params);
-    yield put({ type: actions.TRANSFER_RESULT, value: response });
+    console.log('saga.transferRequest.response', response.transaction_id);
+    yield put({
+      type: actions.SUCCESS_MESSAGE,
+      message: 'message.success.bet',
+    });
   } catch (err) {
     const message = yield call(handleScatterError, err);
 
     yield put({
       type: actions.SET_ERROR_MESSAGE,
-      message, 
+      message,
     });
   }
 }

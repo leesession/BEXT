@@ -15,6 +15,7 @@ const initState = new Map({
   username: undefined,
   eosBalance: undefined,
   betxBalance: undefined,
+  successMessage: undefined,
   errorMessage: undefined,
   ref: undefined,
 });
@@ -38,6 +39,8 @@ export default function appReducer(state = initState, action) {
       return state.set('betxBalance', action.value);
     case actions.TRANSER_RESULT:
       return state.set('transferResult', action.value);
+    case actions.SUCCESS_MESSAGE:
+      return state.set('successMessage', action.message);
     case actions.ERROR_MESSAGE:
       return state.set('errorMessage', action.message);
     case actions.CLEAR_ERROR_MESSAGE:

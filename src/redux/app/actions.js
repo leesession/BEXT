@@ -18,6 +18,7 @@ const actions = {
   TRANSFER_REQUEST: 'TRANSFER_REQUEST',
   TRANSFER_RESULT: 'TRANSFER_RESULT',
   SET_ERROR_MESSAGE: 'SET_ERROR_MESSAGE',
+  SUCCESS_MESSAGE: 'SUCCESS_MESSAGE',
   ERROR_MESSAGE: 'ERROR_MESSAGE',
   CLEAR_ERROR_MESSAGE: 'CLEAR_ERROR_MESSAGE',
   SET_REF: 'SET_REF',
@@ -41,8 +42,8 @@ const actions = {
   setErrorMessage: (message) => ({
     type: actions.SET_ERROR_MESSAGE,
     message,
-  })
-  setRef: (params)=>({
+  }),
+  setRef: (params) => ({
     type: actions.SET_REF,
     ref: params,
   }),
