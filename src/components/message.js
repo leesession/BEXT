@@ -1,5 +1,5 @@
 /* eslint no-bitwise: 0 */
-
+import _ from "lodash";
 import React, { PropTypes } from 'react';
 
 const COLORS = [
@@ -9,6 +9,11 @@ const COLORS = [
 ];
 
 const getUsernameColor = (username) => {
+
+  if(_.isUndefined(username)){
+    return COLORS[0];
+  }
+
   // Compute hash code
   let hash = 7;
   for (let i = 0; i < username.length; i++) {
