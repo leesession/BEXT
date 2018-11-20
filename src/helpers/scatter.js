@@ -1,5 +1,6 @@
 import ScatterJS from 'scatterjs-core';
 import ScatterEOS from 'scatterjs-plugin-eosjs';
+import _ from 'lodash';
 import Eos from 'eosjs';
 const EosApi = require('eosjs-api');
 
@@ -46,7 +47,7 @@ class ScatterHelper {
 
     this.env = 'mainnet';
     this.network = eosSettings[this.env].network;
-    console.log("endpoint is", `${this.network.protocol}://${this.network.host}:${this.network.port}`);
+    console.log('endpoint is', `${this.network.protocol}://${this.network.host}:${this.network.port}`);
     this.readEos = EosApi({ httpEndpoint: `${this.network.protocol}://${this.network.host}:${this.network.port}` });
     this.Eos = Eos;
 
@@ -121,14 +122,14 @@ class ScatterHelper {
     const amount = _.floor(betAmount, 4).toFixed(4);
 
     // Construct json params
-    const options = {
+    const data = {
       from: bettor,
       to: BETX_DICE_CONTRACT,
       quantity: `${amount} ${betAsset}`,
       memo: `${rollUnder}-${referrer}-${seed}`,
     };
 
-    console.log('transfer.options', options);
+    console.log('transfer.data', data);
 
     if (_.isUndefined(api)) {
       return Promise.reject('error.scatter.notAuthenticated');
@@ -137,10 +138,8 @@ class ScatterHelper {
     // Never assume the account's permission/authority. Always take it from the returned account.
     const transactionOptions = { authorization: [`${account.name}@${account.authority}`] };
 
-    return api.transfer(options.from, options.to, options.quantity, options.memo, transactionOptions).then((trx) => {
-      // That's it!
-      console.log(`Transaction ID: ${trx.transaction_id}`);
-    });
+    return api.transaction(BETX_DICE_CONTRACT, (contract) =>
+      contract.transfer(data, transactionOptions));
   }
 
   getEOSBalance(name) {
