@@ -122,6 +122,8 @@
   "stake.action.redemption":"赎回",
   "stake.available":"Available",
 
+  "message.success.bet":"Successfully sent bet.",
+
   "error.scatter.locked":"Scatter is locked. Please unlock it and refresh page.",
   "error.scatter.rejected":"Signature request is rejected in Scatter.",
   "error.page.usernamenotfound":"EOS username not found.",

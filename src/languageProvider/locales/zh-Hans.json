@@ -121,6 +121,7 @@
   "stake.action.redemption":"赎回",
   "stake.available":"可用",
 
+  "message.success.bet":"下注成功！",
   "error.scatter.locked":"Scatter未解锁，请先解锁并刷新页面重试",
   "error.scatter.rejected":"Scatter的签名请求被拒绝",
   "error.page.usernamenotfound":"EOS用户名不存在",
