@@ -1,5 +1,6 @@
 build
 yarn-error.log
+package-lock.json
 nohup.out
 firebase.json
 nohup.out
