@@ -20,14 +20,21 @@ const siteConfig = {
   bbs: 'https://bbs.betx.com/',
 };
 
-const appConfig= {
+const appConfig = {
   firstBetReward: 500,
   betHistoryMemorySize: 500,
   betHistoryTableSize: 20,
   hugeBetAmount: 1000,
-
   chatHistoryMemorySize: 500,
-}
+
+  eosNetwork: {
+    blockchain: 'eos',
+    protocol: 'https',
+    host: 'eos.greymass.com',
+    port: 443,
+    chainId: 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906',
+  },
+};
 
 const parseConfig = {
   serverURL: 'http://localhost:1338/parse',
@@ -42,7 +49,7 @@ const themeConfig = {
   theme: 'themedefault',
 };
 
-const language = (window.navigator.userLanguage || window.navigator.language)==='zh-CN' ? 'chinese' : 'english';
+const language = (window.navigator.userLanguage || window.navigator.language) === 'zh-CN' ? 'chinese' : 'english';
 
 const infuraConfig = {
   wssEndpoint: 'wss://rinkeby.infura.io/ws',

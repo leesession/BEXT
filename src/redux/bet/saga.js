@@ -15,37 +15,36 @@ function websocketInitChannel(payload) {
     const subscribeHandler = () => emitter({ type: actions.BET_SUBSCRIBED });
 
     const updateHandler = (object) => {
-      console.log('object updated', object);
+      // console.log('object updated', object);
       return emitter({ type: actions.BET_OBJECT_UPDATED, data: object });
     };
 
     const createHandler = (object) => {
-      console.log('object created', object);
+      // console.log('object created', object);
       return emitter({ type: actions.BET_OBJECT_CREATED, data: object });
     };
 
     const deleteHandler = (object) => {
-      console.log('object deleted', object);
+      // console.log('object deleted', object);
       return emitter({ type: actions.BET_OBJECT_DELETED, data: object });
     };
 
     const enterHandler = (object) => {
-      console.log('object entered', object);
+      // console.log('object entered', object);
       return emitter({ type: actions.BET_OBJECT_ENTERED, data: object });
     };
 
     const leaveHandler = (object) => {
-      console.log('object left', object);
+      // console.log('object left', object);
       return emitter({ type: actions.BET_OBJECT_LEFT, data: object });
     };
 
     const unsubscribeHandler = () => {
-      console.log('subscription close');
+      // console.log('subscription close');
       return emitter({ type: actions.BET_UNSUBSCRIBED });
     };
 
     const errorHandler = (errorEvent) => {
-      console.log('errorHandler.event', errorEvent);
       // create an Error object and put it into the channel
       emitter({
         type: actions.BET_CHANNEL_ERROR,
@@ -64,7 +63,6 @@ function websocketInitChannel(payload) {
     // the subscriber must return an unsubscribe function
     // this will be invoked when the saga calls `channel.close` method
     const unsubscribeChannel = () => {
-      console.log('eventChannel return gets called');
       // Close the connection
       unsubscribe(subscription);
       return emitter({ type: actions.BET_UNSUBSCRIBED });
@@ -82,7 +80,6 @@ export function* initLiveMessages(action) {
     while (true) {
       const payload = yield take(channel);
 
-      console.log('bet.sata.initLiveMessages.take(channel)', payload);
       yield put(payload);
     }
   } catch (err) {
@@ -104,7 +101,6 @@ export function* fetchBetHistoryRequest() {
       value: response,
     });
   } catch (err) {
-    console.log(err);
     const message = yield call(handleParseError, err);
 
     yield put({
@@ -116,7 +112,6 @@ export function* fetchBetHistoryRequest() {
 
 export function* sendBetRequest(action) {
   const res = yield call(sendBet, action.payload);
-  console.log(res);
   // yield put({
   //   type:'',
   //   value: res,

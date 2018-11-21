@@ -3,51 +3,29 @@ import ScatterEOS from 'scatterjs-plugin-eosjs';
 import _ from 'lodash';
 import Eos from 'eosjs';
 const EosApi = require('eosjs-api');
+import {appConfig} from '../settings';
 
 // Don't forget to tell ScatterJS which plugins you are using.
 ScatterJS.plugins(new ScatterEOS());
 
-const eosSettings = {
-  // testnet: {
-  //   network: {
-  //     blockchain: 'eos',
-  //     protocol: 'https',
-  //     host: 'api.jungle.alohaeos.com',
-  //     port: 443,
-  //     chainId: '038f4b0fc8ff18a4f0842a8f0564611f6e96e8535901dd45e43ac8691a1c4dca',
-  //   },
-  //   endpoint: 'https://api.jungle.alohaeos.com:443',
-  // },
-  mainnet: {
-    network: {
-      blockchain: 'eos',
-      protocol: 'https',
-      host: 'eos.greymass.com',
-      port: 443,
-      chainId: 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906',
-    },
-    // endpoint: 'https://api.eosnewyork.io:443',
-  },
-};
-
 const BETX_TOKEN_CONTRACT = 'thebetxtoken';
 const BETX_DICE_CONTRACT = 'thebetxowner';
 
-const network = {
-  blockchain: 'eos',
-  protocol: 'https',
-  host: 'nodes.get-scatter.com',
-  port: 443,
-  chainId: 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906',
-};
+// const network = {
+//   blockchain: 'eos',
+//   protocol: 'https',
+//   host: 'nodes.get-scatter.com',
+//   port: 443,
+//   chainId: 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906',
+// };
 
 class ScatterHelper {
   constructor() {
-    console.log('ScatterHelper.constructor');
 
     this.env = 'mainnet';
-    this.network = eosSettings[this.env].network;
-    console.log('endpoint is', `${this.network.protocol}://${this.network.host}:${this.network.port}`);
+    this.network = appConfig.eosNetwork;
+
+    console.log("network", this.network);
     this.readEos = EosApi({ httpEndpoint: `${this.network.protocol}://${this.network.host}:${this.network.port}` });
     this.Eos = Eos;
 
@@ -61,13 +39,12 @@ class ScatterHelper {
     this.handleScatterError = this.handleScatterError.bind(this);
   }
 
-  static async createInstance() {
-    const scatterHelper = new ScatterHelper();
-    await scatterHelper.connect();
+  // static async createInstance() {
+  //   const scatterHelper = new ScatterHelper();
+  //   await scatterHelper.connect();
 
-    console.log('ScatterHelper.createInstance.scatter', scatterHelper.scatter);
-    return scatterHelper;
-  }
+  //   return scatterHelper;
+  // }
 
   async connect() {
     const that = this;
@@ -129,8 +106,6 @@ class ScatterHelper {
       memo: `${rollUnder}-${referrer}-${seed}`,
     };
 
-    console.log('transfer.data', data);
-
     if (_.isUndefined(api)) {
       return Promise.reject('error.scatter.notAuthenticated');
     }
@@ -146,7 +121,6 @@ class ScatterHelper {
     const { readEos, Eos } = this;
     return readEos.getCurrencyBalance('eosio.token', name, 'EOS').then((result) => {
       if (!_.isEmpty(result)) {
-        console.log('getEOSBalance.result', result);
 
         const balObj = Eos.modules.format.parseAsset(result[0]);
         if (balObj && balObj.amount) {
@@ -162,7 +136,6 @@ class ScatterHelper {
     const { readEos, Eos } = this;
     return readEos.getCurrencyBalance(BETX_TOKEN_CONTRACT, name, 'BETX').then((result) => {
       if (!_.isEmpty(result)) {
-        console.log('getBETXBalance.result', result);
 
         const balObj = Eos.modules.format.parseAsset(result[0]);
         if (balObj && balObj.amount) {
