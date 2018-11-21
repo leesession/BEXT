@@ -1,9 +1,9 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import _ from 'lodash';
 import { injectIntl, intlShape } from 'react-intl';
-import {CopyToClipboard} from 'react-copy-to-clipboard';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { Layout, Menu, Icon, message, Button, Input, Row, Col, Tag, Modal } from 'antd';
 import { cloudinaryConfig, CloudinaryImage } from '../components/react-cloudinary';
@@ -33,7 +33,7 @@ const menuItems = [
   // { path: '/contact', id: 'topbar.contact' },
   { url: 'https://res.cloudinary.com/forgelab-io/image/upload/v1542534137/BETX-whitepaper-1.0.pdf', id: 'topbar.whitepaper' },
   // Referrals
-  { id:'topbar.referrals'}
+  { id: 'topbar.referrals' },
 ];
 
 const langSettings = [
@@ -64,8 +64,6 @@ class Topbar extends React.PureComponent {
     this.toggleCollapsed = this.toggleCollapsed.bind(this);
     this.onLanguageDropdownClicked = this.onLanguageDropdownClicked.bind(this);
     this.onLoginClicked = this.onLoginClicked.bind(this);
-    
-    this.refLoc = this.props.location.search && parseQuery(this.props.location.search).ref;
   }
 
   componentWillMount() {
@@ -77,8 +75,8 @@ class Topbar extends React.PureComponent {
     const { intl } = this.props;
     const { isLoggedIn } = this.state;
 
-    if(username && !isLoggedIn){
-      message.success(intl.formatMessage({ id: "topbar.message.welcome" }, {name:username}));
+    if (username && !isLoggedIn) {
+      message.success(intl.formatMessage({ id: 'topbar.message.welcome' }, { name: username }));
 
       // Make sure login in success only show up once
       this.setState({
@@ -101,25 +99,27 @@ class Topbar extends React.PureComponent {
     }
   }
 
-
   componentDidMount() {
+    const { location: { search }, setRefAction } = this.props;
+
     // preload language flag img
     langSettings.forEach((item) => {
       document.createElement('img').src = item.imgSrc;
     });
-    
-    if(this.refLoc) this.props.setRefAction(this.refLoc);
-    
+
+    const queryParams = parseQuery(search);
+
+    if (queryParams && queryParams.ref) {
+      setRefAction(queryParams.ref);
+    }
   }
 
   onLanguageDropdownClicked({ key }) {
     const { changeLanguage } = this.props;
-    console.log('onLanguageDropdownClicked.key', key);
     changeLanguage(key);
   }
 
   toggleCollapsed() {
-    console.log('toggle', this.state.collapsed);
 
     this.setState({
       collapsed: !this.state.collapsed,
@@ -131,7 +131,7 @@ class Topbar extends React.PureComponent {
 
     getIdentityReq();
   }
-  
+
   setRefModalVisible(refModalVisible) {
     this.setState({ refModalVisible });
   }
@@ -142,29 +142,29 @@ class Topbar extends React.PureComponent {
       collapsed,
     } = this.state;
 
-    const { locale, username } = this.props;
+    const { locale, username, ref, location:{href}} = this.props;
 
     const btnClassName = `triggerBtn  ${collapsed ? 'menuCollapsed' : 'menuOpen'}`;
     const menuClassName = `menu  ${collapsed ? 'menuCollapsed' : 'menuOpen'}`;
+    
+    const referralLink = `${location.protocol}//${location.hostname}?ref=${username || ""}`;
 
     const menuItemElements = _.map(menuItems, (item) => {
       if (item.url) {
         return <li className="hideOnMobile" key={item.id}><a href={item.url} target="_blank"><IntlMessages id={item.id} /></a></li>;
-      }else if(item.path){
+      } else if (item.path) {
         return <li className="hideOnMobile" key={item.id}><Link to={item.path} ><IntlMessages id={item.id} /></Link></li>;
-      }else{
-        return <li className="hideOnMobile" key={item.id}><a href={item.url} onClick={() => this.setRefModalVisible(true)} target="_blank"><IntlMessages id={item.id} /></a></li>;
       }
+      return <li className="hideOnMobile" key={item.id}><a href={item.url} onClick={() => this.setRefModalVisible(true)} target="_blank"><IntlMessages id={item.id} /></a></li>;
     });
 
     const menuItemElementsMobile = _.map(menuItems, (item) => {
       if (item.url) {
         return <li role="menuitem" key={item.id}><a href={item.url} target="_blank"><IntlMessages id={item.id} /></a></li>;
-      }else if(item.path){
-        return <li role="menuitem"  key={item.id}><Link to={item.path} ><IntlMessages id={item.id} /></Link></li>;
-      }else{
-        return <li role="menuitem"  key={item.id}><a href={item.url} onClick={() => this.setRefModalVisible(true)} target="_blank"><IntlMessages id={item.id} /></a></li>;
+      } else if (item.path) {
+        return <li role="menuitem" key={item.id}><Link to={item.path} ><IntlMessages id={item.id} /></Link></li>;
       }
+      return <li role="menuitem" key={item.id}><a href={item.url} onClick={() => this.setRefModalVisible(true)} target="_blank"><IntlMessages id={item.id} /></a></li>;
     });
 
     const languageDropdown = (
@@ -239,12 +239,12 @@ class Topbar extends React.PureComponent {
 
           </div>
         </Header>
-        
+
         {/* Ref Modal */}
         <Modal
-          className='refModal'
-          title={<IntlMessages id="topbar.copy.title"/>}
-          style={{ top: '40vh'}}
+          className="refModal"
+          title={<IntlMessages id="topbar.copy.title" />}
+          style={{ top: '40vh' }}
           centered
           visible={this.state.refModalVisible}
           onOk={() => this.setRefModalVisible(false)}
@@ -254,16 +254,19 @@ class Topbar extends React.PureComponent {
           }}
           footer={null}
         >
-          <Row type='flex' gutter={20} justify='center' align='middle'>
-             <Col span={18} style={{marginBottom:20}}><div className='refWraper'><span className='refHolder' ref='refText'>{this.props.location.href}</span></div></Col>
-             <Col span={6} style={{marginBottom:20}}>
-             <CopyToClipboard text={this.props.location.href} onCopy={()=>{
-               this.refs.refText.style.background = 'blue';
-             }}>
-             <Button style={{width:'100%', fontSize:'1.2em'}} size='large' type="primary"><IntlMessages id="topbar.copy"/></Button>
-             </CopyToClipboard>
-             </Col>
-             <Col span={24} style={{fontSize:'1.2em'}}><span><IntlMessages id="topbar.copy.description"/></span></Col>
+          <Row type="flex" gutter={20} justify="center" align="middle">
+            <Col span={18} style={{ marginBottom: 20 }}><div className="refWraper"><span className="refHolder" ref="refText">{referralLink}</span></div></Col>
+            <Col span={6} style={{ marginBottom: 20 }}>
+              <CopyToClipboard
+                text={referralLink}
+                onCopy={() => {
+                  this.refs.refText.style.background = 'blue';
+                }}
+              >
+                <Button style={{ width: '100%', fontSize: '1.2em' }} size="large" type="primary"><IntlMessages id="topbar.copy" /></Button>
+              </CopyToClipboard>
+            </Col>
+            <Col span={24} style={{ fontSize: '1.2em' }}><span><IntlMessages id="topbar.copy.description" /></span></Col>
           </Row>
         </Modal>
       </div>
@@ -280,6 +283,7 @@ Topbar.propTypes = {
   errorMessage: PropTypes.string,
   intl: intlShape.isRequired,
   location: PropTypes.object.isRequired,
+  ref: PropTypes.string,
 };
 
 Topbar.defaultProps = {
@@ -289,13 +293,14 @@ Topbar.defaultProps = {
   setRefAction: undefined,
   username: undefined,
   errorMessage: undefined,
-  location: window.location,
+  ref: undefined,
 };
 
 const mapStateToProps = (state) => ({
   locale: state.LanguageSwitcher.language.locale,
   username: state.App.get('username'),
   errorMessage: state.App.get('errorMessage'),
+  ref: state.App.get('ref'),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -304,4 +309,4 @@ const mapDispatchToProps = (dispatch) => ({
   getIdentityReq: () => dispatch(getIdentity()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(Topbar));
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(withRouter(Topbar)));

@@ -18,7 +18,7 @@ import betActions from '../redux/bet/actions';
 import appActions from '../redux/app/actions';
 import IntlMessages from '../components/utility/intlMessages';
 import { appConfig } from '../settings';
-
+import {getFixedFloat} from '../helpers/utility';
 cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
 const FormItem = Form.Item;
@@ -88,7 +88,6 @@ class DicePage extends React.Component {
       betxBalance: 0,
       username: this.defaultUsername,
       betAsset: 'EOS',
-      referrer: '',
       seed: '',
     };
 
@@ -163,7 +162,7 @@ class DicePage extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const {
-      username, eosBalance, betxBalance, successMessage,
+      username, eosBalance, betxBalance, successMessage, ref,
     } = nextProps;
     const { intl } = this.props;
 
@@ -221,7 +220,7 @@ class DicePage extends React.Component {
         }));
       }
 
-      const betAmount = value;
+      const betAmount = getFixedFloat(value,4);
       const payoutOnWin = calculatePayoutOnWin(betAmount, payout);
 
       this.setState({
@@ -236,7 +235,7 @@ class DicePage extends React.Component {
 
     const targetValue = e.currentTarget.getAttribute('data-value');
 
-    let newBetAmount = betAmount;
+    let newBetAmount = _.toNumber(betAmount);
 
     if (targetValue === MAX_BALANCE_STR) { // For "MAX" case
       newBetAmount = balance;
@@ -246,6 +245,7 @@ class DicePage extends React.Component {
       newBetAmount = _.max([betAmount * _.toNumber(targetValue), 0]);
     }
 
+    newBetAmount = getFixedFloat(newBetAmount,4);
     const payoutOnWin = calculatePayoutOnWin(newBetAmount, payout);
 
     this.setState({
@@ -276,9 +276,9 @@ class DicePage extends React.Component {
 
   onBetClicked() {
     const {
-      rollNumber, username, betAmount, betAsset, referrer, seed,
+      rollNumber, username, betAmount, betAsset, seed,
     } = this.state;
-    const { transferReq, setErrorMessageReq } = this.props;
+    const { transferReq, setErrorMessageReq, referrer } = this.props;
 
     if (username === this.defaultUsername) {
       setErrorMessageReq('error.page.usernamenotfound');
@@ -539,6 +539,7 @@ DicePage.propTypes = {
   intl: intlShape.isRequired,
   successMessage: PropTypes.string,
   fetchBetHistoryReq: PropTypes.func,
+  referrer: PropTypes.string,
 };
 
 DicePage.defaultProps = {
@@ -553,6 +554,7 @@ DicePage.defaultProps = {
   setErrorMessageReq: undefined,
   successMessage: undefined,
   fetchBetHistoryReq: undefined,
+  referrer: undefined,
 };
 
 const mapStateToProps = (state) => ({
@@ -562,6 +564,7 @@ const mapStateToProps = (state) => ({
   eosBalance: state.App.get('eosBalance'),
   betxBalance: state.App.get('betxBalance'),
   successMessage: state.App.get('successMessage'),
+  referrer: state.App.get('ref'),
 });
 
 const mapDispatchToProps = (dispatch) => ({
