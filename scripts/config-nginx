@@ -1,0 +1,64 @@
+# Default server configuration
+
+server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+
+        # SSL configuration
+        #
+        listen 443 ssl default_server;
+        listen [::]:443 ssl default_server;
+        #
+        # Note: You should disable gzip for SSL traffic.
+        # See: https://bugs.debian.org/773332
+        #
+        root /var/www/betx/build;
+
+        index index.html index.htm index.nginx-debian.html;
+
+        server_name betx.fun www.bex.fun;
+
+        ssl_session_timeout 5m;
+        ssl_protocols TLSv1 TLSv1.1 TLSv1.2 SSLv2 SSLv3;
+        ssl_prefer_server_ciphers on;
+        ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';
+
+        ssl_certificate /var/www/certs/betx.fun.chained.crt;
+        ssl_certificate_key /var/www/certs/betx.fun.key;
+
+        location /parse {
+
+                # prevents 502 bad gateway error
+                proxy_buffers 8 32k;
+                proxy_buffer_size 64k;
+
+                proxy_pass http://127.0.0.1:1338/parse;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                #proxy_set_header X-NginX-Proxy true;
+                proxy_set_header Host $http_host;
+                #proxy_ssl_session_reuse off;
+                #proxy_redirect off;
+
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection "Upgrade";
+
+        }
+
+        location / {
+
+                # DONT TURN ON THIS FUCKER
+                #proxy_set_header X-Real-IP  $remote_addr;
+
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header Host $host;
+                proxy_pass      http://localhost:5000/;
+        }
+
+        location ~ \.(txt) {
+                root /var/www/betx/build/public/files;
+        }
+
+}
+
