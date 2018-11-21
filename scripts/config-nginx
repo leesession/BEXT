@@ -57,7 +57,7 @@ server {
         }
 
         location ~ \.(txt) {
-                root /var/www/betx/build/public/files;
+                root /var/www/betx/build/files;
         }
 
 }
