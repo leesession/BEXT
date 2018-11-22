@@ -6,18 +6,20 @@ const siteConfig = {
   siteName: 'BETX',
   siteIcon: 'BETX-logo-trans',
   footerText: 'BETX ©2018 All rights reserved',
-  telegramANN: 'https://t.me/betxnotice',
+
+  twitter: 'https://twitter.com/therealbetx',
+  wechatQR: 'qr-wechat-betx',
   telegramZH: 'https://t.me/betxofficial',
   telegramEN: 'https://t.me/betxgroup',
+
+  telegramANN: 'https://t.me/betxnotice',
   contactEmail: 'operation@betx.com',
   website: 'www.betx.com',
   medium: 'https://medium.com/betx',
   facebook: 'https://www.facebook.com/betxofficial',
-  twitter: 'https://twitter.com/BmexOfficial',
   announcement: 'https://betxhelp.zendesk.com/hc/zh-cn/sections/360002532612-%E5%85%AC%E5%91%8A%E4%B8%AD%E5%BF%83',
   terms: 'https://betxhelp.zendesk.com/hc/zh-cn/articles/360018256011',
   ethscan: 'https://rinkeby.etherscan.io/',
-  bbs: 'https://bbs.betx.com/',
 };
 
 const appConfig = {

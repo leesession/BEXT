@@ -18,7 +18,7 @@ import betActions from '../redux/bet/actions';
 import appActions from '../redux/app/actions';
 import IntlMessages from '../components/utility/intlMessages';
 import { appConfig } from '../settings';
-import {getFixedFloat} from '../helpers/utility';
+import { getFixedFloat } from '../helpers/utility';
 cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
 const FormItem = Form.Item;
@@ -121,14 +121,14 @@ class DicePage extends React.Component {
       title: intl.formatMessage({ id: 'dice.history.form.payout' }),
       dataIndex: 'payout',
       key: 'payout',
-      render: (text) => text ? <span style={{ color: 'lightgreen' }}>{text}</span>: "",
+      render: (text) => text ? <span style={{ color: 'lightgreen' }}>{text}</span> : '',
     },
     {
       title: '',
       dataIndex: 'trxUrl',
       key: 'trxUrl',
       render: (text, row, index) => (
-        <a href={text} target="_blank" style={{color: "white"}}><Icon type="right" /></a>
+        <a href={text} target="_blank" style={{ color: 'white' }}><Icon type="right" /></a>
       ),
     },
     ];
@@ -220,7 +220,7 @@ class DicePage extends React.Component {
         }));
       }
 
-      const betAmount = getFixedFloat(value,4);
+      const betAmount = getFixedFloat(value, 4);
       const payoutOnWin = calculatePayoutOnWin(betAmount, payout);
 
       this.setState({
@@ -245,7 +245,7 @@ class DicePage extends React.Component {
       newBetAmount = _.max([betAmount * _.toNumber(targetValue), 0]);
     }
 
-    newBetAmount = getFixedFloat(newBetAmount,4);
+    newBetAmount = getFixedFloat(newBetAmount, 4);
     const payoutOnWin = calculatePayoutOnWin(newBetAmount, payout);
 
     this.setState({
@@ -332,136 +332,147 @@ class DicePage extends React.Component {
                 <section>
                   {/* <div className="horizontalWrapper"> */}
                   <div className="container">
-                    <div className="currency_change">
-                      <Row type="flex" justify="space-around" align="middle" style={{ height: '100%' }}>
-                        <Button size="large" className="bet_button active" type="default" data-value="EOS">EOS
-                        </Button>
-                        <Popover content={(<IntlMessages id="dice.alert.comingsoon" />)}>
-                          <Button size="large" className="bet_button" type="default" data-value="BETX" >BETX
-                          </Button>
-                        </Popover>
-                      </Row>
-                    </div>
-                    <div className="action holderBorder">
-                      <Row type="flex" gutter={0}>
-                        <Col span={8}>
-                          <div className="box">
-                            <span className="label"><IntlMessages id="dice.play.notice" />
-                            </span>
-                          </div>
-                        </Col>
-                        <Col span={8}>
-                          <div className="box">
-                            <span className="label"><IntlMessages id="dice.play.payout" />
-                            </span>
-                          </div>
 
-                        </Col>
-                        <Col span={8}>
-                          <div className="box">
-                            <span className="label"><IntlMessages id="dice.play.win" />
-                            </span>
-                          </div>
-                        </Col>
-                      </Row>
+                    <div className="holderBorder">
 
-                      <Row type="flex" gutter={0}>
-                        <Col span={8}>
-                          <div className="box">
-                            <div className="value">{rollNumber}↓
+                      <div className="container-top">
+                        <Row>
+                          <Col span={24}>
+                            <div className="currency-switch">
+                              <div className="currency-switch-btns">
+                                <Button size="large" className="bet_button active" type="default" data-value="EOS">EOS
+                                </Button>
+                                <Popover content={(<IntlMessages id="dice.alert.comingsoon" />)}>
+                                  <Button size="large" className="bet_button" type="default" data-value="BETX" >BETX
+                                  </Button>
+                                </Popover>
+                              </div>
                             </div>
-                          </div>
-                        </Col>
-                        <Col span={8}>
-                          <div className="box">
-                            <div className="value ratio">{_.floor(payout, 3)}X
-                            </div>
-                          </div>
+                          </Col>
+                        </Row>
+                      </div>
+                      <div className="action">
 
-                        </Col>
-                        <Col span={8}>
-                          <div className="box">
-                            <div className="value">{(_.floor(winChance, 4) * 100).toFixed(2)}%
+                        <Row type="flex" gutter={0}>
+                          <Col span={8}>
+                            <div className="box box-label">
+                              <div className="box-inner">
+                              <div className="label"><IntlMessages id="dice.play.notice" />
+                              </div>
+                              </div>
                             </div>
-                          </div>
-                        </Col>
-                      </Row>
-                      <Row type="flex" justify="center">
-                        <Col span={24}>
-                          <Slider getValue={this.getSliderValue} defaultValue={DEFAULT_ROLL_NUMBER} min={MIN_SELECT_ROLL_NUMBER} max={MAX_SELECT_ROLL_NUMBER} />
-                        </Col>
-                      </Row>
-                      <Row type="flex" gutter={36} justify="center" align="middle">
-
-                        <Col span={24}>
-                          <div className="inputgroup">
-                            <div className="inner">
-                              <Row type="flex" justify="center" align="middle">
-                                <Col span={8}>
-                                  <Row type="flex" justify="center" align="middle">
-                                    <Col span={16} style={{ transform: 'translateY(-15px)' }}>
-                                      <span className="label"><IntlMessages id="dice.play.amount" /></span>
-                                      <Input size="large" className="inputBorder" onChange={this.onInputNumberChange} value={betAmount} />
-                                    </Col>
-                                    <Col span={8}>
-                                      <Row type="flex" justify="center" align="middle">
-                                        <Col span={24}>
-                                          <button className="change_value_button" onClick={this.onBetAmountButtonClick} data-value="1">+</button>
-                                        </Col>
-                                        <Col span={24}>
-                                          <button className="change_value_button" onClick={this.onBetAmountButtonClick} data-value="-1">-</button>
-                                        </Col>
-                                      </Row>
-                                    </Col>
-                                  </Row>
-                                </Col>
-                                <Col span={8}>
-                                  <Row className="inputBorder" type="flex" justify="space-around" align="middle">
-                                    <Button size="large" className="bet_button" type="default" onClick={this.onBetAmountButtonClick} data-value="0.5" >1/2
-                                    </Button>
-                                    <Button size="large" className="bet_button" type="default" onClick={this.onBetAmountButtonClick} data-value="2" >2X
-                                    </Button>
-                                    <Button size="large" className="bet_button" type="default" onClick={this.onBetAmountButtonClick} data-value={MAX_BALANCE_STR} >{MAX_BALANCE_STR}
-                                    </Button>
-                                  </Row>
-                                </Col>
-                                <Col span={8} >
-                                  <Row type="flex" justify="center" align="middle">
-                                    <Col span={16} offset={8} style={{ transform: 'translateY(-15px)' }}>
-                                      <span className="label"><IntlMessages id="dice.reward.total" /></span>
-                                      <Input size="large" disabled className="inputBorder" value={_.floor(payoutOnWin, 4)} />
-                                    </Col>
-                                  </Row>
-                                </Col>
-                              </Row>
+                          </Col>
+                          <Col span={8}>
+                            <div className="box box-label">
+                              <div className="box-inner">
+                              <div className="label"><IntlMessages id="dice.play.payout" />
+                              </div>
+                              </div>
                             </div>
 
-                          </div>
-                        </Col>
-                      </Row>
-                      <Row type="flex" gutter={36}>
+                          </Col>
+                          <Col span={8}>
+                            <div className="box box-label">
+                              <div className="box-inner">
+                              <div className="label"><IntlMessages id="dice.play.win" />
+                              </div>
+                              </div>
+                            </div>
+                          </Col>
+                          <Col span={8}>
+                            <div className="box box-value">
+                              <div className="box-inner">
+                              <div className="value">{rollNumber}↓
+                              </div>
+                              </div>
+                            </div>
+                          </Col>
+                          <Col span={8}>
+                            <div className="box box-value">
+                              <div className="box-inner">
+                              <div className="value ratio">{_.floor(payout, 3)}X
+                              </div>
+                              </div>
+                            </div>
 
-                        <Col span={24}>
-                          {/* <div className="timer">
-                      56
-                          </div> */}
-                        </Col>
-                      </Row>
-                      <Row type="flex" justify="center" align="middle" gutter={36}>
-                        <Col span={6}>
-                          <div className="bet_description"><IntlMessages id="dice.balance.eos" /></div>
-                          <div className="bet_value">{_.floor(eosBalance, 2)}<span className="highlight"> <IntlMessages id="dice.asset.eos" /></span></div>
-                        </Col>
-                        <Col span={12}>
+                          </Col>
+                          <Col span={8}>
+                            <div className="box box-value">
+                              <div className="box-inner">
+                              <div className="value">{(_.floor(winChance, 4) * 100).toFixed(2)}%
+                              </div>
+                              </div>
+                            </div>
+                          </Col>
+                        </Row>
+                        <Row type="flex" justify="center">
+                          <Col span={24}>
+                            <Slider getValue={this.getSliderValue} defaultValue={DEFAULT_ROLL_NUMBER} min={MIN_SELECT_ROLL_NUMBER} max={MAX_SELECT_ROLL_NUMBER} />
+                          </Col>
+                        </Row>
 
-                          {username === this.defaultUsername ? <Button className="btn-login" size="large" type="primary" onClick={this.onLogInClicked}><IntlMessages id="dice.button.login" /></Button> : <Button className="btn-login" size="large" type="primary" onClick={this.onBetClicked}><IntlMessages id="dice.button.bet" /></Button> }
-                          <div className="bet_description"><Icon type="question-circle" /><IntlMessages id="dice.reward.firstbet" /> {appConfig.firstBetReward} <IntlMessages id="dice.asset.betx" /></div>
-                        </Col>
-                        <Col span={6}>
-                          <div className="bet_description"><IntlMessages id="dice.balance.betx" /></div>
-                          <div className="bet_value">{_.floor(betxBalance, 2)}<span className="highlight"> <IntlMessages id="dice.asset.betx" /></span></div>
-                        </Col>
-                      </Row>
+                        <Row type="flex" justify="center" align="middle">
+                          <Col xs={{ span: 12, order: 2 }} lg={{ span: 8, order: 1 }} >
+
+                            <div className="box box-input">
+                              <div className="box-inner">
+                                <Row type="flex" justify="center" align="middle">
+                                  <Col span={16}>
+                                    <div className="box-input-inner">
+                                    <span className="label"><IntlMessages id="dice.play.amount" /></span>
+                                    <Input size="large" className="inputBorder" onChange={this.onInputNumberChange} value={betAmount} />
+                                  </div>
+                                  </Col>
+                                  <Col span={8}>
+                                        <button className="box-input-round-btn" onClick={this.onBetAmountButtonClick} data-value="1">+</button>
+                                        <button className="box-input-round-btn" onClick={this.onBetAmountButtonClick} data-value="-1">-</button>
+                                  </Col>
+
+                                </Row>
+                              </div>
+                            </div>
+                          </Col>
+                          <Col xs={{ span: 24, order: 1 }} lg={{ span: 8, order: 2 }} >
+                            <div className="box box-input">
+                              <div className="box-inner">
+
+                                <div className="inputBorder">
+                                  <Button size="large" className="box-input-button" type="default" onClick={this.onBetAmountButtonClick} data-value="0.5" >1/2
+                                  </Button>
+                                  <Button size="large" className="box-input-button" type="default" onClick={this.onBetAmountButtonClick} data-value="2" >2X
+                                  </Button>
+                                  <Button size="large" className="box-input-button" type="default" onClick={this.onBetAmountButtonClick} data-value={MAX_BALANCE_STR} >{MAX_BALANCE_STR}
+                                  </Button>
+                                </div>
+                              </div>
+                            </div>
+                          </Col>
+                          <Col xs={{ span: 12, order: 3 }} lg={{ span: 8, order: 3 }} >
+                            <div className="box box-input">
+                              <div className="box-inner">
+                                                              <div className="box-input-inner box-input-inner-reward">
+                                <span className="label"><IntlMessages id="dice.reward.total" /></span>
+                                <Input size="large" disabled className="inputBorder" value={_.floor(payoutOnWin, 4)} />
+                                </div>
+                              </div>
+                            </div>
+                          </Col>
+                        </Row>
+                        <Row type="flex" justify="center" align="middle" gutter={36}>
+                          <Col span={6}>
+                            <div className="bet_description"><IntlMessages id="dice.balance.eos" /></div>
+                            <div className="bet_value">{_.floor(eosBalance, 2)}<span className="highlight"> <IntlMessages id="dice.asset.eos" /></span></div>
+                          </Col>
+                          <Col span={12}>
+                            {username === this.defaultUsername ? <Button className="btn-login" size="large" type="primary" onClick={this.onLogInClicked}><IntlMessages id="dice.button.login" /></Button> : <Button className="btn-login" size="large" type="primary" onClick={this.onBetClicked}><IntlMessages id="dice.button.bet" /></Button> }
+                            <div className="bet_description"><Icon type="question-circle" /><IntlMessages id="dice.reward.firstbet" /> {appConfig.firstBetReward} <IntlMessages id="dice.asset.betx" /></div>
+                          </Col>
+                          <Col span={6}>
+                            <div className="bet_description"><IntlMessages id="dice.balance.betx" /></div>
+                            <div className="bet_value">{_.floor(betxBalance, 2)}<span className="highlight"> <IntlMessages id="dice.asset.betx" /></span></div>
+                          </Col>
+                        </Row>
+                      </div>
                     </div>
                   </div>
                   {/* </div> */}

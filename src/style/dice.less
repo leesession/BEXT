@@ -49,6 +49,7 @@
         margin: 50px 0px 80px;
         text-align: center;
         position: relative;
+        @containerPadding: 60px;
 
         .holderBorder {
             border-radius: 20px;
@@ -57,56 +58,232 @@
             overflow: hidden;
         }
 
-        .action {
-            color: white;
-            padding: 60px;
-            padding-top: 90px;
+        .container-top {
+            padding-right: @containerPadding;
 
             @media @phone {
-                padding: 10px;
+                padding-right: 8px;
             }
 
-            .label {
-                color: @fontColor;
-                text-transform: uppercase;
-                display: block;
-                overflow: hidden;
-                word-break: break-word;
-                font-weight: 500;
-                font-size: 1.5em;
+            .currency-switch {
+                padding-top: 15px;
+                padding-bottom: 15px;
+                position: relative;
 
-                @media @desktop {
-                    height: 32px;
+                .currency-switch-btns {
+                    float: right;
+                    width: 200px;
+                    height: 50px;
+                    border: 2px solid @borderColor;
+                    font-size: 2em;
+                    border-radius: 28px;
+                    overflow: hidden;
+
+                    @media @phone {
+                        width: 160px;
+                        height: 40px;
+                    }
+
+                    .bet_button {
+                        height: 100%;
+                        width: 50%;
+                        border-radius: 0;
+                        color: @fontColor;
+                        border:none;
+                        background-color: transparent;
+
+                        &:first-child {
+                            border-right: 2px solid @borderColor
+                        }
+
+                        &.active {
+                            color: @borderColor;
+                            background-color: #313131;
+                        }
+
+                    }
+
                 }
 
+            }
+
+        }
+
+        .action {
+            color: white;
+            padding: @containerPadding/2 @containerPadding @containerPadding @containerPadding;
+
+            @media @phone {
+                padding: 20px 12px;
             }
 
             .box {
-                border-radius: 10px;
-                margin: 20px 20px;
-                padding: 0px 20px 0 20px;
-
-                @media @desktop {
-                    margin: 0px 12px;
-                }
+                position: relative;
 
                 @media @phone {
                     padding: 0px;
                 }
 
+                @media @desktop {
+                    // margin: 0px 12px;
+                }
+
+                .box-inner {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    .transform(translate(-50%, -50%));
+                    width: 100%;
+                }
+
+                &.box-label {
+                    height: 60px;
+
+                    @media @phone {
+                        height: 60px;
+                    }
+
+                }
+
+                &.box-value {
+                    height: 100px;
+
+                    @media @phone {
+                        height: 40px;
+                    }
+
+                }
+
+                &.box-input {
+                    height: 100px;
+
+                    @media @phone {
+                        height: 80px;
+                        margin-left: 0px;
+                        margin-right: 0px;
+                    }
+
+                    .inputBorder {
+                        background-color: transparent;
+                        border: 2px solid @borderColor;
+                        color: white;
+                        border-radius: 10px;
+                        font-size: 2em;
+                        height: 60px;
+                        text-align: center;
+
+                        @media @phone{
+                            height: 45px;
+                        }
+
+                        .box-input-button {
+                            border: none;
+                            background-color: transparent;
+                            font-size: 1em;
+                            color: white;
+                            height: 56px;
+                            // minus border
+                            
+                            @media @phone{
+                                padding: 0px 24px;
+                                height: 41px;
+                            }
+                        }
+
+                    }
+
+                    .box-input-inner {
+                        position: relative;
+
+                        .label {
+                            position: absolute;
+                            top: -2em;
+
+                            @media @phone {
+
+                            }
+
+                        }
+
+                        &.box-input-inner-reward>*{
+                            
+                            width: 80%;
+                            @media @phone{
+                                width: 100%;
+                            }
+                        }
+                    }
+
+                    .box-input-round-btn {
+                        display: block;
+                        height: 40px;
+                        width: 40px;
+                        background-color: @borderColor;
+                        color: black;
+                        border: none;
+                        border-radius: 50%;
+                        font-size: 2em;
+                        font-weight: 100;
+                        cursor: pointer;
+
+                        .transition(all 0.2s ease-in);
+
+                        margin: 12px auto;
+
+                        @media @phone {
+                            height: 30px;
+                            width: 30px;
+                            margin: 5px auto;
+                        }
+
+                        &:focus {
+                            outline: none;
+                        }
+
+                        &:hover {
+                            background-color: @primaryColor;
+                        }
+
+                    }
+
+                }
+
+                .label {
+                    color: @fontColor;
+                    text-transform: uppercase;
+                    word-break: break-word;
+                    font-weight: 500;
+                    font-size: 1.5em;
+                    width: 100%;
+
+                    @media @desktop {
+                        // height: 32px;
+                    }
+
+                }
+
                 .value {
                     color: white;
                     font-size: 3em;
-                    margin-top: 20px;
-                }
 
-                .ratio {
-                    margin-top: 0;
-                    font-size: 5em;
-                    font-style: italic;
-                    font-weight: 600;
-                    color: @borderColor;
-                    filter: drop-shadow(3px 3px 0px #a27d34);
+                    @media @phone {
+                        padding: 10px 0px;
+                    }
+
+                    &.ratio {
+                        padding: 0px;
+                        font-size: 5em;
+                        font-style: italic;
+                        font-weight: 600;
+                        color: @borderColor;
+                        filter: drop-shadow(3px 3px 0px #a27d34);
+
+                        @media @phone {
+                            font-size: 4em;
+                        }
+
+                    }
+
                 }
 
             }
@@ -123,6 +300,10 @@
                 border: none;
                 border-radius: 20px;
                 margin-bottom: 12px;
+
+                @media @phone{
+                    width: 100%;
+                }
             }
 
             .bet_description {
@@ -144,47 +325,8 @@
 
             }
 
-            .inputBorder {
-                background-color: transparent;
-                border: 2px solid @borderColor;
-                color: white;
-                border-radius: 10px;
-                font-size: 2em;
-                height: 45px;
-                text-align: center;
-            }
-
             .ant-input-number-handler {
                 display: none;
-            }
-
-            .change_value_button {
-                height: 40px;
-                width: 40px;
-                background-color: @borderColor;
-                color: black;
-                border: none;
-                border-radius: 50%;
-                font-size: 2em;
-                font-weight: 100;
-                margin: 5px 0px;
-                transition: 0.3s all;
-                cursor: pointer;
-                transition: all 0.2s;
-
-                @media @phone {
-                    height: 30px;
-                    width: 30px;
-                }
-
-                &:focus {
-                    outline: none;
-                }
-
-                &:hover {
-                    background-color: @primaryColor;
-                }
-
             }
 
         }
@@ -236,45 +378,11 @@
 
         }
 
-        .bet_button {
-            border: none;
-            background-color: transparent;
-            font-size: 1em;
-            color: white;
-        }
-
         .history {
             text-align: center;
 
             .ant-tabs-nav-scroll {
                 text-align: center;
-            }
-
-        }
-
-        .currency_change {
-            width: 200px;
-            height: 50px;
-            border: 2px solid @borderColor;
-            font-size: 2em;
-            border-radius: 28px;
-            overflow: hidden;
-
-            .bet_button {
-                height: 100%;
-                width: 50%;
-                border-radius: 0;
-                color: @fontColor;
-
-                &:first-child {
-                    border-right: 2px solid @borderColor
-                }
-
-                &.active {
-                    color: @borderColor;
-                    background-color: #313131;
-                }
-
             }
 
         }
@@ -291,7 +399,7 @@
             ul {
                 display: block;
                 color: white;
-                height: 427px;
+                height: 467px;
                 margin: 0;
                 overflow-y: scroll;
                 border-radius: 10px;
