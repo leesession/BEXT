@@ -120,7 +120,6 @@ class Topbar extends React.PureComponent {
   }
 
   toggleCollapsed() {
-
     this.setState({
       collapsed: !this.state.collapsed,
     });
@@ -142,12 +141,14 @@ class Topbar extends React.PureComponent {
       collapsed,
     } = this.state;
 
-    const { locale, username, ref, location:{href}} = this.props;
+    const {
+      locale, username, ref, location: { href },
+    } = this.props;
 
     const btnClassName = `triggerBtn  ${collapsed ? 'menuCollapsed' : 'menuOpen'}`;
     const menuClassName = `menu  ${collapsed ? 'menuCollapsed' : 'menuOpen'}`;
-    
-    const referralLink = `${location.protocol}//${location.hostname}?ref=${username || ""}`;
+
+    const referralLink = `${location.protocol}//${location.hostname}?ref=${username || ''}`;
 
     const menuItemElements = _.map(menuItems, (item) => {
       if (item.url) {
@@ -170,7 +171,7 @@ class Topbar extends React.PureComponent {
     const languageDropdown = (
       <Menu onClick={this.onLanguageDropdownClicked} className="lang-menu">
         {_.map(langSettings, (lang) => (
-          <Menu.Item key={lang.key}>
+          <Menu.Item key={lang.key}  className="lang-menu-item">
             <img src={lang.imgSrc} alt="" />
             <span style={{ paddingLeft: '12px' }}>
               {lang.text}
@@ -219,13 +220,17 @@ class Topbar extends React.PureComponent {
                     {username ? (<div className="message"><IntlMessages id="topbar.welcome"></IntlMessages><span>, {username}</span></div>) : <Button type="primary" size="large" onClick={this.onLoginClicked}><IntlMessages id="topbar.login" />
                     </Button>}
                   </li>
-                  <li className="lang-menu-trigger" role="menuitem" key="lang">
-                    <Dropdown overlay={languageDropdown}>
-                      <div className="selected">
-                        <img src={_.find(langSettings, { locale }).imgSrc} alt="" />
-                        <i className="fa fa-angle-down" />
+                  <li role="menuitem" key="lang">
+                      <div className="lang-menu-trigger">
+                        <Dropdown overlay={languageDropdown}>
+                        <div className="selected">
+                          <img src={_.find(langSettings, { locale }).imgSrc} alt="" />
+                          <i className="fa fa-angle-down" />
+                        </div>
+                        </Dropdown>
+                        <div className="vertical-align-helper">
+                        </div>
                       </div>
-                    </Dropdown>
                   </li>
                 </ul>
               </div>
