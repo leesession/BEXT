@@ -42,7 +42,6 @@
   "dice.play.amount":"Play amount",
   "dice.alert.comingsoon":"Coming soon",
   "dice.send":"Send",
-  "dice.error.lessThanMinBet":"The minimum bet amount is {amount} {asset}.",
 
   "faq.title":"FAQ",
 
@@ -124,8 +123,12 @@
 
   "message.success.bet":"Successfully sent bet.",
 
+  "message.warn.lessThanMinBet":"The minimum bet amount is {amount} {asset}.",
+  "message.warn.greaterThanMaxBet":"The maximum bet amount is {amount} {asset}.",
+
   "error.scatter.locked":"Scatter is locked. Please unlock it and refresh page.",
   "error.scatter.rejected":"Signature request is rejected in Scatter.",
+  "error.scatter.notconnected":"Scatter is not connected yet.",
   "error.page.usernamenotfound":"EOS username not found.",
   "error.account.cpuInsufficient":"EOS account CPU time insufficient."
 }

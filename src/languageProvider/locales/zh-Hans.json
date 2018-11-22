@@ -42,7 +42,6 @@
   "dice.play.amount":"抵押金额",
   "dice.alert.comingsoon":"即将上线",
   "dice.send":"发送",
-  "dice.error.lessThanMinBet":"下注允许的最小值为 {amount} {asset}.",
 
   "faq.title":"常见问题",
   "faq.account.header":"账户",
@@ -122,8 +121,13 @@
   "stake.available":"可用",
 
   "message.success.bet":"下注成功！",
+
+  "message.warn.lessThanMinBet":"当前下注允许的最小值为 {amount} {asset}",
+  "message.warn.greaterThanMaxBet":"当前下注允许的最大值为 {amount} {asset}.",
+
   "error.scatter.locked":"Scatter未解锁，请先解锁并刷新页面重试",
   "error.scatter.rejected":"Scatter的签名请求被拒绝",
+  "error.scatter.notconnected":"Scatter还未成功连接",
   "error.page.usernamenotfound":"EOS用户名不存在",
   "error.account.cpuInsufficient":"EOS账户没有足够的CPU Time"
 }

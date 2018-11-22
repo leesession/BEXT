@@ -2,8 +2,8 @@ import ScatterJS from 'scatterjs-core';
 import ScatterEOS from 'scatterjs-plugin-eosjs';
 import _ from 'lodash';
 import Eos from 'eosjs';
+import { appConfig } from '../settings';
 const EosApi = require('eosjs-api');
-import {appConfig} from '../settings';
 
 // Don't forget to tell ScatterJS which plugins you are using.
 ScatterJS.plugins(new ScatterEOS());
@@ -12,17 +12,8 @@ const BETX_TOKEN_CONTRACT = 'thebetxtoken';
 const BETX_DICE_CONTRACT = 'thebetxowner';
 const EOS_TOKEN_CONTRACT = 'eosio.token';
 
-// const network = {
-//   blockchain: 'eos',
-//   protocol: 'https',
-//   host: 'nodes.get-scatter.com',
-//   port: 443,
-//   chainId: 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906',
-// };
-
 class ScatterHelper {
   constructor() {
-
     this.env = 'mainnet';
     this.network = appConfig.eosNetwork;
     this.readEos = EosApi({ httpEndpoint: `${this.network.protocol}://${this.network.host}:${this.network.port}` });
@@ -120,7 +111,6 @@ class ScatterHelper {
     const { readEos, Eos } = this;
     return readEos.getCurrencyBalance(EOS_TOKEN_CONTRACT, name, 'EOS').then((result) => {
       if (!_.isEmpty(result)) {
-
         const balObj = Eos.modules.format.parseAsset(result[0]);
         if (balObj && balObj.amount) {
           return Promise.resolve(_.toNumber(balObj.amount));
@@ -135,7 +125,6 @@ class ScatterHelper {
     const { readEos, Eos } = this;
     return readEos.getCurrencyBalance(BETX_TOKEN_CONTRACT, name, 'BETX').then((result) => {
       if (!_.isEmpty(result)) {
-
         const balObj = Eos.modules.format.parseAsset(result[0]);
         if (balObj && balObj.amount) {
           return Promise.resolve(_.toNumber(balObj.amount));
@@ -150,10 +139,17 @@ class ScatterHelper {
     let { message, code, error } = err;
 
     if (_.isString(err)) {
-      const errObject = JSON.parse(err);
+      // 1. JSON response case
+      try {
+        const errObject = JSON.parse(err);
 
-      if (errObject.error) {
-        code = errObject.error.code;
+        if (_.isObject(errObject) && errObject.error) {
+          code = errObject.error.code;
+        }
+      } catch (parseError) {
+        // 2. Plain str case such ass "error.scatter.blabla"
+        // TODO: need to format all errors in this function
+        return Promise.resolve(err);
       }
     }
 

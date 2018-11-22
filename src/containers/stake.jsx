@@ -47,7 +47,7 @@ class StakePage extends React.Component {
             </Col>
             <Col xs={24} md={20} xl={16}>
               <Row gutter={90}>
-                <Col span={12}className='border-right' style={{marginTop:30}}>
+                <Col xs={24} md={12} className='page-dividend border-right'>
                   <Row  gutter={50} type='flex' justify='center' align='middle'>
                     <Col span={12}>
                       <p className="page-sub-title"><IntlMessages id="stake.dividend.total" /></p>
@@ -64,8 +64,11 @@ class StakePage extends React.Component {
                     </Col>
                   </Row>
                   <Row >
-                    <Col span={24} style={{marginTop:30, marginBottom:40, paddingBottom:10}} className='border-bottom text-left'><span className='page-sub-title'><IntlMessages id="stake.dividend.my" /></span></Col>
-                    <Col span={24} className='panel-trans'>
+                    <Col span={24} className='border-bottom text-left'>
+                    <div className='page-sub-title'><IntlMessages id="stake.dividend.my" /></div>
+                    </Col>
+                    <Col span={24}>
+                    <div className="page-dividend-detail panel-trans">
                       <Row className='border-bottom'>
                         <Col span={12}>
                           <p className='page-third-title' style={{marginTop:19}}><IntlMessages id="stake.income.predicate" /></p>
@@ -82,11 +85,12 @@ class StakePage extends React.Component {
                         <Col className='page-third-title text-left' style={{color:"white"}} span={10}>0.00003156 EOS</Col>
                         <Col className='getStake-btn-holder' span={6}><Button className='getStake-btn'><IntlMessages id="stake.income.get"/></Button></Col>
                       </Row>
+                      </div>
                     </Col>
                   </Row>
                 </Col>
 
-                <Col span={12} style={{marginTop:30}}>
+                <Col xs={24} md={12} style={{marginTop:30}}>
                   <Row  gutter={50} type='flex' justify='center' align='middle'>
                     <Col span={12}>
                       <p className="page-sub-title"><IntlMessages id="stake.betx.pledge" /></p>
@@ -152,7 +156,9 @@ class StakePage extends React.Component {
             <Col xs={24} md={20} xl={16}>
               <div className="page-term">
                 <h2 className="page-sub-title"><IntlMessages id="stake.rule.title" /></h2>
-                <div className="page-term-body panel">{termText}</div>
+                <div className="page-term-body">
+                <div className="page-term-body-inner panel">{termText}</div>
+                </div>
               </div>
             </Col>
 

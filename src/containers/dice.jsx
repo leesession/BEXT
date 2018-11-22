@@ -31,11 +31,12 @@ const MAX_ROLL_NUMBER = 100;
 const MAX_SELECT_ROLL_NUMBER = 96;
 const DEFAULT_ROLL_NUMBER = 50;
 const DIVIDEND = 0.98;
-const MIN_INPUT_BET_AMOUNT = 0.1;
 const HUGE_BET_PAYOUT = 0.05;
 const TABLE_BET_HISTORY_SIZE = 20;
 
-const BET_AMOUNT_MAX_INPUT_LENGTH = 7;
+const MIN_INPUT_BET_AMOUNT = 0.1;
+const MAX_INPUT_BET_AMOUNT = 50;
+const MAX_FLOAT_DIGITS = 4;
 
 const {
   Link, Element, Events, scroll, scrollSpy,
@@ -55,6 +56,7 @@ function calculatePayout(winChance) {
 function calculatePayoutOnWin(betAmount, payout) {
   return betAmount * payout;
 }
+
 
 class DicePage extends React.Component {
   constructor(props) {
@@ -149,7 +151,7 @@ class DicePage extends React.Component {
       dataIndex: 'payout',
       key: 'payout',
       render: (text) => text ? <span style={{ color: 'lightgreen' }}>{text}</span> : '',
-    }
+    },
     ];
 
     this.onTabClicked = this.onTabClicked.bind(this);
@@ -158,6 +160,7 @@ class DicePage extends React.Component {
     this.getSliderValue = this.getSliderValue.bind(this);
     this.onBetClicked = this.onBetClicked.bind(this);
     this.onLogInClicked = this.onLogInClicked.bind(this);
+    this.formatBetAmountStr = this.formatBetAmountStr.bind(this);
   }
 
   componentWillMount() {
@@ -219,24 +222,23 @@ class DicePage extends React.Component {
   }
 
   onInputNumberChange(evt) {
-    const { payout, betAsset } = this.state;
+    const { payout, betAsset, balance } = this.state;
     const { intl } = this.props;
+    const { formatBetAmountStr } = this;
 
     const { value } = evt.target;
     const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
 
-    if(value === ''){
+    if (value === '' || value[value.length - 1] === '.') {
       this.setState({
         betAmount: value,
       });
-      
+
       return;
     }
 
     if ((!isNaN(value) && reg.test(value))) {
-
-
-      if (_.toNumber(value) !== 0 && _.toNumber(value) < MIN_INPUT_BET_AMOUNT) {
+      if (_.toNumber(value) < MIN_INPUT_BET_AMOUNT) {
         message.warning(intl.formatMessage({
           id: 'dice.error.lessThanMinBet',
         }, {
@@ -245,7 +247,7 @@ class DicePage extends React.Component {
         }));
       }
 
-      const betAmount = getFixedFloat(value, 4);
+      const betAmount = formatBetAmountStr(value);
       const payoutOnWin = calculatePayoutOnWin(betAmount, payout);
 
       this.setState({
@@ -257,12 +259,11 @@ class DicePage extends React.Component {
 
   onBetAmountButtonClick(e) {
     const { eosBalance: balance, betAmount, payout } = this.state;
+    const { formatBetAmountStr } = this;
 
     const targetValue = e.currentTarget.getAttribute('data-value');
 
     let newBetAmount = _.toNumber(betAmount);
-    const lowBound = 0.1;
-    const highBound = _.min([lowBound, balance]);
 
     if (targetValue === MAX_BALANCE_STR) { // For "MAX" case
       newBetAmount = balance;
@@ -272,7 +273,7 @@ class DicePage extends React.Component {
       newBetAmount = betAmount * _.toNumber(targetValue);
     }
 
-    newBetAmount = getFixedFloat(_.clamp(newBetAmount, lowBound, highBound), 4);
+    newBetAmount = formatBetAmountStr(newBetAmount);
     const payoutOnWin = calculatePayoutOnWin(newBetAmount, payout);
 
     this.setState({
@@ -322,13 +323,54 @@ class DicePage extends React.Component {
     });
   }
 
+  /**
+ * Restrict bet amount to be in certain range
+ * @return {[type]} [description]
+ */
+  formatBetAmountStr(betAmountStr) {
+    const { balance, betAsset } = this.state;
+    const { intl } = this.props;
+
+    const lowBound = MIN_INPUT_BET_AMOUNT;
+    const highBound = _.min([MAX_INPUT_BET_AMOUNT, balance]);
+    _.clamp(_.toNumber(betAmountStr), lowBound, highBound);
+
+    if (_.toNumber(betAmountStr) < lowBound) {
+      message.warning(intl.formatMessage({
+        id: 'message.warn.lessThanMinBet',
+      }, {
+        amount: MIN_INPUT_BET_AMOUNT,
+        asset: betAsset,
+      }));
+
+      return lowBound;
+    } else if (_.toNumber(betAmountStr) > highBound) {
+      message.warning(intl.formatMessage({
+        id: 'message.warn.greaterThanMaxBet',
+      }, {
+        amount: MAX_INPUT_BET_AMOUNT,
+        asset: betAsset,
+      }));
+      return highBound;
+    }
+
+    const parts = betAmountStr.split('.');
+
+    if (parts.length <= 1) {
+      return betAmountStr;
+    }
+    return `${parts[0]}.${parts[1].substring(0, MAX_FLOAT_DIGITS)}`;
+  }
+
   render() {
     const { desktopColumns, mobileColumns } = this;
     const {
       dataSource, betAmount, payoutOnWin, winChance, payout, rollNumber, eosBalance, betxBalance, username,
     } = this.state;
 
-    const { user, betHistory, locale, view } = this.props;
+    const {
+      user, betHistory, locale, view,
+    } = this.props;
 
     const momentLocale = (locale === 'en') ? 'en' : 'zh-cn';
 
@@ -350,7 +392,7 @@ class DicePage extends React.Component {
     const myBetData = _.slice(_.filter(rawBetData, (o) => o.bettor === username), 0, appConfig.betHistoryTableSize);
     const hugeBetData = _.slice(_.filter(rawBetData, (o) => o.payoutAsset.amount >= appConfig.hugeBetAmount), 0, appConfig.betHistoryTableSize);
 
-    const columns = view === "MobileView"? mobileColumns: desktopColumns;
+    const columns = view === 'MobileView' ? mobileColumns : desktopColumns;
 
     return (
       <div>
@@ -386,16 +428,16 @@ class DicePage extends React.Component {
                           <Col span={8}>
                             <div className="box box-label">
                               <div className="box-inner">
-                              <div className="label"><IntlMessages id="dice.play.notice" />
-                              </div>
+                                <div className="label"><IntlMessages id="dice.play.notice" />
+                                </div>
                               </div>
                             </div>
                           </Col>
                           <Col span={8}>
                             <div className="box box-label">
                               <div className="box-inner">
-                              <div className="label"><IntlMessages id="dice.play.payout" />
-                              </div>
+                                <div className="label"><IntlMessages id="dice.play.payout" />
+                                </div>
                               </div>
                             </div>
 
@@ -403,24 +445,24 @@ class DicePage extends React.Component {
                           <Col span={8}>
                             <div className="box box-label">
                               <div className="box-inner">
-                              <div className="label"><IntlMessages id="dice.play.win" />
-                              </div>
-                              </div>
-                            </div>
-                          </Col>
-                          <Col span={8}>
-                            <div className="box box-value">
-                              <div className="box-inner">
-                              <div className="value">{rollNumber}↓
-                              </div>
+                                <div className="label"><IntlMessages id="dice.play.win" />
+                                </div>
                               </div>
                             </div>
                           </Col>
                           <Col span={8}>
                             <div className="box box-value">
                               <div className="box-inner">
-                              <div className="value ratio">{_.floor(payout, 3)}X
+                                <div className="value">{rollNumber}↓
+                                </div>
                               </div>
+                            </div>
+                          </Col>
+                          <Col span={8}>
+                            <div className="box box-value">
+                              <div className="box-inner">
+                                <div className="value ratio">{_.floor(payout, 3)}X
+                                </div>
                               </div>
                             </div>
 
@@ -428,8 +470,8 @@ class DicePage extends React.Component {
                           <Col span={8}>
                             <div className="box box-value">
                               <div className="box-inner">
-                              <div className="value">{(_.floor(winChance, 4) * 100).toFixed(2)}%
-                              </div>
+                                <div className="value">{(_.floor(winChance, 4) * 100).toFixed(2)}%
+                                </div>
                               </div>
                             </div>
                           </Col>
@@ -448,13 +490,13 @@ class DicePage extends React.Component {
                                 <Row type="flex" justify="center" align="middle">
                                   <Col span={16}>
                                     <div className="box-input-inner">
-                                    <span className="label"><IntlMessages id="dice.play.amount" /></span>
-                                    <Input size="large" className="inputBorder" onChange={this.onInputNumberChange} value={betAmount} />
-                                  </div>
+                                      <span className="label"><IntlMessages id="dice.play.amount" /></span>
+                                      <Input size="large" className="inputBorder" onChange={this.onInputNumberChange} value={betAmount} />
+                                    </div>
                                   </Col>
                                   <Col span={8}>
-                                        <button className="box-input-round-btn" onClick={this.onBetAmountButtonClick} data-value="1">+</button>
-                                        <button className="box-input-round-btn" onClick={this.onBetAmountButtonClick} data-value="-1">-</button>
+                                    <button className="box-input-round-btn" onClick={this.onBetAmountButtonClick} data-value="1">+</button>
+                                    <button className="box-input-round-btn" onClick={this.onBetAmountButtonClick} data-value="-1">-</button>
                                   </Col>
 
                                 </Row>
@@ -466,19 +508,19 @@ class DicePage extends React.Component {
                               <div className="box-inner">
 
                                 <div className="inputBorder">
-                                <Row>
-                                  <Col span={8}>
-                                  <Button size="large" className="box-input-button" type="default" onClick={this.onBetAmountButtonClick} data-value="0.5" >1/2
-                                  </Button>
-                                  </Col>
-                                  <Col span={8}>
-                                  <Button size="large" className="box-input-button" type="default" onClick={this.onBetAmountButtonClick} data-value="2" >2X
-                                  </Button>
-                                  </Col>
-                                  <Col span={8}>
-                                  <Button size="large" className="box-input-button" type="default" onClick={this.onBetAmountButtonClick} data-value={MAX_BALANCE_STR} >{MAX_BALANCE_STR}
-                                  </Button>
-                                  </Col>
+                                  <Row>
+                                    <Col span={8}>
+                                      <Button size="large" className="box-input-button" type="default" onClick={this.onBetAmountButtonClick} data-value="0.5" >1/2
+                                      </Button>
+                                    </Col>
+                                    <Col span={8}>
+                                      <Button size="large" className="box-input-button" type="default" onClick={this.onBetAmountButtonClick} data-value="2" >2X
+                                      </Button>
+                                    </Col>
+                                    <Col span={8}>
+                                      <Button size="large" className="box-input-button" type="default" onClick={this.onBetAmountButtonClick} data-value={MAX_BALANCE_STR} >{MAX_BALANCE_STR}
+                                      </Button>
+                                    </Col>
                                   </Row>
                                 </div>
                               </div>
@@ -487,9 +529,9 @@ class DicePage extends React.Component {
                           <Col xs={{ span: 12, order: 3 }} lg={{ span: 8, order: 3 }} >
                             <div className="box box-input">
                               <div className="box-inner">
-                                                              <div className="box-input-inner box-input-inner-reward">
-                                <span className="label"><IntlMessages id="dice.reward.total" /></span>
-                                <Input size="large" disabled className="inputBorder" value={_.floor(payoutOnWin, 4)} />
+                                <div className="box-input-inner box-input-inner-reward">
+                                  <span className="label"><IntlMessages id="dice.reward.total" /></span>
+                                  <Input size="large" disabled className="inputBorder" value={_.floor(payoutOnWin, 4)} />
                                 </div>
                               </div>
                             </div>
@@ -614,7 +656,7 @@ const mapStateToProps = (state) => ({
   betxBalance: state.App.get('betxBalance'),
   successMessage: state.App.get('successMessage'),
   referrer: state.App.get('ref'),
-  view: state.App.get("view"),
+  view: state.App.get('view'),
 });
 
 const mapDispatchToProps = (dispatch) => ({
