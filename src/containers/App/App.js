@@ -50,6 +50,7 @@ export class App extends React.PureComponent {
     const currentAppLocale = AppLocale[locale];
     const appHeight = window.innerHeight;
 
+
     return (
       <LocaleProvider locale={currentAppLocale.antd}>
         <IntlProvider
@@ -108,7 +109,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  toggleAllReq: () => dispatch(toggleAll()),
+  toggleAllReq: (width, height) => dispatch(toggleAll(width, height)),
   toggleTopbarReq: (isTransparent) => dispatch(toggleTopbar(isTransparent)),
 });
 

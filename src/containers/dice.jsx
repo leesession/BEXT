@@ -35,7 +35,7 @@ const MIN_INPUT_BET_AMOUNT = 0.1;
 const HUGE_BET_PAYOUT = 0.05;
 const TABLE_BET_HISTORY_SIZE = 20;
 
-const BET_AMOUNT_STR_LENGTH = 6;
+const BET_AMOUNT_MAX_INPUT_LENGTH = 7;
 
 const {
   Link, Element, Events, scroll, scrollSpy,
@@ -226,16 +226,16 @@ class DicePage extends React.Component {
     const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
 
     if(value === ''){
-            this.setState({
+      this.setState({
         betAmount: value,
       });
-            return;
+      
+      return;
     }
 
     if ((!isNaN(value) && reg.test(value))) {
-      // this.props.onChange(value);
+      
 
-      console.log(_.toNumber(value));
       if (_.toNumber(value) !== 0 && _.toNumber(value) < MIN_INPUT_BET_AMOUNT) {
         message.warning(intl.formatMessage({
           id: 'dice.error.lessThanMinBet',
@@ -350,7 +350,6 @@ class DicePage extends React.Component {
     const myBetData = _.slice(_.filter(rawBetData, (o) => o.bettor === username), 0, appConfig.betHistoryTableSize);
     const hugeBetData = _.slice(_.filter(rawBetData, (o) => o.payoutAsset.amount >= appConfig.hugeBetAmount), 0, appConfig.betHistoryTableSize);
 
-    console.log("Render, view is ", view);
     const columns = view === "MobileView"? mobileColumns: desktopColumns;
 
     return (

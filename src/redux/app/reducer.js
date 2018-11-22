@@ -4,7 +4,6 @@ import { getDefaultPath } from '../../helpers/urlSync';
 import actions, { getView } from './actions';
 
 const preKeys = getDefaultPath();
-console.log(`preKeys is ${preKeys}`);
 const WALLET_ADDRESS_MAX_COUNT = 8;
 
 const initState = new Map({

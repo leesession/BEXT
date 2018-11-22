@@ -19,7 +19,6 @@ const initState = new Map({
 export default function (state = initState, action) {
   switch (action.type) {
     case actions.INIT_SOCKET_CONNECTION_BET:
-      console.log('betReducer.INIT_SOCKET_CONNECTION_BET');
 
       return state
         .set('refresh', !state.get('refresh'));
@@ -68,7 +67,6 @@ export default function (state = initState, action) {
       break;
     }
     case actions.BET_CHANNEL_UPDATE:
-      console.log('BET_CHANNEL_UPDATE.payload', action.payload);
       break;
     default:
       return state;
