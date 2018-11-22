@@ -54,7 +54,7 @@ class Footer extends React.Component {
           </ul>
         </div>*/}
 
-        <div div className="corp-container">
+        <div className="corp-container">
           <span>{siteConfig.footerText}</span>
         </div>
       </div>
