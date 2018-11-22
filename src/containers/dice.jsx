@@ -234,7 +234,7 @@ class DicePage extends React.Component {
     }
 
     if ((!isNaN(value) && reg.test(value))) {
-      
+
 
       if (_.toNumber(value) !== 0 && _.toNumber(value) < MIN_INPUT_BET_AMOUNT) {
         message.warning(intl.formatMessage({
@@ -466,12 +466,20 @@ class DicePage extends React.Component {
                               <div className="box-inner">
 
                                 <div className="inputBorder">
+                                <Row>
+                                  <Col span={8}>
                                   <Button size="large" className="box-input-button" type="default" onClick={this.onBetAmountButtonClick} data-value="0.5" >1/2
                                   </Button>
+                                  </Col>
+                                  <Col span={8}>
                                   <Button size="large" className="box-input-button" type="default" onClick={this.onBetAmountButtonClick} data-value="2" >2X
                                   </Button>
+                                  </Col>
+                                  <Col span={8}>
                                   <Button size="large" className="box-input-button" type="default" onClick={this.onBetAmountButtonClick} data-value={MAX_BALANCE_STR} >{MAX_BALANCE_STR}
                                   </Button>
+                                  </Col>
+                                  </Row>
                                 </div>
                               </div>
                             </div>
@@ -579,7 +587,7 @@ DicePage.propTypes = {
   intl: intlShape.isRequired,
   successMessage: PropTypes.string,
   fetchBetHistoryReq: PropTypes.func,
-  referrer: PropTypes.string,
+  referrer: PropTypes.string.isRequired,
   view: PropTypes.string,
 };
 
@@ -595,7 +603,6 @@ DicePage.defaultProps = {
   setErrorMessageReq: undefined,
   successMessage: undefined,
   fetchBetHistoryReq: undefined,
-  referrer: undefined,
   view: undefined,
 };
 

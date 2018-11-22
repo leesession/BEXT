@@ -16,7 +16,7 @@ const initState = new Map({
   betxBalance: undefined,
   successMessage: undefined,
   errorMessage: undefined,
-  ref: undefined,
+  ref: "", // Don't want undefined here
   isTopbarTransparent: true,
 });
 

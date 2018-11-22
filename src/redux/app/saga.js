@@ -15,11 +15,9 @@ function* getIdentityRequest(action) {
   try {
     const response = yield call(getIdentity);
 
-    console.log('saga.getIdentityRequest.response', response);
     yield put({ type: actions.GET_USERNAME_RESULT, value: response.name });
 
     const eosBalance = yield call(getEOSBalance, response.name);
-    console.log('getIdentityRequest.eosBalance', eosBalance);
 
     yield put({
       type: actions.GET_EOS_BALANCE_RESULT,
@@ -27,7 +25,6 @@ function* getIdentityRequest(action) {
     });
 
     const betxBalance = yield call(getBETXBalance, response.name);
-    console.log('getIdentityRequest.betxBalance', betxBalance);
 
     yield put({
       type: actions.GET_BETX_BALANCE_RESULT,
@@ -48,7 +45,6 @@ function* transferRequest(action) {
 
   try {
     const response = yield call(transfer, params);
-    console.log('saga.transferRequest.response', response.transaction_id);
     yield put({
       type: actions.SUCCESS_MESSAGE,
       message: 'message.success.bet',

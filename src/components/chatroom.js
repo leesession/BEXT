@@ -45,7 +45,6 @@ class ChatRoom extends React.Component {
     const { sendMessageReq, username } = this.props;
     const { value } = this.state;
 
-    console.log('sending message', value);
     event.preventDefault();
 
     sendMessageReq({

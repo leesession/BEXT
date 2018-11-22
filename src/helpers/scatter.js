@@ -25,8 +25,6 @@ class ScatterHelper {
 
     this.env = 'mainnet';
     this.network = appConfig.eosNetwork;
-
-    console.log("network", this.network);
     this.readEos = EosApi({ httpEndpoint: `${this.network.protocol}://${this.network.host}:${this.network.port}` });
     this.Eos = Eos;
 
