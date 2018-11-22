@@ -73,6 +73,7 @@ class ChatRoom extends React.Component {
           <Button>English</Button>
           </Col>
         </Row> */}
+        <div className="chatroom-message-container">
         <ul ref={(ele) => { this.myRef = ele; }}>
           {
             !_.isEmpty(history.all()) &&
@@ -80,6 +81,7 @@ class ChatRoom extends React.Component {
               <Message message={message} key={message.id || index} />)
           }
         </ul>
+        </div>
         <form className="form" onSubmit={this.handleSubmit}>
           <Row gutter={20} type='flex' justify='center'>
             <Col span={16}>
