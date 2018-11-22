@@ -10,6 +10,7 @@ ScatterJS.plugins(new ScatterEOS());
 
 const BETX_TOKEN_CONTRACT = 'thebetxtoken';
 const BETX_DICE_CONTRACT = 'thebetxowner';
+const EOS_TOKEN_CONTRACT = 'eosio.token';
 
 // const network = {
 //   blockchain: 'eos',
@@ -113,13 +114,13 @@ class ScatterHelper {
     // Never assume the account's permission/authority. Always take it from the returned account.
     const transactionOptions = { authorization: [`${account.name}@${account.authority}`] };
 
-    return api.transaction(BETX_DICE_CONTRACT, (contract) =>
+    return api.transaction(EOS_TOKEN_CONTRACT, (contract) =>
       contract.transfer(data, transactionOptions));
   }
 
   getEOSBalance(name) {
     const { readEos, Eos } = this;
-    return readEos.getCurrencyBalance('eosio.token', name, 'EOS').then((result) => {
+    return readEos.getCurrencyBalance(EOS_TOKEN_CONTRACT, name, 'EOS').then((result) => {
       if (!_.isEmpty(result)) {
 
         const balObj = Eos.modules.format.parseAsset(result[0]);
