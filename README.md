@@ -19,7 +19,7 @@ Yarn
 
 # Development
 
-Server: http://45.76.161.216:5000/
+Server: http://207.148.126.102:5000/
 Domainname: http://betx.fun
 
 ## Prepare Database data
