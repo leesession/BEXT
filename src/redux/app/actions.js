@@ -22,6 +22,7 @@ const actions = {
   ERROR_MESSAGE: 'ERROR_MESSAGE',
   CLEAR_ERROR_MESSAGE: 'CLEAR_ERROR_MESSAGE',
   SET_REF: 'SET_REF',
+  TOGGLE_TOPBAR: 'TOGGLE_TOPBAR',
   toggleAll: (width, height) => {
     const view = getView(width);
     const collapsed = view !== 'DesktopView';
@@ -47,6 +48,10 @@ const actions = {
     type: actions.SET_REF,
     ref: params,
   }),
+  toggleTopbar: (isTransparent) => ({
+    type: actions.TOGGLE_TOPBAR,
+    isTransparent,
+  })
 };
 
 export default actions;

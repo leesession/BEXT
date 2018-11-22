@@ -35,6 +35,8 @@ const MIN_INPUT_BET_AMOUNT = 0.1;
 const HUGE_BET_PAYOUT = 0.05;
 const TABLE_BET_HISTORY_SIZE = 20;
 
+const BET_AMOUNT_STR_LENGTH = 6;
+
 const {
   Link, Element, Events, scroll, scrollSpy,
 } = Scroll;
@@ -91,7 +93,7 @@ class DicePage extends React.Component {
       seed: '',
     };
 
-    this.columns = [{
+    this.desktopColumns = [{
       title: intl.formatMessage({ id: 'dice.history.form.time' }),
       dataIndex: 'time',
       key: 'time',
@@ -131,6 +133,23 @@ class DicePage extends React.Component {
         <a href={text} target="_blank" style={{ color: 'white' }}><Icon type="right" /></a>
       ),
     },
+    ];
+
+    this.mobileColumns = [{
+      title: intl.formatMessage({ id: 'dice.history.form.time' }),
+      dataIndex: 'time',
+      key: 'time',
+    }, {
+      title: intl.formatMessage({ id: 'dice.history.form.bettor' }),
+      dataIndex: 'bettor',
+      key: 'bettor',
+    },
+    {
+      title: intl.formatMessage({ id: 'dice.history.form.payout' }),
+      dataIndex: 'payout',
+      key: 'payout',
+      render: (text) => text ? <span style={{ color: 'lightgreen' }}>{text}</span> : '',
+    }
     ];
 
     this.onTabClicked = this.onTabClicked.bind(this);
@@ -206,11 +225,17 @@ class DicePage extends React.Component {
     const { value } = evt.target;
     const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
 
-    if ((!isNaN(value) && reg.test(value)) || value === '') {
+    if(value === ''){
+            this.setState({
+        betAmount: value,
+      });
+            return;
+    }
+
+    if ((!isNaN(value) && reg.test(value))) {
       // this.props.onChange(value);
 
       console.log(_.toNumber(value));
-
       if (_.toNumber(value) !== 0 && _.toNumber(value) < MIN_INPUT_BET_AMOUNT) {
         message.warning(intl.formatMessage({
           id: 'dice.error.lessThanMinBet',
@@ -236,16 +261,18 @@ class DicePage extends React.Component {
     const targetValue = e.currentTarget.getAttribute('data-value');
 
     let newBetAmount = _.toNumber(betAmount);
+    const lowBound = 0.1;
+    const highBound = _.min([lowBound, balance]);
 
     if (targetValue === MAX_BALANCE_STR) { // For "MAX" case
       newBetAmount = balance;
     } else if (targetValue === '1' || targetValue === '-1') { // For +1 and -1 cases; don't set upper limit with balance;
-      newBetAmount = _.max([betAmount + _.toNumber(targetValue), 0]);
-    } else if (targetValue === '0.5' || targetValue === '2') { // For 0.5x and 2x cases; don't set upper limit with balance;
-      newBetAmount = _.max([betAmount * _.toNumber(targetValue), 0]);
+      newBetAmount = betAmount + _.toNumber(targetValue);
+    } else if (targetValue === '0.5' || targetValue === '2') { // For 0.5x and 2x cases; set upper limit with balance;
+      newBetAmount = betAmount * _.toNumber(targetValue);
     }
 
-    newBetAmount = getFixedFloat(newBetAmount, 4);
+    newBetAmount = getFixedFloat(_.clamp(newBetAmount, lowBound, highBound), 4);
     const payoutOnWin = calculatePayoutOnWin(newBetAmount, payout);
 
     this.setState({
@@ -296,12 +323,12 @@ class DicePage extends React.Component {
   }
 
   render() {
-    const { columns } = this;
+    const { desktopColumns, mobileColumns } = this;
     const {
       dataSource, betAmount, payoutOnWin, winChance, payout, rollNumber, eosBalance, betxBalance, username,
     } = this.state;
 
-    const { user, betHistory, locale } = this.props;
+    const { user, betHistory, locale, view } = this.props;
 
     const momentLocale = (locale === 'en') ? 'en' : 'zh-cn';
 
@@ -322,6 +349,9 @@ class DicePage extends React.Component {
 
     const myBetData = _.slice(_.filter(rawBetData, (o) => o.bettor === username), 0, appConfig.betHistoryTableSize);
     const hugeBetData = _.slice(_.filter(rawBetData, (o) => o.payoutAsset.amount >= appConfig.hugeBetAmount), 0, appConfig.betHistoryTableSize);
+
+    console.log("Render, view is ", view);
+    const columns = view === "MobileView"? mobileColumns: desktopColumns;
 
     return (
       <div>
@@ -551,6 +581,7 @@ DicePage.propTypes = {
   successMessage: PropTypes.string,
   fetchBetHistoryReq: PropTypes.func,
   referrer: PropTypes.string,
+  view: PropTypes.string,
 };
 
 DicePage.defaultProps = {
@@ -566,6 +597,7 @@ DicePage.defaultProps = {
   successMessage: undefined,
   fetchBetHistoryReq: undefined,
   referrer: undefined,
+  view: undefined,
 };
 
 const mapStateToProps = (state) => ({
@@ -576,6 +608,7 @@ const mapStateToProps = (state) => ({
   betxBalance: state.App.get('betxBalance'),
   successMessage: state.App.get('successMessage'),
   referrer: state.App.get('ref'),
+  view: state.App.get("view"),
 });
 
 const mapDispatchToProps = (dispatch) => ({

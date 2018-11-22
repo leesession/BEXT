@@ -5,6 +5,8 @@ import { IntlProvider } from 'react-intl';
 import { Debounce } from 'react-throttle';
 import { WindowResizeListener } from 'react-window-resize-listener';
 import { ThemeProvider } from 'styled-components';
+import Waypoint from 'react-waypoint';
+
 import appActions from '../../redux/app/actions';
 import Topbar from '../topbar';
 import AppRouter from './AppRouter';
@@ -12,14 +14,37 @@ import { AppLocale } from '../../index';
 import themes from '../../config/themes';
 import { themeConfig, siteConfig } from '../../config';
 import AppHolder from './commonStyle';
-import FooterComponent  from "../../components/footer";
+import FooterComponent from '../../components/footer';
 const { Content, Footer } = Layout;
-const { toggleAll } = appActions;
+const { toggleAll, toggleTopbar } = appActions;
 
 export class App extends React.PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.onWaypointLeave = this.onWaypointLeave.bind(this);
+    this.onWaypointEnter = this.onWaypointEnter.bind(this);
+  }
+
+  onWaypointLeave({ currentPosition, previousPosition, waypointTop }) {
+    const { toggleTopbarReq } = this.props;
+    if (currentPosition === Waypoint.above) {
+      toggleTopbarReq(false);
+    }
+  }
+
+  onWaypointEnter({ currentPosition, previousPosition, waypointTop }) {
+    const { toggleTopbarReq } = this.props;
+
+    if (currentPosition === Waypoint.inside) {
+      toggleTopbarReq(true);
+    }
+  }
+
+
   render() {
     const {
-      match: { url }, locale, toggleAll,
+      match: { url }, locale, toggleAllReq,
     } = this.props;
 
     const currentAppLocale = AppLocale[locale];
@@ -37,7 +62,7 @@ export class App extends React.PureComponent {
                 <Debounce time="1000" handler="onResize">
                   <WindowResizeListener
                     onResize={(windowSize) =>
-                      toggleAll(
+                      toggleAllReq(
                         windowSize.windowWidth,
                         windowSize.windowHeight
                       )}
@@ -46,6 +71,7 @@ export class App extends React.PureComponent {
                 <Topbar url={url} />
                 <Layout style={{ flexDirection: 'row', overflowX: 'hidden' }}>
                   <Layout>
+                    <Waypoint onEnter={this.onWaypointEnter} onLeave={this.onWaypointLeave} />
                     <Content
                       style={{
                         flexShrink: '0',
@@ -68,15 +94,22 @@ export class App extends React.PureComponent {
 }
 
 App.propTypes = {
-  toggleAll: PropTypes.func.isRequired,
+  toggleAllReq: PropTypes.func.isRequired,
+  toggleTopbarReq: PropTypes.func.isRequired,
   match: PropTypes.object.isRequired,
   locale: PropTypes.string.isRequired,
 };
 
-export default connect(
-  (state) => ({
-    auth: state.Auth,
-    locale: state.LanguageSwitcher.language.locale,
-  }),
-  { toggleAll }
-)(App);
+App.defaultProps = {
+};
+
+const mapStateToProps = (state) => ({
+  locale: state.LanguageSwitcher.language.locale,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  toggleAllReq: () => dispatch(toggleAll()),
+  toggleTopbarReq: (isTransparent) => dispatch(toggleTopbar(isTransparent)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

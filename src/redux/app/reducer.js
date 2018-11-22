@@ -18,6 +18,7 @@ const initState = new Map({
   successMessage: undefined,
   errorMessage: undefined,
   ref: undefined,
+  isTopbarTransparent: true,
 });
 
 export default function appReducer(state = initState, action) {
@@ -47,6 +48,8 @@ export default function appReducer(state = initState, action) {
       return state.set('errorMessage', undefined);
     case actions.SET_REF:
       return state.set('ref', action.ref);
+    case actions.TOGGLE_TOPBAR:
+      return state.set('isTopbarTransparent', action.isTransparent);
     default:
       return state;
   }

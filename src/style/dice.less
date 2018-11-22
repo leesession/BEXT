@@ -8,7 +8,11 @@
 #dicepage {
     background-color: @bgColor;
     padding-top: 80px;
-    padding-bottom: 80px;
+    padding-bottom: 40px;
+
+    @media @phone{
+        padding-bottom: 0px;
+    }
 
     .wrapper {
         margin-left: auto;
@@ -46,10 +50,14 @@
     }
 
     .container {
-        margin: 50px 0px 80px;
+        margin: 50px 0px 20px;
         text-align: center;
         position: relative;
         @containerPadding: 60px;
+
+        @media @phone{
+            margin: 20px 0px 40px;
+        }
 
         .holderBorder {
             border-radius: 20px;
@@ -512,6 +520,10 @@
         .ant-tabs-tab {
             color: @borderColor;
             font-size: 1.2em;
+
+            @media @phone{
+                font-size: 1.5em;
+            }
         }
 
         .ant-tabs-tab-active {

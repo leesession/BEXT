@@ -49,16 +49,22 @@
     position: fixed;
     width: 100%;
     z-index: 10;
-    background-color: transparent;
+    
+    // Set antd header color to transparent 
+    &.transparent{
+        .ant-layout-header{
+            background-color: transparent;
+        }
+    }
 
     .ant-layout-header {
         height: @height;
         line-height: @height;
+        .transition(background-color .2s ease);
 
         img {
             width: 180px;
         }
-
     }
 
     @media @phone {

@@ -4,6 +4,7 @@ import { Link, withRouter } from 'react-router-dom';
 import _ from 'lodash';
 import { injectIntl, intlShape } from 'react-intl';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import classNames from 'classnames';
 
 import { Layout, Menu, Icon, message, Button, Input, Row, Col, Tag, Modal } from 'antd';
 import { cloudinaryConfig, CloudinaryImage } from '../components/react-cloudinary';
@@ -142,7 +143,7 @@ class Topbar extends React.PureComponent {
     } = this.state;
 
     const {
-      locale, username, ref, location: { href },
+      locale, username, ref, location: { href }, isTopbarTransparent
     } = this.props;
 
     const btnClassName = `triggerBtn  ${collapsed ? 'menuCollapsed' : 'menuOpen'}`;
@@ -181,12 +182,14 @@ class Topbar extends React.PureComponent {
       </Menu>
     );
 
+    const topbarClassname = classNames({
+      topbar:true,
+      transparent: isTopbarTransparent,
+    });
+
     return (
-      <div className="topbar">
-        <Header
-          style={{ background: 'transparent' }}
-          className={collapsed ? 'collapsed' : ''}
-        >
+      <div className={topbarClassname}>
+        <Header>
           <div className="cancel-ant-layout-header">
             <div className="horizontalWrapper">
               <div className="topbarWrapper">
@@ -289,6 +292,7 @@ Topbar.propTypes = {
   intl: intlShape.isRequired,
   location: PropTypes.object.isRequired,
   ref: PropTypes.string,
+  isTopbarTransparent: PropTypes.bool.isRequired,
 };
 
 Topbar.defaultProps = {
@@ -306,6 +310,7 @@ const mapStateToProps = (state) => ({
   username: state.App.get('username'),
   errorMessage: state.App.get('errorMessage'),
   ref: state.App.get('ref'),
+  isTopbarTransparent: state.App.get("isTopbarTransparent"),
 });
 
 const mapDispatchToProps = (dispatch) => ({
