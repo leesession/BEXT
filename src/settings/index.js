@@ -23,7 +23,7 @@ const siteConfig = {
 };
 
 const appConfig = {
-  firstBetReward: 500,
+  firstBetReward: 300,
   betHistoryMemorySize: 500,
   betHistoryTableSize: 20,
   hugeBetAmount: 1000,

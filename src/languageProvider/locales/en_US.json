@@ -23,7 +23,7 @@
   "dice.asset.betx":"BETX",
   "dice.balance.eos":"EOS Balance",
   "dice.balance.betx":"BETX Balance",
-  "dice.reward.firstbet":"First Bet Reward",
+  "dice.reward.firstbet":"Bet 1 EOS to win {amount} BETX",
   "dice.reward.total":"Reward",
   "dice.button.login":"Log In",
   "dice.button.bet":"Bet",

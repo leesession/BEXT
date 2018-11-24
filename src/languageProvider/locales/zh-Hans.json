@@ -23,7 +23,7 @@
   "dice.asset.betx":"BETX",
   "dice.balance.eos":"EOS余额",
   "dice.balance.betx":"BETX余额",
-  "dice.reward.firstbet":"首次投注奖励",
+  "dice.reward.firstbet":"累计下注1EOS奖励{amount}BETX",
   "dice.reward.total":"赢得奖金",
   "dice.button.login":"登录",
   "dice.button.bet":"下注",

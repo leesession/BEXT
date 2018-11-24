@@ -544,7 +544,7 @@ class DicePage extends React.Component {
                           </Col>
                           <Col span={12}>
                             {username === this.defaultUsername ? <Button className="btn-login" size="large" type="primary" onClick={this.onLogInClicked}><IntlMessages id="dice.button.login" /></Button> : <Button className="btn-login" size="large" type="primary" onClick={this.onBetClicked}><IntlMessages id="dice.button.bet" /></Button> }
-                            <div className="bet_description"><Icon type="question-circle" /><IntlMessages id="dice.reward.firstbet" /> {appConfig.firstBetReward} <IntlMessages id="dice.asset.betx" /></div>
+                            <div className="bet_description"><Icon type="question-circle" /><IntlMessages id="dice.reward.firstbet" values={{ "amount": appConfig.firstBetReward}} /></div>
                           </Col>
                           <Col span={6}>
                             <div className="bet_description"><IntlMessages id="dice.balance.betx" /></div>
