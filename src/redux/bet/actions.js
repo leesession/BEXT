@@ -1,5 +1,4 @@
 const actions = {
-  SEND_BET: 'SEND_BET',
   INIT_SOCKET_CONNECTION_BET: 'INIT_SOCKET_CONNECTION_BET',
   CLOSE_SOCKET_CONNECTION_BET: 'CLOSE_SOCKET_CONNECTION_BET',
   FETCH_BET_HISTORY: 'FETCH_BET_HISTORY',
@@ -19,10 +18,6 @@ const actions = {
   GET_BETX_STAKE_AMOUNT_RESULT: 'GET_BETX_STAKE_AMOUNT_RESULT',
   initSocketConnection: (obj) => ({
     type: actions.INIT_SOCKET_CONNECTION_BET,
-    payload: obj,
-  }),
-  sendTransaction: (obj) => ({
-    type: actions.SEND_BET,
     payload: obj,
   }),
   fetchBetHistory: () => ({

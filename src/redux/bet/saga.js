@@ -110,14 +110,6 @@ export function* fetchBetHistoryRequest() {
   }
 }
 
-export function* sendBetRequest(action) {
-  const res = yield call(sendBet, action.payload);
-  // yield put({
-  //   type:'',
-  //   value: res,
-  // });
-}
-
 export function * getBetVolumeRequest(){
   try{
   const result = yield call(getBetVolume);
@@ -158,7 +150,6 @@ export default function* topicSaga() {
   yield all([
     takeEvery(actions.INIT_SOCKET_CONNECTION_BET, initLiveMessages),
     takeEvery(actions.FETCH_BET_HISTORY, fetchBetHistoryRequest),
-    takeEvery(actions.SEND_BET, sendBetRequest),
     takeEvery(actions.GET_BET_VOLUME, getBetVolumeRequest),
     takeEvery(actions.GET_BETX_STAKE_AMOUNT, getBetxStakeAmountRequest),
   ]);

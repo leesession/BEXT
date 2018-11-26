@@ -6,6 +6,7 @@ import actions from './actions';
 import Queue from '../../helpers/queue';
 import { appConfig } from '../../settings';
 import ParseHelper from '../../helpers/parse';
+import appReducer from '../app/reducer';
 
 const { parseBetReceipt } = ParseHelper;
 
@@ -63,6 +64,9 @@ export default function (state = initState, action) {
       // Deduping - If newObject is legit and not contained in the queue
       if (newObject && _.isUndefined(_.find(state.get('history').all(), {id: newObject.id}))) {
         state.get('history').enq(newObject);
+
+        const appState = appReducer();
+        const currentBet = appState.get("currentBet");
 
         return state
           .set('refresh', !state.get('refresh'));

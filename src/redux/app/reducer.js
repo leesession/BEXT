@@ -18,6 +18,7 @@ const initState = new Map({
   errorMessage: undefined,
   ref: "", // Don't want undefined here
   isTopbarTransparent: true,
+  currentBet:undefined,
 });
 
 export default function appReducer(state = initState, action) {
@@ -41,6 +42,8 @@ export default function appReducer(state = initState, action) {
       return state.set('transferResult', action.value);
     case actions.SUCCESS_MESSAGE:
       return state.set('successMessage', action.message);
+    case actions.CLEAR_SUCCESS_MESSAGE:
+      return state.set('successMessage', undefined);
     case actions.ERROR_MESSAGE:
       return state.set('errorMessage', action.message);
     case actions.CLEAR_ERROR_MESSAGE:
@@ -49,6 +52,8 @@ export default function appReducer(state = initState, action) {
       return state.set('ref', action.ref);
     case actions.TOGGLE_TOPBAR:
       return state.set('isTopbarTransparent', action.isTransparent);
+    case actions.CURRENT_BET:
+      return state.set('currentBet', action.value);
     default:
       return state;
   }
