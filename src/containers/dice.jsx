@@ -268,12 +268,13 @@ class DicePage extends React.Component {
     if (targetValue === MAX_BALANCE_STR) { // For "MAX" case
       newBetAmount = balance;
     } else if (targetValue === '1' || targetValue === '-1') { // For +1 and -1 cases; don't set upper limit with balance;
-      newBetAmount = betAmount + _.toNumber(targetValue);
+      newBetAmount = _.toNumber(betAmount) + _.toNumber(targetValue);
     } else if (targetValue === '0.5' || targetValue === '2') { // For 0.5x and 2x cases; set upper limit with balance;
-      newBetAmount = betAmount * _.toNumber(targetValue);
+      newBetAmount = _.toNumber(betAmount) * _.toNumber(targetValue);
     }
 
-    newBetAmount = formatBetAmountStr(newBetAmount);
+    // newBetAmount is a number. Don't forget to change it with toString here.
+    newBetAmount = formatBetAmountStr(newBetAmount.toString());
     const payoutOnWin = calculatePayoutOnWin(newBetAmount, payout);
 
     this.setState({
