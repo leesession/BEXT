@@ -177,10 +177,10 @@ class StakePage extends React.Component {
                           </Col>
                         </Row>
                         <Row type="flex" align="middle" className="page-dividend-detail-bottom">
-                          <Col className="page-third-title text-right" span={6}><IntlMessages id="stake.income.rest" /></Col>
-                          <Col span={2} style={{ marginTop: 12 }}><CloudinaryImage publicId="eos-logo-grey" options={{ height: 30, crop: 'scale' }} /></Col>
-                          <Col className="page-third-title text-left" style={{ color: 'white' }} span={10}>{myAvailableDiv} EOS</Col>
-                          <Col className="getStake-btn-holder" span={6}><Button className="getStake-btn"><IntlMessages id="stake.income.get" /></Button></Col>
+                          <div className="page-third-title text-right"><IntlMessages id="stake.income.rest" /></div>
+                          <div><CloudinaryImage publicId="eos-logo-grey" options={{ height: 30, crop: 'scale' }} /></div>
+                          <div className="page-third-title text-left" style={{ color: 'white' }} >{myAvailableDiv} EOS</div>
+                          <div className="getStake-btn-holder" span={6}><Button className="getStake-btn"><IntlMessages id="stake.income.get" /></Button></div>
                         </Row>
                       </div>
                     </Col>
