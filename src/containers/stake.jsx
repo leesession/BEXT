@@ -124,8 +124,9 @@ class StakePage extends React.Component {
     const termTextParts = intl.formatMessage({ id: 'stake.rule.body' }).split('\n');
     const termText = _.map(termTextParts, (part, partIndex) => <p key={partIndex}>{part}</p>);
 
-    const myExpectedDiv = 0;
-    const DivPer10KBETX = 0;
+    const totalDividend = allVolume * appConfig.dividendRatio;
+    const myExpectedDiv = totalDividend * (myBetxBalance/ betxCirculation);
+    const DivPer10KBETX = totalDividend * (10000.0 / betxCirculation);
     const myAvailableDiv = 0;
 
     return (
@@ -153,7 +154,7 @@ class StakePage extends React.Component {
                       <p className="page-sub-title"><IntlMessages id="stake.dividend.total" /></p>
                       <div className="page-third-title panel icon-container">
                         <div><CloudinaryImage publicId="eos-logo-grey" options={{ height: 40, crop: 'scale' }} /></div>
-                        {_.floor(allVolume * appConfig.dividendRatio, 4)} EOS</div>
+                        {_.floor(totalDividend, 4)} EOS</div>
                     </Col>
                   </Row>
                   <Row>
@@ -166,13 +167,13 @@ class StakePage extends React.Component {
                           <Col span={12}>
                             <div className="page-dividend-detail-box">
                             <p className="page-third-title" ><IntlMessages id="stake.income.predicate" /></p>
-                            <p className="page-third-title" >{myExpectedDiv} EOS</p>
+                            <p className="page-third-title" >{_.floor(myExpectedDiv,4)} EOS</p>
                             </div>
                           </Col>
                           <Col span={12}>
                           <div className="page-dividend-detail-box">
                             <p className="page-third-title" ><IntlMessages id="stake.income.betx" /></p>
-                            <p className="page-third-title" >{DivPer10KBETX} EOS</p>
+                            <p className="page-third-title" >{_.floor(DivPer10KBETX,4)} EOS</p>
                             </div>
                           </Col>
                         </Row>
@@ -200,7 +201,7 @@ class StakePage extends React.Component {
                       <p className="page-sub-title"><IntlMessages id="stake.betx.circulate" /></p>
                       <div className="page-third-title panel icon-container" >
                         <div><CloudinaryImage publicId="betx-logo-grey" options={{ height: 40, crop: 'scale' }} /></div>
-                        {formatNumberThousands(betxCirculation)} EOS</div>
+                        {formatNumberThousands(_.floor(betxCirculation,2))} EOS</div>
                     </Col>
                   </Row>
                   <Row className="stake-container" >
@@ -301,6 +302,7 @@ const mapStateToProps = (state) => ({
   allVolume: state.Bet.get('allVolume'),
   betxStakeAmount: state.Bet.get('betxStakeAmount'),
   betxCirculation: state.Bet.get('betxCirculation'),
+  myBetxBalance: state.App.get('betxBalance'),
 });
 
 const mapDispatchToProps = (dispatch) => ({
