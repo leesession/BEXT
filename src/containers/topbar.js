@@ -126,7 +126,9 @@ class Topbar extends React.PureComponent {
     });
   }
 
-  onLoginClicked() {
+  onLoginClicked(evt) {
+
+    evt.preventDefault();
     const { getIdentityReq } = this.props;
 
     getIdentityReq();
@@ -143,7 +145,7 @@ class Topbar extends React.PureComponent {
     } = this.state;
 
     const {
-      locale, username, ref, location: { href }, isTopbarTransparent
+      locale, username, ref, location: { href }, isTopbarTransparent,
     } = this.props;
 
     const btnClassName = `triggerBtn  ${collapsed ? 'menuCollapsed' : 'menuOpen'}`;
@@ -168,11 +170,12 @@ class Topbar extends React.PureComponent {
       }
       return <li role="menuitem" key={item.id}><a href={item.url} onClick={() => this.setRefModalVisible(true)} target="_blank"><IntlMessages id={item.id} /></a></li>;
     });
+    menuItemElementsMobile.push(<li role="menuitem" key="login"><a href={null} style={{width:"100%"}} onClick={this.onLoginClicked}><IntlMessages id="topbar.login" /></a></li>);
 
     const languageDropdown = (
       <Menu onClick={this.onLanguageDropdownClicked} className="lang-menu">
         {_.map(langSettings, (lang) => (
-          <Menu.Item key={lang.key}  className="lang-menu-item">
+          <Menu.Item key={lang.key} className="lang-menu-item">
             <img src={lang.imgSrc} alt="" />
             <span style={{ paddingLeft: '12px' }}>
               {lang.text}
@@ -183,7 +186,7 @@ class Topbar extends React.PureComponent {
     );
 
     const topbarClassname = classNames({
-      topbar:true,
+      topbar: true,
       transparent: isTopbarTransparent,
     });
 
@@ -205,35 +208,38 @@ class Topbar extends React.PureComponent {
                 </div>
 
                 <ul className="isoRight">
-                  <div className="hideOnLarge">
-                    <button
-                      className={btnClassName}
-                      style={{ color: customizedTheme.textColor }}
-                      onClick={this.toggleCollapsed}
-                      data-toggle="collapse"
-                      data-target="#bs-example-navbar-collapse-1"
-                    >
-                      <span className="icon-bar top-bar"></span>
-                      <span className="icon-bar middle-bar"></span>
-                      <span className="icon-bar bottom-bar"></span>
-                    </button>
-                  </div>
 
-                  <li className="nav-btn" role="menuitem" key="login">
+                  <li className="nav-btn hideOnMobile" role="menuitem" key="login">
                     {username ? (<div className="message"><IntlMessages id="topbar.welcome"></IntlMessages><span>, {username}</span></div>) : <Button type="primary" size="large" onClick={this.onLoginClicked}><IntlMessages id="topbar.login" />
                     </Button>}
                   </li>
                   <li role="menuitem" key="lang">
-                      <div className="lang-menu-trigger">
-                        <Dropdown overlay={languageDropdown}>
+                    <div className="lang-menu-trigger">
+                      <Dropdown overlay={languageDropdown}>
                         <div className="selected">
+                          
                           <img src={_.find(langSettings, { locale }).imgSrc} alt="" />
                           <i className="fa fa-angle-down" />
                         </div>
-                        </Dropdown>
-                        <div className="vertical-align-helper">
-                        </div>
+                      </Dropdown>
+                      <div className="vertical-align-helper">
                       </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div className="hideOnLarge">
+                      <button
+                        className={btnClassName}
+                        style={{ color: customizedTheme.textColor }}
+                        onClick={this.toggleCollapsed}
+                        data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1"
+                      >
+                        <span className="icon-bar top-bar"></span>
+                        <span className="icon-bar middle-bar"></span>
+                        <span className="icon-bar bottom-bar"></span>
+                      </button>
+                    </div>
                   </li>
                 </ul>
               </div>
@@ -310,7 +316,7 @@ const mapStateToProps = (state) => ({
   username: state.App.get('username'),
   errorMessage: state.App.get('errorMessage'),
   ref: state.App.get('ref'),
-  isTopbarTransparent: state.App.get("isTopbarTransparent"),
+  isTopbarTransparent: state.App.get('isTopbarTransparent'),
 });
 
 const mapDispatchToProps = (dispatch) => ({

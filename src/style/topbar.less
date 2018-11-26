@@ -256,14 +256,20 @@ ul.menu-list {
         }
 
         .lang-menu-trigger {
+
+            @heightOnMobile: 30px;
                 .selected {
                     display: inline-block;
-                    border: 1px solid #fff;
+                    border: 1px solid @borderColor;
                     .border-radius(100px);
                     padding-left: 15px;
                     padding-right: 15px;
                     cursor: pointer;
                     vertical-align: middle;
+
+                    @media @phone{
+                        height: @heightOnMobile;
+                    }
 
                     img {
                         float: left;
@@ -278,7 +284,12 @@ ul.menu-list {
                         float: left;
                         height: 36px;
                         line-height: 35px;
-                        color: #fff;
+                        color: @borderColor;
+
+                        @media @phone{
+                            height: @heightOnMobile - 5px;
+                            line-height: @heightOnMobile - 6px;
+                        }
                     }
 
                 }
@@ -297,16 +308,18 @@ ul.menu-list {
 }
 
 .menu {
-    background-color: white;
-    border: 1px solid #e7e7e7;
+    background-color: @bgColor;
+    border: 1px solid @borderColor;
+    color: @borderColor;
     height: auto;
     max-height: 340px;
     font-size: 1em;
     overflow: hidden;
-    -webkit-transition: max-height .5s ease;
-    -moz-transition: max-height .5s ease;
-    -ms-transition: max-height .5s ease;
-    -o-transition: max-height .5s ease;
+    .transition(max-height .5s ease);
+
+    @media @phone{
+        font-size: 1.4em;
+    }
 
     ul {
         display: flex;
@@ -318,7 +331,7 @@ ul.menu-list {
             text-align: center;
 
             &:last-of-type {
-                border-top: 1px solid #ddd;
+                border-top: 1px solid @borderColor;
             }
 
         }
