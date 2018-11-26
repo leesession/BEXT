@@ -32,6 +32,8 @@ class ParseHelper {
     this.fetchChatHistory = this.fetchChatHistory.bind(this);
     this.handleParseError = this.handleParseError.bind(this);
     this.parseBetReceipt = this.parseBetReceipt.bind(this);
+    this.getBetVolume = this.getBetVolume.bind(this);
+    this.getBetxStakeAmount = this.getBetxStakeAmount.bind(this);
   }
 
   /**
@@ -254,6 +256,14 @@ class ParseHelper {
     query.limit(appConfig.chatHistoryMemorySize);
 
     return query.find();
+  }
+
+  getBetVolume(){
+    return this.parse.Cloud.run('getBetVolume', {types:["day", "all"]});
+  }
+
+  getBetxStakeAmount(){
+  return this.parse.Cloud.run('getBetxStakeAmount');
   }
 
   handleParseError(err) {
