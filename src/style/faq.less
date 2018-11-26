@@ -46,12 +46,25 @@
 
 	.page-third-title {
 		text-align: center;
-		margin: 15px 0;
 		color: @borderColor;
 		font-size: @thirdTitleSize;
 		font-weight: 100;
 		letter-spacing: 1px;
 	}
+
+.page-dividend-section-title{
+			text-align: left;
+			margin-top: 15px;
+			margin-bottom: 15px;
+		}
+
+		.icon-container{
+			padding:20px;
+
+			@media @phone{
+				padding: 12px;
+			}
+		}
 
 	.page-dividend{
 		margin-top: 30px;
@@ -62,6 +75,19 @@
 
 		.page-dividend-detail{
 			margin-top: 30px;
+
+			@media @phone{
+				margin-top: 18px;
+			}
+
+			.page-dividend-detail-box{
+				padding-top:20px;
+				padding-bottom: 12px;
+
+				p:last-child{
+					color: white;
+				}
+			}
 
 			.page-dividend-detail-bottom{
 				height: 85px;
@@ -75,6 +101,7 @@
 				}
 			}
 		}
+
 	}
 
 	//-------ANTD clear group------
@@ -179,10 +206,17 @@
 			margin: 5px 0;
 		}
 
-		.stake-container-inner{
+		.stake-container-body{
+			margin-top: 30px;
+
+			@media @phone{
+				margin-top: 18px;
+			}
+
+		.stake-container-body-inner{
 			padding: 20px;
 
-			.stake-container-inner-input{
+			.stake-container-body-inner-input{
 				display: flex;
 				flex-direction: row;
 				height: 45px;
@@ -226,6 +260,7 @@
 				}
 			}
 		}
+	}
 
 	}
 
