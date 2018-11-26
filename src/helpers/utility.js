@@ -122,3 +122,17 @@ export function millisecToMin(millis) {
   const seconds = ((millis % 60000) / 1000).toFixed(0);
   return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 }
+
+/**
+ * Formatting number with thousand separator.
+ * @param  {number} x e.g. 1000000.65
+ * @return {string}   "1,000,000.65"
+ */
+export function formatNumberThousands(x) {
+
+    if(_.isUndefined(x)){
+      return x;
+    }
+
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
