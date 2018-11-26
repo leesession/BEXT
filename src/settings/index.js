@@ -28,7 +28,7 @@ const appConfig = {
   betHistoryTableSize: 20,
   hugeBetAmount: 1000,
   chatHistoryMemorySize: 500,
-
+  dividendRatio: 0.01,  // Dividend ratio compared to betVolume
   eosNetwork: {
     blockchain: 'eos',
     protocol: 'https',
