@@ -1,4 +1,5 @@
 @height: 80px;
+@heightOnMobile: 60px;
 
 .refModal {
     .ant-modal-title {
@@ -71,6 +72,9 @@
         .ant-layout-header {
             padding-left: 0px;
             padding-right: 0px;
+
+            height: @heightOnMobile;
+            line-height: @heightOnMobile;
 
             img {
                 width: 120px;
@@ -177,6 +181,7 @@ ul.menu-list {
         background-color: transparent;
         background-image: none;
         border: 1px solid transparent;
+        vertical-align: middle;
 
         .icon-bar {
             width: 22px;
@@ -225,6 +230,10 @@ ul.menu-list {
     li {
         &:not(:last-of-type) {
             margin-right: 16px;
+
+            @media @phone{
+                margin-right: 12px;
+            }
         }
 
         &.nav-btn {
@@ -233,7 +242,8 @@ ul.menu-list {
                 .border-radius(20px);
                 font-size: 1.2em;
                 width: 100px;
-                border-color: white;
+                border-color: @borderColor;
+                color: @borderColor;
                 background-color: transparent;
 
                 &:hover {
@@ -257,7 +267,7 @@ ul.menu-list {
 
         .lang-menu-trigger {
 
-            @heightOnMobile: 30px;
+            @triggerHeightOnMobile: 30px;
                 .selected {
                     display: inline-block;
                     border: 1px solid @borderColor;
@@ -267,28 +277,39 @@ ul.menu-list {
                     cursor: pointer;
                     vertical-align: middle;
 
+                    .selected-inner{
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+
+                        &>*{
+                            display: inline-block;
+                            vertical-align: middle;
+                        }
+                    }
                     @media @phone{
-                        height: @heightOnMobile;
+                        height: @triggerHeightOnMobile;
                     }
 
                     img {
-                        float: left;
                         height: 20px;
                         width: auto;
-                        margin-top: 8px;
                         margin-right: 8px;
                         .opacity(0.7);
+
+                        @media @phone{
+                            height: 16px;
+                        }
                     }
 
                     i {
-                        float: left;
-                        height: 36px;
                         line-height: 35px;
                         color: @borderColor;
 
                         @media @phone{
-                            height: @heightOnMobile - 5px;
-                            line-height: @heightOnMobile - 6px;
+                            height: @triggerHeightOnMobile - 3px;
+                            line-height: @triggerHeightOnMobile - 4px;
+                            font-size: 2em;
                         }
                     }
 
@@ -309,7 +330,7 @@ ul.menu-list {
 
 .menu {
     background-color: @bgColor;
-    border: 1px solid @borderColor;
+    border-bottom: 1px solid @borderColor;
     color: @borderColor;
     height: auto;
     max-height: 340px;
@@ -339,6 +360,9 @@ ul.menu-list {
     }
 
     a {
+        display: block;
+        height: 100%;
+        width: 100%;
         color: @topbarFontColor;
     }
 

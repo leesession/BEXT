@@ -217,13 +217,13 @@ class Topbar extends React.PureComponent {
                     <div className="lang-menu-trigger">
                       <Dropdown overlay={languageDropdown}>
                         <div className="selected">
-                          
-                          <img src={_.find(langSettings, { locale }).imgSrc} alt="" />
-                          <i className="fa fa-angle-down" />
+                          <div className="selected-inner">
+                            <img src={_.find(langSettings, { locale }).imgSrc} alt="" />
+                            <i className="fa fa-angle-down" />
+                          </div>
                         </div>
                       </Dropdown>
-                      <div className="vertical-align-helper">
-                      </div>
+                      <div className="vertical-align-helper" />
                     </div>
                   </li>
                   <li>
@@ -239,6 +239,7 @@ class Topbar extends React.PureComponent {
                         <span className="icon-bar middle-bar"></span>
                         <span className="icon-bar bottom-bar"></span>
                       </button>
+                      <div className="vertical-align-helper" />
                     </div>
                   </li>
                 </ul>
