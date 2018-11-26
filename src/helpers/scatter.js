@@ -145,6 +145,18 @@ class ScatterHelper {
 
         if (_.isObject(errObject) && errObject.error) {
           code = errObject.error.code;
+
+          // Try to parse out assert message from details
+          if(errObject.error.details){
+            const assertMessageObj = _.find(errObject.error.details, {method: "eosio_assert"});
+
+            if(assertMessageObj){
+
+              if(assertMessageObj.message.indexOf("Bet less than max") >=0){
+                return Promise.resolve("error.scatter.betLessThanMax");
+              }
+            }
+          }
         }
       } catch (parseError) {
         // 2. Plain str case such ass "error.scatter.blabla"
