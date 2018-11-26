@@ -1,33 +1,30 @@
 /* eslint react/no-array-index-key: 0, no-nested-ternary:0 */ // Disable "Do not use Array index in keys" for options since they dont have unique identifier
 
 import React, { PropTypes } from 'react';
-import { Form, Row, Col, Table, Input, InputNumber, Button, Tabs } from 'antd';
+import { Row, Col, Tabs, Collapse } from 'antd';
 import { connect } from 'react-redux';
 import { injectIntl, intlShape } from 'react-intl';
 import _ from 'lodash';
-import * as Scroll from 'react-scroll';
 import moment from 'moment';
 import { cloudinaryConfig, CloudinaryImage } from '../components/react-cloudinary';
-const TabPane = Tabs.TabPane;
 import IntlMessages from '../components/utility/intlMessages';
 
-cloudinaryConfig({ cloud_name: 'forgelab-io' });
+const { TabPane } = Tabs;
+const { Panel } = Collapse;
 
-const {
-  Link, Element, Events, scroll, scrollSpy,
-} = Scroll;
+cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
 const content = [{
   header: 'faq.account.header',
   body: [
-  {
-  title: 'faq.account.title.1',
-  text: 'faq.account.text.1',
-  },
-  {
-    title: 'faq.account.title.2',
-    text: 'faq.account.text.2',
-  }],
+    {
+      title: 'faq.account.title.1',
+      text: 'faq.account.text.1',
+    },
+    {
+      title: 'faq.account.title.2',
+      text: 'faq.account.text.2',
+    }],
 }, {
   header: 'faq.game.header',
   body: [{
@@ -57,7 +54,13 @@ const content = [{
   {
     title: 'faq.dividend.title.2',
     text: 'faq.dividend.text.2',
-  }],
+  },
+  {
+    title: 'faq.dividend.title.3',
+    text: 'faq.dividend.text.3',
+    imgId:"betx/faq-timeline",
+  }
+  ],
 }, {
   header: 'faq.token.header',
   body: [
@@ -65,18 +68,16 @@ const content = [{
       title: 'faq.token.title.0',
       text: 'faq.token.text.0',
     },
-  {
-    title: 'faq.token.title.1',
-    text: 'faq.token.text.1',
-  },
-  {
-    title: 'faq.token.title.2',
-    text: 'faq.token.text.2',
-  },
-  {
-    title: 'faq.token.title.3',
-    text: 'faq.token.text.3',
-  },
+    {
+      title: 'faq.token.title.2',
+      text: 'faq.token.text.2',
+      imgId:"betx/token-distribution",
+    },
+    {
+      title: 'faq.token.title.3',
+      text: 'faq.token.text.3',
+      imgId:"betx/mining-efficiency",
+    },
   ],
 },
 {
@@ -92,10 +93,6 @@ const content = [{
   {
     title: 'faq.bounty.title.3',
     text: 'faq.bounty.text.3',
-  },
-  {
-    title: 'faq.bounty.title.4',
-    text: 'faq.bounty.text.4',
   },
   ],
 }, {
@@ -125,14 +122,54 @@ class FAQPage extends React.Component {
   }
 
   render() {
-    const { intl } = this.props;
-    const {
-    } = this.state;
+    const { intl, view, locale} = this.props;
 
-    const termTextParts = intl.formatMessage({ id: "faq.term.body" }).split('\n');
-    const termText =_.map(termTextParts, (part,partIndex)=><p key={partIndex}>{part}</p>);
-    const termTextElement = <div className="page-term-body">{termText}</div>;
+    const termTextParts = intl.formatMessage({ id: 'faq.term.body' }).split('\n');
+    const termText = _.map(termTextParts, (part, partIndex) => <p key={partIndex}>{part}</p>);
+    const termTextElement = <div className="page-term-body"><div className="page-term-body-inner panel">{termText}</div></div>;
 
+    let faqElements;
+
+    if (_.isUndefined(view)) {
+      return null;
+    } else if (view === 'MobileView') {
+      faqElements =
+      (<Collapse accordion className="faq-collapse-mobile">
+        {_.map(content, (item, index) => {
+          const body = _.map(item.body, (bodyItem, innerIndex) => {
+            const parts = intl.formatMessage({ id: bodyItem.text }).split('\n');
+            const text = _.map(parts, (part, partIndex) => <p key={partIndex}>{part}</p>);
+            const img = bodyItem.imgId && <div><CloudinaryImage publicId={`${bodyItem.imgId}-${locale}`} options={{width:750, crop:"scale"}}/></div>;
+            
+            return (<div key={innerIndex} style={{ marginBottom: '12px' }}><h3>{<IntlMessages id={bodyItem.title} />}</h3>{text}{img}</div>);
+          });
+          return (<Panel header={intl.formatMessage({ id: item.header })} key={index}>
+            <h2 className="tabpane-title">{intl.formatMessage({ id: item.header })}</h2>
+            {body}
+          </Panel>);
+        })}
+      </Collapse>);
+    } else {
+      faqElements = (<Tabs
+        defaultActiveKey="1"
+        tabPosition="left"
+        style={{}}
+        className="faq-tabs"
+        tabBarGutter={0}
+      >
+        {_.map(content, (item, index) => {
+          const body = _.map(item.body, (bodyItem, innerIndex) => {
+            const parts = intl.formatMessage({ id: bodyItem.text }).split('\n');
+            const text = _.map(parts, (part, partIndex) => <p key={partIndex}>{part}</p>);
+            const img = bodyItem.imgId && <div><CloudinaryImage publicId={`${bodyItem.imgId}-${locale}`} options={{width:750, crop:"scale"}} /></div>;
+            return (<div key={innerIndex} style={{ marginBottom: '24px' }}><h3>{<IntlMessages id={bodyItem.title} />}</h3>{text}{img}</div>);
+          });
+          return (<TabPane tab={intl.formatMessage({ id: item.header })} key={index}><h2 className="tabpane-title">{intl.formatMessage({ id: item.header })}</h2>{body}</TabPane>);
+        })}
+
+      </Tabs>
+      );
+    }
 
     return (
       <div id="faq-page">
@@ -157,31 +194,14 @@ class FAQPage extends React.Component {
               <h1 className="page-title"><IntlMessages id="faq.title" /></h1>
             </Col>
             <Col xs={24} md={20} xl={16}>
-              <Tabs
-                defaultActiveKey="1"
-                tabPosition="left"
-                style={{}}
-                className="faq-tabs"
-                tabBarGutter={0}
-              >
-
-                {_.map(content, (item, index) => {
-                  const body = _.map(item.body, (bodyItem, innerIndex) => 
-                    {
-                      const parts = intl.formatMessage({ id: bodyItem.text }).split('\n');
-                      const text =_.map(parts, (part,partIndex)=><p key={partIndex}>{part}</p>);
-                      return (<div key={innerIndex} style={{marginBottom: "24px"}}><h3>{<IntlMessages id={bodyItem.title} />}</h3>{text}</div>)
-                    });
-                  return (<TabPane tab={intl.formatMessage({ id: item.header })} key={index}><h2 className="tabpane-title">{intl.formatMessage({ id: item.header })}</h2>{body}</TabPane>);
-                })}
-              </Tabs>
+              {faqElements}
             </Col>
           </Row>
           <Row type="flex" justify="center">
             <Col xs={24} md={20} xl={16}>
               <div className="page-term">
-              <h2 className="page-term-title"><IntlMessages id="faq.term.title" /></h2>
-              {termTextElement}
+                <h2 className="page-term-title"><IntlMessages id="faq.term.title" /></h2>
+                {termTextElement}
               </div>
             </Col>
           </Row>
@@ -193,12 +213,18 @@ class FAQPage extends React.Component {
 
 FAQPage.propTypes = {
   intl: intlShape.isRequired,
+  view: PropTypes.string,
+  locale: PropTypes.string,
 };
 
 FAQPage.defaultProps = {
+  view: undefined,
+  locale: "en",
 };
 
 const mapStateToProps = (state) => ({
+  view: state.App.get('view'),
+  locale: state.LanguageSwitcher.language.locale,
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -301,6 +301,8 @@
 
 			.ant-tabs-tab-active {
 				background-color: @bgColor;
+				overflow: scroll;
+				height: 100%;
 			}
 
 			.ant-tabs-ink-bar {
@@ -311,7 +313,7 @@
 
 		.ant-tabs-content {
 			border: none;
-			height: 610px;
+			height: 850px;
 			padding-left: 48px;
 			color: white;
 			text-align: left;
@@ -337,8 +339,39 @@
 				margin-bottom: 12px;
 			}
 
+			img{
+				max-height: 350px;
+
+				@media @desktop{
+					max-height: 250px;
+				}
+			}
+
 		}
 
+	}
+
+	.faq-collapse-mobile{
+		text-align: left;
+
+		.ant-collapse-header{
+			font-size: 1.4em;
+		}
+
+		.ant-collapse-content-box{
+			h3{
+				font-size: 1.6em;
+				margin-bottom: 8px;
+			}
+			p{
+				font-size:1.4em;
+			}
+
+			img{
+				width:100%;
+				margin: 12px auto;
+			}
+		}
 	}
 
 	.page-term {
