@@ -1,9 +1,11 @@
 import React, { PropTypes } from 'react';
-import { Form, Row, Col, Table, Input, InputNumber, Button, Tabs } from 'antd';
-import { siteConfig } from '../settings';
-import Popup from 'reactjs-popup';
+import { Row, Col, Input, Button, Popover } from 'antd';
+import { injectIntl, intlShape } from 'react-intl';
 
+import IntlMessages from './utility/intlMessages';
+import { siteConfig } from '../settings';
 import { cloudinaryConfig, CloudinaryImage } from './react-cloudinary';
+
 cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
 const popupStyle = {
@@ -14,45 +16,60 @@ class Footer extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-    };
+    this.state = { open: false };
+    this.openModal = this.openModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+  }
+
+  openModal() {
+    this.setState({ open: true });
+  }
+  closeModal() {
+    this.setState({ open: false });
   }
 
   render() {
+    const { intl } = this.props;
+
     return (
       <div id="footer">
-        {/*<div className="contact-container">
+        <div className="contact-container">
+
           <ul>
+            <li>
+              <a href={`mailto:${siteConfig.contactEmail}`}>
+                <i className="fa fa-envelope-o" />
+              </a>
+            </li>
             <li>
               <a href={siteConfig.telegramEN}>
                 <i className="fa fa-paper-plane-o" />
               </a>
             </li>
-
             <li>
-              <a href={siteConfig.twitter}>
-                <i className="fa fa-twitter-square" />
+              <a href={siteConfig.twitter} target="_blank">
+                <i className="fa fa-twitter" />
               </a>
             </li>
-
             <li>
-              <Popup
+              {/*              <Popup
                 trigger={() => (
                   <span>
-                    <i className="fa fa-weixin" />
+                    abdfdfss
                   </span>
                 )}
-                position="right center"
                 on="hover"
                 contentStyle={popupStyle}
               >
-                <div>
-                <CloudinaryImage publicId={siteConfig.wechatQR} options={{ height: 150, crop: 'scale' }} alt="QR code Wechat" />
-                </div>
-              </Popup>
+                <CloudinaryImage publicId="qr-wechat-betx" options={{ height: 150, crop: 'scale' }} alt="QR code Wechat" />
+              </Popup> */}
+              <Popover content={<CloudinaryImage publicId="qr-wechat-betx" options={{ height: 150, crop: 'scale' }} alt="QR code Wechat" />} title={intl.formatMessage({ id: 'footer.contactus.wechat' })}>
+                <span><i className="fa fa-wechat" /></span>
+              </Popover>
             </li>
           </ul>
-        </div>*/}
+
+        </div>
 
         <div className="corp-container">
           <span>{siteConfig.footerText}</span>
@@ -63,10 +80,11 @@ class Footer extends React.Component {
 }
 
 Footer.propTypes = {
+  intl: intlShape.isRequired,
 };
 
 Footer.defaultProps = {
 };
 
-export default Footer;
+export default injectIntl(Footer);
 

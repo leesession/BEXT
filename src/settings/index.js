@@ -13,8 +13,8 @@ const siteConfig = {
   telegramEN: 'https://t.me/betxgroup',
 
   telegramANN: 'https://t.me/betxnotice',
-  contactEmail: 'operation@betx.com',
-  website: 'www.betx.com',
+  contactEmail: 'contact@betx.fun',
+  website: 'www.betx.fun',
   medium: 'https://medium.com/betx',
   facebook: 'https://www.facebook.com/betxofficial',
   announcement: 'https://betxhelp.zendesk.com/hc/zh-cn/sections/360002532612-%E5%85%AC%E5%91%8A%E4%B8%AD%E5%BF%83',

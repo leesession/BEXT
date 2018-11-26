@@ -121,6 +121,10 @@
   "stake.action.redemption":"Reclaim",
   "stake.available":"Available",
 
+  "footer.contactus.email":"Email",
+  "footer.contactus.telegram":"Telegram",
+  "footer.contactus.wechat":"Wechat Assistant",
+
   "message.success.bet":"Successfully sent bet.",
 
   "message.warn.lessThanMinBet":"The minimum bet amount is {amount} {asset}.",

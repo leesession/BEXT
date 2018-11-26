@@ -120,6 +120,10 @@
   "stake.action.redemption":"赎回",
   "stake.available":"可用",
 
+  "footer.contactus.email":"邮件",
+  "footer.contactus.telegram":"电报",
+  "footer.contactus.wechat":"微信小助手",
+
   "message.success.bet":"下注成功！",
 
   "message.warn.lessThanMinBet":"当前下注允许的最小值为 {amount} {asset}",
