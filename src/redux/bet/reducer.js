@@ -14,6 +14,10 @@ const { messageType } = actions;
 const initState = new Map({
   history: new Queue(appConfig.betHistoryMemorySize),
   refresh: false,
+  dailyVolume: 0,
+  allVolume: 0,
+  betxStakeAmount: 0,
+  betxCirculation: 0,
 });
 
 export default function (state = initState, action) {
@@ -68,6 +72,12 @@ export default function (state = initState, action) {
     }
     case actions.BET_CHANNEL_UPDATE:
       break;
+    case actions.GET_BET_VOLUME_RESULT:
+      return state.set("dailyVolume", action.value && action.value.day || 0);
+      return state.set("allVolume", action.value && action.value.all || 0);
+    case actions.GET_BETX_STAKE_AMOUNT_RESULT:
+      return state.set("betxStakeAmount", action.value && action.value.staked || 0)
+            .set("betxCirculation", action.value && action.value.issued || 0);
     default:
       return state;
   }

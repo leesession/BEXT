@@ -4,7 +4,7 @@ import { eventChannel } from 'redux-saga';
 import actions from './actions';
 import ParseHelper from '../../helpers/parse';
 const {
-  subscribe, unsubscribe, sendBet, fetchBetHistory, handleParseError,
+  subscribe, unsubscribe, sendBet, fetchBetHistory, handleParseError, getBetVolume, getBetxStakeAmount
 } = ParseHelper;
 
 
@@ -118,10 +118,48 @@ export function* sendBetRequest(action) {
   // });
 }
 
+export function * getBetVolumeRequest(){
+  try{
+  const result = yield call(getBetVolume);
+    yield put({
+      type: actions.GET_BET_VOLUME_RESULT,
+      value: result,
+    });
+  } catch (err) {
+    const message = yield call(handleParseError, err);
+
+    // yield put({
+    //   type: actions.SET_ERROR_MESSAGE,
+    //   message,
+    // });
+
+    console.log(message);
+  }
+}
+
+export function * getBetxStakeAmountRequest(){
+  try{
+  const result = yield call(getBetxStakeAmount);
+    yield put({
+      type: actions.GET_BETX_STAKE_AMOUNT_RESULT,
+      value: result,
+    });
+  } catch (err) {
+    const message = yield call(handleParseError, err);
+    console.log(message);
+    // yield put({
+    //   type: actions.SET_ERROR_MESSAGE,
+    //   message,
+    // });
+  }
+}
+
 export default function* topicSaga() {
   yield all([
     takeEvery(actions.INIT_SOCKET_CONNECTION_BET, initLiveMessages),
     takeEvery(actions.FETCH_BET_HISTORY, fetchBetHistoryRequest),
     takeEvery(actions.SEND_BET, sendBetRequest),
+    takeEvery(actions.GET_BET_VOLUME, getBetVolumeRequest),
+    takeEvery(actions.GET_BETX_STAKE_AMOUNT, getBetxStakeAmountRequest),
   ]);
 }
