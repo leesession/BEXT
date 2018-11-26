@@ -139,7 +139,7 @@ class FAQPage extends React.Component {
           const body = _.map(item.body, (bodyItem, innerIndex) => {
             const parts = intl.formatMessage({ id: bodyItem.text }).split('\n');
             const text = _.map(parts, (part, partIndex) => <p key={partIndex}>{part}</p>);
-            const img = bodyItem.imgId && <div><CloudinaryImage publicId={`${bodyItem.imgId}-${locale}`} options={{width:750, crop:"scale"}}/></div>;
+            const img = bodyItem.imgId && <div><CloudinaryImage publicId={`${bodyItem.imgId}-${locale}`} /></div>;
             
             return (<div key={innerIndex} style={{ marginBottom: '12px' }}><h3>{<IntlMessages id={bodyItem.title} />}</h3>{text}{img}</div>);
           });
@@ -161,7 +161,7 @@ class FAQPage extends React.Component {
           const body = _.map(item.body, (bodyItem, innerIndex) => {
             const parts = intl.formatMessage({ id: bodyItem.text }).split('\n');
             const text = _.map(parts, (part, partIndex) => <p key={partIndex}>{part}</p>);
-            const img = bodyItem.imgId && <div><CloudinaryImage publicId={`${bodyItem.imgId}-${locale}`} options={{width:750, crop:"scale"}} /></div>;
+            const img = bodyItem.imgId && <div><CloudinaryImage publicId={`${bodyItem.imgId}-${locale}`} /></div>;
             return (<div key={innerIndex} style={{ marginBottom: '24px' }}><h3>{<IntlMessages id={bodyItem.title} />}</h3>{text}{img}</div>);
           });
           return (<TabPane tab={intl.formatMessage({ id: item.header })} key={index}><h2 className="tabpane-title">{intl.formatMessage({ id: item.header })}</h2>{body}</TabPane>);
