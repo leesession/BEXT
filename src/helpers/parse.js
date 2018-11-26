@@ -226,17 +226,6 @@ class ParseHelper {
     return message.save({}, { useMasterKey: true });
   }
 
-  sendBet(betObj) {
-    const bet = new ParseBet();
-    bet.set('bettor', betObj.bettor);
-    bet.set('rollUnder', betObj.rollUnder);
-    bet.set('betAmount', betObj.betAmount);
-    // bet.set('roll', betObj.roll);
-    // bet.set('payoutOnWin', betObj.payout);
-
-    return bet.save({}, { useMasterKey: true });
-  }
-
   fetchBetHistory() {
     const { parseBetReceipt } = this;
     const query = new Parse.Query(ParseBet);
