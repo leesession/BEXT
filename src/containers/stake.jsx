@@ -137,7 +137,7 @@ class StakePage extends React.Component {
               <h1 className="page-title"><IntlMessages id="stake.title" /></h1>
             </Col>
             <Col xs={24} md={20} xl={16} className="border-bottom">
-              <h3 className="page-sub-title"><IntlMessages id="stake.dividend.rest" />({<Icon type="clock-circle" />} <span style={{ color: 'white', letterSpacing: 2 }}>{`${time.h}:${time.m}:${time.s}`}</span>)</h3>
+              <h3 className="page-sub-title"><IntlMessages id="stake.dividend.rest" /> ({<Icon type="clock-circle" />} <span style={{ color: 'white', letterSpacing: 2 }}>{`--:--:--`}</span>)</h3>
             </Col>
             <Col xs={24} md={20} xl={16}>
               <Row gutter={90}>
@@ -194,14 +194,14 @@ class StakePage extends React.Component {
                       <p className="page-sub-title"><IntlMessages id="stake.betx.pledge" /></p>
                       <div className="page-third-title panel icon-container" >
                         <div><CloudinaryImage publicId="betx-logo-grey" options={{ height: 40, crop: 'scale' }} /></div>
-                        {formatNumberThousands(betxStakeAmount)} EOS
+                        {formatNumberThousands(betxStakeAmount)} BETX
                       </div>
                     </Col>
                     <Col span={12}>
                       <p className="page-sub-title"><IntlMessages id="stake.betx.circulate" /></p>
                       <div className="page-third-title panel icon-container" >
                         <div><CloudinaryImage publicId="betx-logo-grey" options={{ height: 40, crop: 'scale' }} /></div>
-                        {formatNumberThousands(_.floor(betxCirculation,2))} EOS</div>
+                        {formatNumberThousands(_.floor(betxCirculation,2))} BETX</div>
                     </Col>
                   </Row>
                   <Row className="stake-container" >

@@ -240,7 +240,7 @@ class DicePage extends React.Component {
     if ((!isNaN(value) && reg.test(value))) {
       if (_.toNumber(value) < MIN_INPUT_BET_AMOUNT) {
         message.warning(intl.formatMessage({
-          id: 'dice.error.lessThanMinBet',
+          id: 'message.warn.lessThanMinBet',
         }, {
           amount: MIN_INPUT_BET_AMOUNT.toFixed(4),
           asset: betAsset,

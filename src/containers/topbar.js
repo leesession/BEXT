@@ -72,8 +72,8 @@ class Topbar extends React.PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { errorMessage, username } = nextProps;
-    const { intl } = this.props;
+    const { errorMessage, username, location: newLocation} = nextProps;
+    const { intl, location} = this.props;
     const { isLoggedIn } = this.state;
 
     if (username && !isLoggedIn) {
@@ -270,7 +270,9 @@ class Topbar extends React.PureComponent {
           footer={null}
         >
           <Row type="flex" gutter={20} justify="center" align="middle">
-            <Col span={18} style={{ marginBottom: 20 }}><div className="refWraper"><span className="refHolder" ref="refText">{referralLink}</span></div></Col>
+            <Col span={18} style={{ marginBottom: 20 }}>
+            <div className="refWraper">
+            <span className="refHolder" ref="refText">{referralLink}</span></div></Col>
             <Col span={6} style={{ marginBottom: 20 }}>
               <CopyToClipboard
                 text={referralLink}
