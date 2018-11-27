@@ -7,6 +7,7 @@ const {
   subscribe, unsubscribe, sendBet, fetchBetHistory, handleParseError, getBetVolume, getBetxStakeAmount
 } = ParseHelper;
 
+let betGlobalChannel;
 
 function websocketInitChannel(payload) {
   return eventChannel((emitter) => {
@@ -41,6 +42,7 @@ function websocketInitChannel(payload) {
 
     const unsubscribeHandler = () => {
       // console.log('subscription close');
+      betGlobalChannel = undefined;
       return emitter({ type: actions.BET_UNSUBSCRIBED });
     };
 
@@ -75,14 +77,15 @@ function websocketInitChannel(payload) {
 
 export function* initLiveBetHistory(action) {
   try {
-    const channel = yield call(websocketInitChannel, action.payload);
+
+    if(!_.isUndefined(betGlobalChannel)){
+      return;
+    }
+
+    betGlobalChannel = yield call(websocketInitChannel, action.payload);
 
     while (true) {
-      const payload = yield take(channel);
-
-      if(_.isUndefined(payload)){
-        console.log("initLiveBetHistory, payload is undefined.");
-      }
+      const payload = yield take(betGlobalChannel);
 
       yield put(payload);
     }
@@ -129,7 +132,7 @@ export function * getBetVolumeRequest(){
     //   message,
     // });
 
-    console.log(message);
+    // console.log(message);
   }
 }
 
@@ -142,7 +145,7 @@ export function * getBetxStakeAmountRequest(){
     });
   } catch (err) {
     const message = yield call(handleParseError, err);
-    console.log(message);
+    // console.log(message);
     // yield put({
     //   type: actions.SET_ERROR_MESSAGE,
     //   message,

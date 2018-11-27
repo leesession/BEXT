@@ -87,7 +87,6 @@ export default function (state = initState, action) {
       return state.set('betxStakeAmount', action.value && action.value.staked || 0)
         .set('betxCirculation', action.value && action.value.issued || 0);
     case actions.SET_CURRENT_BET:
-      console.log('betReducer: set current bet to ', action.value);
       return state.set('currentBet', action.value);
     default:
       return state;
