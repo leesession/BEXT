@@ -42,8 +42,8 @@ class Queue {
   all() {
     return this.elements;
   }
-  
-  clean(){
+
+  clean() {
     this.elements = [];
   }
 }

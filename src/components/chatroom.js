@@ -23,8 +23,8 @@ class ChatRoom extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentWillMount(){
-    const {fetchChatHistoryReq} = this.props;
+  componentWillMount() {
+    const { fetchChatHistoryReq } = this.props;
     fetchChatHistoryReq();
   }
 
@@ -56,8 +56,8 @@ class ChatRoom extends React.Component {
       value: '',
     });
   }
-  
-  componentWillUnmount(){
+
+  componentWillUnmount() {
     this.props.history.clean();
   }
 
@@ -76,13 +76,13 @@ class ChatRoom extends React.Component {
           </Col>
         </Row> */}
         <div className="chatroom-message-container">
-        <ul ref={(ele) => { this.myRef = ele; }}>
-          {
-            !_.isEmpty(history.all()) &&
-            _.map(history.all(), (message, index) =>
-              <Message message={message} key={message.id || index} />)
-          }
-        </ul>
+          <ul ref={(ele) => { this.myRef = ele; }}>
+            {
+              !_.isEmpty(history.all()) &&
+              _.map(history.all(), (message, index) =>
+                <Message message={message} key={message.id || index} />)
+            }
+          </ul>
         </div>
         <form className="form" onSubmit={this.handleSubmit}>
           <Row gutter={20} type='flex' justify='center'>
@@ -90,7 +90,7 @@ class ChatRoom extends React.Component {
               <Input type="text" placeholder="" onChange={this.handleChange} value={value} />
             </Col>
             <Col span={6}>
-              <Button  type="default" htmlType="submit" style={{fontSize:'1.2em',fontWeight:800}} size="large"><IntlMessages id="dice.send" /></Button>
+              <Button type="default" htmlType="submit" style={{ fontSize: '1.2em', fontWeight: 800 }} size="large"><IntlMessages id="dice.send" /></Button>
             </Col>
           </Row>
           {/* <div className="info"><span>{messageNum} messages, refresh: {refresh}</span></div> */}
@@ -129,7 +129,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   initSocketConnectionReq: (obj) => dispatch(initSocketConnection(obj)),
   sendMessageReq: (obj) => dispatch(sendMessage(obj)),
-  fetchChatHistoryReq: () =>dispatch(fetchChatHistory()),
+  fetchChatHistoryReq: () => dispatch(fetchChatHistory()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatRoom);

@@ -243,9 +243,9 @@ class DicePage extends React.Component {
         message.warning(intl.formatMessage({
           id: 'message.warn.lessThanMinBet',
         }, {
-          amount: MIN_INPUT_BET_AMOUNT.toFixed(4),
-          asset: betAsset,
-        }));
+            amount: MIN_INPUT_BET_AMOUNT.toFixed(4),
+            asset: betAsset,
+          }));
       }
 
       const betAmount = formatBetAmountStr(value);
@@ -325,7 +325,7 @@ class DicePage extends React.Component {
     });
   }
 
-  onLoginAlert(){
+  onLoginAlert() {
     message.warning(this.props.intl.formatMessage({
       id: 'message.warn.loginFirst'
     }))
@@ -347,18 +347,18 @@ class DicePage extends React.Component {
       message.warning(intl.formatMessage({
         id: 'message.warn.lessThanMinBet',
       }, {
-        amount: MIN_INPUT_BET_AMOUNT,
-        asset: betAsset,
-      }));
+          amount: MIN_INPUT_BET_AMOUNT,
+          asset: betAsset,
+        }));
 
       return lowBound;
     } else if (_.toNumber(betAmountStr) > highBound) {
       message.warning(intl.formatMessage({
         id: 'message.warn.greaterThanMaxBet',
       }, {
-        amount: MAX_INPUT_BET_AMOUNT,
-        asset: betAsset,
-      }));
+          amount: MAX_INPUT_BET_AMOUNT,
+          asset: betAsset,
+        }));
       return highBound;
     }
 
@@ -551,8 +551,8 @@ class DicePage extends React.Component {
                             <div className="bet_value">{_.floor(eosBalance, 2)}<span className="highlight"> <IntlMessages id="dice.asset.eos" /></span></div>
                           </Col>
                           <Col span={12}>
-                            {username === this.defaultUsername ? <Button className="btn-login" size="large" type="primary" onClick={this.onLogInClicked}><IntlMessages id="dice.button.login" /></Button> : <Button className="btn-login" size="large" type="primary" onClick={this.onBetClicked}><IntlMessages id="dice.button.bet" /></Button> }
-                            <div className="bet_description"><Icon type="question-circle" /><IntlMessages id="dice.reward.firstbet" values={{ "amount": appConfig.firstBetReward}} /></div>
+                            {username === this.defaultUsername ? <Button className="btn-login" size="large" type="primary" onClick={this.onLogInClicked}><IntlMessages id="dice.button.login" /></Button> : <Button className="btn-login" size="large" type="primary" onClick={this.onBetClicked}><IntlMessages id="dice.button.bet" /></Button>}
+                            <div className="bet_description"><Icon type="question-circle" /><IntlMessages id="dice.reward.firstbet" values={{ "amount": appConfig.firstBetReward }} /></div>
                           </Col>
                           <Col span={6}>
                             <div className="bet_description"><IntlMessages id="dice.balance.betx" /></div>

@@ -74,11 +74,11 @@ function websocketInitChannel(payload) {
 
 export function* initLiveMessages(action) {
   try {
-    if(! _.isUndefined(messageGlobalChannel)){ 
+    if (!_.isUndefined(messageGlobalChannel)) {
       console.log('channel exist');
       return;
-     }; 
-     messageGlobalChannel = yield call(websocketInitChannel, action.payload);
+    };
+    messageGlobalChannel = yield call(websocketInitChannel, action.payload);
 
     while (true) {
       const payload = yield take(messageGlobalChannel);
@@ -97,30 +97,30 @@ export function* initLiveMessages(action) {
 
 export function* sendMessageRequest(action) {
 
-  try{
+  try {
 
-  const res = yield call(sendMessage, action.payload);
-  
+    const res = yield call(sendMessage, action.payload);
+
   }
-  catch(e){
+  catch (e) {
     const message = handleParseError(e);
-    
+
     console.error(message);
   }
 }
 
 
 export function* fetchChatHistoryRequest() {
-  
-  try{
-    const response = yield call (fetchChatHistory);
+
+  try {
+    const response = yield call(fetchChatHistory);
 
     yield put({
       type: actions.FETCH_CHAT_HISTORY_RESULT,
       data: response,
     });
   }
-  catch(e){
+  catch (e) {
     const message = handleParseError(e);
 
     console.error(message);
