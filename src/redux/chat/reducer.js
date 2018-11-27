@@ -32,7 +32,7 @@ export default function (state = initState, action) {
       state.get('history').enq(convertMessageToJSON(action.data));
 
       return state
-        .set('messageNum', state.get('state') + 1)
+        .set('messageNum', state.get('history').size() + 1)
         .set('refresh', !state.get('refresh'));
     case actions.MESSAGE_CHANNEL_UPDATE:
       console.log('MESSAGE_CHANNEL_UPDATE.payload', action.payload);
@@ -49,9 +49,12 @@ export default function (state = initState, action) {
       _.each(action.data, (message) => {
         state.get("history").enq(convertMessageToJSON(message));
       });
-
       return state
-        .set('refresh', !state.get('refresh'));  
+        .set('refresh', !state.get('refresh'));
+    case actions.MESSAGE_CLEAR:
+      state.get("history").clear();
+      return state
+        .set('refresh', !state.get('refresh'));
     default:
       return state;
   }

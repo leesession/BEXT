@@ -10,7 +10,9 @@ import IntlMessages from '../components/utility/intlMessages';
 
 cloudinaryConfig({ cloud_name: 'dd1ixvdxn' });
 
-const { initSocketConnection, sendMessage, fetchChatHistory } = chatActions;
+const {
+  initSocketConnection, sendMessage, fetchChatHistory, clearMessage,
+} = chatActions;
 
 class ChatRoom extends React.Component {
   constructor(props) {
@@ -23,8 +25,8 @@ class ChatRoom extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentWillMount(){
-    const {fetchChatHistoryReq} = this.props;
+  componentWillMount() {
+    const { fetchChatHistoryReq } = this.props;
     fetchChatHistoryReq();
   }
 
@@ -35,6 +37,11 @@ class ChatRoom extends React.Component {
 
   componentDidUpdate() {
     this.myRef.scrollTop = this.myRef.scrollHeight;
+  }
+
+  componentWillUnmount() {
+    const { clearMessageHistoryReq } = this.props;
+    clearMessageHistoryReq();
   }
 
   handleChange(event) {
@@ -57,7 +64,6 @@ class ChatRoom extends React.Component {
     });
   }
 
-
   render() {
     const { history, messageNum, refresh } = this.props;
     const { value } = this.state;
@@ -73,21 +79,21 @@ class ChatRoom extends React.Component {
           </Col>
         </Row> */}
         <div className="chatroom-message-container">
-        <ul ref={(ele) => { this.myRef = ele; }}>
-          {
-            !_.isEmpty(history.all()) &&
-            _.map(history.all(), (message, index) =>
-              <Message message={message} key={message.id || index} />)
-          }
-        </ul>
+          <ul ref={(ele) => { this.myRef = ele; }}>
+            {
+              !_.isEmpty(history.all()) &&
+              _.map(history.all(), (message, index) =>
+                <Message message={message} key={message.id || index} />)
+            }
+          </ul>
         </div>
         <form className="form" onSubmit={this.handleSubmit}>
-          <Row gutter={20} type='flex' justify='center'>
+          <Row gutter={20} type="flex" justify="center">
             <Col span={16}>
               <Input type="text" placeholder="" onChange={this.handleChange} value={value} />
             </Col>
             <Col span={6}>
-              <Button  type="default" htmlType="submit" style={{fontSize:'1.2em',fontWeight:800}} size="large"><IntlMessages id="dice.send" /></Button>
+              <Button type="default" htmlType="submit" style={{ fontSize: '1.2em', fontWeight: 800 }} size="large"><IntlMessages id="dice.send" /></Button>
             </Col>
           </Row>
           {/* <div className="info"><span>{messageNum} messages, refresh: {refresh}</span></div> */}
@@ -102,6 +108,7 @@ ChatRoom.propTypes = {
   messageNum: PropTypes.number,
   initSocketConnectionReq: PropTypes.func,
   sendMessageReq: PropTypes.func,
+  clearMessageHistoryReq: PropTypes.func,
   refresh: PropTypes.bool,
   fetchChatHistoryReq: PropTypes.func,
   username: PropTypes.string,
@@ -115,6 +122,7 @@ ChatRoom.defaultProps = {
   refresh: undefined,
   fetchChatHistoryReq: undefined,
   username: undefined,
+  clearMessageHistoryReq: undefined,
 };
 
 const mapStateToProps = (state) => ({
@@ -126,7 +134,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   initSocketConnectionReq: (obj) => dispatch(initSocketConnection(obj)),
   sendMessageReq: (obj) => dispatch(sendMessage(obj)),
-  fetchChatHistoryReq: () =>dispatch(fetchChatHistory()),
+  fetchChatHistoryReq: () => dispatch(fetchChatHistory()),
+  clearMessageHistoryReq: () => dispatch(clearMessage()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatRoom);

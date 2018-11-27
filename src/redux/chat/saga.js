@@ -4,6 +4,7 @@ import { eventChannel } from 'redux-saga';
 import actions from './actions';
 import ParseHelper from '../../helpers/parse';
 const { subscribe, unsubscribe, sendMessage, fetchChatHistory, handleParseError } = ParseHelper;
+let messageGlobalChannel = undefined;
 
 function websocketInitChannel(payload) {
   return eventChannel((emitter) => {
@@ -63,6 +64,7 @@ function websocketInitChannel(payload) {
     const unsubscribeChannel = () => {
       // Close the connection
       unsubscribe(subscription);
+      messageGlobalChannel = undefined;
       return emitter({ type: actions.MESSAGE_UNSUBSCRIBED });
     };
 
@@ -73,10 +75,13 @@ function websocketInitChannel(payload) {
 
 export function* initLiveMessages(action) {
   try {
-    const channel = yield call(websocketInitChannel, action.payload);
+    if (!_.isUndefined(messageGlobalChannel)) {
+      return;
+    };
+    messageGlobalChannel = yield call(websocketInitChannel, action.payload);
 
     while (true) {
-      const payload = yield take(channel);
+      const payload = yield take(messageGlobalChannel);
 
       yield put(payload);
     }
@@ -92,30 +97,30 @@ export function* initLiveMessages(action) {
 
 export function* sendMessageRequest(action) {
 
-  try{
+  try {
 
-  const res = yield call(sendMessage, action.payload);
-  
+    const res = yield call(sendMessage, action.payload);
+
   }
-  catch(e){
+  catch (e) {
     const message = handleParseError(e);
-    
+
     console.error(message);
   }
 }
 
 
 export function* fetchChatHistoryRequest() {
-  
-  try{
-    const response = yield call (fetchChatHistory);
+
+  try {
+    const response = yield call(fetchChatHistory);
 
     yield put({
       type: actions.FETCH_CHAT_HISTORY_RESULT,
       data: response,
     });
   }
-  catch(e){
+  catch (e) {
     const message = handleParseError(e);
 
     console.error(message);

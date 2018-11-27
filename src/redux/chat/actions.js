@@ -9,6 +9,7 @@ const actions = {
   MESSAGE_OBJECT_UPDATED: 'MESSAGE_OBJECT_UPDATED',
   MESSAGE_OBJECT_DELETED: 'MESSAGE_OBJECT_DELETED',
   MESSAGE_OBJECT_ENTERED: 'MESSAGE_OBJECT_ENTERED',
+  MESSAGE_CLEAR: 'MESSAGE_CLEAR',
   MESSAGE_OBJECT_LEFT: 'MESSAGE_OBJECT_LET',
   SEND_MESSAGE: 'SEND_MESSAGE',
   FETCH_CHAT_HISTORY: 'FETCH_CHAT_HISTORY',
@@ -30,7 +31,10 @@ const actions = {
   }),
   fetchChatHistory: ()=>({
     type: actions.FETCH_CHAT_HISTORY,
-  })
+  }),
+  clearMessage: ()=> ({
+    type: actions.MESSAGE_CLEAR,
+  }),
 };
 
 export default actions;
