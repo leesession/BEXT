@@ -4,6 +4,7 @@ import {
 
 import _ from 'lodash';
 import actions from './actions';
+import betActions from '../bet/actions';
 import ScatterHelper from '../../helpers/scatter';
 const {
   handleScatterError, getIdentity, transfer, getBalance, getEOSBalance, getBETXBalance,
@@ -48,11 +49,10 @@ function* transferRequest(action) {
 
     // 1. Record current bet value
     yield put({
-      type: actions.CURRENT_BET,
+      type: betActions.SET_CURRENT_BET,
       value: response,
     });
 
-    console.log(response);
 // {
 //   "broadcast": true,
 //   "transaction": {

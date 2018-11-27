@@ -83,7 +83,7 @@ class ScatterHelper {
     const { api, account } = this;
 
     const {
-      bettor, betAmount, betAsset, rollUnder, referrer, seed,
+      bettor, betAmount, betAsset, rollUnder, referrer, seed, nounce,
     } = params;
 
     const amount = _.floor(betAmount, 4).toFixed(4);
@@ -93,7 +93,7 @@ class ScatterHelper {
       from: bettor,
       to: BETX_DICE_CONTRACT,
       quantity: `${amount} ${betAsset}`,
-      memo: `${rollUnder}-${referrer}-${seed}`,
+      memo: `${rollUnder}-${referrer}-${seed}-${nounce}`,
     };
 
     if (_.isUndefined(api)) {

@@ -18,7 +18,7 @@ import betActions from '../redux/bet/actions';
 import appActions from '../redux/app/actions';
 import IntlMessages from '../components/utility/intlMessages';
 import { appConfig } from '../settings';
-import { getFixedFloat } from '../helpers/utility';
+import { getFixedFloat, randomString} from '../helpers/utility';
 cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
 const FormItem = Form.Item;
@@ -320,7 +320,8 @@ class DicePage extends React.Component {
       betAsset,
       rollUnder: rollNumber,
       referrer,
-      seed,
+      seed:randomString(16),
+      nounce: randomString(16),
     });
   }
 

@@ -25,7 +25,6 @@ const actions = {
   CLEAR_ERROR_MESSAGE: 'CLEAR_ERROR_MESSAGE',
   SET_REF: 'SET_REF',
   TOGGLE_TOPBAR: 'TOGGLE_TOPBAR',
-  CURRENT_BET: 'CURRENT_BET',
   toggleAll: (width, height) => {
     const view = getView(width);
     const collapsed = view !== 'DesktopView';

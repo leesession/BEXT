@@ -19,6 +19,7 @@ const initState = new Map({
   allVolume: 0,
   betxStakeAmount: 0,
   betxCirculation: 0,
+  currentBet: undefined,
 });
 
 export default function (state = initState, action) {
@@ -48,8 +49,11 @@ export default function (state = initState, action) {
       const newObject = parseBetReceipt(action.data);
 
       // Deduping - If newObject is legit and not contained in the queue
-      if (newObject && _.isUndefined(_.find(state.get('history').all(), {id: newObject.id}))) {
+      if (newObject && _.isUndefined(_.find(state.get('history').all(), { id: newObject.id }))) {
         state.get('history').enq(newObject);
+
+        // TODO: Correlate current bet with new bet
+        // const currentBet = state.get('currentBet');
 
         return state
           .set('refresh', !state.get('refresh'));
@@ -62,11 +66,11 @@ export default function (state = initState, action) {
       const newObject = parseBetReceipt(action.data);
 
       // Deduping - If newObject is legit and not contained in the queue
-      if (newObject && _.isUndefined(_.find(state.get('history').all(), {id: newObject.id}))) {
+      if (newObject && _.isUndefined(_.find(state.get('history').all(), { id: newObject.id }))) {
         state.get('history').enq(newObject);
 
-        const appState = appReducer();
-        const currentBet = appState.get("currentBet");
+        // TODO: Correlate current bet with new bet
+        // const currentBet = state.get('currentBet');
 
         return state
           .set('refresh', !state.get('refresh'));
@@ -77,11 +81,14 @@ export default function (state = initState, action) {
     case actions.BET_CHANNEL_UPDATE:
       break;
     case actions.GET_BET_VOLUME_RESULT:
-      return state.set("dailyVolume", action.value && action.value.day || 0)
-      .set("allVolume", action.value && action.value.all || 0);
+      return state.set('dailyVolume', action.value && action.value.day || 0)
+        .set('allVolume', action.value && action.value.all || 0);
     case actions.GET_BETX_STAKE_AMOUNT_RESULT:
-      return state.set("betxStakeAmount", action.value && action.value.staked || 0)
-            .set("betxCirculation", action.value && action.value.issued || 0);
+      return state.set('betxStakeAmount', action.value && action.value.staked || 0)
+        .set('betxCirculation', action.value && action.value.issued || 0);
+    case actions.SET_CURRENT_BET:
+      console.log('betReducer: set current bet to ', action.value);
+      return state.set('currentBet', action.value);
     default:
       return state;
   }

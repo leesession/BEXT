@@ -73,12 +73,16 @@ function websocketInitChannel(payload) {
   });
 }
 
-export function* initLiveMessages(action) {
+export function* initLiveBetHistory(action) {
   try {
     const channel = yield call(websocketInitChannel, action.payload);
 
     while (true) {
       const payload = yield take(channel);
+
+      if(_.isUndefined(payload)){
+        console.log("initLiveBetHistory, payload is undefined.");
+      }
 
       yield put(payload);
     }
@@ -148,7 +152,7 @@ export function * getBetxStakeAmountRequest(){
 
 export default function* topicSaga() {
   yield all([
-    takeEvery(actions.INIT_SOCKET_CONNECTION_BET, initLiveMessages),
+    takeEvery(actions.INIT_SOCKET_CONNECTION_BET, initLiveBetHistory),
     takeEvery(actions.FETCH_BET_HISTORY, fetchBetHistoryRequest),
     takeEvery(actions.GET_BET_VOLUME, getBetVolumeRequest),
     takeEvery(actions.GET_BETX_STAKE_AMOUNT, getBetxStakeAmountRequest),

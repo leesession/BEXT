@@ -18,10 +18,14 @@ const initState = new Map({
   errorMessage: undefined,
   ref: "", // Don't want undefined here
   isTopbarTransparent: true,
-  currentBet:undefined,
 });
 
 export default function appReducer(state = initState, action) {
+
+  if(_.isUndefined(action)){
+    console.log("appReducer.action is undefined;");
+  }
+
   switch (action.type) {
     case actions.TOGGLE_ALL:
       if (state.get('view') !== action.view || action.height !== state.height) {
@@ -52,8 +56,6 @@ export default function appReducer(state = initState, action) {
       return state.set('ref', action.ref);
     case actions.TOGGLE_TOPBAR:
       return state.set('isTopbarTransparent', action.isTransparent);
-    case actions.CURRENT_BET:
-      return state.set('currentBet', action.value);
     default:
       return state;
   }
