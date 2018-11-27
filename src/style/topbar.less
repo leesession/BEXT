@@ -5,43 +5,83 @@
     .ant-modal-title {
         font-size: 1.5em;
         text-align: center;
-        color: white;
+        color: white
     }
 
-    .ant-modal-header, .ant-modal-body {
+    .ant-modal-header {
         background-color: grey;
         color: white;
-        padding-top: 30px;
-        padding-left: 30px;
-        padding-right: 30px;
+        padding: 30px 30px 10px
     }
 
     .ant-modal-body {
         padding-bottom: 30px;
+        padding-left:45px;
+        padding-right:45px;
+        background-color: grey;
+        color: white;
+        border-radius:0px 0px 4px 4px;
+
+        @media @phone{
+            padding-left:30px;
+            padding-right:30px;
+        }
     }
 
     & * {
-        border: none;
+        border: none
     }
 
-    .refWraper {
-        background-color: #444444;
-        padding: 0px 0 0px 10px;
-        border-radius: 5px;
-        font-size: 1.5em;
-        height: 32px;
+    .refmodal-container-input {
 
-        .refHolder {
-            text-align: center;
-            width: 100%;
-            line-height: 32px;
+        display: flex;
+        flex-wrap: wrap;
 
-            &:hover {
-                cursor: pointer;
+        &>div {
+            margin-bottom: 20px;
+
+            @media @phone{
+                width: 100%
+            }
+
+            &:first-of-type {
+                flex-grow: 2;
+                margin-right: 20px;
+                background-color: #444444;
+                padding: 0px 0 0px 10px;
+                border-radius: 5px;
+                font-size: 1.5em;
+                height: 32px;
+
+                @media @phone {
+                    font-size: 1.2em;
+                    margin-right: 0px;
+                }
+
+                span {
+                    text-align: center;
+                    width: 100%;
+                    line-height: 32px;
+
+                    &:hover {
+                        cursor: pointer
+                    }
+
+                }
+
+            }
+
+            &:nth-of-type(2) {
+                button {
+                    max-width: 100%;
+                    width: 8em;
+                }
+
             }
 
         }
 
+        ;
     }
 
 }
@@ -50,12 +90,13 @@
     position: fixed;
     width: 100%;
     z-index: 10;
-    
+
     // Set antd header color to transparent 
-    &.transparent{
-        .ant-layout-header{
-            background-color: transparent;
+    &.transparent {
+        .ant-layout-header {
+            background-color: transparent
         }
+
     }
 
     .ant-layout-header {
@@ -64,20 +105,20 @@
         .transition(background-color .2s ease);
 
         img {
-            width: 180px;
+            width: 180px
         }
+
     }
 
     @media @phone {
         .ant-layout-header {
             padding-left: 0px;
             padding-right: 0px;
-
             height: @heightOnMobile;
             line-height: @heightOnMobile;
 
             img {
-                width: 120px;
+                width: 120px
             }
 
         }
@@ -88,11 +129,11 @@
 
 .topbarWrapper {
     font-size: 1em;
-    display: flex;
+    display: flex
 }
 
 .isoLeft, .isoRight {
-    display: flex;
+    display: flex
 }
 
 .isoLeft {
@@ -105,7 +146,7 @@
             span {
                 color: white;
                 font-size: 2.2em;
-                vertical-align: middle;
+                vertical-align: middle
             }
 
         }
@@ -116,9 +157,10 @@
             vertical-align: middle;
             margin-right: 12px;
 
-            @media @phone{
-                height: 36px;
+            @media @phone {
+                height: 36px
             }
+
         }
 
     }
@@ -139,14 +181,14 @@ ul.menu-list {
 
             i {
                 padding-left: 6px;
-                font-size: 1em;
+                font-size: 1em
             }
 
         }
 
         &:hover {
             background-color: rgba(153, 153, 153, 0.2);
-            .transition(background-color .5s ease);
+            .transition(background-color .5s ease)
         }
 
         //
@@ -166,12 +208,12 @@ ul.menu-list {
             -webkit-transition: width .5s ease, background-color .5s ease;
             -moz-transition: width .5s ease, background-color .5s ease;
             -ms-transition: width .5s ease, background-color .5s ease;
-            -o-transition: width .5s ease, background-color .5s ease;
+            -o-transition: width .5s ease, background-color .5s ease
         }
 
         &:hover:after {
             background-color: @borderColor;
-            width: 100%;
+            width: 100%
         }
 
     }
@@ -195,36 +237,36 @@ ul.menu-list {
             display: block;
 
             &:not(:first-of-type) {
-                margin-top: 4px;
+                margin-top: 4px
             }
 
         }
 
         .top-bar {
             transform: rotate(45deg);
-            transform-origin: 10% 10%;
+            transform-origin: 10% 10%
         }
 
         .middle-bar {
-            opacity: 0;
+            opacity: 0
         }
 
         .bottom-bar {
             transform: rotate(-45deg);
-            transform-origin: 10% 90%;
+            transform-origin: 10% 90%
         }
 
         &.menuCollapsed {
             .top-bar {
-                transform: rotate(0deg);
+                transform: rotate(0deg)
             }
 
             .middle-bar {
-                opacity: 1;
+                opacity: 1
             }
 
             .bottom-bar {
-                transform: rotate(0deg);
+                transform: rotate(0deg)
             }
 
         }
@@ -235,9 +277,10 @@ ul.menu-list {
         &:not(:last-of-type) {
             margin-right: 16px;
 
-            @media @phone{
-                margin-right: 12px;
+            @media @phone {
+                margin-right: 12px
             }
+
         }
 
         &.nav-btn {
@@ -251,18 +294,18 @@ ul.menu-list {
                 background-color: transparent;
 
                 &:hover {
-                    background-color: #444444;
+                    background-color: #444444
                 }
 
             }
 
             .message {
                 span:nth-of-type(1) {
-                    color: @topbarFontColor;
+                    color: @topbarFontColor
                 }
 
                 span:nth-of-type(2) {
-                    color: @topbarFontColor;
+                    color: @topbarFontColor
                 }
 
             }
@@ -270,54 +313,59 @@ ul.menu-list {
         }
 
         .lang-menu-trigger {
-
             @triggerHeightOnMobile: 30px;
-                .selected {
-                    display: inline-block;
-                    border: 1px solid @borderColor;
-                    .border-radius(100px);
-                    padding-left: 15px;
-                    padding-right: 15px;
-                    cursor: pointer;
-                    vertical-align: middle;
 
-                    .selected-inner{
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
+            .selected {
+                display: inline-block;
+                border: 1px solid @borderColor;
+                .border-radius(100px);
+                padding-left: 15px;
+                padding-right: 15px;
+                cursor: pointer;
+                vertical-align: middle;
 
-                        &>*{
-                            display: inline-block;
-                            vertical-align: middle;
-                        }
-                    }
-                    @media @phone{
-                        height: @triggerHeightOnMobile;
-                    }
+                .selected-inner {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
 
-                    img {
-                        height: 20px;
-                        width: auto;
-                        margin-right: 8px;
-                        .opacity(0.7);
-
-                        @media @phone{
-                            height: 16px;
-                        }
-                    }
-
-                    i {
-                        line-height: 35px;
-                        color: @borderColor;
-
-                        @media @phone{
-                            height: @triggerHeightOnMobile - 3px;
-                            line-height: @triggerHeightOnMobile - 4px;
-                            font-size: 2em;
-                        }
+                    &>* {
+                        display: inline-block;
+                        vertical-align: middle
                     }
 
                 }
+
+                @media @phone {
+                    height: @triggerHeightOnMobile
+                }
+
+                img {
+                    height: 20px;
+                    width: auto;
+                    margin-right: 8px;
+                    .opacity(0.7);
+
+                    @media @phone {
+                        height: 16px
+                    }
+
+                }
+
+                i {
+                    line-height: 35px;
+                    color: @borderColor;
+
+                    @media @phone {
+                        height: @triggerHeightOnMobile - 3px;
+                        line-height: @triggerHeightOnMobile - 4px;
+                        font-size: 2em
+                    }
+
+                }
+
+            }
+
         }
 
     }
@@ -326,10 +374,12 @@ ul.menu-list {
 
 .lang-menu {
     flex-direction: column;
-    .lang-menu-item{
+
+    .lang-menu-item {
         padding-left: 24px;
-        padding-right: 24px;
+        padding-right: 24px
     }
+
 }
 
 .menu {
@@ -342,8 +392,8 @@ ul.menu-list {
     overflow: hidden;
     .transition(max-height .5s ease);
 
-    @media @phone{
-        font-size: 1.4em;
+    @media @phone {
+        font-size: 1.4em
     }
 
     ul {
@@ -356,7 +406,7 @@ ul.menu-list {
             text-align: center;
 
             &:last-of-type {
-                border-top: 1px solid @borderColor;
+                border-top: 1px solid @borderColor
             }
 
         }
@@ -367,12 +417,12 @@ ul.menu-list {
         display: block;
         height: 100%;
         width: 100%;
-        color: @topbarFontColor;
+        color: @topbarFontColor
     }
 
     &.menuCollapsed {
         max-height: 0px;
-        border: 0px;
+        border: 0px
     }
 
 }

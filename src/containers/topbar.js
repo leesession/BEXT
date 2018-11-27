@@ -72,8 +72,8 @@ class Topbar extends React.PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { errorMessage, username, location: newLocation} = nextProps;
-    const { intl, location} = this.props;
+    const { errorMessage, username, location: newLocation } = nextProps;
+    const { intl, location } = this.props;
     const { isLoggedIn } = this.state;
 
     if (username && !isLoggedIn) {
@@ -127,7 +127,6 @@ class Topbar extends React.PureComponent {
   }
 
   onLoginClicked(evt) {
-
     evt.preventDefault();
     const { getIdentityReq } = this.props;
 
@@ -170,7 +169,7 @@ class Topbar extends React.PureComponent {
       }
       return <li role="menuitem" key={item.id}><a href={item.url} onClick={() => this.setRefModalVisible(true)} target="_blank"><IntlMessages id={item.id} /></a></li>;
     });
-    menuItemElementsMobile.push(<li role="menuitem" key="login"><a href={null} style={{width:"100%"}} onClick={this.onLoginClicked}><IntlMessages id="topbar.login" /></a></li>);
+    menuItemElementsMobile.push(<li role="menuitem" key="login"><a href={null} style={{ width: '100%' }} onClick={this.onLoginClicked}><IntlMessages id="topbar.login" /></a></li>);
 
     const languageDropdown = (
       <Menu onClick={this.onLanguageDropdownClicked} className="lang-menu">
@@ -269,22 +268,23 @@ class Topbar extends React.PureComponent {
           }}
           footer={null}
         >
-          <Row type="flex" gutter={20} justify="center" align="middle">
-            <Col span={18} style={{ marginBottom: 20 }}>
-            <div className="refWraper">
-            <span className="refHolder" ref="refText">{referralLink}</span></div></Col>
-            <Col span={6} style={{ marginBottom: 20 }}>
-              <CopyToClipboard
-                text={referralLink}
-                onCopy={() => {
-                  this.refs.refText.style.background = 'blue';
-                }}
-              >
-                <Button style={{ width: '100%', fontSize: '1.2em' }} size="large" type="primary"><IntlMessages id="topbar.copy" /></Button>
-              </CopyToClipboard>
-            </Col>
-            <Col span={24} style={{ fontSize: '1.2em' }}><span><IntlMessages id="topbar.copy.description" /></span></Col>
-          </Row>
+          <div className="refmodal-container">
+            <div className="refmodal-container-input">
+              <div><span ref="refText">{referralLink}</span></div>
+              <div>
+                <CopyToClipboard
+                  text={referralLink}
+                  onCopy={() => {
+                    this.refs.refText.style.background = 'blue';
+                  }}
+                >
+                <Button size="large" type="primary"><IntlMessages id="topbar.copy" /></Button>
+                </CopyToClipboard>
+              </div>
+            </div>
+            <div>
+              <span><IntlMessages id="topbar.copy.description" /></span></div>
+          </div>
         </Modal>
       </div>
     );
