@@ -56,7 +56,10 @@ class ChatRoom extends React.Component {
       value: '',
     });
   }
-
+  
+  componentWillUnmount(){
+    this.props.history.clean();
+  }
 
   render() {
     const { history, messageNum, refresh } = this.props;

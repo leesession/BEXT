@@ -161,6 +161,7 @@ class DicePage extends React.Component {
     this.onBetClicked = this.onBetClicked.bind(this);
     this.onLogInClicked = this.onLogInClicked.bind(this);
     this.formatBetAmountStr = this.formatBetAmountStr.bind(this);
+    this.onLoginAlert = this.onLoginAlert.bind(this);
   }
 
   componentWillMount() {
@@ -322,6 +323,12 @@ class DicePage extends React.Component {
       referrer,
       seed,
     });
+  }
+
+  onLoginAlert(){
+    message.warning(this.props.intl.formatMessage({
+      id: 'message.warn.loginFirst'
+    }))
   }
 
   /**
@@ -511,15 +518,15 @@ class DicePage extends React.Component {
                                 <div className="inputBorder">
                                   <Row>
                                     <Col span={8}>
-                                      <Button size="large" className="box-input-button" type="default" onClick={this.onBetAmountButtonClick} data-value="0.5" >1/2
+                                      <Button size="large" className="box-input-button" type="default" onClick={username === this.defaultUsername ? this.onLoginAlert : this.onBetAmountButtonClick} data-value="0.5" >1/2
                                       </Button>
                                     </Col>
                                     <Col span={8}>
-                                      <Button size="large" className="box-input-button" type="default" onClick={this.onBetAmountButtonClick} data-value="2" >2X
+                                      <Button size="large" className="box-input-button" type="default" onClick={username === this.defaultUsername ? this.onLoginAlert : this.onBetAmountButtonClick} data-value="2" >2X
                                       </Button>
                                     </Col>
                                     <Col span={8}>
-                                      <Button size="large" className="box-input-button" type="default" onClick={this.onBetAmountButtonClick} data-value={MAX_BALANCE_STR} >{MAX_BALANCE_STR}
+                                      <Button size="large" className="box-input-button" type="default" onClick={username === this.defaultUsername ? this.onLoginAlert : this.onBetAmountButtonClick} data-value={MAX_BALANCE_STR} >{MAX_BALANCE_STR}
                                       </Button>
                                     </Col>
                                   </Row>

@@ -4,6 +4,7 @@ import { eventChannel } from 'redux-saga';
 import actions from './actions';
 import ParseHelper from '../../helpers/parse';
 const { subscribe, unsubscribe, sendMessage, fetchChatHistory, handleParseError } = ParseHelper;
+let messageGlobalChannel = undefined;
 
 function websocketInitChannel(payload) {
   return eventChannel((emitter) => {
@@ -73,10 +74,14 @@ function websocketInitChannel(payload) {
 
 export function* initLiveMessages(action) {
   try {
-    const channel = yield call(websocketInitChannel, action.payload);
+    if(! _.isUndefined(messageGlobalChannel)){ 
+      console.log('channel exist');
+      return;
+     }; 
+     messageGlobalChannel = yield call(websocketInitChannel, action.payload);
 
     while (true) {
-      const payload = yield take(channel);
+      const payload = yield take(messageGlobalChannel);
 
       yield put(payload);
     }

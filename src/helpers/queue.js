@@ -42,6 +42,10 @@ class Queue {
   all() {
     return this.elements;
   }
+  
+  clean(){
+    this.elements = [];
+  }
 }
 
 export default Queue;

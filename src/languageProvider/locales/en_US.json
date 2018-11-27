@@ -128,6 +128,8 @@
   "message.warn.lessThanMinBet":"The minimum bet amount is {amount} {asset}.",
   "message.warn.greaterThanMaxBet":"The maximum bet amount is {amount} {asset}.",
 
+  "message.warn.loginFirst":"Please login first",
+
   "error.scatter.locked":"Scatter is locked. Please unlock it and refresh page.",
   "error.scatter.rejected":"Signature request is rejected in Scatter.",
   "error.scatter.notconnected":"Scatter is not connected yet.",
