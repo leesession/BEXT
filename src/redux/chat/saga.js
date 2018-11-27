@@ -39,6 +39,7 @@ function websocketInitChannel(payload) {
 
     const unsubscribeHandler = () => {
       // console.log('subscription close');
+      messageGlobalChannel = undefined;
       return emitter({ type: actions.MESSAGE_UNSUBSCRIBED });
     };
 
@@ -64,7 +65,6 @@ function websocketInitChannel(payload) {
     const unsubscribeChannel = () => {
       // Close the connection
       unsubscribe(subscription);
-      messageGlobalChannel = undefined;
       return emitter({ type: actions.MESSAGE_UNSUBSCRIBED });
     };
 
