@@ -64,6 +64,7 @@ function websocketInitChannel(payload) {
     const unsubscribeChannel = () => {
       // Close the connection
       unsubscribe(subscription);
+      messageGlobalChannel = undefined;
       return emitter({ type: actions.MESSAGE_UNSUBSCRIBED });
     };
 
@@ -75,7 +76,6 @@ function websocketInitChannel(payload) {
 export function* initLiveMessages(action) {
   try {
     if (!_.isUndefined(messageGlobalChannel)) {
-      console.log('channel exist');
       return;
     };
     messageGlobalChannel = yield call(websocketInitChannel, action.payload);

@@ -43,7 +43,7 @@ class Queue {
     return this.elements;
   }
 
-  clean() {
+  clear() {
     this.elements = [];
   }
 }

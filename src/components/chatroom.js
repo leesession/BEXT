@@ -10,7 +10,7 @@ import IntlMessages from '../components/utility/intlMessages';
 
 cloudinaryConfig({ cloud_name: 'dd1ixvdxn' });
 
-const { initSocketConnection, sendMessage, fetchChatHistory } = chatActions;
+const { initSocketConnection, sendMessage, fetchChatHistory, clearMessage } = chatActions;
 
 class ChatRoom extends React.Component {
   constructor(props) {
@@ -36,6 +36,10 @@ class ChatRoom extends React.Component {
   componentDidUpdate() {
     this.myRef.scrollTop = this.myRef.scrollHeight;
   }
+  
+  componentWillUnmount(){
+    this.props.clearMessageHistoryReq();
+  }
 
   handleChange(event) {
     this.setState({ value: event.target.value });
@@ -55,10 +59,6 @@ class ChatRoom extends React.Component {
     this.setState({
       value: '',
     });
-  }
-
-  componentWillUnmount() {
-    this.props.history.clean();
   }
 
   render() {
@@ -105,6 +105,7 @@ ChatRoom.propTypes = {
   messageNum: PropTypes.number,
   initSocketConnectionReq: PropTypes.func,
   sendMessageReq: PropTypes.func,
+  clearMessageHistoryReq: PropTypes.func,
   refresh: PropTypes.bool,
   fetchChatHistoryReq: PropTypes.func,
   username: PropTypes.string,
@@ -118,6 +119,7 @@ ChatRoom.defaultProps = {
   refresh: undefined,
   fetchChatHistoryReq: undefined,
   username: undefined,
+  clearMessageHistoryReq: undefined,
 };
 
 const mapStateToProps = (state) => ({
@@ -130,6 +132,7 @@ const mapDispatchToProps = (dispatch) => ({
   initSocketConnectionReq: (obj) => dispatch(initSocketConnection(obj)),
   sendMessageReq: (obj) => dispatch(sendMessage(obj)),
   fetchChatHistoryReq: () => dispatch(fetchChatHistory()),
+  clearMessageHistoryReq: ()=>dispatch(clearMessage()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatRoom);

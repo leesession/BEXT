@@ -161,7 +161,6 @@ class DicePage extends React.Component {
     this.onBetClicked = this.onBetClicked.bind(this);
     this.onLogInClicked = this.onLogInClicked.bind(this);
     this.formatBetAmountStr = this.formatBetAmountStr.bind(this);
-    this.onLoginAlert = this.onLoginAlert.bind(this);
   }
 
   componentWillMount() {
@@ -259,29 +258,33 @@ class DicePage extends React.Component {
   }
 
   onBetAmountButtonClick(e) {
-    const { eosBalance: balance, betAmount, payout } = this.state;
+    const { eosBalance: balance, betAmount, payout, username } = this.state;
     const { formatBetAmountStr } = this;
-
     const targetValue = e.currentTarget.getAttribute('data-value');
-
     let newBetAmount = _.toNumber(betAmount);
 
-    if (targetValue === MAX_BALANCE_STR) { // For "MAX" case
-      newBetAmount = balance;
-    } else if (targetValue === '1' || targetValue === '-1') { // For +1 and -1 cases; don't set upper limit with balance;
-      newBetAmount = _.toNumber(betAmount) + _.toNumber(targetValue);
-    } else if (targetValue === '0.5' || targetValue === '2') { // For 0.5x and 2x cases; set upper limit with balance;
-      newBetAmount = _.toNumber(betAmount) * _.toNumber(targetValue);
+    if (username === this.defaultUsername) {
+      message.warning(this.props.intl.formatMessage({
+        id: 'message.warn.loginFirst'
+      }));
+    } else {
+      if (targetValue === MAX_BALANCE_STR) { // For "MAX" case
+        newBetAmount = balance;
+      } else if (targetValue === '1' || targetValue === '-1') { // For +1 and -1 cases; don't set upper limit with balance;
+        newBetAmount = _.toNumber(betAmount) + _.toNumber(targetValue);
+      } else if (targetValue === '0.5' || targetValue === '2') { // For 0.5x and 2x cases; set upper limit with balance;
+        newBetAmount = _.toNumber(betAmount) * _.toNumber(targetValue);
+      }
+
+      // newBetAmount is a number. Don't forget to change it with toString here.
+      newBetAmount = formatBetAmountStr(newBetAmount.toString());
+      const payoutOnWin = calculatePayoutOnWin(newBetAmount, payout);
+
+      this.setState({
+        betAmount: newBetAmount,
+        payoutOnWin,
+      });
     }
-
-    // newBetAmount is a number. Don't forget to change it with toString here.
-    newBetAmount = formatBetAmountStr(newBetAmount.toString());
-    const payoutOnWin = calculatePayoutOnWin(newBetAmount, payout);
-
-    this.setState({
-      betAmount: newBetAmount,
-      payoutOnWin,
-    });
   }
 
   getSliderValue(value) {
@@ -323,12 +326,6 @@ class DicePage extends React.Component {
       referrer,
       seed,
     });
-  }
-
-  onLoginAlert() {
-    message.warning(this.props.intl.formatMessage({
-      id: 'message.warn.loginFirst'
-    }))
   }
 
   /**
@@ -518,15 +515,15 @@ class DicePage extends React.Component {
                                 <div className="inputBorder">
                                   <Row>
                                     <Col span={8}>
-                                      <Button size="large" className="box-input-button" type="default" onClick={username === this.defaultUsername ? this.onLoginAlert : this.onBetAmountButtonClick} data-value="0.5" >1/2
+                                      <Button size="large" className="box-input-button" type="default" onClick={this.onBetAmountButtonClick} data-value="0.5" >1/2
                                       </Button>
                                     </Col>
                                     <Col span={8}>
-                                      <Button size="large" className="box-input-button" type="default" onClick={username === this.defaultUsername ? this.onLoginAlert : this.onBetAmountButtonClick} data-value="2" >2X
+                                      <Button size="large" className="box-input-button" type="default" onClick={this.onBetAmountButtonClick} data-value="2" >2X
                                       </Button>
                                     </Col>
                                     <Col span={8}>
-                                      <Button size="large" className="box-input-button" type="default" onClick={username === this.defaultUsername ? this.onLoginAlert : this.onBetAmountButtonClick} data-value={MAX_BALANCE_STR} >{MAX_BALANCE_STR}
+                                      <Button size="large" className="box-input-button" type="default" onClick={this.onBetAmountButtonClick} data-value={MAX_BALANCE_STR} >{MAX_BALANCE_STR}
                                       </Button>
                                     </Col>
                                   </Row>
