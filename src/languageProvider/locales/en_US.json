@@ -129,6 +129,7 @@
   "message.warn.greaterThanMaxBet":"The maximum bet amount is {amount} {asset}.",
 
   "message.warn.loginFirst":"Please login first",
+  "message.warn.emptyInput":"Chat input cannot be empty.",
 
   "error.scatter.locked":"Scatter is locked. Please unlock it and refresh page.",
   "error.scatter.rejected":"Signature request is rejected in Scatter.",

@@ -230,21 +230,23 @@ class ParseHelper {
     const { parseBetReceipt } = this;
     const query = new Parse.Query(ParseBet);
     query.exists('receipt');
+    query.descending("resolved_block_num");
     query.limit(appConfig.betHistoryMemorySize);
-    query.ascending('resolved_block_num');
 
-    return query.find().then((results) => Promise.resolve(_.filter(
+    // Bet history need to be inserted to the queue in ascending order, so we need to reserve the array here
+    return query.find().then((results) => Promise.resolve(_.reverse(_.filter(
       _.map(results, (entry) => parseBetReceipt(entry)),
       (o) => !_.isUndefined(o)
-    )));
+    ))));
   }
 
   fetchChatHistory() {
     const query = new Parse.Query(ParseMessage);
-    query.ascending("createdAt");
+    query.descending("updatedAt");
     query.limit(appConfig.chatHistoryMemorySize);
 
-    return query.find();
+// Chat history need to be inserted to the queue in ascending order, so we need to reserve the array here
+    return query.find().then((results=> Promise.resolve(_.reverse(results))));
   }
 
   getBetVolume(){

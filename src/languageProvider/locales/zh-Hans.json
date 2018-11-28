@@ -128,6 +128,7 @@
   "message.warn.greaterThanMaxBet":"当前下注允许的最大值为 {amount} {asset}.",
 
   "message.warn.loginFirst":"请先登录",
+  "message.warn.emptyInput":"聊天框输入为空",
 
   "error.scatter.locked":"Scatter未解锁，请先解锁并刷新页面重试",
   "error.scatter.rejected":"Scatter的签名请求被拒绝",

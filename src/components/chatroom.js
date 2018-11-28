@@ -1,7 +1,8 @@
 import React, { PropTypes } from 'react';
-import { Form, Row, Col, Table, Input, InputNumber, Button, Tabs } from 'antd';
+import { Form, Row, Col, Table, Input, InputNumber, Button, Tabs, message } from 'antd';
 import { connect } from 'react-redux';
 import _ from 'lodash';
+import { injectIntl, intlShape } from 'react-intl';
 
 import { cloudinaryConfig, CloudinaryImage } from '../components/react-cloudinary';
 import chatActions from '../redux/chat/actions';
@@ -49,10 +50,19 @@ class ChatRoom extends React.Component {
   }
 
   handleSubmit(event) {
-    const { sendMessageReq, username } = this.props;
+    const { sendMessageReq, username, intl } = this.props;
     const { value } = this.state;
 
     event.preventDefault();
+
+    // Return is input string is empty
+    if (value === '' || _.trim(value) === '') {
+      message.warn(intl.formatMessage({ id: 'message.warn.emptyInput' }));
+      this.setState({
+        value: '',
+      });
+      return;
+    }
 
     sendMessageReq({
       username,
@@ -112,6 +122,7 @@ ChatRoom.propTypes = {
   refresh: PropTypes.bool,
   fetchChatHistoryReq: PropTypes.func,
   username: PropTypes.string,
+  intl: intlShape.isRequired,
 };
 
 ChatRoom.defaultProps = {
@@ -138,5 +149,5 @@ const mapDispatchToProps = (dispatch) => ({
   clearMessageHistoryReq: () => dispatch(clearMessage()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ChatRoom);
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(ChatRoom));
 
