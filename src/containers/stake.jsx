@@ -121,8 +121,8 @@ class StakePage extends React.Component {
     } = this.props;
     const { time, inputStake, inputReclaim } = this.state;
 
-    const termTextParts = intl.formatMessage({ id: 'stake.rule.body' }).split('\n');
-    const termText = _.map(termTextParts, (part, partIndex) => <p key={partIndex}>{part}</p>);
+    const termText = 
+    (<div><p><IntlMessages id="stake.rule.body1" /></p><p className="highlight"><IntlMessages id="stake.rule.body2" /> </p><p><IntlMessages id="stake.rule.body3" /> </p></div>);
 
     const totalDividend = allVolume * appConfig.dividendRatio;
     const myExpectedDiv = totalDividend * (myBetxBalance/ betxCirculation);
