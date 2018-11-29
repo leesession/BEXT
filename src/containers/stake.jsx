@@ -117,7 +117,7 @@ class StakePage extends React.Component {
 
   render() {
     const {
-      intl, dailyVolume, allVolume, betxStakeAmount, betxCirculation, myBetxBalance, myStakedBetxBalance,
+      intl, dailyVolume, allVolume, betxStakeAmount, betxCirculation, myBetxBalance, myStakedBetxBalance, mySnapshot, platformSnapshot,
     } = this.props;
     const { time, inputStake, inputReclaim } = this.state;
 
@@ -164,18 +164,30 @@ class StakePage extends React.Component {
                     <Col span={24}>
                       <div className="page-dividend-detail panel-trans">
                         <Row className="border-bottom">
-                          <Col span={12}>
+                        <Col span={8}>
+                            <div className="page-dividend-detail-box">
+                            <p className="page-third-title" ><IntlMessages id="stake.income.mySnapshot" /></p>
+                            <p className="page-third-title" >{_.floor(mySnapshot,4)} BETX</p>
+                            </div>
+                          </Col>
+                          <Col span={8}>
+                            <div className="page-dividend-detail-box">
+                            <p className="page-third-title" ><IntlMessages id="stake.income.platformSnapshot" /></p>
+                            <p className="page-third-title" >{_.floor(platformSnapshot,4)} BETX</p>
+                            </div>
+                          </Col>
+                          <Col span={8}>
                             <div className="page-dividend-detail-box">
                             <p className="page-third-title" ><IntlMessages id="stake.income.predicate" /></p>
                             <p className="page-third-title" >{_.floor(myExpectedDiv,4)} EOS</p>
                             </div>
                           </Col>
-                          <Col span={12}>
+                          {/*<Col span={12}>
                           <div className="page-dividend-detail-box">
                             <p className="page-third-title" ><IntlMessages id="stake.income.betx" /></p>
                             <p className="page-third-title" >{_.floor(DivPer10KBETX,4)} EOS</p>
                             </div>
-                          </Col>
+                          </Col>*/}
                         </Row>
                         <Row type="flex" align="middle" className="page-dividend-detail-bottom">
                           <div className="page-third-title text-right"><IntlMessages id="stake.income.rest" /></div>
@@ -284,6 +296,8 @@ StakePage.propTypes = {
   betxCirculation: PropTypes.number,
   myBetxBalance: PropTypes.number,
   myStakedBetxBalance: PropTypes.number,
+  mySnapshot: PropTypes.number,
+  platformSnapshot: PropTypes.number,
 };
 
 StakePage.defaultProps = {
@@ -295,6 +309,8 @@ StakePage.defaultProps = {
   betxCirculation: 0,
   myBetxBalance: 0,
   myStakedBetxBalance: 0,
+mySnapshot: 0, 
+platformSnapshot:0,
 };
 
 const mapStateToProps = (state) => ({

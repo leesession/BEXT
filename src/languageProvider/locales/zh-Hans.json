@@ -107,6 +107,8 @@
   "stake.dividend.total":"总共累计分红",
   "stake.dividend.allday":"今日累计分红",
   "stake.dividend.my":"我的分红",
+  "stake.income.mySnapshot":"我的快照总和",
+  "stake.income.platformSnapshot":"平台快照总和",
   "stake.income.predicate":"我的预估收益",
   "stake.income.betx":"每万BETX预期收益",
   "stake.income.rest":"我的分红余额",

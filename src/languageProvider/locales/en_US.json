@@ -108,6 +108,8 @@
   "stake.dividend.total":"Total Dividend",
   "stake.dividend.allday":"Today's Dividend",
   "stake.dividend.my":"My Dividend",
+  "stake.income.mySnapshot":"My Snapshot Total",
+  "stake.income.platformSnapshot":"Platform Snapshot Total",
   "stake.income.predicate":"My Expected Dividend",
   "stake.income.betx":"Dividend per 10,000 BETX",
   "stake.income.rest":"My Available Dividend",
