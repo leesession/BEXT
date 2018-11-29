@@ -134,6 +134,8 @@
   "error.scatter.locked":"Scatter is locked. Please unlock it and refresh page.",
   "error.scatter.rejected":"Signature request is rejected in Scatter.",
   "error.scatter.notconnected":"Scatter is not connected yet.",
+  "error.scatter.overdrawnBalance":"Insufficient balance from account.",
+
   "error.page.usernamenotfound":"EOS username not found.",
   "error.account.cpuInsufficient":"EOS account CPU time insufficient.",
   "error.scatter.betLessThanMax": "Payout amount greater than max. Bet less."

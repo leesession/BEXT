@@ -155,6 +155,9 @@ class ScatterHelper {
               if(assertMessageObj.message.indexOf("Bet less than max") >=0){
                 return Promise.resolve("error.scatter.betLessThanMax");
               }
+              else if(assertMessageObj.message.indexOf("overdrawn balance") >=0){
+                return Promise.resolve("error.scatter.overdrawnBalance");
+              }
             }
           }
         }
