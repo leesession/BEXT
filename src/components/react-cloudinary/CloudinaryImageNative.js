@@ -21,6 +21,7 @@ function _inherits(subClass, superClass) {
 }
 
 const _react = require('react');
+const PropTypes = require('prop-types');
 
 const _react2 = _interopRequireDefault(_react);
 
@@ -50,8 +51,8 @@ const CloudinaryImage = (function (_Component) {
   _createClass(CloudinaryImage, null, [{
     key: 'propTypes',
     value: {
-      publicId: _react.PropTypes.string.isRequired,
-      options: _react.PropTypes.object,
+      publicId: PropTypes.string.isRequired,
+      options: PropTypes.object,
     },
     enumerable: true,
   }]);

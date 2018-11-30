@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Form, Row, Col, Table, Input, InputNumber, Button, Tabs, message } from 'antd';
 import { connect } from 'react-redux';
 import _ from 'lodash';

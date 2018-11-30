@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Switch, Route } from 'react-router-dom';
 import asyncComponent from '../../helpers/AsyncFunc';
 
@@ -27,11 +28,6 @@ class AppRouter extends React.Component {
           exact
           path={`${url}/stake`}
           component={asyncComponent(() => import('../stake'))}
-        />
-        <Route
-          exact
-          path={`${url}/whitepaper`}
-          component={asyncComponent(() => import('../whitepaper'))}
         />
         <Route
           exact

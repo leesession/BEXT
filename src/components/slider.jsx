@@ -1,5 +1,6 @@
 import { Slider, InputNumber, Row, Col } from 'antd';
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 class IntegerStep extends React.Component {
   constructor(props) {

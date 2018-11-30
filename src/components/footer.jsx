@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Row, Col, Input, Button, Popover } from 'antd';
 import { injectIntl, intlShape } from 'react-intl';
 

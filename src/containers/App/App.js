@@ -1,9 +1,11 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Layout, LocaleProvider } from 'antd';
 import { IntlProvider } from 'react-intl';
 import { Debounce } from 'react-throttle';
-import { WindowResizeListener } from 'react-window-resize-listener';
+import WindowSizeListener from 'react-window-size-listener'
+
 import { ThemeProvider } from 'styled-components';
 import Waypoint from 'react-waypoint';
 
@@ -61,7 +63,7 @@ export class App extends React.PureComponent {
             <AppHolder>
               <Layout style={{ height: appHeight }}>
                 <Debounce time="1000" handler="onResize">
-                  <WindowResizeListener
+                  <WindowSizeListener
                     onResize={(windowSize) =>
                       toggleAllReq(
                         windowSize.windowWidth,

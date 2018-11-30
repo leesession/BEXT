@@ -1,6 +1,7 @@
 /* eslint no-bitwise: 0 */
 import _ from "lodash";
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 const COLORS = [
   '#e21400', '#91580f', '#f8a700', '#f78b00',
