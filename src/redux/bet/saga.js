@@ -13,7 +13,10 @@ function websocketInitChannel(payload) {
   return eventChannel((emitter) => {
     const subscription = subscribe(payload.collection);
 
-    const subscribeHandler = () => emitter({ type: actions.BET_SUBSCRIBED });
+    const subscribeHandler = () => {
+      console.log("Bet live channel subscribed.");
+      return emitter({ type: actions.BET_SUBSCRIBED })
+    };
 
     const updateHandler = (object) => {
       // console.log('object updated', object);
@@ -43,6 +46,7 @@ function websocketInitChannel(payload) {
     const unsubscribeHandler = () => {
       // console.log('subscription close');
       betGlobalChannel = undefined;
+      console.log("Bet live channel unsubscribed.");
       return emitter({ type: actions.BET_UNSUBSCRIBED });
     };
 
@@ -96,6 +100,11 @@ export function* initLiveBetHistory(action) {
     // socketChannel.close()
   } finally {
     console.log('message stream terminated');
+
+    // Reconnect to make sure there's always a ws connection
+    yield put({
+      type:actions.INIT_SOCKET_CONNECTION_BET,
+    });
   }
 }
 

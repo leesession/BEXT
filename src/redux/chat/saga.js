@@ -3,42 +3,37 @@ import { all, take, takeEvery, put, fork, call, cancelled } from 'redux-saga/eff
 import { eventChannel } from 'redux-saga';
 import actions from './actions';
 import ParseHelper from '../../helpers/parse';
-const { subscribe, unsubscribe, sendMessage, fetchChatHistory, handleParseError } = ParseHelper;
-let messageGlobalChannel = undefined;
+const {
+  subscribe, unsubscribe, sendMessage, fetchChatHistory, handleParseError,
+} = ParseHelper;
+let messageGlobalChannel;
 
 function websocketInitChannel(payload) {
   return eventChannel((emitter) => {
     const subscription = subscribe(payload.collection);
 
-    const subscribeHandler = () => emitter({ type: actions.MESSAGE_SUBSCRIBED });
+    const subscribeHandler = () => {
+      console.log('Chat live channel subscribed.');
+      return emitter({ type: actions.MESSAGE_SUBSCRIBED });
+    };
 
-    const updateHandler = (object) => {
+    const updateHandler = (object) =>
       // console.log('object updated', object);
-      return emitter({ type: actions.MESSAGE_OBJECT_UPDATED, data: object });
-    };
-
-    const createHandler = (object) => {
+      emitter({ type: actions.MESSAGE_OBJECT_UPDATED, data: object });
+    const createHandler = (object) =>
       // console.log('object created', object);
-      return emitter({ type: actions.MESSAGE_OBJECT_CREATED, data: object });
-    };
-
-    const deleteHandler = (object) => {
+      emitter({ type: actions.MESSAGE_OBJECT_CREATED, data: object });
+    const deleteHandler = (object) =>
       // console.log('object deleted', object);
-      return emitter({ type: actions.MESSAGE_OBJECT_DELETED, data: object });
-    };
-
-    const enterHandler = (object) => {
+      emitter({ type: actions.MESSAGE_OBJECT_DELETED, data: object });
+    const enterHandler = (object) =>
       // console.log('object entered', object);
-      return emitter({ type: actions.MESSAGE_OBJECT_ENTERED, data: object });
-    };
-
-    const leaveHandler = (object) => {
+      emitter({ type: actions.MESSAGE_OBJECT_ENTERED, data: object });
+    const leaveHandler = (object) =>
       // console.log('object left', object);
-      return emitter({ type: actions.MESSAGE_OBJECT_LEFT, data: object });
-    };
-
+      emitter({ type: actions.MESSAGE_OBJECT_LEFT, data: object });
     const unsubscribeHandler = () => {
-      // console.log('subscription close');
+      console.log('Chat live channel unsubscribed.');
       messageGlobalChannel = undefined;
       return emitter({ type: actions.MESSAGE_UNSUBSCRIBED });
     };
@@ -77,7 +72,7 @@ export function* initLiveMessages(action) {
   try {
     if (!_.isUndefined(messageGlobalChannel)) {
       return;
-    };
+    }
     messageGlobalChannel = yield call(websocketInitChannel, action.payload);
 
     while (true) {
@@ -92,17 +87,18 @@ export function* initLiveMessages(action) {
     // socketChannel.close()
   } finally {
     console.log('message stream terminated');
+
+    // Reconnect
+    yield put({
+      type: actions.INIT_SOCKET_CONNECTION_MESSAGE,
+    });
   }
 }
 
 export function* sendMessageRequest(action) {
-
   try {
-
     const res = yield call(sendMessage, action.payload);
-
-  }
-  catch (e) {
+  } catch (e) {
     const message = handleParseError(e);
 
     console.error(message);
@@ -111,7 +107,6 @@ export function* sendMessageRequest(action) {
 
 
 export function* fetchChatHistoryRequest() {
-
   try {
     const response = yield call(fetchChatHistory);
 
@@ -119,13 +114,11 @@ export function* fetchChatHistoryRequest() {
       type: actions.FETCH_CHAT_HISTORY_RESULT,
       data: response,
     });
-  }
-  catch (e) {
+  } catch (e) {
     const message = handleParseError(e);
 
     console.error(message);
   }
-
 }
 
 export default function* topicSaga() {
