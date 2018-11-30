@@ -29,10 +29,10 @@ const actions = {
     type: actions.SEND_MESSAGE,
     payload: obj,
   }),
-  fetchChatHistory: ()=>({
+  fetchChatHistory: () => ({
     type: actions.FETCH_CHAT_HISTORY,
   }),
-  clearMessage: ()=> ({
+  clearMessage: () => ({
     type: actions.MESSAGE_CLEAR,
   }),
 };

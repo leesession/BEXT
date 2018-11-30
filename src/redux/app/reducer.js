@@ -16,14 +16,13 @@ const initState = new Map({
   betxBalance: undefined,
   successMessage: undefined,
   errorMessage: undefined,
-  ref: "", // Don't want undefined here
+  ref: '', // Don't want undefined here
   isTopbarTransparent: true,
 });
 
 export default function appReducer(state = initState, action) {
-
-  if(_.isUndefined(action)){
-    console.log("appReducer.action is undefined;");
+  if (_.isUndefined(action)) {
+    console.log('appReducer.action is undefined;');
   }
 
   switch (action.type) {
@@ -42,8 +41,6 @@ export default function appReducer(state = initState, action) {
       return state.set('eosBalance', action.value);
     case actions.GET_BETX_BALANCE_RESULT:
       return state.set('betxBalance', action.value);
-    case actions.TRANSER_RESULT:
-      return state.set('transferResult', action.value);
     case actions.SUCCESS_MESSAGE:
       return state.set('successMessage', action.message);
     case actions.CLEAR_SUCCESS_MESSAGE:

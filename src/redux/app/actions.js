@@ -53,7 +53,7 @@ const actions = {
   toggleTopbar: (isTransparent) => ({
     type: actions.TOGGLE_TOPBAR,
     isTransparent,
-  })
+  }),
 };
 
 export default actions;

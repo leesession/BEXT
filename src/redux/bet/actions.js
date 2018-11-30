@@ -30,6 +30,10 @@ const actions = {
   getBETXStakeAmount: () => ({
     type: actions.GET_BETX_STAKE_AMOUNT,
   }),
+  clearCurrentBet: () => ({
+    type: actions.SET_CURRENT_BET,
+    value: undefined,
+  }),
 };
 
 export default actions;

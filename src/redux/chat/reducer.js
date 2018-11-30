@@ -47,12 +47,12 @@ export default function (state = initState, action) {
 
     case actions.FETCH_CHAT_HISTORY_RESULT:
       _.each(action.data, (message) => {
-        state.get("history").enq(convertMessageToJSON(message));
+        state.get('history').enq(convertMessageToJSON(message));
       });
       return state
         .set('refresh', !state.get('refresh'));
     case actions.MESSAGE_CLEAR:
-      state.get("history").clear();
+      state.get('history').clear();
       return state
         .set('refresh', !state.get('refresh'));
     default:

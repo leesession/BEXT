@@ -88,6 +88,8 @@ export function* initLiveMessages(action) {
   } finally {
     console.log('message stream terminated');
 
+    yield call(delay, 5000);
+    
     // Reconnect
     yield put({
       type: actions.INIT_SOCKET_CONNECTION_MESSAGE,

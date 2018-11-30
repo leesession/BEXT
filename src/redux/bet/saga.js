@@ -3,8 +3,9 @@ import { all, take, takeEvery, put, fork, call, cancelled } from 'redux-saga/eff
 import { eventChannel } from 'redux-saga';
 import actions from './actions';
 import ParseHelper from '../../helpers/parse';
+import {delay} from '../../helpers/utility';
 const {
-  subscribe, unsubscribe, sendBet, fetchBetHistory, handleParseError, getBetVolume, getBetxStakeAmount
+  subscribe, unsubscribe, sendBet, fetchBetHistory, handleParseError, getBetVolume, getBetxStakeAmount,
 } = ParseHelper;
 
 let betGlobalChannel;
@@ -14,39 +15,29 @@ function websocketInitChannel(payload) {
     const subscription = subscribe(payload.collection);
 
     const subscribeHandler = () => {
-      console.log("Bet live channel subscribed.");
-      return emitter({ type: actions.BET_SUBSCRIBED })
+      console.log('Bet live channel subscribed.');
+      return emitter({ type: actions.BET_SUBSCRIBED });
     };
 
-    const updateHandler = (object) => {
+    const updateHandler = (object) =>
       // console.log('object updated', object);
-      return emitter({ type: actions.BET_OBJECT_UPDATED, data: object });
-    };
-
-    const createHandler = (object) => {
+      emitter({ type: actions.BET_OBJECT_UPDATED, data: object });
+    const createHandler = (object) =>
       // console.log('object created', object);
-      return emitter({ type: actions.BET_OBJECT_CREATED, data: object });
-    };
-
-    const deleteHandler = (object) => {
+      emitter({ type: actions.BET_OBJECT_CREATED, data: object });
+    const deleteHandler = (object) =>
       // console.log('object deleted', object);
-      return emitter({ type: actions.BET_OBJECT_DELETED, data: object });
-    };
-
-    const enterHandler = (object) => {
+      emitter({ type: actions.BET_OBJECT_DELETED, data: object });
+    const enterHandler = (object) =>
       // console.log('object entered', object);
-      return emitter({ type: actions.BET_OBJECT_ENTERED, data: object });
-    };
-
-    const leaveHandler = (object) => {
+      emitter({ type: actions.BET_OBJECT_ENTERED, data: object });
+    const leaveHandler = (object) =>
       // console.log('object left', object);
-      return emitter({ type: actions.BET_OBJECT_LEFT, data: object });
-    };
-
+      emitter({ type: actions.BET_OBJECT_LEFT, data: object });
     const unsubscribeHandler = () => {
       // console.log('subscription close');
       betGlobalChannel = undefined;
-      console.log("Bet live channel unsubscribed.");
+      console.log('Bet live channel unsubscribed.');
       return emitter({ type: actions.BET_UNSUBSCRIBED });
     };
 
@@ -81,8 +72,7 @@ function websocketInitChannel(payload) {
 
 export function* initLiveBetHistory(action) {
   try {
-
-    if(!_.isUndefined(betGlobalChannel)){
+    if (!_.isUndefined(betGlobalChannel)) {
       return;
     }
 
@@ -101,9 +91,11 @@ export function* initLiveBetHistory(action) {
   } finally {
     console.log('message stream terminated');
 
+    yield call(delay, 5000);
+
     // Reconnect to make sure there's always a ws connection
     yield put({
-      type:actions.INIT_SOCKET_CONNECTION_BET,
+      type: actions.INIT_SOCKET_CONNECTION_BET,
     });
   }
 }
@@ -126,9 +118,9 @@ export function* fetchBetHistoryRequest() {
   }
 }
 
-export function * getBetVolumeRequest(){
-  try{
-  const result = yield call(getBetVolume);
+export function* getBetVolumeRequest() {
+  try {
+    const result = yield call(getBetVolume);
     yield put({
       type: actions.GET_BET_VOLUME_RESULT,
       value: result,
@@ -145,9 +137,9 @@ export function * getBetVolumeRequest(){
   }
 }
 
-export function * getBetxStakeAmountRequest(){
-  try{
-  const result = yield call(getBetxStakeAmount);
+export function* getBetxStakeAmountRequest() {
+  try {
+    const result = yield call(getBetxStakeAmount);
     yield put({
       type: actions.GET_BETX_STAKE_AMOUNT_RESULT,
       value: result,
