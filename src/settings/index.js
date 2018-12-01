@@ -26,8 +26,10 @@ const appConfig = {
   firstBetReward: 300,
   betHistoryMemorySize: 500,
   betHistoryTableSize: 20,
+  betChannelReconnectInterval: 5000,
   hugeBetAmount: 1000,
   chatHistoryMemorySize: 500,
+  chatChannelReconnectInterval: 5000,
   dividendRatio: 0.01,  // Dividend ratio compared to betVolume
   eosNetwork: {
     blockchain: 'eos',
@@ -39,7 +41,7 @@ const appConfig = {
 };
 
 const parseConfig = {
-  serverURL: 'http://localhost:1338/parse',
+  serverURL: 'https://betx.fun/parse',
   appId: 'BETX-APP',
   javascriptKey: 'betx-js-key',
 };
