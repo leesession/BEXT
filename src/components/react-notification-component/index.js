@@ -2,6 +2,7 @@ import React from 'react';
 import ReactNotification from './react-notification';
 import PropTypes from 'prop-types';
 import { isArray } from './utils';
+import _ from 'lodash';
 
 import {
   INSERTION,
@@ -111,8 +112,6 @@ class ReactNotificationComponent extends React.Component {
       this.state.userDefinedTypes
     );
 
-    console.log(notification);
-
     this.setState({
       notifications:
         notification.insert === INSERTION.TOP
@@ -124,16 +123,12 @@ class ReactNotificationComponent extends React.Component {
   }
 
   // API call
-  updateNotification(object) {
+  updateNotification(params) {
     const { notifications: data } = this.state;
-    const {content} = object;
-    console.log(data);
 
     data.forEach((ele) => {
-      ele.content = content;
+      _.extend(ele, params);
     });
-
-    console.log(data);
 
     this.setState({ notifications: data });
   }
