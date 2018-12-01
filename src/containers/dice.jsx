@@ -2,11 +2,11 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { injectIntl, intlShape } from 'react-intl';
-import { Icon, Form, Row, Col, Table, Input, Button, Tabs, Popover, message } from 'antd';
+import { Icon, Row, Col, Table, Input, Button, Tabs, Popover, message } from 'antd';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import * as Scroll from 'react-scroll';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 import ReactNotification from '../components/react-notification-component';
@@ -14,8 +14,8 @@ import '../components/react-notification-component/less/notification.less';
 
 import { cloudinaryConfig, CloudinaryImage } from '../components/react-cloudinary';
 
-import InfoSection from '../components/sections/info';
 import Slider from '../components/slider';
+import Dice from '../components/dice';
 import Chatroom from '../components/chatroom';
 import betActions from '../redux/bet/actions';
 import appActions from '../redux/app/actions';
@@ -24,8 +24,8 @@ import { appConfig } from '../settings';
 import { getFixedFloat, randomString } from '../helpers/utility';
 cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
-const FormItem = Form.Item;
-const InputGroup = Input.Group;
+import "animate.css/animate.min.css";
+
 const { TabPane } = Tabs;
 const MAX_BALANCE_STR = 'MAX';
 const MIN_ROLL_NUMBER = 1;
@@ -41,11 +41,7 @@ const MIN_INPUT_BET_AMOUNT = 0.1;
 const MAX_INPUT_BET_AMOUNT = 50;
 const MAX_FLOAT_DIGITS = 4;
 
-const {
-  Link, Element, Events, scroll, scrollSpy,
-} = Scroll;
-
-const { initSocketConnection, fetchBetHistory } = betActions;
+const { initSocketConnection, fetchBetHistory, clearCurrentBet } = betActions;
 const { getIdentity, transfer, setErrorMessage } = appActions;
 
 function calculateWinChance(rollNumber) {
@@ -97,6 +93,7 @@ class DicePage extends React.Component {
       betAsset: 'EOS',
       seed: '',
       clickTime: 0,
+      notifications: [],
     };
 
     this.desktopColumns = [{
@@ -165,7 +162,6 @@ class DicePage extends React.Component {
     this.onBetClicked = this.onBetClicked.bind(this);
     this.onLogInClicked = this.onLogInClicked.bind(this);
     this.formatBetAmountStr = this.formatBetAmountStr.bind(this);
-    this.onDiceClicked = this.onDiceClicked.bind(this);
     this.notificationDOMRef = React.createRef();
   }
 
@@ -177,22 +173,16 @@ class DicePage extends React.Component {
 
   componentDidMount() {
     const { initSocketConnectionReq } = this.props;
-    Events.scrollEvent.register('begin', (...rest) => {
-      console.log('begin', rest);
-    });
-
-    Events.scrollEvent.register('end', (...rest) => {
-      console.log('end', rest);
-    });
-
     initSocketConnectionReq({ collection: 'Bet' });
   }
 
   componentWillReceiveProps(nextProps) {
     const {
-      username, eosBalance, betxBalance, successMessage,
+      username, eosBalance, betxBalance, currentBet,
     } = nextProps;
-    const { intl } = this.props;
+    const { intl, clearCurrentBetReq } = this.props;
+    const { notifications } = this.state;
+    const { notificationDOMRef } = this;
 
     const fieldsToUpdate = {};
 
@@ -209,163 +199,84 @@ class DicePage extends React.Component {
       fieldsToUpdate.betxBalance = betxBalance;
     }
 
-    this.setState(fieldsToUpdate);
+    if (currentBet) {
+      const foundMatch = _.find(notifications, { transactionId: currentBet.transactionId });
 
-    if (successMessage) {
-      message.success(intl.formatMessage({
-        id: successMessage,
-      }));
+      // Add a new notification is the new bet doesn't have one yet.
+      if (_.isUndefined(foundMatch)) {
+        const titleEle = <p className="notification-title">{intl.formatMessage({ id: 'message.success.sentBet' }, { betAmount: currentBet.betAmount })}</p>;
+        const messageEle = <p className="notification-message">{intl.formatMessage({ id: 'message.success.waitForBetResult' })}</p>;
+        const notificationId = notificationDOMRef.current.addNotification({
+          isMobile: true,
+          type: 'custom',
+          content: <div className="bet-notification-container">
+            <div className="bet-notification-container-dice">
+              <Dice />
+            </div>
+            <div className="bet-notification-container-text">
+              {titleEle}
+              {messageEle}
+            </div></div>,
+          insert: 'top',
+          container: 'top-center',
+          animationIn: ['animated', 'fadeIn'],
+          animationOut: ['animated', 'fadeOut'],
+          dismissable: { click: false, touch: false },
+          width: 550,
+        });
+
+        notifications.push({ notificationId, transactionId: currentBet.transactionId });
+        fieldsToUpdate.notifications = notifications;
+
+      } else { // Found existing notification of this bet
+        if (currentBet.isResolved) { // Only update notification when it's resolvd
+          const containerClass = classNames({
+            'bet-notification-container': true,
+            'bet-notification-container-lose': !currentBet.isWon,
+          });
+
+          const messageWin = intl.formatMessage({
+            id: 'message.success.resultWon',
+          }, { roll: currentBet.roll, payout: currentBet.payout });
+          const messageLose = intl.formatMessage({
+            id: 'message.success.resultLose',
+          }, { roll: currentBet.roll, betAmount: currentBet.betAmount });
+
+          const titleEle =<p className="notification-title">{currentBet.isWon ? messageWin : messageLose}</p>;
+          const messageEle = <p className="notification-message">{intl.formatMessage({ id: 'message.success.sentBet' }, { betAmount: currentBet.betAmount })}</p>;
+          notificationDOMRef.current.updateNotification({
+            dismiss: { duration: 5000 },
+            content: <div className={containerClass}>
+              <div className="bet-notification-container-dice">
+                <Dice className="stop-animation" />
+              </div>
+              <div className="bet-notification-container-text">
+                {messageEle}
+                {titleEle}
+              </div>
+            </div>,
+          });
+
+          setTimeout(function(){
+            notificationDOMRef.current.removeNotification(foundMatch.notificationId);
+          }, 5000);
+
+          _.remove(notifications, { notificationId: foundMatch.notificationId });
+          fieldsToUpdate.notifications = notifications;
+          console.log('After removal,', notifications);
+
+          clearCurrentBetReq();
+        }
+      }
     }
+
+    this.setState(fieldsToUpdate);
   }
 
   componentWillUnmount() {
-    Events.scrollEvent.remove('begin');
-    Events.scrollEvent.remove('end');
   }
 
   onTabClicked() {
-
-  }
-
-  onDiceClicked(evt) {
-    evt.preventDefault();
-
-    const { betAmount, betAsset, clickTime } = this.state;
-    const { intl } = this.props;
-
-    if(clickTime ===0)
-   { this.notificationDOMRef.current.addNotification({
-         isMobile: true,
-         type: 'custom',
-         insert: 'top',
-         container: 'top-center',
-         content: <div className="bet-notification-container">
-           <div className="bet-notification-container-dice">
-             <div id="dice">
-               <div className="side front">
-                 <div className="dot center"></div>
-               </div>
-               <div className="side front inner"></div>
-               <div className="side top">
-                 <div className="dot dtop dleft"></div>
-                 <div className="dot dbottom dright"></div>
-               </div>
-               <div className="side top inner"></div>
-               <div className="side right">
-                 <div className="dot dtop dleft"></div>
-                 <div className="dot center"></div>
-                 <div className="dot dbottom dright"></div>
-               </div>
-               <div className="side right inner"></div>
-               <div className="side left">
-                 <div className="dot dtop dleft"></div>
-                 <div className="dot dtop dright"></div>
-                 <div className="dot dbottom dleft"></div>
-                 <div className="dot dbottom dright"></div>
-               </div>
-               <div className="side left inner"></div>
-               <div className="side bottom">
-                 <div className="dot center"></div>
-                 <div className="dot dtop dleft"></div>
-                 <div className="dot dtop dright"></div>
-                 <div className="dot dbottom dleft"></div>
-                 <div className="dot dbottom dright"></div>
-               </div>
-               <div className="side bottom inner"></div>
-               <div className="side back">
-                 <div className="dot dtop dleft"></div>
-                 <div className="dot dtop dright"></div>
-                 <div className="dot dbottom dleft"></div>
-                 <div className="dot dbottom dright"></div>
-                 <div className="dot center dleft"></div>
-                 <div className="dot center dright"></div>
-               </div>
-               <div className="side back inner"></div>
-               <div className="side cover x"></div>
-               <div className="side cover y"></div>
-               <div className="side cover z"></div>
-             </div>
-           </div>
-           <div className="bet-notification-container-text"><p className="notification-title">{intl.formatMessage({
-             id: 'message.success.sentBet',
-           }, {
-             amount: betAmount,
-             asset: betAsset,
-           })}</p><p className="notification-message">{intl.formatMessage({
-             id: 'message.success.waitForBetResult',
-           })}</p></div></div>,
-         animationIn: ['animated', 'fadeIn'],
-         animationOut: ['animated', 'fadeOut'],
-         // dismiss: { duration: 5000 },
-         dismissable: { click: true },
-         width: 450,
-       });
- this.setState({
-  clickTime: 1,
- });
-  }
-  else{
-      this.notificationDOMRef.current.updateNotification({
-         content: <div className="bet-notification-container">
-           <div className="bet-notification-container-dice">
-             <div id="dice" className="stop-animation">
-               <div className="side front">
-                 <div className="dot center"></div>
-               </div>
-               <div className="side front inner"></div>
-               <div className="side top">
-                 <div className="dot dtop dleft"></div>
-                 <div className="dot dbottom dright"></div>
-               </div>
-               <div className="side top inner"></div>
-               <div className="side right">
-                 <div className="dot dtop dleft"></div>
-                 <div className="dot center"></div>
-                 <div className="dot dbottom dright"></div>
-               </div>
-               <div className="side right inner"></div>
-               <div className="side left">
-                 <div className="dot dtop dleft"></div>
-                 <div className="dot dtop dright"></div>
-                 <div className="dot dbottom dleft"></div>
-                 <div className="dot dbottom dright"></div>
-               </div>
-               <div className="side left inner"></div>
-               <div className="side bottom">
-                 <div className="dot center"></div>
-                 <div className="dot dtop dleft"></div>
-                 <div className="dot dtop dright"></div>
-                 <div className="dot dbottom dleft"></div>
-                 <div className="dot dbottom dright"></div>
-               </div>
-               <div className="side bottom inner"></div>
-               <div className="side back">
-                 <div className="dot dtop dleft"></div>
-                 <div className="dot dtop dright"></div>
-                 <div className="dot dbottom dleft"></div>
-                 <div className="dot dbottom dright"></div>
-                 <div className="dot center dleft"></div>
-                 <div className="dot center dright"></div>
-               </div>
-               <div className="side back inner"></div>
-               <div className="side cover x"></div>
-               <div className="side cover y"></div>
-               <div className="side cover z"></div>
-             </div>
-           </div>
-           <div className="bet-notification-container-text"><p className="notification-title">{intl.formatMessage({
-             id: 'message.success.sentBet',
-           }, {
-             amount: betAmount,
-             asset: betAsset,
-           })}</p><p className="notification-message">{intl.formatMessage({
-             id: 'message.success.resultWon',
-           }, {roll: 96, amount: betAmount, asset:betAsset} )}</p>
-           </div>
-           </div>
-       });
-  }
-
 
   }
 
@@ -699,7 +610,7 @@ class DicePage extends React.Component {
                             <div className="bet_value">{_.floor(eosBalance, 2)}<span className="highlight"> <IntlMessages id="dice.asset.eos" /></span></div>
                           </Col>
                           <Col span={12}>
-                            {username === this.defaultUsername ? <Button className="btn-login" size="large" type="primary" onClick={this.onDiceClicked}><IntlMessages id="dice.button.login" /></Button> : <Button className="btn-login" size="large" type="primary" onClick={this.onBetClicked}><IntlMessages id="dice.button.bet" /></Button>}
+                            {username === this.defaultUsername ? <Button className="btn-login" size="large" type="primary" onClick={this.onLogInClicked}><IntlMessages id="dice.button.login" /></Button> : <Button className="btn-login" size="large" type="primary" onClick={this.onBetClicked}><IntlMessages id="dice.button.bet" /></Button>}
                             <div className="bet_description"><Icon type="question-circle" /><IntlMessages id="dice.reward.firstbet" values={{ amount: appConfig.firstBetReward }} /></div>
                           </Col>
                           <Col span={6}>
@@ -788,6 +699,8 @@ DicePage.propTypes = {
   fetchBetHistoryReq: PropTypes.func,
   referrer: PropTypes.string.isRequired,
   view: PropTypes.string,
+  currentBet: PropTypes.object,
+  clearCurrentBetReq: PropTypes.func,
 };
 
 DicePage.defaultProps = {
@@ -804,6 +717,8 @@ DicePage.defaultProps = {
   successMessage: undefined,
   fetchBetHistoryReq: undefined,
   view: undefined,
+  currentBet: undefined,
+  clearCurrentBetReq: undefined,
 };
 
 const mapStateToProps = (state) => ({
@@ -816,14 +731,16 @@ const mapStateToProps = (state) => ({
   successMessage: state.App.get('successMessage'),
   referrer: state.App.get('ref'),
   view: state.App.get('view'),
+  currentBet: state.Bet.get('currentBet'),
 });
 
 const mapDispatchToProps = (dispatch) => ({
   transferReq: (obj) => dispatch(transfer(obj)),
   initSocketConnectionReq: (obj) => dispatch(initSocketConnection(obj)),
   getIdentityReq: () => dispatch(getIdentity()),
-  setErrorMessageReq: (message) => dispatch(setErrorMessage(message)),
+  setErrorMessageReq: (errorMessage) => dispatch(setErrorMessage(errorMessage)),
   fetchBetHistoryReq: () => dispatch(fetchBetHistory()),
+  clearCurrentBetReq: () => dispatch(clearCurrentBet()),
 });
 
 // Wrap the component to inject dispatch and state into it
