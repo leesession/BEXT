@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Layout, LocaleProvider } from 'antd';
 import { IntlProvider } from 'react-intl';
-import { Debounce } from 'react-throttle';
 import WindowSizeListener from 'react-window-size-listener'
 
 import { ThemeProvider } from 'styled-components';
@@ -62,7 +61,6 @@ export class App extends React.PureComponent {
           <ThemeProvider theme={themes[themeConfig.theme]}>
             <AppHolder>
               <Layout style={{ height: appHeight }}>
-                <Debounce time="1000" handler="onResize">
                   <WindowSizeListener
                     onResize={(windowSize) =>
                       toggleAllReq(
@@ -70,7 +68,6 @@ export class App extends React.PureComponent {
                         windowSize.windowHeight
                       )}
                   />
-                </Debounce>
                 <Topbar url={url} />
                 <Layout style={{ flexDirection: 'row', overflowX: 'hidden' }}>
                   <Layout>
