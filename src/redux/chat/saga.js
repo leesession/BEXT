@@ -3,6 +3,9 @@ import { all, take, takeEvery, put, fork, call, cancelled } from 'redux-saga/eff
 import { eventChannel } from 'redux-saga';
 import actions from './actions';
 import ParseHelper from '../../helpers/parse';
+import {delay} from '../../helpers/utility';
+import {appConfig } from "../../settings";
+
 const {
   subscribe, unsubscribe, sendMessage, fetchChatHistory, handleParseError,
 } = ParseHelper;
@@ -86,9 +89,9 @@ export function* initLiveMessages(action) {
     // if we want end the socketChannel, we need close it explicitly
     // socketChannel.close()
   } finally {
-    console.log('message stream terminated');
+    console.log(`Chat live stream terminated; waiting for ${appConfig.chatChannelReconnectInterval} ms before reconnect.`);
 
-    yield call(delay, 5000);
+    yield call(delay, appConfig.chatChannelReconnectInterval);
     
     // Reconnect
     yield put({

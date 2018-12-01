@@ -46,18 +46,10 @@ function* transferRequest(action) {
   try {
     const response = yield call(transfer, params);
 
-    // 1. Record current bet value
-    try {
-      betAmountObject = parseAsset(response.processed.action_traces.act.data.quantity);
-    } catch (e) {
-      console.error(e);
-    }
-
     yield put({
       type: betActions.SET_CURRENT_BET,
       value: {
-        betAmount: betAmountObject.amount,
-        betAsset: betAmountObject.asset,
+        betAmount: response.processed.action_traces[0].act.data.quantity,
         transactionId: response.transaction_id,
       },
     });
