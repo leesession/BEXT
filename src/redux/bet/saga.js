@@ -4,6 +4,8 @@ import { eventChannel } from 'redux-saga';
 import actions from './actions';
 import ParseHelper from '../../helpers/parse';
 import {delay} from '../../helpers/utility';
+import {appConfig} from "../../settings";
+
 const {
   subscribe, unsubscribe, sendBet, fetchBetHistory, handleParseError, getBetVolume, getBetxStakeAmount,
 } = ParseHelper;
@@ -89,9 +91,9 @@ export function* initLiveBetHistory(action) {
     // if we want end the socketChannel, we need close it explicitly
     // socketChannel.close()
   } finally {
-    console.log('message stream terminated');
+    console.log(`Bet live stream terminated; waiting for ${appConfig.betChannelReconnectInterval} ms before reconnect.`);
 
-    yield call(delay, 5000);
+    yield call(delay, appConfig.betChannelReconnectInterval);
 
     // Reconnect to make sure there's always a ws connection
     yield put({
