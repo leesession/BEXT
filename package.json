@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "antd": "^2.12.2",
+    "animate.css": "^3.7.0",
+    "antd": "^3.10.9",
     "antd-local-icon": "^0.1.3",
     "classnames": "^2.2.6",
     "clone": "^2.1.1",
@@ -19,7 +20,7 @@
     "react": "16.4.2",
     "react-cloudinary": "^0.4.1",
     "react-copy-to-clipboard": "^5.0.1",
-    "react-dom": "16.3.0",
+    "react-dom": "16.4.2",
     "react-element-resize": "^0.2.1",
     "react-hot-loader": "^1.3.1",
     "react-intl": "^2.3.0",
@@ -40,7 +41,7 @@
     "scatterjs-core": "^2.3.8",
     "scatterjs-plugin-eosjs": "^1.3.10",
     "scrollreveal": "^3.4.0",
-    "styled-components": "^2.2.1",
+    "styled-components": "4.1.0",
     "styled-theme": "^0.3.3",
     "web3-utils": "^1.0.0-beta.27",
     "yarn": "^1.3.2"
