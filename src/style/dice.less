@@ -508,6 +508,10 @@
                 color: white;
                 text-align: center;
                 font-size: 1.5em;
+
+                @media @phone{
+                    font-size: 1.2em;
+                }
             }
 
         }
@@ -525,7 +529,8 @@
             font-size: 1.2em;
 
             @media @phone {
-                font-size: 1.5em;
+                font-size: 1.2em;
+                margin-right: 12px;
             }
 
         }
@@ -549,6 +554,11 @@
             td {
                 text-align: center;
                 font-size: 1.5em;
+
+                @media @phone{
+                    font-size: 1.2em;
+                    padding: 12px 4px;
+                }
             }
 
         }
@@ -573,9 +583,9 @@
     justify-content: left;
     width: 100%;
 
-    &.bet-notification-container-lose{
-        background-color: @bgColorWin;
-        border-left: 8px solid darken(@bgColorWin, 15%);
+    &.bet-notification-container-lose {
+        background-color: @bgColorLose;
+        border-left: 8px solid darken(@bgColorLose, 15%);
     }
 
     &>div {
@@ -588,12 +598,13 @@
         padding-top: 50px;
         padding-left: 50px;
 
-        @media @phone{
-width: 120px;
-        height: 130px;
-        padding-top: 40px;
-        padding-left: 40px;            
+        @media @phone {
+            width: 120px;
+            height: 130px;
+            padding-top: 40px;
+            padding-left: 40px;
         }
+
     }
 
     .bet-notification-container-text {
@@ -601,22 +612,21 @@ width: 120px;
 
         p {
             text-align: left;
+        }
 
-            &:first-of-type {
-                font-weight: 700;
-                font-size: 1.6em;
-                margin-bottom: 15px;
-            }
+        .notification-title {
+            font-weight: 700;
+            font-size: 1.6em;
+            margin-bottom: 15px;
+        }
 
-            &:nth-of-type(2) {
-                max-width: calc(100% - 15px);
-                font-size: 1.6em;
-                line-height: 150%;
-                word-wrap: break-word;
-                margin-bottom: 0;
-                margin-top: 0;
-            }
-
+        .notification-message {
+            max-width: calc(100% - 15px);
+            font-size: 1.6em;
+            line-height: 150%;
+            word-wrap: break-word;
+            margin-bottom: 0;
+            margin-top: 0;
         }
 
     }
@@ -665,9 +675,10 @@ width: 120px;
     transform-style: preserve-3d;
     animation: spin 5s infinite linear;
 
-    &.stop-animation{
+    &.stop-animation {
         animation-play-state: paused;
     }
+
 }
 
 .side {
