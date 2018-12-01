@@ -57,6 +57,7 @@ class ParseHelper {
       rollUnder: parseObject.get('roll_under'),
       betAmount: parseObject.get('bet_amt'),
       roll: parseObject.get('roll'),
+      transferTx: parseObject.get("transferTx"),
       payout: _.toNumber(payoutAsset.amount) === 0 ? "": parseObject.get('payout'),
       payoutAsset: {
         amount: _.toNumber(payoutAsset.amount),

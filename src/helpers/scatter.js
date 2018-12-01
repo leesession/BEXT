@@ -14,7 +14,6 @@ const EOS_TOKEN_CONTRACT = 'eosio.token';
 
 class ScatterHelper {
   constructor() {
-    this.env = 'mainnet';
     this.network = appConfig.eosNetwork;
     this.readEos = EosApi({ httpEndpoint: `${this.network.protocol}://${this.network.host}:${this.network.port}` });
     this.Eos = Eos;
@@ -27,6 +26,7 @@ class ScatterHelper {
     this.getBETXBalance = this.getBETXBalance.bind(this);
     this.transfer = this.transfer.bind(this);
     this.handleScatterError = this.handleScatterError.bind(this);
+    this.parseAsset = this.parseAsset.bind(this);
   }
 
   // static async createInstance() {
@@ -39,7 +39,9 @@ class ScatterHelper {
   async connect() {
     const that = this;
 
-    return ScatterJS.scatter.connect('betx.fun').then((connected) => {
+    const connectionOptions = {initTimeout:10000}
+
+    return ScatterJS.scatter.connect('betx.fun',connectionOptions).then((connected) => {
     // User does not have Scatter Desktop, Mobile or Classic installed.
       if (!connected) {
         return false;
@@ -133,6 +135,10 @@ class ScatterHelper {
 
       return Promise.resolve();
     });
+  }
+
+  parseAsset(quantity){
+    return Eos.modules.format.parseAsset(quantity);
   }
 
   handleScatterError(err) {
