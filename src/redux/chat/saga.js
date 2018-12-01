@@ -3,8 +3,8 @@ import { all, take, takeEvery, put, fork, call, cancelled } from 'redux-saga/eff
 import { eventChannel } from 'redux-saga';
 import actions from './actions';
 import ParseHelper from '../../helpers/parse';
-import {delay} from '../../helpers/utility';
-import {appConfig } from "../../settings";
+import { delay } from '../../helpers/utility';
+import { appConfig } from '../../settings';
 
 const {
   subscribe, unsubscribe, sendMessage, fetchChatHistory, handleParseError,
@@ -36,7 +36,6 @@ function websocketInitChannel(payload) {
       // console.log('object left', object);
       emitter({ type: actions.MESSAGE_OBJECT_LEFT, data: object });
     const unsubscribeHandler = () => {
-      console.log('Chat live channel unsubscribed.');
       messageGlobalChannel = undefined;
       return emitter({ type: actions.MESSAGE_UNSUBSCRIBED });
     };
@@ -88,15 +87,21 @@ export function* initLiveMessages(action) {
     // socketChannel is still open in catch block
     // if we want end the socketChannel, we need close it explicitly
     // socketChannel.close()
-  } finally {
+  }
+}
+
+export function* reconnectLiveMessgeRequest() {
+  try {
     console.log(`Chat live stream terminated; waiting for ${appConfig.chatChannelReconnectInterval} ms before reconnect.`);
 
     yield call(delay, appConfig.chatChannelReconnectInterval);
-    
+
     // Reconnect
     yield put({
       type: actions.INIT_SOCKET_CONNECTION_MESSAGE,
     });
+  } catch (err) {
+    console.error(err);
   }
 }
 
@@ -131,5 +136,6 @@ export default function* topicSaga() {
     takeEvery(actions.INIT_SOCKET_CONNECTION_MESSAGE, initLiveMessages),
     takeEvery(actions.SEND_MESSAGE, sendMessageRequest),
     takeEvery(actions.FETCH_CHAT_HISTORY, fetchChatHistoryRequest),
+    takeEvery(actions.MESSAGE_UNSUBSCRIBED, reconnectLiveMessgeRequest),
   ]);
 }

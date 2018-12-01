@@ -3,8 +3,8 @@ import { all, take, takeEvery, put, fork, call, cancelled } from 'redux-saga/eff
 import { eventChannel } from 'redux-saga';
 import actions from './actions';
 import ParseHelper from '../../helpers/parse';
-import {delay} from '../../helpers/utility';
-import {appConfig} from "../../settings";
+import { delay } from '../../helpers/utility';
+import { appConfig } from '../../settings';
 
 const {
   subscribe, unsubscribe, sendBet, fetchBetHistory, handleParseError, getBetVolume, getBetxStakeAmount,
@@ -39,7 +39,6 @@ function websocketInitChannel(payload) {
     const unsubscribeHandler = () => {
       // console.log('subscription close');
       betGlobalChannel = undefined;
-      console.log('Bet live channel unsubscribed.');
       return emitter({ type: actions.BET_UNSUBSCRIBED });
     };
 
@@ -90,8 +89,12 @@ export function* initLiveBetHistory(action) {
     // socketChannel is still open in catch block
     // if we want end the socketChannel, we need close it explicitly
     // socketChannel.close()
-  } finally {
-    console.log(`Bet live stream terminated; waiting for ${appConfig.betChannelReconnectInterval} ms before reconnect.`);
+  }
+}
+
+export function* reconnectLiveBetRequest() {
+  try {
+    console.log(`Bet live channel unsubscribed; waiting for ${appConfig.betChannelReconnectInterval} ms before reconnect.`);
 
     yield call(delay, appConfig.betChannelReconnectInterval);
 
@@ -99,6 +102,8 @@ export function* initLiveBetHistory(action) {
     yield put({
       type: actions.INIT_SOCKET_CONNECTION_BET,
     });
+  } catch (err) {
+    console.error(err);
   }
 }
 
@@ -162,5 +167,6 @@ export default function* topicSaga() {
     takeEvery(actions.FETCH_BET_HISTORY, fetchBetHistoryRequest),
     takeEvery(actions.GET_BET_VOLUME, getBetVolumeRequest),
     takeEvery(actions.GET_BETX_STAKE_AMOUNT, getBetxStakeAmountRequest),
+    takeEvery(actions.BET_UNSUBSCRIBED, reconnectLiveBetRequest),
   ]);
 }

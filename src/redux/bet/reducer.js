@@ -76,7 +76,7 @@ export default function (state = initState, action) {
           currentBet.isResolved = true;
           currentBet.payout = newObject.payout;
           currentBet.roll = newObject.roll;
-          currentBet.isWon = newObject.roll< newObject.rollUnder;
+          currentBet.isWon = newObject.roll < newObject.rollUnder;
           state.set('currentBet', currentBet);
         }
 
@@ -89,11 +89,11 @@ export default function (state = initState, action) {
     case actions.BET_CHANNEL_UPDATE:
       break;
     case actions.GET_BET_VOLUME_RESULT:
-      return state.set('dailyVolume', action.value && action.value.day || 0)
-        .set('allVolume', action.value && action.value.all || 0);
+      return state.set('dailyVolume', (action.value && action.value.day) || 0)
+        .set('allVolume', (action.value && action.value.all) || 0);
     case actions.GET_BETX_STAKE_AMOUNT_RESULT:
-      return state.set('betxStakeAmount', action.value && action.value.staked || 0)
-        .set('betxCirculation', action.value && action.value.issued || 0);
+      return state.set('betxStakeAmount', (action.value && action.value.staked) || 0)
+        .set('betxCirculation', (action.value && action.value.issued) || 0);
     case actions.SET_CURRENT_BET:
       return state.set('currentBet', action.value);
     default:
