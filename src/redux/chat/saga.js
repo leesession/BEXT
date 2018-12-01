@@ -56,6 +56,7 @@ function websocketInitChannel(payload) {
     subscription.on('delete', deleteHandler);
     subscription.on('enter', enterHandler);
     subscription.on('leave', leaveHandler);
+    subscription.on('error', errorHandler);
 
     // the subscriber must return an unsubscribe function
     // this will be invoked when the saga calls `channel.close` method
