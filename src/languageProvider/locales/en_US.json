@@ -130,8 +130,8 @@
   "message.success.bet":"Successfully sent bet.",
   "message.success.sentBet":"You bet {betAmount}",
   "message.success.waitForBetResult":"Waiting for roll result",
-  "message.success.resultWon":"Rolled {roll}, you won {payout}",
-  "message.success.resultLose":"Rolled {roll}, you lost {betAmount}!",
+  "message.success.resultWon":"Rolled {roll}, won {payout}",
+  "message.success.resultLose":"Rolled {roll}, lost {betAmount}!",
 
   "message.warn.lessThanMinBet":"The minimum bet amount is {amount} {asset}.",
   "message.warn.greaterThanMaxBet":"The maximum bet amount is {amount} {asset}.",
@@ -146,5 +146,7 @@
 
   "error.page.usernamenotfound":"EOS username not found.",
   "error.account.cpuInsufficient":"EOS account CPU time insufficient.",
-  "error.scatter.betLessThanMax": "Payout amount greater than max. Bet less."
+  "error.scatter.betLessThanMax": "Payout amount greater than max. Bet less.",
+
+  "error.parse.default": "Unknown server error"
 }

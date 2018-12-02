@@ -53,8 +53,16 @@ export default function (state = initState, action) {
         state.get('history').enq(newObject);
 
         // TODO: Correlate current bet with new bet
-        // const currentBet = state.get('currentBet');
+        const currentBet = state.get('currentBet');
 
+        if (currentBet && newObject.transferTx === currentBet.transactionId) {
+          currentBet.isResolved = true;
+          currentBet.payout = newObject.payout;
+          currentBet.roll = newObject.roll;
+          currentBet.isWon = newObject.roll < newObject.rollUnder;
+          state.set('currentBet', currentBet);
+        }
+        
         return state
           .set('refresh', !state.get('refresh'));
       }

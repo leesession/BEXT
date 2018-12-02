@@ -17,6 +17,11 @@ const PARSE_ERROR = {
   // PROVIDER_NOT_FOUND: 'No auth provider found for firebase',
 };
 
+const STATUS ={
+  NOT_STARTED: "Not Started",
+  RESOLVED: "Resolved",
+}
+
 class ParseHelper {
   constructor() {
     this.parse = Parse;
@@ -43,11 +48,11 @@ class ParseHelper {
    */
   parseBetReceipt(parseObject) {
   // Skip any bet that doesn't have a receipt object
-    if (_.isUndefined(parseObject.get('receipt'))) {
+    if (parseObject.get('status') !== STATUS.RESOLVED) {
       return undefined;
     }
 
-    const payoutAsset = Eos.modules.format.parseAsset(parseObject.get('payout'));
+    const payoutAsset = parseObject.get('payout') && Eos.modules.format.parseAsset(parseObject.get('payout'));
     const resolveTrxId = parseObject.get("receipt") && parseObject.get("receipt").trx_id;
 
     return {
@@ -58,10 +63,10 @@ class ParseHelper {
       betAmount: parseObject.get('bet_amt'),
       roll: parseObject.get('roll'),
       transferTx: parseObject.get("transferTx"),
-      payout: _.toNumber(payoutAsset.amount) === 0 ? "": parseObject.get('payout'),
+      payout: (_.isUndefined(payoutAsset) || _.toNumber(payoutAsset.amount) === 0) ? "": parseObject.get('payout'),
       payoutAsset: {
-        amount: _.toNumber(payoutAsset.amount),
-        symbol: payoutAsset.symbol,
+        amount: payoutAsset && _.toNumber(payoutAsset.amount),
+        symbol: payoutAsset && payoutAsset.symbol,
       },
       resolvedBlockNum: parseObject.get('resolved_block_num'),
       trxUrl: `https://eostracker.io/transactions/${parseObject.get('resolved_block_num')}/${resolveTrxId}`,
@@ -230,7 +235,7 @@ class ParseHelper {
   fetchBetHistory() {
     const { parseBetReceipt } = this;
     const query = new Parse.Query(ParseBet);
-    query.exists('receipt');
+    query.equalTo('status', STATUS.RESOLVED);
     query.descending("resolved_block_num");
     query.limit(appConfig.betHistoryMemorySize);
 

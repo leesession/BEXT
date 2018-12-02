@@ -146,5 +146,7 @@
 
   "error.page.usernamenotfound":"EOS用户名不存在",
   "error.account.cpuInsufficient":"EOS账户没有足够的CPU Time",
-  "error.scatter.betLessThanMax": "奖金超过当前最大值，请减小下注"
+  "error.scatter.betLessThanMax": "奖金超过当前最大值，请减小下注",
+
+  "error.parse.default": "未知服务器错误，如重复出现请联系客服"
 }

@@ -202,9 +202,10 @@ class DicePage extends React.Component {
     if (currentBet) {
       const foundMatch = _.find(notifications, { transactionId: currentBet.transactionId });
 
+      const titleEle = <p className="notification-title">{intl.formatMessage({ id: 'message.success.sentBet' }, { betAmount: currentBet.betAmount })}</p>;
+
       // Add a new notification is the new bet doesn't have one yet.
       if (_.isUndefined(foundMatch)) {
-        const titleEle = <p className="notification-title">{intl.formatMessage({ id: 'message.success.sentBet' }, { betAmount: currentBet.betAmount })}</p>;
         const messageEle = <p className="notification-message">{intl.formatMessage({ id: 'message.success.waitForBetResult' })}</p>;
         const notificationId = notificationDOMRef.current.addNotification({
           isMobile: true,
@@ -242,8 +243,7 @@ class DicePage extends React.Component {
             id: 'message.success.resultLose',
           }, { roll: currentBet.roll, betAmount: currentBet.betAmount });
 
-          const titleEle =<p className="notification-title">{currentBet.isWon ? messageWin : messageLose}</p>;
-          const messageEle = <p className="notification-message">{intl.formatMessage({ id: 'message.success.sentBet' }, { betAmount: currentBet.betAmount })}</p>;
+          const messageEle =<p className="notification-message">{currentBet.isWon ? messageWin : messageLose}</p>;
           notificationDOMRef.current.updateNotification({
             dismiss: { duration: 5000 },
             content: <div className={containerClass}>
@@ -251,8 +251,8 @@ class DicePage extends React.Component {
                 <Dice className="stop-animation" />
               </div>
               <div className="bet-notification-container-text">
-                {messageEle}
                 {titleEle}
+                {messageEle}
               </div>
             </div>,
           });
@@ -549,7 +549,7 @@ class DicePage extends React.Component {
                           </Col>
                         </Row>
 
-                        <Row type="flex" justify="center" align="middle">
+                        <Row className="input-group-container" type="flex" justify="center" align="middle">
                           <Col xs={{ span: 12, order: 2 }} lg={{ span: 8, order: 1 }} >
 
                             <div className="box box-input">
