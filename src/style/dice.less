@@ -245,7 +245,7 @@
                             margin: 5px auto;
                             line-height: 30px;
                             font-size: 3em;
-                            padding:0px;
+                            padding: 0px;
                         }
 
                         &:focus {
@@ -328,9 +328,10 @@
                 color: @fontColor;
                 letter-spacing: 2px;
 
-                i{
+                i {
                     margin-right: 6px;
                 }
+
             }
 
             .bet_value {
@@ -352,12 +353,13 @@
 
         }
 
-        .input-group-container{
-            padding-top:20px;
+        .input-group-container {
+            padding-top: 20px;
 
-            @media @phone{
+            @media @phone {
                 padding-top: 0px;
             }
+
         }
 
         // General style for input number
@@ -386,7 +388,7 @@
             padding-top: 0px;
             padding-bottom: 20px;
 
-            @media @phone{
+            @media @phone {
                 padding-top: 10px;
                 padding-bottom: 10px;
             }
@@ -533,9 +535,10 @@
                 text-align: center;
                 font-size: 1.5em;
 
-                @media @phone{
+                @media @phone {
                     font-size: 1.0em;
                 }
+
             }
 
         }
@@ -567,7 +570,12 @@
 
         .ant-table-placeholder {
             border-top: 1px solid white;
-            margin: 0 30px;
+            margin: 0 0px;
+
+            @media @phone{
+                margin-left: 0px;
+                margin-right: 0px;
+            }
         }
 
         .ant-table-row {
@@ -579,10 +587,11 @@
                 text-align: center;
                 font-size: 1.5em;
 
-                @media @phone{
+                @media @phone {
                     font-size: 1.0em;
                     padding: 12px 4px;
                 }
+
             }
 
         }
@@ -623,10 +632,10 @@
         padding-left: 50px;
 
         @media @phone {
-            width: 120px;
-            height: 130px;
-            padding-top: 40px;
-            padding-left: 40px;
+            width: 100px;
+            height: 100px;
+            padding-top: 30px;
+            padding-left: 30px;
         }
 
     }
@@ -636,18 +645,24 @@
 
         p {
             text-align: left;
+            font-size: 1.6em;
+
+            @media @phone{
+                font-size: 1.8em;
+            }
         }
 
         .notification-title {
             font-weight: 700;
-            font-size: 1.6em;
             margin-bottom: 15px;
+
+            @media @phone{
+                margin-bottom: 8px;
+            }
         }
 
         .notification-message {
             max-width: calc(100% - 15px);
-            font-size: 1.6em;
-            line-height: 150%;
             word-wrap: break-word;
             margin-bottom: 0;
             margin-top: 0;
@@ -691,6 +706,7 @@
 }
 
 @diceSize: 50;
+@diceSizeMobile: 30;
 
 #dice {
     position: absolute;
@@ -703,6 +719,11 @@
         animation-play-state: paused;
     }
 
+    @media @phone {
+        width: @diceSizeMobile * 1px;
+        height: @diceSizeMobile * 1px;
+    }
+
 }
 
 .side {
@@ -712,6 +733,14 @@
     background: #fff;
     box-shadow: inset 0 0 @diceSize/5 * 1px #ccc;
     border-radius: @diceSize/5 * 1px;
+
+    @media @phone {
+        width: @diceSizeMobile * 1px;
+        height: @diceSizeMobile * 1px;
+        box-shadow: inset 0 0 @diceSizeMobile/5 * 1px #ccc;
+        border-radius: @diceSizeMobile/5 * 1px;
+    }
+
 }
 
 #dice .cover, #dice .inner {
@@ -734,50 +763,110 @@
 
 #dice .front {
     transform: translateZ(@diceSize/2 * 1px);
+
+    @media @phone {
+        transform: translateZ(@diceSizeMobile/2 * 1px);
+    }
+
 }
 
 #dice .front.inner {
     transform: translateZ(((@diceSize/2)-2) * 1px);
+
+    @media @phone {
+        transform: translateZ(((@diceSizeMobile/2)-2) * 1px);
+    }
+
 }
 
 #dice .back {
     transform: rotateX(-180deg) translateZ(@diceSize/2 * 1px);
+
+    @media @phone {
+        transform: rotateX(-180deg) translateZ(@diceSizeMobile/2 * 1px);
+    }
+
 }
 
 #dice .back.inner {
     transform: rotateX(-180deg) translateZ(((@diceSize/2)-2) * 1px);
+
+    @media @phone {
+        transform: rotateX(-180deg) translateZ(((@diceSizeMobile/2)-2) * 1px);
+    }
+
 }
 
 #dice .right {
     transform: rotateY(90deg) translateZ(@diceSize/2 * 1px);
+
+    @media @phone {
+        transform: rotateY(90deg) translateZ(@diceSizeMobile/2 * 1px);
+    }
+
 }
 
 #dice .right.inner {
     transform: rotateY(90deg) translateZ(((@diceSize/2)-2) * 1px);
+
+    @media @phone {
+        transform: rotateY(90deg) translateZ(((@diceSizeMobile/2)-2) * 1px);
+    }
+
 }
 
 #dice .left {
     transform: rotateY(-90deg) translateZ(@diceSize/2 * 1px);
+
+    @media @phone {
+        transform: rotateY(-90deg) translateZ(@diceSizeMobile/2 * 1px);
+    }
+
 }
 
 #dice .left.inner {
     transform: rotateY(-90deg) translateZ(((@diceSize/2)-2) * 1px);
+
+    @media @phone {
+        transform: rotateY(-90deg) translateZ(((@diceSizeMobile/2)-2) * 1px);
+    }
+
 }
 
 #dice .top {
     transform: rotateX(90deg) translateZ(@diceSize/2 * 1px);
+
+    @media @phone {
+        transform: rotateX(90deg) translateZ(@diceSizeMobile/2 * 1px);
+    }
+
 }
 
 #dice .top.inner {
     transform: rotateX(90deg) translateZ(((@diceSize/2)-2) * 1px);
+
+    @media @phone {
+        transform: rotateX(90deg) translateZ(((@diceSizeMobile/2)-2) * 1px);
+    }
+
 }
 
 #dice .bottom {
     transform: rotateX(-90deg) translateZ(@diceSize/2 * 1px);
+
+    @media @phone {
+        transform: rotateX(-90deg) translateZ(@diceSizeMobile/2 * 1px);
+    }
+
 }
 
 #dice .bottom.inner {
     transform: rotateX(-90deg) translateZ(((@diceSize/2)-2) * 1px);
+
+    @media @phone {
+        transform: rotateX(-90deg) translateZ(((@diceSizeMobile/2)-2) * 1px);
+    }
+
 }
 
 .dot {
@@ -787,32 +876,75 @@
     border-radius: @diceSize/8.695 * 1px;
     background: #444;
     box-shadow: inset @diceSize/40 * 1px 0 @diceSize/20 * 1px #000;
+
+    @media @phone {
+        width: @diceSizeMobile/4.348 * 1px;
+        height: @diceSizeMobile/4.348 * 1px;
+        border-radius: @diceSizeMobile/8.695 * 1px;
+        box-shadow: inset @diceSizeMobile/40 * 1px 0 @diceSizeMobile/20 * 1px #000;
+    }
+
 }
 
 .dot.center {
     margin: @diceSize/2.597* 1px 0 0 @diceSize/2.597* 1px;
+
+    @media @phone {
+        margin: @diceSizeMobile/2.597* 1px 0 0 @diceSizeMobile/2.597* 1px;
+    }
+
 }
 
 .dot.dtop {
     margin-top: @diceSize/10* 1px;
+
+    @media @phone {
+        margin-top: @diceSizeMobile/10* 1px;
+    }
+
 }
 
 .dot.dleft {
     margin-left: @diceSize/1.492 * 1px;
+
+    @media @phone {
+        margin-left: @diceSizeMobile/1.492 * 1px;
+    }
+
 }
 
 .dot.dright {
     margin-left: @diceSize/10* 1px;
+
+    @media @phone {
+        margin-left: @diceSizeMobile/10* 1px;
+    }
+
 }
 
 .dot.dbottom {
     margin-top: @diceSize/1.492 * 1px;
+
+    @media @phone {
+        margin-top: @diceSizeMobile/1.492 * 1px;
+    }
+
 }
 
 .dot.center.dleft {
     margin: @diceSize/2.597* 1px 0 0 @diceSize/10* 1px;
+
+    @media @phone {
+        margin: @diceSizeMobile/2.597* 1px 0 0 @diceSizeMobile/10* 1px;
+    }
+
 }
 
 .dot.center.dright {
     margin: @diceSize/2.597* 1px 0 0 @diceSize/1.492 * 1px;
+
+    @media @phone {
+        margin: @diceSizeMobile/2.597* 1px 0 0 @diceSizeMobile/1.492 * 1px;
+    }
+
 }

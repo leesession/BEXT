@@ -40,12 +40,12 @@ function websocketInitChannel(payload) {
       return emitter({ type: actions.MESSAGE_UNSUBSCRIBED });
     };
 
-    const errorHandler = (errorEvent) => {
+    const errorHandler = (object) => {
       // console.log('errorHandler.event', errorEvent);
       // create an Error object and put it into the channel
       emitter({
         type: actions.MESSAGE_CHANNEL_ERROR,
-        error: new Error(errorEvent.reason),
+        error: new Error(object),
       });
     };
 

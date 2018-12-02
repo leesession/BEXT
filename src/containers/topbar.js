@@ -259,7 +259,6 @@ class Topbar extends React.PureComponent {
         <Modal
           className="refModal"
           title={<IntlMessages id="topbar.copy.title" />}
-          style={{ top: '40vh' }}
           centered
           visible={this.state.refModalVisible}
           onOk={() => this.setRefModalVisible(false)}

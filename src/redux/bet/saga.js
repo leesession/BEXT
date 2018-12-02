@@ -43,11 +43,11 @@ function websocketInitChannel(payload) {
       return emitter({ type: actions.BET_UNSUBSCRIBED });
     };
 
-    const errorHandler = (errorEvent) => {
+    const errorHandler = (object) => {
       // create an Error object and put it into the channel
       emitter({
         type: actions.BET_CHANNEL_ERROR,
-        error: new Error(errorEvent.reason),
+        error: new Error(object),
       });
     };
 
