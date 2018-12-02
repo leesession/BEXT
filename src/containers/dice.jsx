@@ -604,7 +604,7 @@ class DicePage extends React.Component {
                             </div>
                           </Col>
                         </Row>
-                        <Row type="flex" justify="center" align="middle" gutter={36}>
+                        <Row type="flex" justify="center" align="middle" gutter={{xs:12, lg:24, xxl:36}}>
                           <Col span={6}>
                             <div className="bet_description"><IntlMessages id="dice.balance.eos" /></div>
                             <div className="bet_value">{_.floor(eosBalance, 2)}<span className="highlight"> <IntlMessages id="dice.asset.eos" /></span></div>
