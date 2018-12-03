@@ -200,19 +200,6 @@ class ParseHelper {
   // accepts chat payload object containing user1 and user2
   subscribe(collection) {
     const query = new Parse.Query(collection);
-    // let user1Pointer = {
-    //   __type:"Pointer",
-    //   className:"_User",
-    //   objectId:payload.user1.objectId
-    // }
-    // let user2Pointer = {
-    //   __type:"Pointer",
-    //   className:"_User",
-    //   objectId:payload.user2.objectId
-    // }
-    // messageQuery.equalTo("user1", user1Pointer);
-    // messageQuery.equalTo("user2", user2Pointer);
-
     const subscription = query.subscribe();
     return subscription;
   }

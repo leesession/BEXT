@@ -37,7 +37,8 @@ function websocketInitChannel(payload) {
       emitter({ type: actions.MESSAGE_OBJECT_LEFT, data: object });
     const unsubscribeHandler = () => {
       messageGlobalChannel = undefined;
-      return emitter({ type: actions.MESSAGE_UNSUBSCRIBED });
+      console.log("unsubscribeHandler emitting MESSAGE_UNSUBSCRIBED");
+      return emitter({ type: actions.MESSAGE_UNSUBSCRIBED, payload });
     };
 
     const errorHandler = (object) => {
@@ -63,7 +64,7 @@ function websocketInitChannel(payload) {
     const unsubscribeChannel = () => {
       // Close the connection
       unsubscribe(subscription);
-      return emitter({ type: actions.MESSAGE_UNSUBSCRIBED });
+      console.log("unsubscribeChannel() emitting MESSAGE_UNSUBSCRIBED");
     };
 
     // unsubscribe function, this gets called when we close the channel
@@ -91,7 +92,7 @@ export function* initLiveMessages(action) {
   }
 }
 
-export function* reconnectLiveMessgeRequest() {
+export function* reconnectLiveMessgeRequest(action) {
   try {
     console.log(`Chat live stream terminated; waiting for ${appConfig.chatChannelReconnectInterval} ms before reconnect.`);
 
@@ -100,6 +101,7 @@ export function* reconnectLiveMessgeRequest() {
     // Reconnect
     yield put({
       type: actions.INIT_SOCKET_CONNECTION_MESSAGE,
+      payload: action.payload,
     });
   } catch (err) {
     console.error(err);

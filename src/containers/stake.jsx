@@ -124,17 +124,23 @@ class StakePage extends React.Component {
     const DivPer10KBETX = totalDividend * (10000.0 / betxCirculation);
     const myAvailableDiv = 0;
 
+    const colWidth = {
+      xs: 24,
+      xl: 20,
+      xxl: 18,
+    };
+
     return (
       <div id="faq-page">
         <div className="wrapper">
           <Row type="flex" justify="center">
-            <Col xs={24} md={20} xl={16}>
+            <Col {...colWidth}>
               <h1 className="page-title"><IntlMessages id="stake.title" /></h1>
             </Col>
-            <Col xs={24} md={20} xl={16} className="border-bottom">
+            <Col  {...colWidth} className="border-bottom">
               <h3 className="page-sub-title"><IntlMessages id="stake.dividend.rest" /> ({<Icon type="clock-circle" />} <span style={{ color: 'white', letterSpacing: 2 }}>--:--:--</span>)</h3>
             </Col>
-            <Col xs={24} md={20} xl={16}>
+            <Col  {...colWidth}>
               <Row gutter={90}>
                 <Col xs={24} md={12} className="page-dividend border-right">
                   <Row gutter={50} type="flex" justify="center" align="middle">
@@ -266,7 +272,7 @@ class StakePage extends React.Component {
               </Row>
             </Col>
 
-            <Col xs={24} md={20} xl={16}>
+            <Col  {...colWidth}>
               <div className="page-term">
                 <h2 className="page-sub-title"><IntlMessages id="stake.rule.title" /></h2>
                 <div className="page-term-body">

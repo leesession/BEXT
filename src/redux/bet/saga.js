@@ -40,7 +40,8 @@ function websocketInitChannel(payload) {
     const unsubscribeHandler = () => {
       // console.log('subscription close');
       betGlobalChannel = undefined;
-      return emitter({ type: actions.BET_UNSUBSCRIBED });
+      console.log("unsubscribeHandler() emitting BET_UNSUBSCRIBED");
+      return emitter({ type: actions.BET_UNSUBSCRIBED, payload });
     };
 
     const errorHandler = (object) => {
@@ -65,7 +66,7 @@ function websocketInitChannel(payload) {
     const unsubscribeChannel = () => {
       // Close the connection
       unsubscribe(subscription);
-      return emitter({ type: actions.BET_UNSUBSCRIBED });
+      console.log("unsubscribeChannel() emitting BET_UNSUBSCRIBED");
     };
 
     // unsubscribe function, this gets called when we close the channel
@@ -94,7 +95,7 @@ export function* initLiveBetHistory(action) {
   }
 }
 
-export function* reconnectLiveBetRequest() {
+export function* reconnectLiveBetRequest(action) {
   try {
     console.log(`Bet live channel unsubscribed; waiting for ${appConfig.betChannelReconnectInterval} ms before reconnect.`);
 
@@ -103,6 +104,7 @@ export function* reconnectLiveBetRequest() {
     // Reconnect to make sure there's always a ws connection
     yield put({
       type: actions.INIT_SOCKET_CONNECTION_BET,
+      payload: action.payload,
     });
   } catch (err) {
     console.error(err);
