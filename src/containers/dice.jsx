@@ -9,9 +9,10 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
+import 'animate.css/animate.min.css';
+
 import ReactNotification from '../components/react-notification-component';
 import '../components/react-notification-component/less/notification.less';
-
 import { cloudinaryConfig, CloudinaryImage } from '../components/react-cloudinary';
 
 import Slider from '../components/slider';
@@ -22,9 +23,8 @@ import appActions from '../redux/app/actions';
 import IntlMessages from '../components/utility/intlMessages';
 import { appConfig } from '../settings';
 import { getFixedFloat, randomString } from '../helpers/utility';
-cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
-import "animate.css/animate.min.css";
+cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
 const { TabPane } = Tabs;
 const MAX_BALANCE_STR = 'MAX';
@@ -41,7 +41,7 @@ const MIN_INPUT_BET_AMOUNT = 0.1;
 const MAX_INPUT_BET_AMOUNT = 50;
 const MAX_FLOAT_DIGITS = 4;
 
-const { initSocketConnection, fetchBetHistory, clearCurrentBet } = betActions;
+const { initSocketConnection, fetchBetHistory, deleteCurrentBet } = betActions;
 const { getIdentity, transfer, setErrorMessage } = appActions;
 
 function calculateWinChance(rollNumber) {
@@ -92,7 +92,6 @@ class DicePage extends React.Component {
       username: this.defaultUsername,
       betAsset: 'EOS',
       seed: '',
-      clickTime: 0,
       notifications: [],
     };
 
@@ -178,9 +177,10 @@ class DicePage extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const {
-      username, eosBalance, betxBalance, currentBet,
+      username, eosBalance, betxBalance, currentBets,
     } = nextProps;
-    const { intl, clearCurrentBetReq } = this.props;
+
+    const { intl, deleteCurrentBetReq } = this.props;
     const { notifications } = this.state;
     const { notificationDOMRef } = this;
 
@@ -199,13 +199,15 @@ class DicePage extends React.Component {
       fieldsToUpdate.betxBalance = betxBalance;
     }
 
-    if (currentBet) {
-      const foundMatch = _.find(notifications, { transactionId: currentBet.transactionId });
+    // console.log('componentWillReceiveProps.currentBets', currentBets);
 
-      const titleEle = <p className="notification-title">{intl.formatMessage({ id: 'message.success.sentBet' }, { betAmount: currentBet.betAmount })}</p>;
+    _.each(currentBets, (bet) => {
+      const existingNotification = _.find(notifications, { transactionId: bet.transactionId });
+
+      const titleEle = <p className="notification-title">{intl.formatMessage({ id: 'message.success.sentBet' }, { betAmount: bet.betAmount })}</p>;
 
       // Add a new notification is the new bet doesn't have one yet.
-      if (_.isUndefined(foundMatch)) {
+      if (_.isUndefined(existingNotification)) {
         const messageEle = <p className="notification-message">{intl.formatMessage({ id: 'message.success.waitForBetResult' })}</p>;
         const notificationId = notificationDOMRef.current.addNotification({
           isMobile: true,
@@ -226,25 +228,32 @@ class DicePage extends React.Component {
           width: 550,
         });
 
-        notifications.push({ notificationId, transactionId: currentBet.transactionId });
-        fieldsToUpdate.notifications = notifications;
+        notifications.push({ notificationId, transactionId: bet.transactionId });
+      } else if (bet.isResolved) { // Found existing notification of this bet
+        const { notificationId, transactionId } = existingNotification;
 
-      } else { // Found existing notification of this bet
-        if (currentBet.isResolved) { // Only update notification when it's resolvd
-          const containerClass = classNames({
-            'bet-notification-container': true,
-            'bet-notification-container-lose': !currentBet.isWon,
-          });
+        if (!notificationId) { // Can't proceed if notificationId is null
+          return;
+        }
 
-          const messageWin = intl.formatMessage({
-            id: 'message.success.resultWon',
-          }, { roll: currentBet.roll, payout: currentBet.payout });
-          const messageLose = intl.formatMessage({
-            id: 'message.success.resultLose',
-          }, { roll: currentBet.roll, betAmount: currentBet.betAmount });
+        const containerClass = classNames({
+          'bet-notification-container': true,
+          'bet-notification-container-lose': !bet.isWon,
+        });
 
-          const messageEle =<p className="notification-message">{currentBet.isWon ? messageWin : messageLose}</p>;
-          notificationDOMRef.current.updateNotification({
+        const messageWin = intl.formatMessage({
+          id: 'message.success.resultWon',
+        }, { roll: bet.roll, payout: bet.payout });
+
+        const messageLose = intl.formatMessage({
+          id: 'message.success.resultLose',
+        }, { roll: bet.roll, betAmount: bet.betAmount });
+
+        const messageEle = <p className="notification-message">{bet.isWon ? messageWin : messageLose}</p>;
+
+        notificationDOMRef.current.updateNotificationOptions(
+          notificationId,
+          {
             dismiss: { duration: 5000 },
             content: <div className={containerClass}>
               <div className="bet-notification-container-dice">
@@ -255,20 +264,22 @@ class DicePage extends React.Component {
                 {messageEle}
               </div>
             </div>,
-          });
+          }
+        );
 
-          setTimeout(function(){
-            notificationDOMRef.current.removeNotification(foundMatch.notificationId);
-          }, 5000);
+        setTimeout(() => {
+          // Remove this notification from notification componnent
+          notificationDOMRef.current.removeNotification(notificationId);
+          // Remove this notification from this.state
+          _.remove(notifications, { notificationId });
 
-          _.remove(notifications, { notificationId: foundMatch.notificationId });
-          fieldsToUpdate.notifications = notifications;
-          console.log('After removal,', notifications);
-
-          clearCurrentBetReq();
-        }
+          // Remove this notification from state store currentBets
+          deleteCurrentBetReq(transactionId);
+        }, 5000);
       }
-    }
+    });
+
+    fieldsToUpdate.notifications = notifications;
 
     this.setState(fieldsToUpdate);
   }
@@ -386,7 +397,6 @@ class DicePage extends React.Component {
       rollUnder: rollNumber,
       referrer,
       seed: randomString(16),
-      nounce: randomString(16),
     });
   }
 
@@ -453,7 +463,6 @@ class DicePage extends React.Component {
       trxUrl: bet.trxUrl,
     })));
 
-    // console.log(rawBetData);
     const allBetData = _.slice(rawBetData, 0, appConfig.betHistoryTableSize);
 
     const myBetData = _.slice(_.filter(rawBetData, (o) => o.bettor === username), 0, appConfig.betHistoryTableSize);
@@ -604,7 +613,7 @@ class DicePage extends React.Component {
                             </div>
                           </Col>
                         </Row>
-                        <Row type="flex" justify="center" align="middle" gutter={{xs:12, lg:24, xxl:36}}>
+                        <Row type="flex" justify="center" align="middle" gutter={{ xs: 12, lg: 24, xxl: 36 }}>
                           <Col span={6}>
                             <div className="bet_description"><IntlMessages id="dice.balance.eos" /></div>
                             <div className="bet_value">{_.floor(eosBalance, 2)}<span className="highlight"> <IntlMessages id="dice.asset.eos" /></span></div>
@@ -699,8 +708,8 @@ DicePage.propTypes = {
   fetchBetHistoryReq: PropTypes.func,
   referrer: PropTypes.string.isRequired,
   view: PropTypes.string,
-  currentBet: PropTypes.object,
-  clearCurrentBetReq: PropTypes.func,
+  currentBets: PropTypes.array,
+  deleteCurrentBetReq: PropTypes.func,
 };
 
 DicePage.defaultProps = {
@@ -717,8 +726,8 @@ DicePage.defaultProps = {
   successMessage: undefined,
   fetchBetHistoryReq: undefined,
   view: undefined,
-  currentBet: undefined,
-  clearCurrentBetReq: undefined,
+  currentBets: [],
+  deleteCurrentBetReq: undefined,
 };
 
 const mapStateToProps = (state) => ({
@@ -731,7 +740,7 @@ const mapStateToProps = (state) => ({
   successMessage: state.App.get('successMessage'),
   referrer: state.App.get('ref'),
   view: state.App.get('view'),
-  currentBet: state.Bet.get('currentBet'),
+  currentBets: state.Bet.get('currentBets'),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -740,7 +749,7 @@ const mapDispatchToProps = (dispatch) => ({
   getIdentityReq: () => dispatch(getIdentity()),
   setErrorMessageReq: (errorMessage) => dispatch(setErrorMessage(errorMessage)),
   fetchBetHistoryReq: () => dispatch(fetchBetHistory()),
-  clearCurrentBetReq: () => dispatch(clearCurrentBet()),
+  deleteCurrentBetReq: (transactionId) => dispatch(deleteCurrentBet(transactionId)),
 });
 
 // Wrap the component to inject dispatch and state into it

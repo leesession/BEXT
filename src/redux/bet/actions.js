@@ -16,7 +16,8 @@ const actions = {
   GET_BET_VOLUME_RESULT: 'GET_BET_VOLUME_RESULT',
   GET_BETX_STAKE_AMOUNT: 'GET_BETX_STAKE_AMOUNT',
   GET_BETX_STAKE_AMOUNT_RESULT: 'GET_BETX_STAKE_AMOUNT_RESULT',
-  SET_CURRENT_BET: 'SET_CURRENT_BET',
+  ADD_CURRENT_BET: 'ADD_CURRENT_BET',
+  DELETE_CURRENT_BET: 'DELETE_CURRENT_BET',
   initSocketConnection: (obj) => ({
     type: actions.INIT_SOCKET_CONNECTION_BET,
     payload: obj,
@@ -30,9 +31,9 @@ const actions = {
   getBETXStakeAmount: () => ({
     type: actions.GET_BETX_STAKE_AMOUNT,
   }),
-  clearCurrentBet: () => ({
-    type: actions.SET_CURRENT_BET,
-    value: undefined,
+  deleteCurrentBet: (transactionId) => ({
+    type: actions.DELETE_CURRENT_BET,
+    value: transactionId,
   }),
 };
 

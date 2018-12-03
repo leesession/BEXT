@@ -6,11 +6,10 @@ import betActions from '../bet/actions';
 import ScatterHelper from '../../helpers/scatter';
 
 const {
-  handleScatterError, getIdentity, transfer, getBalance, getEOSBalance, getBETXBalance, parseAsset,
+  handleScatterError, getIdentity, transfer, getEOSBalance, getBETXBalance, 
 } = ScatterHelper;
 
-function* getIdentityRequest(action) {
-  const params = action.payload;
+function* getIdentityRequest() {
 
   try {
     const response = yield call(getIdentity);
@@ -47,7 +46,7 @@ function* transferRequest(action) {
     const response = yield call(transfer, params);
 
     yield put({
-      type: betActions.SET_CURRENT_BET,
+      type: betActions.ADD_CURRENT_BET,
       value: {
         betAmount: response.processed.action_traces[0].act.data.quantity,
         transactionId: response.transaction_id,

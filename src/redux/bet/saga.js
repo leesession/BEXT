@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { all, take, takeEvery, put, fork, call, cancelled } from 'redux-saga/effects';
+import { all, take, takeEvery, put, fork, call } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import actions from './actions';
 import appActions from '../app/actions';
@@ -8,7 +8,7 @@ import { delay } from '../../helpers/utility';
 import { appConfig } from '../../settings';
 
 const {
-  subscribe, unsubscribe, sendBet, fetchBetHistory, handleParseError, getBetVolume, getBetxStakeAmount,
+  subscribe, unsubscribe, fetchBetHistory, handleParseError, getBetVolume, getBetxStakeAmount,
 } = ParseHelper;
 
 let betGlobalChannel;

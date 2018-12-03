@@ -1,8 +1,9 @@
 import React from 'react';
-import ReactNotification from './react-notification';
 import PropTypes from 'prop-types';
-import { isArray } from './utils';
 import _ from 'lodash';
+
+import ReactNotification from './react-notification';
+import { isArray } from './utils';
 
 import {
   INSERTION,
@@ -51,7 +52,7 @@ class ReactNotificationComponent extends React.Component {
     }
 
     this.addNotification = this.addNotification.bind(this);
-    this.updateNotification = this.updateNotification.bind(this);
+    this.updateNotificationOptions = this.updateNotificationOptions.bind(this);
     this.onNotificationClick = this.onNotificationClick.bind(this);
     this.toggleRemoval = this.toggleRemoval.bind(this);
     this.toggleTimeoutRemoval = this.toggleTimeoutRemoval.bind(this);
@@ -123,14 +124,16 @@ class ReactNotificationComponent extends React.Component {
   }
 
   // API call
-  updateNotification(params) {
-    const { notifications: data } = this.state;
+  updateNotificationOptions(notificationId, options) {
+    const { notifications } = this.state;
 
-    data.forEach((ele) => {
-      _.extend(ele, params);
-    });
+    const existingNotification = _.find(notifications, { id: notificationId });
 
-    this.setState({ notifications: data });
+    if (!_.isUndefined(existingNotification)) {
+      _.extend(existingNotification, options);
+    }
+
+    this.setState({ notifications });
   }
 
   // API call
