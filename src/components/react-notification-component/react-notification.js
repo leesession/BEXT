@@ -95,8 +95,6 @@ export default class ReactNotification extends React.Component {
     // append animation classes
     animatedElementClasses = animatedElementClasses.concat(animationIn || []);
 
-    console.log('classes', animatedElementClasses);
-
     this.setState({
       animatedElementClasses,
       rootElementStyle: {

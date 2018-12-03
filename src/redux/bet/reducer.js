@@ -102,9 +102,7 @@ export default function (state = initState, action) {
     case actions.BET_OBJECT_CREATED:
     case actions.BET_OBJECT_UPDATED:
     {
-      console.log('BET_OBJECT_UPDATED: action.data', action.data);
       const newBet = parseBetReceipt(action.data);
-      console.log('BET_OBJECT_UPDATED: newBet', newBet);
       let needRefresh = false;
 
       // Update bet history table
@@ -153,7 +151,6 @@ export default function (state = initState, action) {
       // Update notification component
       const removedElements = _.remove(state.get('currentBets'), { transactionId });
 
-      console.log('removedElements', removedElements);
       if (!_.isEmpty(removedElements)) {
         return state
           .set('refresh', !state.get('refresh'));
