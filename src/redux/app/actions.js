@@ -13,6 +13,7 @@ const actions = {
   GET_IDENTITY: 'GET_IDENTITY',
   GET_IDENTITY_RESULT: 'GET_IDENTITY_RESULT',
   GET_USERNAME_RESULT: 'GET_USERNAME_RESULT',
+  GET_BALANCES: "GET_BALANCES",
   GET_EOS_BALANCE_RESULT: 'GET_EOS_BALANCE_RESULT',
   GET_BETX_BALANCE_RESULT: 'GET_BETX_BALANCE_RESULT',
   TRANSFER_REQUEST: 'TRANSFER_REQUEST',
@@ -53,6 +54,10 @@ const actions = {
     type: actions.TOGGLE_TOPBAR,
     isTransparent,
   }),
+  getBalances: (name) =>({
+    type: actions.GET_BALANCES,
+    name
+  })
 };
 
 export default actions;

@@ -6,24 +6,38 @@ import betActions from '../bet/actions';
 import ScatterHelper from '../../helpers/scatter';
 
 const {
-  handleScatterError, getIdentity, transfer, getEOSBalance, getBETXBalance, 
+  handleScatterError, getIdentity, transfer, getEOSBalance, getBETXBalance,
 } = ScatterHelper;
 
 function* getIdentityRequest() {
-
   try {
     const response = yield call(getIdentity);
 
     yield put({ type: actions.GET_USERNAME_RESULT, value: response.name });
 
-    const eosBalance = yield call(getEOSBalance, response.name);
+    yield put({ type: actions.GET_BALANCES, name: response.name });
+  } catch (err) {
+    const message = yield call(handleScatterError, err);
+
+    yield put({
+      type: actions.SET_ERROR_MESSAGE,
+      message,
+    });
+  }
+}
+
+function* getBalancesRequest(action) {
+  const { name } = action;
+
+  try {
+    const eosBalance = yield call(getEOSBalance, name);
 
     yield put({
       type: actions.GET_EOS_BALANCE_RESULT,
       value: eosBalance,
     });
 
-    const betxBalance = yield call(getBETXBalance, response.name);
+    const betxBalance = yield call(getBETXBalance, name);
 
     yield put({
       type: actions.GET_BETX_BALANCE_RESULT,
@@ -280,6 +294,7 @@ function* setErrorMessageRequest(action) {
 export default function* () {
   yield all([
     takeEvery(actions.GET_IDENTITY, getIdentityRequest),
+    takeEvery(actions.GET_BALANCES, getBalancesRequest),
     takeEvery(actions.TRANSFER_REQUEST, transferRequest),
     takeEvery(actions.SET_ERROR_MESSAGE, setErrorMessageRequest),
     takeEvery(actions.SET_SUCCESS_MESSAGE, setSuccessMessageRequest),

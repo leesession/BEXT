@@ -42,7 +42,9 @@ const MAX_INPUT_BET_AMOUNT = 50;
 const MAX_FLOAT_DIGITS = 4;
 
 const { initSocketConnection, fetchBetHistory, deleteCurrentBet } = betActions;
-const { getIdentity, transfer, setErrorMessage } = appActions;
+const {
+  getIdentity, getBalances, transfer, setErrorMessage,
+} = appActions;
 
 function calculateWinChance(rollNumber) {
   return (rollNumber - MIN_ROLL_NUMBER) / ((MAX_ROLL_NUMBER - MIN_ROLL_NUMBER) + 1);
@@ -180,8 +182,8 @@ class DicePage extends React.Component {
       username, eosBalance, betxBalance, currentBets,
     } = nextProps;
 
-    const { intl, deleteCurrentBetReq } = this.props;
-    const { notifications } = this.state;
+    const { intl, deleteCurrentBetReq, getBalancesReq } = this.props;
+    const { notifications, username: stateUsername } = this.state;
     const { notificationDOMRef } = this;
 
     const fieldsToUpdate = {};
@@ -275,6 +277,8 @@ class DicePage extends React.Component {
 
           // Remove this notification from state store currentBets
           deleteCurrentBetReq(transactionId);
+
+          getBalancesReq(stateUsername);
         }, 5000);
       }
     });
@@ -710,6 +714,7 @@ DicePage.propTypes = {
   view: PropTypes.string,
   currentBets: PropTypes.array,
   deleteCurrentBetReq: PropTypes.func,
+  getBalancesReq: PropTypes.func,
 };
 
 DicePage.defaultProps = {
@@ -728,6 +733,7 @@ DicePage.defaultProps = {
   view: undefined,
   currentBets: [],
   deleteCurrentBetReq: undefined,
+  getBalancesReq: undefined,
 };
 
 const mapStateToProps = (state) => ({
@@ -750,6 +756,7 @@ const mapDispatchToProps = (dispatch) => ({
   setErrorMessageReq: (errorMessage) => dispatch(setErrorMessage(errorMessage)),
   fetchBetHistoryReq: () => dispatch(fetchBetHistory()),
   deleteCurrentBetReq: (transactionId) => dispatch(deleteCurrentBet(transactionId)),
+  getBalancesReq: (name) => dispatch(getBalances(name)),
 });
 
 // Wrap the component to inject dispatch and state into it
