@@ -6,7 +6,7 @@ import betActions from '../bet/actions';
 import ScatterHelper from '../../helpers/scatter';
 
 const {
-  handleScatterError, getIdentity, transfer, getEOSBalance, getBETXBalance,
+  handleScatterError, getIdentity, transfer, getEOSBalance, getBETXBalance, getAccount
 } = ScatterHelper;
 
 function* getIdentityRequest() {
@@ -15,7 +15,10 @@ function* getIdentityRequest() {
 
     yield put({ type: actions.GET_USERNAME_RESULT, value: response.name });
 
+    yield put({ type: actions.GET_ACCOUNT, name: response.name });
+
     yield put({ type: actions.GET_BALANCES, name: response.name });
+
   } catch (err) {
     const message = yield call(handleScatterError, err);
 
@@ -30,12 +33,12 @@ function* getBalancesRequest(action) {
   const { name } = action;
 
   try {
-    const eosBalance = yield call(getEOSBalance, name);
+    // const eosBalance = yield call(getEOSBalance, name);
 
-    yield put({
-      type: actions.GET_EOS_BALANCE_RESULT,
-      value: eosBalance,
-    });
+    // yield put({
+    //   type: actions.GET_EOS_BALANCE_RESULT,
+    //   value: eosBalance,
+    // });
 
     const betxBalance = yield call(getBETXBalance, name);
 
@@ -50,6 +53,37 @@ function* getBalancesRequest(action) {
       type: actions.SET_ERROR_MESSAGE,
       message,
     });
+  }
+}
+
+function* getAccountRequest(action) {
+  const { name } = action;
+
+  try {
+    const response = yield call(getAccount, name);
+
+    console.log("getAccountRequest.response: ", response);
+    yield put({
+      type: actions.GET_EOS_BALANCE_RESULT,
+      value: response.eosBalance,
+    });
+
+    yield put({
+      type: actions.GET_CPU_USAGE_RESULT,
+      value: response.cpuUsage,
+    });
+
+
+    yield put({
+      type: actions.GET_NET_USAGE_RESULT,
+      value: response.netUsage,
+    });
+
+  } catch (err) {
+    const message = yield call(handleScatterError, err);
+
+    // Silence error message
+    console.log(err);
   }
 }
 
@@ -294,6 +328,7 @@ function* setErrorMessageRequest(action) {
 export default function* () {
   yield all([
     takeEvery(actions.GET_IDENTITY, getIdentityRequest),
+    takeEvery(actions.GET_ACCOUNT, getAccountRequest),
     takeEvery(actions.GET_BALANCES, getBalancesRequest),
     takeEvery(actions.TRANSFER_REQUEST, transferRequest),
     takeEvery(actions.SET_ERROR_MESSAGE, setErrorMessageRequest),
