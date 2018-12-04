@@ -1,4 +1,4 @@
-/* eslint react/no-array-index-key: 0, no-nested-ternary:0 */ // Disable "Do not use Array index in keys" for options since they dont have unique identifier
+/* eslint react/no-array-index-key: 0, no-nested-ternary: 0, react/no-unused-prop-types: 0 */ // Disable "Do not use Array index in keys" for options since they dont have unique identifier
 
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -144,7 +144,7 @@ class DicePage extends React.Component {
       dataIndex: 'time',
       key: 'time',
       width: 105,
-    }, 
+    },
     {
       title: intl.formatMessage({ id: 'dice.history.form.bettor' }),
       dataIndex: 'bettor',
@@ -156,7 +156,7 @@ class DicePage extends React.Component {
       dataIndex: 'payout',
       key: 'payout',
       width: 105,
-      render: (text) => { console.log(text); return text ? <span style={{ color: 'lightgreen' }}>{text}</span> : <span></span>},
+      render: (text) => (text ? <span style={{ color: 'lightgreen' }}>{text}</span> : <span></span>),
     },
     ];
 
@@ -451,9 +451,7 @@ class DicePage extends React.Component {
       dataSource, betAmount, payoutOnWin, winChance, payout, rollNumber, eosBalance, betxBalance, username,
     } = this.state;
 
-    const {
-      betHistory, locale, view, cpuUsage, netUsage,
-    } = this.props;
+    const { betHistory, locale, view } = this.props;
 
 
     const momentLocale = (locale === 'en') ? 'en' : 'zh-cn';
@@ -474,8 +472,6 @@ class DicePage extends React.Component {
 
     const myBetData = _.slice(_.filter(rawBetData, (o) => o.bettor === username), 0, appConfig.betHistoryTableSize);
     const hugeBetData = _.slice(_.filter(rawBetData, (o) => o.payoutAsset.amount >= appConfig.hugeBetAmount), 0, appConfig.betHistoryTableSize);
-
-    console.log(hugeBetData);
 
     const columns = view === 'MobileView' ? mobileColumns : desktopColumns;
 
