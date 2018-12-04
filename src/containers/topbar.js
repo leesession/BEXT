@@ -65,6 +65,8 @@ class Topbar extends React.PureComponent {
     };
 
     this.toggleCollapsed = this.toggleCollapsed.bind(this);
+    this.selectedMenu = this.selectedMenu.bind(this);
+
     this.onLanguageDropdownClicked = this.onLanguageDropdownClicked.bind(this);
     this.onLoginClicked = this.onLoginClicked.bind(this);
   }
@@ -128,6 +130,12 @@ class Topbar extends React.PureComponent {
     });
   }
 
+  selectedMenu(){
+    this.setState({
+      collapsed: !this.state.collapsed,
+    });
+  }
+
   onLoginClicked(evt) {
     evt.preventDefault();
     const { getIdentityReq } = this.props;
@@ -136,7 +144,11 @@ class Topbar extends React.PureComponent {
   }
 
   setRefModalVisible(refModalVisible) {
-    this.setState({ refModalVisible });
+    this.setState({
+      refModalVisible:refModalVisible,
+      collapsed: true,
+    });
+
   }
 
   render() {
@@ -165,9 +177,9 @@ class Topbar extends React.PureComponent {
 
     const menuItemElementsMobile = _.map(menuItems, (item) => {
       if (item.url) {
-        return <li role="menuitem" key={item.id}><a href={item.url} target="_blank"><IntlMessages id={item.id} /></a></li>;
+        return <li role="menuitem" key={item.id}><a href={item.url} onClick={this.selectedMenu} target="_blank"><IntlMessages id={item.id} /></a></li>;
       } else if (item.path) {
-        return <li role="menuitem" key={item.id}><Link to={item.path} ><IntlMessages id={item.id} /></Link></li>;
+        return <li role="menuitem" key={item.id}><Link to={item.path} onClick={this.selectedMenu} ><IntlMessages id={item.id} /></Link></li>;
       }
       return <li role="menuitem" key={item.id}><a href={item.url} onClick={() => this.setRefModalVisible(true)} target="_blank"><IntlMessages id={item.id} /></a></li>;
     });

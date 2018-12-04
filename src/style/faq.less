@@ -18,6 +18,9 @@
 		padding-top:100px;
 		padding-left:@phonePadding;
 		padding-right: @phonePadding;
+		&.wrapper_stake{
+			padding-top: 80px;
+		}
 	}
 
 	color:white;
@@ -34,7 +37,12 @@
 			margin-bottom: 12px;
 		}
 	}
-
+	.tabpane-title{
+		@media @phone {
+			font-size: 1.2em;
+			margin-bottom: 1em;
+		}
+	}
 	.page-sub-title {
 		text-align: center;
 		margin: 15px 0;
@@ -44,7 +52,17 @@
 		letter-spacing: 1px;
 		height: 40px;
 		overflow: hidden;
-
+		&.sub_title_stake{
+			@media @phone{
+				margin: 10px 0;
+				height: auto;
+			}
+		}
+		&.stake_block{
+			@media @phone{
+				margin: 16px 0;
+			}
+		}
 		@media @phone{
 			height: 35px;
 		}
@@ -90,7 +108,7 @@
 				padding-top:20px;
 				padding-bottom: 12px;
 
-				p:first-child{
+				p:first-child:not(.third_title_stake){
 					height: 54px;
 					overflow-y: hidden;
 					padding-left:12px;
@@ -106,6 +124,10 @@
 				height: 85px;
 				display: flex;
 				justify-content: center;
+				&.dividend_stake{
+					height:50px;
+					padding-left: 20px;
+				}
 
 &>div:nth-of-type(1){
 					max-width: 30%;
@@ -276,7 +298,7 @@
 						&:focus {
 						outline: none;
 						}
-					}	
+					}
 
 				button{	// button
 					height: 100%;
@@ -304,7 +326,8 @@
 				margin-bottom: 0px;
 				padding-top: 12px;
 				padding-bottom: 12px;
-				width: 160px;
+				//width: 160px;
+				width:240px;
 				font-size: 1.1em;
 			}
 
@@ -314,7 +337,7 @@
 
 			.ant-tabs-tab-active {
 				background-color: @bgColor;
-				
+
 			}
 
 			.ant-tabs-ink-bar {
@@ -352,7 +375,7 @@
 			}
 
 			p {
-				font-size: 1.4em;
+				font-size: 1em;
 				margin-bottom: 12px;
 			}
 
@@ -372,16 +395,18 @@
 		text-align: left;
 
 		.ant-collapse-header{
-			font-size: 1.4em;
+			font-size: 1em;
 		}
 
 		.ant-collapse-content-box{
 			h3{
-				font-size: 1.6em;
+				font-size: 1em;
 				margin-bottom: 8px;
+				font-weight: bold;
 			}
 			p{
-				font-size:1.4em;
+				font-weight: normal;
+				font-size:0.9em;
 			}
 
 			img{
@@ -416,7 +441,7 @@
 				}
 
 				p {
-					font-size: 1.4em;
+					font-size: 1em;
 					margin-bottom: 8px;
 				}
 
@@ -427,3 +452,4 @@
 	}
 
 }
+
