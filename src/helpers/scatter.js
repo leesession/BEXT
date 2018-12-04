@@ -27,6 +27,7 @@ class ScatterHelper {
     this.transfer = this.transfer.bind(this);
     this.handleScatterError = this.handleScatterError.bind(this);
     this.parseAsset = this.parseAsset.bind(this);
+    this.getAccount = this.getAccount.bind(this);
   }
 
   // static async createInstance() {
@@ -107,6 +108,19 @@ class ScatterHelper {
 
     return api.transaction(EOS_TOKEN_CONTRACT, (contract) =>
       contract.transfer(data, transactionOptions));
+  }
+
+  getAccount(name){
+    const { readEos, Eos } = this;
+    return readEos.getAccount(name).then((result) => {
+      console.log(result);
+
+      return Promise.resolve({
+        eosBalance: _.toNumber(Eos.modules.format.parseAsset(result.core_liquid_balance).amount),
+        cpuUsage: result.cpu_limit.used / result.cpu_limit.max,
+        netUsage: result.net_limit.used / result.net_limit.max,
+      });
+    });
   }
 
   getEOSBalance(name) {
