@@ -172,6 +172,12 @@ class FAQPage extends React.Component {
       );
     }
 
+const colWidth = {
+      xs: 24,
+      xl: 20,
+      xxl: 16,
+    };
+
     return (
       <div id="faq-page">
         <div className="wrapper">
@@ -191,15 +197,15 @@ class FAQPage extends React.Component {
               ))}
             </div>
           </Col> */}
-            <Col xs={24} md={20} xl={16}>
+            <Col {...colWidth}>
               <h1 className="page-title"><IntlMessages id="faq.title" /></h1>
             </Col>
-            <Col xs={24} md={20} xl={16}>
+            <Col {...colWidth}>
               {faqElements}
             </Col>
           </Row>
           <Row type="flex" justify="center">
-            <Col xs={24} md={20} xl={16}>
+            <Col {...colWidth}>
               <div className="page-term">
                 <h2 className="page-term-title"><IntlMessages id="faq.term.title" /></h2>
                 {termTextElement}
