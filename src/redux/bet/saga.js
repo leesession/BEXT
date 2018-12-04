@@ -41,7 +41,6 @@ function websocketInitChannel(payload) {
       // console.log('subscription close');
       betGlobalChannel = undefined;
       console.log('unsubscribeHandler() emitting BET_UNSUBSCRIBED');
-      return emitter({ type: actions.BET_UNSUBSCRIBED, payload });
     };
 
     const errorHandler = (object) => {
@@ -92,10 +91,18 @@ export function* initLiveBetHistory(action) {
     // socketChannel is still open in catch block
     // if we want end the socketChannel, we need close it explicitly
   } finally {
+    console.log('initLiveBetHistory.saga, finally close:');
     betGlobalChannel.close();
+
+    yield call(reconnectLiveBetRequest, action);
   }
 }
 
+/**
+ * [*reconnectLiveBetRequest description]
+ * @param {[type]} action        action.payload should be the same as initLiveBetHistory {collection}
+ * @yield {[type]} [description]
+ */
 export function* reconnectLiveBetRequest(action) {
   try {
     console.log(`Bet live channel unsubscribed; waiting for ${appConfig.betChannelReconnectInterval} ms before reconnect.`);
@@ -172,6 +179,6 @@ export default function* topicSaga() {
     takeEvery(actions.FETCH_BET_HISTORY, fetchBetHistoryRequest),
     takeEvery(actions.GET_BET_VOLUME, getBetVolumeRequest),
     takeEvery(actions.GET_BETX_STAKE_AMOUNT, getBetxStakeAmountRequest),
-    takeEvery(actions.BET_UNSUBSCRIBED, reconnectLiveBetRequest),
+    // takeEvery(actions.BET_UNSUBSCRIBED, reconnectLiveBetRequest),
   ]);
 }

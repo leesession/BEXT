@@ -207,7 +207,6 @@ class ParseHelper {
 
   // accepts chat payload object containing user1 and user2
   unsubscribe(subscription) {
-    console.log('unsubscribing', subscription);
     subscription.unsubscribe();
   }
 
