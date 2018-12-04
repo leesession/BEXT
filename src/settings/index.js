@@ -34,7 +34,7 @@ const appConfig = {
   eosNetwork: {
     blockchain: 'eos',
     protocol: 'https',
-    host: 'eos.greymass.com',
+    host: 'proxy.eosnode.tools',
     port: 443,
     chainId: 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906',
   },
