@@ -1,7 +1,8 @@
+/* eslint prefer-promise-reject-errors: 0 */
 import ScatterJS from 'scatterjs-core';
 import ScatterEOS from 'scatterjs-plugin-eosjs';
 import _ from 'lodash';
-import Eos from 'eosjs';
+import Eosjs from 'eosjs';
 import { appConfig } from '../settings';
 const EosApi = require('eosjs-api');
 
@@ -16,7 +17,7 @@ class ScatterHelper {
   constructor() {
     this.network = appConfig.eosNetwork;
     this.readEos = EosApi({ httpEndpoint: `${this.network.protocol}://${this.network.host}:${this.network.port}` });
-    this.Eos = Eos;
+    this.Eos = Eosjs;
 
     this.connect();
 
@@ -50,6 +51,8 @@ class ScatterHelper {
 
       that.scatter = ScatterJS.scatter;
       window.ScatterJS = null;
+
+      return Promise.resolve();
     });
   }
 
@@ -111,15 +114,11 @@ class ScatterHelper {
 
   getAccount(name) {
     const { readEos, Eos } = this;
-    return readEos.getAccount(name).then((result) => {
-      console.log(result);
-
-      return Promise.resolve({
-        eosBalance: _.toNumber(Eos.modules.format.parseAsset(result.core_liquid_balance).amount),
-        cpuUsage: result.cpu_limit.used / result.cpu_limit.max,
-        netUsage: result.net_limit.used / result.net_limit.max,
-      });
-    });
+    return readEos.getAccount(name).then((result) => Promise.resolve({
+      eosBalance: _.toNumber(Eos.modules.format.parseAsset(result.core_liquid_balance).amount),
+      cpuUsage: result.cpu_limit.used / result.cpu_limit.max,
+      netUsage: result.net_limit.used / result.net_limit.max,
+    }));
   }
 
   getEOSBalance(name) {
@@ -150,11 +149,14 @@ class ScatterHelper {
   }
 
   parseAsset(quantity) {
+    const { Eos } = this;
+
     return Eos.modules.format.parseAsset(quantity);
   }
 
   handleScatterError(err) {
-    let { message, code, error } = err;
+    let { message, code } = err;
+    const { error } = err;
 
     if (_.isString(err)) {
       // 1. JSON response case
@@ -162,7 +164,8 @@ class ScatterHelper {
         const errObject = JSON.parse(err);
 
         if (_.isObject(errObject) && errObject.error) {
-          code = errObject.error.code;
+          const { code: errorCode } = errObject.error;
+          code = errorCode;
 
           // Try to parse out assert message from details
           if (errObject.error.details) {

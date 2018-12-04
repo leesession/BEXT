@@ -6,7 +6,7 @@ import betActions from '../bet/actions';
 import ScatterHelper from '../../helpers/scatter';
 
 const {
-  handleScatterError, getIdentity, transfer, getEOSBalance, getBETXBalance, getAccount
+  handleScatterError, getIdentity, transfer, getEOSBalance, getBETXBalance, getAccount,
 } = ScatterHelper;
 
 function* getIdentityRequest() {
@@ -18,7 +18,6 @@ function* getIdentityRequest() {
     yield put({ type: actions.GET_ACCOUNT, name: response.name });
 
     yield put({ type: actions.GET_BALANCES, name: response.name });
-
   } catch (err) {
     const message = yield call(handleScatterError, err);
 
@@ -77,7 +76,6 @@ function* getAccountRequest(action) {
       type: actions.GET_NET_USAGE_RESULT,
       value: response.netUsage,
     });
-
   } catch (err) {
     const message = yield call(handleScatterError, err);
 

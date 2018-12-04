@@ -37,7 +37,7 @@ function websocketInitChannel(payload) {
       emitter({ type: actions.MESSAGE_OBJECT_LEFT, data: object });
     const unsubscribeHandler = () => {
       messageGlobalChannel = undefined;
-      console.log("unsubscribeHandler emitting MESSAGE_UNSUBSCRIBED");
+      console.log('unsubscribeHandler emitting MESSAGE_UNSUBSCRIBED');
       return emitter({ type: actions.MESSAGE_UNSUBSCRIBED, payload });
     };
 
@@ -64,7 +64,7 @@ function websocketInitChannel(payload) {
     const unsubscribeChannel = () => {
       // Close the connection
       unsubscribe(subscription);
-      console.log("unsubscribeChannel() emitting MESSAGE_UNSUBSCRIBED");
+      console.log('unsubscribeChannel() emitting MESSAGE_UNSUBSCRIBED');
     };
 
     // unsubscribe function, this gets called when we close the channel

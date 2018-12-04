@@ -59,8 +59,8 @@ const content = [{
   {
     title: 'faq.dividend.title.3',
     text: 'faq.dividend.text.3',
-    imgId:"betx/faq-timeline",
-  }
+    imgId: 'betx/faq-timeline',
+  },
   ],
 }, {
   header: 'faq.token.header',
@@ -72,12 +72,12 @@ const content = [{
     {
       title: 'faq.token.title.2',
       text: 'faq.token.text.2',
-      imgId:"betx/token-distribution",
+      imgId: 'betx/token-distribution',
     },
     {
       title: 'faq.token.title.3',
       text: 'faq.token.text.3',
-      imgId:"betx/mining-efficiency",
+      imgId: 'betx/mining-efficiency',
     },
   ],
 },
@@ -123,7 +123,7 @@ class FAQPage extends React.Component {
   }
 
   render() {
-    const { intl, view, locale} = this.props;
+    const { intl, view, locale } = this.props;
 
     const termTextParts = intl.formatMessage({ id: 'faq.term.body' }).split('\n');
     const termText = _.map(termTextParts, (part, partIndex) => <p key={partIndex}>{part}</p>);
@@ -141,7 +141,7 @@ class FAQPage extends React.Component {
             const parts = intl.formatMessage({ id: bodyItem.text }).split('\n');
             const text = _.map(parts, (part, partIndex) => <p key={partIndex}>{part}</p>);
             const img = bodyItem.imgId && <div><CloudinaryImage publicId={`${bodyItem.imgId}-${locale}`} /></div>;
-            
+
             return (<div key={innerIndex} style={{ marginBottom: '12px' }}><h3>{<IntlMessages id={bodyItem.title} />}</h3>{text}{img}</div>);
           });
           return (<Panel header={intl.formatMessage({ id: item.header })} key={index}>
@@ -172,7 +172,7 @@ class FAQPage extends React.Component {
       );
     }
 
-const colWidth = {
+    const colWidth = {
       xs: 24,
       xl: 20,
       xxl: 16,
@@ -226,7 +226,7 @@ FAQPage.propTypes = {
 
 FAQPage.defaultProps = {
   view: undefined,
-  locale: "en",
+  locale: 'en',
 };
 
 const mapStateToProps = (state) => ({

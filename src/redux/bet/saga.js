@@ -40,7 +40,7 @@ function websocketInitChannel(payload) {
     const unsubscribeHandler = () => {
       // console.log('subscription close');
       betGlobalChannel = undefined;
-      console.log("unsubscribeHandler() emitting BET_UNSUBSCRIBED");
+      console.log('unsubscribeHandler() emitting BET_UNSUBSCRIBED');
       return emitter({ type: actions.BET_UNSUBSCRIBED, payload });
     };
 
@@ -66,7 +66,7 @@ function websocketInitChannel(payload) {
     const unsubscribeChannel = () => {
       // Close the connection
       unsubscribe(subscription);
-      console.log("unsubscribeChannel() emitting BET_UNSUBSCRIBED");
+      console.log('unsubscribeChannel() emitting BET_UNSUBSCRIBED');
     };
 
     // unsubscribe function, this gets called when we close the channel
@@ -91,8 +91,7 @@ export function* initLiveBetHistory(action) {
     console.error('socket error:', err);
     // socketChannel is still open in catch block
     // if we want end the socketChannel, we need close it explicitly
-  }
-  finally{
+  } finally {
     betGlobalChannel.close();
   }
 }

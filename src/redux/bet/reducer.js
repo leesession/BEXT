@@ -102,7 +102,7 @@ export default function (state = initState, action) {
     case actions.BET_OBJECT_CREATED:
     case actions.BET_OBJECT_UPDATED:
     {
-      console.log("Raw new bet: ", action.data);
+      // console.log('Raw new bet: ', action.data);
       const newBet = parseBetReceipt(action.data);
       let needRefresh = false;
 
