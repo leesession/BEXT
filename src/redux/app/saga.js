@@ -62,7 +62,6 @@ function* getAccountRequest(action) {
   try {
     const response = yield call(getAccount, name);
 
-    console.log("getAccountRequest.response: ", response);
     yield put({
       type: actions.GET_EOS_BALANCE_RESULT,
       value: response.eosBalance,

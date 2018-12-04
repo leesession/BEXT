@@ -91,7 +91,9 @@ export function* initLiveBetHistory(action) {
     console.error('socket error:', err);
     // socketChannel is still open in catch block
     // if we want end the socketChannel, we need close it explicitly
-    // socketChannel.close()
+  }
+  finally{
+    betGlobalChannel.close();
   }
 }
 
