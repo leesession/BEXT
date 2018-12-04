@@ -18,6 +18,8 @@
   "topbar.copy":"Copy",
   "topbar.copy.title":"Get Rewarded With Referrals!",
   "topbar.copy.description":"Refer a friend now and receive 0.2% of their bets! Send above link to them and your account will automatically be added as a referrer when they bet.",
+  "topbar.stats.cpu":"CPU",
+  "topbar.stats.net":"NET",
 
   "dice.asset.eos":"EOS",
   "dice.asset.betx":"BETX",

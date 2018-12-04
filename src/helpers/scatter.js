@@ -40,15 +40,14 @@ class ScatterHelper {
   async connect() {
     const that = this;
 
-    const connectionOptions = {initTimeout:10000}
+    const connectionOptions = { initTimeout: 10000 };
 
-    return ScatterJS.scatter.connect('betx.fun',connectionOptions).then((connected) => {
+    return ScatterJS.scatter.connect('betx.fun', connectionOptions).then((connected) => {
     // User does not have Scatter Desktop, Mobile or Classic installed.
       if (!connected) {
         return false;
       }
 
-      console.log('ScatterJS is connected!');
       that.scatter = ScatterJS.scatter;
       window.ScatterJS = null;
     });
@@ -110,7 +109,7 @@ class ScatterHelper {
       contract.transfer(data, transactionOptions));
   }
 
-  getAccount(name){
+  getAccount(name) {
     const { readEos, Eos } = this;
     return readEos.getAccount(name).then((result) => {
       console.log(result);
@@ -146,12 +145,11 @@ class ScatterHelper {
           return Promise.resolve(_.toNumber(balObj.amount));
         }
       }
-
       return Promise.resolve();
     });
   }
 
-  parseAsset(quantity){
+  parseAsset(quantity) {
     return Eos.modules.format.parseAsset(quantity);
   }
 
@@ -167,16 +165,14 @@ class ScatterHelper {
           code = errObject.error.code;
 
           // Try to parse out assert message from details
-          if(errObject.error.details){
-            const assertMessageObj = _.find(errObject.error.details, {method: "eosio_assert"});
+          if (errObject.error.details) {
+            const assertMessageObj = _.find(errObject.error.details, { method: 'eosio_assert' });
 
-            if(assertMessageObj){
-
-              if(assertMessageObj.message.indexOf("Bet less than max") >=0){
-                return Promise.resolve("error.scatter.betLessThanMax");
-              }
-              else if(assertMessageObj.message.indexOf("overdrawn balance") >=0){
-                return Promise.resolve("error.scatter.overdrawnBalance");
+            if (assertMessageObj) {
+              if (assertMessageObj.message.indexOf('Bet less than max') >= 0) {
+                return Promise.resolve('error.scatter.betLessThanMax');
+              } else if (assertMessageObj.message.indexOf('overdrawn balance') >= 0) {
+                return Promise.resolve('error.scatter.overdrawnBalance');
               }
             }
           }

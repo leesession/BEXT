@@ -18,6 +18,8 @@
   "topbar.copy":"复制",
   "topbar.copy.title":"通过推荐获得奖励！",
   "topbar.copy.description":"推荐朋友，终身获得其0.2％的投注! 只需要将上面的链接发送给朋友，您就会在他们下注时自动成为推荐人。",
+  "topbar.stats.cpu":"CPU",
+  "topbar.stats.net":"NET",
 
   "dice.asset.eos":"EOS",
   "dice.asset.betx":"BETX",

@@ -14,6 +14,7 @@ import Dropdown, {
   DropdownMenu,
   MenuItem,
 } from '../components/uielements/dropdown';
+import StatsWidget from "../components/statsWidget";
 
 import { getCurrentTheme } from './ThemeSwitcher/config';
 import { themeConfig } from '../config';
@@ -209,8 +210,12 @@ class Topbar extends React.PureComponent {
 
                 <ul className="isoRight">
 
+                  <li className="nav-btn" role="menuitem" key="stats">
+                    <StatsWidget />
+                  </li>
+
                   <li className="nav-btn hideOnMobile" role="menuitem" key="login">
-                    {username ? (<div className="message"><IntlMessages id="topbar.welcome"></IntlMessages><span>, {username}</span></div>) : <Button type="primary" size="large" onClick={this.onLoginClicked}><IntlMessages id="topbar.login" />
+                    {username ? (<div className="message"><IntlMessages id="topbar.welcome"></IntlMessages><span>{username}</span></div>) : <Button type="primary" size="large" onClick={this.onLoginClicked}><IntlMessages id="topbar.login" />
                     </Button>}
                   </li>
                   <li role="menuitem" key="lang">
