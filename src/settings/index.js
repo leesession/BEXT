@@ -30,7 +30,7 @@ const appConfig = {
   hugeBetAmount: 100,
   chatHistoryMemorySize: 500,
   chatChannelReconnectInterval: 5000,
-  dividendRatio: 0.01,  // Dividend ratio compared to betVolume
+  dividendRatio: 0.01, // Dividend ratio compared to betVolume
   eosNetwork: {
     blockchain: 'eos',
     protocol: 'https',
@@ -38,7 +38,7 @@ const appConfig = {
     port: 443,
     chainId: 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906',
   },
-  cpuBankUrl: "https://cpuemergency.com/",
+  cpuBankUrl: 'https://cpuemergency.com/',
 };
 
 const parseConfig = {

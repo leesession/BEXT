@@ -1,7 +1,6 @@
-import { Slider, InputNumber, Row, Col } from 'antd';
+import { Slider, Row, Col } from 'antd';
 import React from 'react';
 import PropTypes from 'prop-types';
-import _ from "lodash";
 
 class IntegerStep extends React.Component {
   constructor(props) {
@@ -15,7 +14,7 @@ class IntegerStep extends React.Component {
   }
 
   onChange(value) {
-    const { getValue} = this.props;
+    const { getValue } = this.props;
 
 
     this.setState({
@@ -27,13 +26,15 @@ class IntegerStep extends React.Component {
 
   render() {
     const { value } = this.state;
-    const { min, max, step, defaultValue } = this.props;
+    const {
+      min, max, step,
+    } = this.props;
     return (
       <div className="slider">
         <Row gutter={32}>
           <Col span={24}>
             <Slider
-              className='slider_self'
+              className="slider_self"
               min={min}
               max={max}
               onChange={this.onChange}
