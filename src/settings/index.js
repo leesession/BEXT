@@ -27,7 +27,7 @@ const appConfig = {
   betHistoryMemorySize: 500,
   betHistoryTableSize: 20,
   betChannelReconnectInterval: 5000,
-  hugeBetAmount: 1000,
+  hugeBetAmount: 100,
   chatHistoryMemorySize: 500,
   chatChannelReconnectInterval: 5000,
   dividendRatio: 0.01,  // Dividend ratio compared to betVolume
