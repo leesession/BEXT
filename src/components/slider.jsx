@@ -1,30 +1,33 @@
 import { Slider, InputNumber, Row, Col } from 'antd';
 import React from 'react';
 import PropTypes from 'prop-types';
+import _ from "lodash";
 
 class IntegerStep extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      inputValue: props.defaultValue,
+      value: props.defaultValue,
     };
 
     this.onChange = this.onChange.bind(this);
   }
 
   onChange(value) {
-    const { getValue } = this.props;
+    const { getValue} = this.props;
+
+
     this.setState({
-      inputValue: value,
+      value,
     });
 
     getValue(value);
   }
 
   render() {
-    const { inputValue } = this.state;
-    const { min, max, defaultValue } = this.props;
+    const { value } = this.state;
+    const { min, max, step, defaultValue } = this.props;
     return (
       <div className="slider">
         <Row gutter={32}>
@@ -34,8 +37,9 @@ class IntegerStep extends React.Component {
               min={min}
               max={max}
               onChange={this.onChange}
-              value={typeof inputValue === 'number' ? inputValue : 0}
+              value={value}
               tipFormatter={null}
+              step={step}
             />
           </Col>
         </Row>
@@ -49,6 +53,7 @@ IntegerStep.propTypes = {
   min: PropTypes.number.isRequired,
   max: PropTypes.number.isRequired,
   defaultValue: PropTypes.number.isRequired,
+  step: PropTypes.number.isRequired,
 };
 
 IntegerStep.defaultProps = {
