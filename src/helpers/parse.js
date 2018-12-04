@@ -1,6 +1,7 @@
 import Parse from 'parse';
 import _ from 'lodash';
 import Eos from 'eosjs';
+import moment from 'moment';
 
 import { appConfig, parseConfig } from '../settings';
 
@@ -57,7 +58,7 @@ class ParseHelper {
 
     return {
       id: parseObject.id,
-      time: parseObject.get('resolved_block_time'),
+      time: moment.utc(parseObject.get('resolved_block_time')).toDate(),  // Convert server UTC time to local here
       bettor: parseObject.get('bettor'),
       rollUnder: parseObject.get('roll_under'),
       betAmount: parseObject.get('bet_amt'),
