@@ -6,7 +6,6 @@ import { Row, Col, Tabs, Collapse } from 'antd';
 import { connect } from 'react-redux';
 import { injectIntl, intlShape } from 'react-intl';
 import _ from 'lodash';
-import moment from 'moment';
 import { cloudinaryConfig, CloudinaryImage } from '../components/react-cloudinary';
 import IntlMessages from '../components/utility/intlMessages';
 
@@ -234,8 +233,5 @@ const mapStateToProps = (state) => ({
   locale: state.LanguageSwitcher.language.locale,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-});
-
 // Wrap the component to inject dispatch and state into it
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(FAQPage));
+export default connect(mapStateToProps, null)(injectIntl(FAQPage));
