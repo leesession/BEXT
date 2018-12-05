@@ -1,5 +1,5 @@
 /* eslint no-bitwise: 0 */
-import _ from "lodash";
+import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -10,8 +10,7 @@ const COLORS = [
 ];
 
 const getUsernameColor = (username) => {
-
-  if(_.isUndefined(username)){
+  if (_.isUndefined(username)) {
     return COLORS[0];
   }
 

@@ -37,6 +37,10 @@ export default function appReducer(state = initState, action) {
       break;
     case actions.GET_USERNAME_RESULT:
       return state.set('username', action.value);
+    case actions.GET_CPU_USAGE_RESULT:
+      return state.set('cpuUsage', action.value);
+    case actions.GET_NET_USAGE_RESULT:
+      return state.set('netUsage', action.value);
     case actions.GET_EOS_BALANCE_RESULT:
       return state.set('eosBalance', action.value);
     case actions.GET_BETX_BALANCE_RESULT:

@@ -1,3 +1,5 @@
+/* eslint no-restricted-globals: ["off", "location"], react/no-string-refs: 0 */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -6,14 +8,12 @@ import _ from 'lodash';
 import { injectIntl, intlShape } from 'react-intl';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import classNames from 'classnames';
+import { Layout, Menu, message, Button, Modal } from 'antd';
 
-import { Layout, Menu, Icon, message, Button, Input, Row, Col, Tag, Modal } from 'antd';
+import Dropdown from '../components/uielements/dropdown';
 import { cloudinaryConfig, CloudinaryImage } from '../components/react-cloudinary';
 import languageSwitcherActions from '../redux/languageSwitcher/actions';
-import Dropdown, {
-  DropdownMenu,
-  MenuItem,
-} from '../components/uielements/dropdown';
+import StatsWidget from '../components/statsWidget';
 
 import { getCurrentTheme } from './ThemeSwitcher/config';
 import { themeConfig } from '../config';
@@ -75,8 +75,8 @@ class Topbar extends React.PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { errorMessage, username, location: newLocation } = nextProps;
-    const { intl, location } = this.props;
+    const { errorMessage, username } = nextProps;
+    const { intl } = this.props;
     const { isLoggedIn } = this.state;
 
     if (username && !isLoggedIn) {
@@ -91,10 +91,10 @@ class Topbar extends React.PureComponent {
     if (errorMessage) {
       switch (errorMessage) {
         case 'error.scatter.locked':
-          const hide = message.loading(intl.formatMessage({ id: errorMessage }), 0);
+        { const hide = message.loading(intl.formatMessage({ id: errorMessage }), 0);
           // Dismiss manually and asynchronously
           setTimeout(hide, 3000);
-          break;
+          break; }
 
         default:
           message.error(intl.formatMessage({ id: errorMessage }));
@@ -104,7 +104,7 @@ class Topbar extends React.PureComponent {
   }
 
   componentDidMount() {
-    const { location: { search }, setRefAction } = this.props;
+    const { location: { search }, setRefReq } = this.props;
 
     // preload language flag img
     langSettings.forEach((item) => {
@@ -114,7 +114,7 @@ class Topbar extends React.PureComponent {
     const queryParams = parseQuery(search);
 
     if (queryParams && queryParams.ref) {
-      setRefAction(queryParams.ref);
+      setRefReq(queryParams.ref);
     }
   }
 
@@ -129,7 +129,7 @@ class Topbar extends React.PureComponent {
     });
   }
 
-  selectedMenu(){
+  selectedMenu() {
     this.setState({
       collapsed: !this.state.collapsed,
     });
@@ -144,10 +144,9 @@ class Topbar extends React.PureComponent {
 
   setRefModalVisible(refModalVisible) {
     this.setState({
-      refModalVisible:refModalVisible,
+      refModalVisible,
       collapsed: true,
     });
-
   }
 
   render() {
@@ -157,7 +156,7 @@ class Topbar extends React.PureComponent {
     } = this.state;
 
     const {
-      locale, username, ref, location: { href }, isTopbarTransparent,
+      locale, username, location: { href }, isTopbarTransparent,
     } = this.props;
 
     const btnClassName = `triggerBtn  ${collapsed ? 'menuCollapsed' : 'menuOpen'}`;
@@ -221,8 +220,12 @@ class Topbar extends React.PureComponent {
 
                 <ul className="isoRight">
 
+                  <li className="nav-btn" role="menuitem" key="stats">
+                    <StatsWidget />
+                  </li>
+
                   <li className="nav-btn hideOnMobile" role="menuitem" key="login">
-                    {username ? (<div className="message"><IntlMessages id="topbar.welcome"></IntlMessages><span>, {username}</span></div>) : <Button type="primary" size="large" onClick={this.onLoginClicked}><IntlMessages id="topbar.login" />
+                    {username ? (<div className="message"><IntlMessages id="topbar.welcome"></IntlMessages><span>{username}</span></div>) : <Button type="primary" size="large" onClick={this.onLoginClicked}><IntlMessages id="topbar.login" />
                     </Button>}
                   </li>
                   <li role="menuitem" key="lang">
@@ -290,7 +293,7 @@ class Topbar extends React.PureComponent {
                     this.refs.refText.style.background = 'blue';
                   }}
                 >
-                <Button size="large" type="primary"><IntlMessages id="topbar.copy" /></Button>
+                  <Button size="large" type="primary"><IntlMessages id="topbar.copy" /></Button>
                 </CopyToClipboard>
               </div>
             </div>
@@ -307,12 +310,11 @@ Topbar.propTypes = {
   locale: PropTypes.string,
   changeLanguage: PropTypes.func,
   getIdentityReq: PropTypes.func,
-  setRefAction: PropTypes.func,
+  setRefReq: PropTypes.func,
   username: PropTypes.string,
   errorMessage: PropTypes.string,
   intl: intlShape.isRequired,
   location: PropTypes.object.isRequired,
-  ref: PropTypes.string,
   isTopbarTransparent: PropTypes.bool.isRequired,
 };
 
@@ -320,22 +322,20 @@ Topbar.defaultProps = {
   locale: 'en',
   changeLanguage: undefined,
   getIdentityReq: undefined,
-  setRefAction: undefined,
+  setRefReq: undefined,
   username: undefined,
   errorMessage: undefined,
-  ref: undefined,
 };
 
 const mapStateToProps = (state) => ({
   locale: state.LanguageSwitcher.language.locale,
   username: state.App.get('username'),
   errorMessage: state.App.get('errorMessage'),
-  ref: state.App.get('ref'),
   isTopbarTransparent: state.App.get('isTopbarTransparent'),
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  setRefAction: (ref) => dispatch(setRef(ref)),
+  setRefReq: (ref) => dispatch(setRef(ref)),
   changeLanguage: (lanId) => dispatch(languageSwitcherActions.changeLanguage(lanId)),
   getIdentityReq: () => dispatch(getIdentity()),
 });

@@ -1,6 +1,7 @@
 import Parse from 'parse';
 import _ from 'lodash';
 import Eos from 'eosjs';
+import moment from 'moment';
 
 import { appConfig, parseConfig } from '../settings';
 
@@ -17,10 +18,10 @@ const PARSE_ERROR = {
   // PROVIDER_NOT_FOUND: 'No auth provider found for firebase',
 };
 
-const STATUS ={
-  NOT_STARTED: "Not Started",
-  RESOLVED: "Resolved",
-}
+const STATUS = {
+  NOT_STARTED: 'Not Started',
+  RESOLVED: 'Resolved',
+};
 
 class ParseHelper {
   constructor() {
@@ -53,17 +54,17 @@ class ParseHelper {
     }
 
     const payoutAsset = parseObject.get('payout') && Eos.modules.format.parseAsset(parseObject.get('payout'));
-    const resolveTrxId = parseObject.get("receipt") && parseObject.get("receipt").trx_id;
+    const resolveTrxId = parseObject.get('receipt') && parseObject.get('receipt').trx_id;
 
     return {
       id: parseObject.id,
-      time: parseObject.get('resolved_block_time'),
+      time: moment.utc(parseObject.get('resolved_block_time')).toDate(), // Convert server UTC time to local here
       bettor: parseObject.get('bettor'),
       rollUnder: parseObject.get('roll_under'),
       betAmount: parseObject.get('bet_amt'),
       roll: parseObject.get('roll'),
-      transferTx: parseObject.get("transferTx"),
-      payout: (_.isUndefined(payoutAsset) || _.toNumber(payoutAsset.amount) === 0) ? "": parseObject.get('payout'),
+      transferTx: parseObject.get('transferTx'),
+      payout: (_.isUndefined(payoutAsset) || _.toNumber(payoutAsset.amount) === 0) ? '' : parseObject.get('payout'),
       payoutAsset: {
         amount: payoutAsset && _.toNumber(payoutAsset.amount),
         symbol: payoutAsset && payoutAsset.symbol,
@@ -206,7 +207,6 @@ class ParseHelper {
 
   // accepts chat payload object containing user1 and user2
   unsubscribe(subscription) {
-    console.log('unsubscribing', subscription);
     subscription.unsubscribe();
   }
 
@@ -223,7 +223,7 @@ class ParseHelper {
     const { parseBetReceipt } = this;
     const query = new Parse.Query(ParseBet);
     query.equalTo('status', STATUS.RESOLVED);
-    query.descending("resolved_block_num");
+    query.descending('resolved_block_num');
     query.limit(appConfig.betHistoryMemorySize);
 
     // Bet history need to be inserted to the queue in ascending order, so we need to reserve the array here
@@ -235,19 +235,19 @@ class ParseHelper {
 
   fetchChatHistory() {
     const query = new Parse.Query(ParseMessage);
-    query.descending("updatedAt");
+    query.descending('updatedAt');
     query.limit(appConfig.chatHistoryMemorySize);
 
-// Chat history need to be inserted to the queue in ascending order, so we need to reserve the array here
-    return query.find().then((results=> Promise.resolve(_.reverse(results))));
+    // Chat history need to be inserted to the queue in ascending order, so we need to reserve the array here
+    return query.find().then(((results) => Promise.resolve(_.reverse(results))));
   }
 
-  getBetVolume(){
-    return this.parse.Cloud.run('getBetVolume', {types:["day", "all"]});
+  getBetVolume() {
+    return this.parse.Cloud.run('getBetVolume', { types: ['day', 'all'] });
   }
 
-  getBetxStakeAmount(){
-  return this.parse.Cloud.run('getBetxStakeAmount');
+  getBetxStakeAmount() {
+    return this.parse.Cloud.run('getBetxStakeAmount');
   }
 
   handleParseError(err) {
