@@ -11,7 +11,6 @@ const {
   subscribe, unsubscribe, fetchBetHistory, handleParseError, getBetVolume, getBetxStakeAmount,
 } = ParseHelper;
 
-let betGlobalChannel;
 
 function websocketInitChannel(payload) {
   return eventChannel((emitter) => {
@@ -39,8 +38,9 @@ function websocketInitChannel(payload) {
       emitter({ type: actions.BET_OBJECT_LEFT, data: object });
     const unsubscribeHandler = () => {
       // console.log('subscription close');
-      betGlobalChannel = undefined;
+      // betSubscription = undefined;
       console.log('unsubscribeHandler() emitting BET_UNSUBSCRIBED');
+      return emitter({ type: actions.BET_UNSUBSCRIBED, payload });
     };
 
     const errorHandler = (object) => {
@@ -74,15 +74,15 @@ function websocketInitChannel(payload) {
 }
 
 export function* initLiveBetHistory(action) {
-  try {
-    if (!_.isUndefined(betGlobalChannel)) {
-      return;
-    }
+  let betChannel;
 
-    betGlobalChannel = yield call(websocketInitChannel, action.payload);
+  try {
+    betChannel = yield call(websocketInitChannel, action.payload);
+
+    console.log('initLiveBetHistory.eventChannel is, ', betChannel);
 
     while (true) {
-      const payload = yield take(betGlobalChannel);
+      const payload = yield take(betChannel);
 
       yield put(payload);
     }
@@ -92,7 +92,11 @@ export function* initLiveBetHistory(action) {
     // if we want end the socketChannel, we need close it explicitly
   } finally {
     console.log('initLiveBetHistory.saga, finally close:');
-    betGlobalChannel.close();
+
+    if (betChannel) {
+      betChannel.close();
+      console.log('initLiveBetHistory.finally: eventChannel is, ', betChannel);
+    }
 
     yield call(reconnectLiveBetRequest, action);
   }
