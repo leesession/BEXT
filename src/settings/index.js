@@ -27,17 +27,18 @@ const appConfig = {
   betHistoryMemorySize: 500,
   betHistoryTableSize: 20,
   betChannelReconnectInterval: 5000,
-  hugeBetAmount: 1000,
+  hugeBetAmount: 100,
   chatHistoryMemorySize: 500,
   chatChannelReconnectInterval: 5000,
-  dividendRatio: 0.01,  // Dividend ratio compared to betVolume
+  dividendRatio: 0.01, // Dividend ratio compared to betVolume
   eosNetwork: {
     blockchain: 'eos',
     protocol: 'https',
-    host: 'eos.greymass.com',
+    host: 'proxy.eosnode.tools',
     port: 443,
     chainId: 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906',
   },
+  cpuBankUrl: 'https://cpuemergency.com/',
 };
 
 const parseConfig = {

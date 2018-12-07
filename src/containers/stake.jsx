@@ -137,10 +137,10 @@ class StakePage extends React.Component {
             <Col {...colWidth}>
               <h1 className="page-title"><IntlMessages id="stake.title" /></h1>
             </Col>
-            <Col  {...colWidth} className="border-bottom">
+            <Col {...colWidth} className="border-bottom">
               <h3 className="page-sub-title sub_title_stake stake_block"><IntlMessages id="stake.dividend.rest" /> ({<Icon type="clock-circle" />} <span style={{ color: 'white', letterSpacing: 2 }}>--:--:--</span>)</h3>
             </Col>
-            <Col  {...colWidth}>
+            <Col {...colWidth}>
               <Row gutter={90}>
                 <Col xs={24} md={12} className="page-dividend border-right">
                   <Row gutter={50} type="flex" justify="center" align="middle">
@@ -272,7 +272,7 @@ class StakePage extends React.Component {
               </Row>
             </Col>
 
-            <Col  {...colWidth}>
+            <Col {...colWidth}>
               <div className="page-term">
                 <h2 className="page-sub-title sub_title_stake"><IntlMessages id="stake.rule.title" /></h2>
                 <div className="page-term-body">

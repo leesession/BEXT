@@ -59,8 +59,8 @@ const content = [{
   {
     title: 'faq.dividend.title.3',
     text: 'faq.dividend.text.3',
-    imgId:"betx/faq-timeline",
-  }
+    imgId: 'betx/faq-timeline',
+  },
   ],
 }, {
   header: 'faq.token.header',
@@ -72,12 +72,12 @@ const content = [{
     {
       title: 'faq.token.title.2',
       text: 'faq.token.text.2',
-      imgId:"betx/token-distribution",
+      imgId: 'betx/token-distribution',
     },
     {
       title: 'faq.token.title.3',
       text: 'faq.token.text.3',
-      imgId:"betx/mining-efficiency",
+      imgId: 'betx/mining-efficiency',
     },
   ],
 },
@@ -123,7 +123,7 @@ class FAQPage extends React.Component {
   }
 
   render() {
-    const { intl, view, locale} = this.props;
+    const { intl, view, locale } = this.props;
 
     const termTextParts = intl.formatMessage({ id: 'faq.term.body' }).split('\n');
     const termText = _.map(termTextParts, (part, partIndex) => <p key={partIndex}>{part}</p>);
@@ -172,6 +172,12 @@ class FAQPage extends React.Component {
       );
     }
 
+    const colWidth = {
+      xs: 24,
+      xl: 20,
+      xxl: 16,
+    };
+
     return (
       <div id="faq-page">
         <div className="wrapper">
@@ -191,15 +197,15 @@ class FAQPage extends React.Component {
               ))}
             </div>
           </Col> */}
-            <Col xs={24} md={20} xl={16}>
+            <Col {...colWidth}>
               <h1 className="page-title"><IntlMessages id="faq.title" /></h1>
             </Col>
-            <Col xs={24} md={20} xl={16}>
+            <Col {...colWidth}>
               {faqElements}
             </Col>
           </Row>
           <Row type="flex" justify="center">
-            <Col xs={24} md={20} xl={16}>
+            <Col {...colWidth}>
               <div className="page-term">
                 <h2 className="page-term-title"><IntlMessages id="faq.term.title" /></h2>
                 {termTextElement}
@@ -220,7 +226,7 @@ FAQPage.propTypes = {
 
 FAQPage.defaultProps = {
   view: undefined,
-  locale: "en",
+  locale: 'en',
 };
 
 const mapStateToProps = (state) => ({

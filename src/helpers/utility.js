@@ -1,3 +1,4 @@
+import _ from 'lodash';
 const fetch = require('node-fetch');
 
 /**
@@ -69,7 +70,7 @@ export function randomString(size) {
 export function parseQuery(queryString) {
   const query = {};
 
-  if(queryString.length === 0){
+  if (queryString.length === 0) {
     return query;
   }
 
@@ -84,11 +85,11 @@ export function parseQuery(queryString) {
 
 export function assertDefined(...args) {
   if (args.length < 2 || _.isUndefined(args[1])) {
-        // array[0] - methodName
-        // array[1] - message
+    // array[0] - methodName
+    // array[1] - message
     const array = args.slice(0, 1);
     array[1] = `${args.length >= 3 ? args[2] : 'variable'} is not defined...`;
-    throw new Error(formatMessage(array));
+    throw new Error(array);
   }
 }
 
@@ -102,7 +103,7 @@ export function assertDefined(...args) {
 export function getFixedFloat(val, digits) {
   assertDefined('utils.getFixedFloat', digits, 'digits');
 
-  if(val[val.length-1] === '.'){
+  if (val[val.length - 1] === '.') {
     return val;
   }
 
@@ -129,12 +130,11 @@ export function millisecToMin(millis) {
  * @return {string}   "1,000,000.65"
  */
 export function formatNumberThousands(x) {
+  if (_.isUndefined(x)) {
+    return x;
+  }
 
-    if(_.isUndefined(x)){
-      return x;
-    }
-
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
-export const delay = ms => new Promise(res => setTimeout(res, ms));
+export const delay = (ms) => new Promise((res) => setTimeout(res, ms));

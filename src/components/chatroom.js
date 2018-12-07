@@ -1,16 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form, Row, Col, Table, Input, InputNumber, Button, Tabs, message } from 'antd';
+import { Row, Col, Input, Button, message } from 'antd';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import { injectIntl, intlShape } from 'react-intl';
 
-import { cloudinaryConfig, CloudinaryImage } from '../components/react-cloudinary';
 import chatActions from '../redux/chat/actions';
 import Message from './message';
 import IntlMessages from '../components/utility/intlMessages';
-
-cloudinaryConfig({ cloud_name: 'dd1ixvdxn' });
 
 const {
   initSocketConnection, sendMessage, fetchChatHistory, clearMessage,
@@ -93,8 +90,8 @@ class ChatRoom extends React.Component {
           <ul ref={(ele) => { this.myRef = ele; }}>
             {
               !_.isEmpty(history.all()) &&
-              _.map(history.all(), (message, index) =>
-                <Message message={message} key={message.id || index} />)
+              _.map(history.all(), (messageObj, index) =>
+                <Message message={messageObj} key={messageObj.id || index} />)
             }
           </ul>
         </div>

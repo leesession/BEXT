@@ -1,4 +1,4 @@
-/* eslint react/no-array-index-key: 0, no-nested-ternary:0 */ // Disable "Do not use Array index in keys" for options since they dont have unique identifier
+/* eslint react/no-array-index-key: 0, no-nested-ternary: 0, react/no-unused-prop-types: 0 */ // Disable "Do not use Array index in keys" for options since they dont have unique identifier
 
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -43,7 +43,7 @@ const MAX_FLOAT_DIGITS = 4;
 
 const { initSocketConnection, fetchBetHistory, deleteCurrentBet } = betActions;
 const {
-  getIdentity, getBalances, transfer, setErrorMessage,
+  getIdentity, getAccountInfo, getBalances, transfer, setErrorMessage,
 } = appActions;
 
 function calculateWinChance(rollNumber) {
@@ -143,20 +143,23 @@ class DicePage extends React.Component {
       title: intl.formatMessage({ id: 'dice.history.form.time' }),
       dataIndex: 'time',
       key: 'time',
-    }, {
+      width: 105,
+    },
+    {
       title: intl.formatMessage({ id: 'dice.history.form.bettor' }),
       dataIndex: 'bettor',
       key: 'bettor',
+      width: 105,
     },
     {
       title: intl.formatMessage({ id: 'dice.history.form.payout' }),
       dataIndex: 'payout',
       key: 'payout',
-      render: (text) => text ? <span style={{ color: 'lightgreen' }}>{text}</span> : '',
+      width: 105,
+      render: (text) => (text ? <span style={{ color: 'lightgreen' }}>{text}</span> : <span></span>),
     },
     ];
 
-    this.onTabClicked = this.onTabClicked.bind(this);
     this.onInputNumberChange = this.onInputNumberChange.bind(this);
     this.onBetAmountButtonClick = this.onBetAmountButtonClick.bind(this);
     this.getSliderValue = this.getSliderValue.bind(this);
@@ -182,7 +185,9 @@ class DicePage extends React.Component {
       username, eosBalance, betxBalance, currentBets,
     } = nextProps;
 
-    const { intl, deleteCurrentBetReq, getBalancesReq } = this.props;
+    const {
+      intl, deleteCurrentBetReq, getBalancesReq, getAccountInfoReq,
+    } = this.props;
     const { notifications, username: stateUsername } = this.state;
     const { notificationDOMRef } = this;
 
@@ -278,6 +283,7 @@ class DicePage extends React.Component {
           // Remove this notification from state store currentBets
           deleteCurrentBetReq(transactionId);
 
+          getAccountInfoReq(stateUsername);
           getBalancesReq(stateUsername);
         }, 5000);
       }
@@ -289,10 +295,6 @@ class DicePage extends React.Component {
   }
 
   componentWillUnmount() {
-  }
-
-  onTabClicked() {
-
   }
 
   onInputNumberChange(evt) {
@@ -449,9 +451,8 @@ class DicePage extends React.Component {
       dataSource, betAmount, payoutOnWin, winChance, payout, rollNumber, eosBalance, betxBalance, username,
     } = this.state;
 
-    const {
-      betHistory, locale, view,
-    } = this.props;
+    const { betHistory, locale, view } = this.props;
+
 
     const momentLocale = (locale === 'en') ? 'en' : 'zh-cn';
 
@@ -558,7 +559,7 @@ class DicePage extends React.Component {
                         </Row>
                         <Row type="flex" justify="center">
                           <Col span={24}>
-                            <Slider getValue={this.getSliderValue} defaultValue={DEFAULT_ROLL_NUMBER} min={MIN_SELECT_ROLL_NUMBER} max={MAX_SELECT_ROLL_NUMBER} />
+                            <Slider getValue={this.getSliderValue} defaultValue={DEFAULT_ROLL_NUMBER} min={MIN_SELECT_ROLL_NUMBER} max={MAX_SELECT_ROLL_NUMBER} step={1} />
                           </Col>
                         </Row>
 
@@ -652,36 +653,39 @@ class DicePage extends React.Component {
                 <section id="tables" >
                   {/* <div className="horizontalWrapper"> */}
                   <div className="container">
-                    <Tabs defaultActiveKey="1" onChange={this.onTabClicked} size="large">
-                      <TabPane tab={<IntlMessages id="dice.history.all" />} key="1">
-                        <Table
-                          className="holderBorder"
-                          columns={columns}
-                          dataSource={allBetData}
-                          bordered={false}
-                          showHeader
-                          pagination={false}
-                        />
+                    <Tabs size="large">
+                      <TabPane tab={<IntlMessages id="dice.history.all" />} key="allbet">
+                        <div className="holderBorder">
+                          <Table
+                            columns={columns}
+                            dataSource={allBetData}
+                            bordered={false}
+                            showHeader
+                            pagination={false}
+                          />
+                        </div>
                       </TabPane>
-                      <TabPane tab={<IntlMessages id="dice.history.my" />} key="2">
-                        <Table
-                          className="holderBorder"
-                          columns={columns}
-                          dataSource={myBetData}
-                          bordered={false}
-                          showHeader
-                          pagination={false}
-                        />
+                      <TabPane tab={<IntlMessages id="dice.history.my" />} key="mybet">
+                        <div className="holderBorder">
+                          <Table
+                            columns={columns}
+                            dataSource={myBetData}
+                            bordered={false}
+                            showHeader
+                            pagination={false}
+                          />
+                        </div>
                       </TabPane>
-                      <TabPane tab={<IntlMessages id="dice.history.huge" />} key="3">
-                        <Table
-                          className="holderBorder"
-                          columns={columns}
-                          dataSource={hugeBetData}
-                          bordered={false}
-                          showHeader
-                          pagination={false}
-                        />
+                      <TabPane tab={<IntlMessages id="dice.history.huge" />} key="hugebet">
+                        <div className="holderBorder">
+                          <Table
+                            columns={columns}
+                            dataSource={hugeBetData}
+                            bordered={false}
+                            showHeader
+                            pagination={false}
+                          />
+                        </div>
                       </TabPane>
                     </Tabs>
                   </div>
@@ -715,6 +719,7 @@ DicePage.propTypes = {
   currentBets: PropTypes.array,
   deleteCurrentBetReq: PropTypes.func,
   getBalancesReq: PropTypes.func,
+  getAccountInfoReq: PropTypes.func,
 };
 
 DicePage.defaultProps = {
@@ -734,6 +739,7 @@ DicePage.defaultProps = {
   currentBets: [],
   deleteCurrentBetReq: undefined,
   getBalancesReq: undefined,
+  getAccountInfoReq: undefined,
 };
 
 const mapStateToProps = (state) => ({
@@ -757,6 +763,7 @@ const mapDispatchToProps = (dispatch) => ({
   fetchBetHistoryReq: () => dispatch(fetchBetHistory()),
   deleteCurrentBetReq: (transactionId) => dispatch(deleteCurrentBet(transactionId)),
   getBalancesReq: (name) => dispatch(getBalances(name)),
+  getAccountInfoReq: (name) => dispatch(getAccountInfo(name)),
 });
 
 // Wrap the component to inject dispatch and state into it

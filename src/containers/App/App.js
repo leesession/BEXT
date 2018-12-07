@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Layout, LocaleProvider } from 'antd';
 import { IntlProvider } from 'react-intl';
-import WindowSizeListener from 'react-window-size-listener'
+import WindowSizeListener from 'react-window-size-listener';
 
 import { ThemeProvider } from 'styled-components';
 import Waypoint from 'react-waypoint';
@@ -61,13 +61,13 @@ export class App extends React.PureComponent {
           <ThemeProvider theme={themes[themeConfig.theme]}>
             <AppHolder>
               <Layout style={{ height: appHeight }}>
-                  <WindowSizeListener
-                    onResize={(windowSize) =>
-                      toggleAllReq(
-                        windowSize.windowWidth,
-                        windowSize.windowHeight
-                      )}
-                  />
+                <WindowSizeListener
+                  onResize={(windowSize) =>
+                    toggleAllReq(
+                      windowSize.windowWidth,
+                      windowSize.windowHeight
+                    )}
+                />
                 <Topbar url={url} />
                 <Layout style={{ flexDirection: 'row', overflowX: 'hidden' }}>
                   <Layout>
