@@ -61,6 +61,7 @@ class Topbar extends React.PureComponent {
       collapsed: true,
       isLoggedIn: false,
       refModalVisible: false,
+      languageDropdown:null,
     };
 
     this.toggleCollapsed = this.toggleCollapsed.bind(this);
@@ -71,7 +72,21 @@ class Topbar extends React.PureComponent {
   }
 
   componentWillMount() {
-
+    const languageDropdown = (
+      <Menu onClick={this.onLanguageDropdownClicked} className="lang-menu">
+        {_.map(langSettings, (lang) => (
+          <Menu.Item key={lang.key} className="lang-menu-item">
+            <img src={lang.imgSrc} alt="" />
+            <span style={{ paddingLeft: '12px' }}>
+              {lang.text}
+            </span>
+          </Menu.Item>
+        ))}
+      </Menu>
+    );
+    this.setState({
+      languageDropdown
+    })
   }
 
   componentWillReceiveProps(nextProps) {
@@ -184,7 +199,7 @@ class Topbar extends React.PureComponent {
     });
     menuItemElementsMobile.push(<li role="menuitem" key="login"><a href={null} style={{ width: '100%' }} onClick={this.onLoginClicked}><IntlMessages id="topbar.login" /></a></li>);
 
-    const languageDropdown = (
+  /*  const languageDropdown = (
       <Menu onClick={this.onLanguageDropdownClicked} className="lang-menu">
         {_.map(langSettings, (lang) => (
           <Menu.Item key={lang.key} className="lang-menu-item">
@@ -195,7 +210,7 @@ class Topbar extends React.PureComponent {
           </Menu.Item>
         ))}
       </Menu>
-    );
+    );*/
 
     const topbarClassname = classNames({
       topbar: true,
@@ -227,7 +242,7 @@ class Topbar extends React.PureComponent {
                   </li>
                   <li role="menuitem" key="lang">
                     <div className="lang-menu-trigger">
-                      <Dropdown overlay={languageDropdown}>
+                      <Dropdown overlay={this.state.languageDropdown}>
                         <div className="selected">
                           <div className="selected-inner">
                             <img src={_.find(langSettings, { locale }).imgSrc} alt="" />

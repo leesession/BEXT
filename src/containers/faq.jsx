@@ -127,7 +127,7 @@ class FAQPage extends React.Component {
 
     const termTextParts = intl.formatMessage({ id: 'faq.term.body' }).split('\n');
     const termText = _.map(termTextParts, (part, partIndex) => <p key={partIndex}>{part}</p>);
-    const termTextElement = <div className="page-term-body"><div className="page-term-body-inner panel">{termText}</div></div>;
+    const termTextElement = <div className="page-term-body"><div className="page-term-body-inner panel normal-font">{termText}</div></div>;
 
     let faqElements;
 
@@ -141,7 +141,7 @@ class FAQPage extends React.Component {
             const parts = intl.formatMessage({ id: bodyItem.text }).split('\n');
             const text = _.map(parts, (part, partIndex) => <p key={partIndex}>{part}</p>);
             const img = bodyItem.imgId && <div><CloudinaryImage publicId={`${bodyItem.imgId}-${locale}`} /></div>;
-            
+
             return (<div key={innerIndex} style={{ marginBottom: '12px' }}><h3>{<IntlMessages id={bodyItem.title} />}</h3>{text}{img}</div>);
           });
           return (<Panel header={intl.formatMessage({ id: item.header })} key={index}>

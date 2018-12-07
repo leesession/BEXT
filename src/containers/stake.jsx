@@ -276,7 +276,7 @@ class StakePage extends React.Component {
               <div className="page-term">
                 <h2 className="page-sub-title sub_title_stake"><IntlMessages id="stake.rule.title" /></h2>
                 <div className="page-term-body">
-                  <div className="page-term-body-inner panel">{termText}</div>
+                  <div className="page-term-body-inner panel normal-font">{termText}</div>
                 </div>
               </div>
             </Col>
