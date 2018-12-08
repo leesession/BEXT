@@ -262,6 +262,7 @@ class DicePage extends React.Component {
         );
 
         setTimeout(() => {
+          if (!notificationDOMRef.current) { return; }
           // Remove this notification from notification componnent
           notificationDOMRef.current.removeNotification(notificationId);
           // Remove this notification from this.state
