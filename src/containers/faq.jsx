@@ -126,7 +126,7 @@ class FAQPage extends React.Component {
 
     const termTextParts = intl.formatMessage({ id: 'faq.term.body' }).split('\n');
     const termText = _.map(termTextParts, (part, partIndex) => <p key={partIndex}>{part}</p>);
-    const termTextElement = <div className="page-term-body"><div className="page-term-body-inner panel">{termText}</div></div>;
+    const termTextElement = <div className="page-term-body"><div className="page-term-body-inner panel normal-font">{termText}</div></div>;
 
     let faqElements;
 
