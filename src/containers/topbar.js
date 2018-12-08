@@ -119,7 +119,7 @@ class Topbar extends React.PureComponent {
   }
 
   componentDidMount() {
-    const { location: { search }, setRefReq } = this.props;
+    const { setRefReq, locationURL: { search } } = this.props;
 
     // preload language flag img
     langSettings.forEach((item) => {
@@ -171,13 +171,13 @@ class Topbar extends React.PureComponent {
     } = this.state;
 
     const {
-      locale, username, location, isTopbarTransparent,
+      locale, username, isTopbarTransparent, locationURL,
     } = this.props;
 
     const btnClassName = `triggerBtn  ${collapsed ? 'menuCollapsed' : 'menuOpen'}`;
     const menuClassName = `menu  ${collapsed ? 'menuCollapsed' : 'menuOpen'}`;
 
-    const referralLink = `${location.protocol}//${location.hostname}?ref=${username || ''}`;
+    const referralLink = `${locationURL.protocol}//${locationURL.hostname}?ref=${username || ''}`;
 
     const menuItemElements = _.map(menuItems, (item) => {
       if (item.url) {
@@ -329,8 +329,8 @@ Topbar.propTypes = {
   username: PropTypes.string,
   errorMessage: PropTypes.string,
   intl: intlShape.isRequired,
-  location: PropTypes.object.isRequired,
   isTopbarTransparent: PropTypes.bool.isRequired,
+  locationURL: PropTypes.object,
 };
 
 Topbar.defaultProps = {
@@ -340,6 +340,7 @@ Topbar.defaultProps = {
   setRefReq: undefined,
   username: undefined,
   errorMessage: undefined,
+  locationURL: window.location,
 };
 
 const mapStateToProps = (state) => ({
