@@ -12,61 +12,69 @@ class Footer extends React.Component {
     super(props);
     this.state = {
       visible: false,
+      wechatImage: undefined,
     };
 
     this.handleVisibleChange = this.handleVisibleChange.bind(this);
   }
 
-   handleVisibleChange = (visible) => {
-     this.setState({ visible });
-   }
+  componentWillMount() {
+    const wechatImage = <CloudinaryImage publicId="qr-wechat-betx" options={{ height: 150, crop: 'scale' }} alt="QR code Wechat" />;
+    this.setState({
+      wechatImage,
+    });
+  }
 
-   render() {
-     const { intl } = this.props;
-     const { visible } = this.state;
+  handleVisibleChange = (visible) => {
+    this.setState({ visible });
+  }
 
-     return (
-       <div id="footer">
-         <div className="contact-container">
+  render() {
+    const { intl } = this.props;
+    const { visible, wechatImage } = this.state;
 
-           <ul>
-             <li>
-               <a href={`mailto:${siteConfig.contactEmail}`}>
-                 <i className="fa fa-envelope-o" />
-               </a>
-             </li>
-             <li>
-               <a href={siteConfig.telegramEN}>
-                 <i className="fa fa-paper-plane-o" />
-               </a>
-             </li>
-             <li>
-               <a href={siteConfig.twitter} target="_blank">
-                 <i className="fa fa-twitter" />
-               </a>
-             </li>
-             <li>
-               <Popover
-                 placement="top"
-                 content={<CloudinaryImage publicId="qr-wechat-betx" options={{ height: 150, crop: 'scale' }} alt="QR code Wechat" />}
-                 title={intl.formatMessage({ id: 'footer.contactus.wechat' })}
-                 trigger="click"
-                 visible={visible}
-                 onVisibleChange={this.handleVisibleChange}
-               >
-                 <span><i className="fa fa-wechat" /></span>
-               </Popover>
-             </li>
-           </ul>
+    return (
+      <div id="footer">
+        <div className="contact-container">
 
-         </div>
+          <ul>
+            <li>
+              <a href={`mailto:${siteConfig.contactEmail}`}>
+                <i className="fa fa-envelope-o" />
+              </a>
+            </li>
+            <li>
+              <a href={siteConfig.telegramEN}>
+                <i className="fa fa-paper-plane-o" />
+              </a>
+            </li>
+            <li>
+              <a href={siteConfig.twitter} target="_blank">
+                <i className="fa fa-twitter" />
+              </a>
+            </li>
+            <li>
+              <Popover
+                placement="top"
+                content={wechatImage}
+                title={intl.formatMessage({ id: 'footer.contactus.wechat' })}
+                trigger="click"
+                visible={visible}
+                onVisibleChange={this.handleVisibleChange}
+              >
+                <span><i className="fa fa-wechat" /></span>
+              </Popover>
+            </li>
+          </ul>
 
-         <div className="corp-container">
-           <span>{siteConfig.footerText}</span>
-         </div>
-       </div>
-     );
-   }
+        </div>
+
+        <div className="corp-container">
+          <span>{siteConfig.footerText}</span>
+        </div>
+      </div>
+    );
+  }
 }
 
 Footer.propTypes = {
