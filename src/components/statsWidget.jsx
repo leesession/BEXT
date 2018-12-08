@@ -59,9 +59,12 @@ class StatsWidget extends React.Component {
     // Calculate gradient color based on percentage
 
     if (cpuUsage) {
-      const cpuPercent = _.floor(cpuUsage, 2) * 100; const color = CalculateColorByPercentage(startColor, endColor, cpuUsage);
+      const cpuPercent = _.toInteger(cpuUsage * 100);
 
-      const progressStyle = _.cloneDeep(style); _.extend(progressStyle, { strokeColor: color }); cpuElement = (<div className="topbar-statswidget-cpu">
+      const color = CalculateColorByPercentage(startColor, endColor, _.floor(cpuUsage, 2));
+
+      const progressStyle = _.cloneDeep(style); _.extend(progressStyle, { strokeColor: color });
+      cpuElement = (<div className="topbar-statswidget-cpu">
         <a href={appConfig.cpuBankUrl} target="_self">
           <Progress {...progressStyle} percent={cpuPercent} />
           <div className="topbar-statswidget-title"><IntlMessages id="topbar.stats.cpu" /></div>
@@ -70,7 +73,7 @@ class StatsWidget extends React.Component {
     }
 
     if (netUsage) {
-      const netPercent = _.floor(netUsage, 2) * 100;
+      const netPercent = _.toInteger(netUsage * 100);
 
       const color = CalculateColorByPercentage(startColor, endColor, _.floor(netUsage, 2));
 
