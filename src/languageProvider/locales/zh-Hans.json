@@ -129,10 +129,10 @@
   "footer.contactus.wechat":"微信小助手",
 
   "message.success.bet":"下注成功！",
-  "message.success.sentBet":"您成功下注 {amount} {asset}",
+  "message.success.sentBet":"您成功下注 {betAmount}",
   "message.success.waitForBetResult":"正在等待结果",
-  "message.success.resultWon":"掷出 {roll}, 你赢的{amount} {asset}",
-  "message.success.resultLose":"掷出 {roll}, 您输了 {amount} {asset}!",
+  "message.success.resultWon":"掷出 {roll}, 赢得 {payout}",
+  "message.success.resultLose":"掷出 {roll}, 失去 {betAmount}!",
 
 
   "message.warn.lessThanMinBet":"当前下注允许的最小值为 {amount} {asset}",
