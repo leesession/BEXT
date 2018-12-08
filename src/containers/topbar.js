@@ -15,8 +15,6 @@ import { cloudinaryConfig, CloudinaryImage } from '../components/react-cloudinar
 import languageSwitcherActions from '../redux/languageSwitcher/actions';
 import StatsWidget from '../components/statsWidget';
 
-import { getCurrentTheme } from './ThemeSwitcher/config';
-import { themeConfig } from '../config';
 import IntlMessages from '../components/utility/intlMessages';
 import appActions from '../redux/app/actions';
 import { parseQuery } from '../helpers/utility';
@@ -165,7 +163,6 @@ class Topbar extends React.PureComponent {
   }
 
   render() {
-    const customizedTheme = getCurrentTheme('topbarTheme', themeConfig.theme);
     const {
       collapsed,
     } = this.state;
@@ -260,7 +257,7 @@ class Topbar extends React.PureComponent {
                     <div className="hideOnLarge">
                       <button
                         className={btnClassName}
-                        style={{ color: customizedTheme.textColor }}
+                        style={{ color: '#323332' }}
                         onClick={this.toggleCollapsed}
                         data-toggle="collapse"
                         data-target="#bs-example-navbar-collapse-1"
