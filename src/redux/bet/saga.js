@@ -1,5 +1,4 @@
-import _ from 'lodash';
-import { all, take, takeEvery, put, fork, call } from 'redux-saga/effects';
+import { all, take, takeEvery, put, call } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import actions from './actions';
 import appActions from '../app/actions';
@@ -79,8 +78,6 @@ export function* initLiveBetHistory(action) {
   try {
     betChannel = yield call(websocketInitChannel, action.payload);
 
-    console.log('initLiveBetHistory.eventChannel is, ', betChannel);
-
     while (true) {
       const payload = yield take(betChannel);
 
@@ -109,8 +106,6 @@ export function* initLiveBetHistory(action) {
  */
 export function* reconnectLiveBetRequest(action) {
   try {
-    console.log(`Bet live channel unsubscribed; waiting for ${appConfig.betChannelReconnectInterval} ms before reconnect.`);
-
     yield call(delay, appConfig.betChannelReconnectInterval);
 
     // Reconnect to make sure there's always a ws connection

@@ -1,10 +1,8 @@
 import { Map } from 'immutable';
-import _ from 'lodash';
 import { getDefaultPath } from '../../helpers/urlSync';
 import actions, { getView } from './actions';
 
 const preKeys = getDefaultPath();
-const WALLET_ADDRESS_MAX_COUNT = 8;
 
 const initState = new Map({
   collapsed: !(window.innerWidth > 1220),
@@ -21,10 +19,6 @@ const initState = new Map({
 });
 
 export default function appReducer(state = initState, action) {
-  if (_.isUndefined(action)) {
-    console.log('appReducer.action is undefined;');
-  }
-
   switch (action.type) {
     case actions.TOGGLE_ALL:
       if (state.get('view') !== action.view || action.height !== state.height) {

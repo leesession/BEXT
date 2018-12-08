@@ -14,7 +14,7 @@ class Queue {
     if (_.isNumber(value) && value > 0) {
       this.capacity = value;
     } else {
-      console.log('Queue.setSize', `input is invalid: ${value}`);
+      throw new Error(`Queue.setMaxSize, input is invalid: ${value}`);
     }
   }
 

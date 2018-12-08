@@ -105,8 +105,8 @@ const mapStateToProps = (state) => ({
   view: state.App.get('view'),
 });
 
-const mapDispatchToProps = (dispatch) => ({
-});
+// const mapDispatchToProps = (dispatch) => ({
+// });
 
-export default connect(mapStateToProps, mapDispatchToProps)(StatsWidget);
+export default connect(mapStateToProps, null)(StatsWidget);
 

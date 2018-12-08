@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { all, take, takeEvery, put, fork, call, cancelled } from 'redux-saga/effects';
+import { all, take, takeEvery, put, call } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import actions from './actions';
 import ParseHelper from '../../helpers/parse';

@@ -1,12 +1,11 @@
-import { call, all, takeEvery, put, fork, cancel, take, cancelled } from 'redux-saga/effects';
+import { call, all, takeEvery, put } from 'redux-saga/effects';
 
-import _ from 'lodash';
 import actions from './actions';
 import betActions from '../bet/actions';
 import ScatterHelper from '../../helpers/scatter';
 
 const {
-  handleScatterError, getIdentity, transfer, getEOSBalance, getBETXBalance, getAccount,
+  handleScatterError, getIdentity, transfer, getBETXBalance, getAccount,
 } = ScatterHelper;
 
 function* getIdentityRequest() {

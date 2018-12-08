@@ -171,7 +171,7 @@ class Topbar extends React.PureComponent {
     } = this.state;
 
     const {
-      locale, username, location: { href }, isTopbarTransparent,
+      locale, username, location, isTopbarTransparent,
     } = this.props;
 
     const btnClassName = `triggerBtn  ${collapsed ? 'menuCollapsed' : 'menuOpen'}`;

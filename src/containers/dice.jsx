@@ -22,7 +22,7 @@ import betActions from '../redux/bet/actions';
 import appActions from '../redux/app/actions';
 import IntlMessages from '../components/utility/intlMessages';
 import { appConfig } from '../settings';
-import { getFixedFloat, randomString } from '../helpers/utility';
+import { randomString } from '../helpers/utility';
 
 cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
@@ -34,8 +34,6 @@ const MAX_ROLL_NUMBER = 100;
 const MAX_SELECT_ROLL_NUMBER = 96;
 const DEFAULT_ROLL_NUMBER = 50;
 const DIVIDEND = 0.98;
-const HUGE_BET_PAYOUT = 0.05;
-const TABLE_BET_HISTORY_SIZE = 20;
 
 const MIN_INPUT_BET_AMOUNT = 0.1;
 const MAX_INPUT_BET_AMOUNT = 50;
@@ -72,17 +70,6 @@ class DicePage extends React.Component {
 
     this.defaultUsername = `Guest-${_.random(100000, 999999, false)}`;
     this.state = {
-      dataSource: [{
-        key: '1',
-        name: 'Mike',
-        age: 32,
-        address: '10 Downing Street',
-      }, {
-        key: '2',
-        name: 'John',
-        age: 42,
-        address: '10 Downing Street',
-      }],
 
       betAmount,
       rollNumber,
@@ -93,7 +80,7 @@ class DicePage extends React.Component {
       betxBalance: 0,
       username: this.defaultUsername,
       betAsset: 'EOS',
-      seed: '',
+      seed: undefined,
       notifications: [],
     };
 
@@ -133,7 +120,7 @@ class DicePage extends React.Component {
       title: '',
       dataIndex: 'trxUrl',
       key: 'trxUrl',
-      render: (text, row, index) => (
+      render: (text) => (
         <a href={text} target="_blank" style={{ color: 'white' }}><Icon type="right" /></a>
       ),
     },
@@ -298,7 +285,7 @@ class DicePage extends React.Component {
   }
 
   onInputNumberChange(evt) {
-    const { payout, betAsset, balance } = this.state;
+    const { payout, betAsset } = this.state;
     const { intl } = this.props;
     const { formatBetAmountStr } = this;
 
@@ -402,7 +389,7 @@ class DicePage extends React.Component {
       betAsset,
       rollUnder: rollNumber,
       referrer,
-      seed: randomString(16),
+      seed: seed || randomString(16), // We haven't set up a function for user custom seed
     });
   }
 
@@ -448,7 +435,7 @@ class DicePage extends React.Component {
   render() {
     const { desktopColumns, mobileColumns } = this;
     const {
-      dataSource, betAmount, payoutOnWin, winChance, payout, rollNumber, eosBalance, betxBalance, username,
+      betAmount, payoutOnWin, winChance, payout, rollNumber, eosBalance, betxBalance, username,
     } = this.state;
 
     const { betHistory, locale, view } = this.props;

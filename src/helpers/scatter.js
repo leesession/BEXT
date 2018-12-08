@@ -88,7 +88,7 @@ class ScatterHelper {
     const { api, account } = this;
 
     const {
-      bettor, betAmount, betAsset, rollUnder, referrer, seed, nonce,
+      bettor, betAmount, betAsset, rollUnder, referrer, seed,
     } = params;
 
     const amount = _.floor(betAmount, 4).toFixed(4);
@@ -156,7 +156,6 @@ class ScatterHelper {
 
   handleScatterError(err) {
     let { message, code } = err;
-    const { error } = err;
 
     if (_.isString(err)) {
       // 1. JSON response case

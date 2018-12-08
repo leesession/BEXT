@@ -8,7 +8,7 @@ import ParseHelper from '../../helpers/parse';
 
 const { parseBetReceipt } = ParseHelper;
 
-const { messageType } = actions;
+// const { messageType } = actions;
 
 const initState = new Map({
   history: new Queue(appConfig.betHistoryMemorySize),
@@ -28,7 +28,7 @@ const initState = new Map({
  */
 function CreateOrUpdateBetInHistory(betQueue, newBet) {
   if (_.isUndefined(newBet)) {
-    console.log(`CreateOrUpdateBetInHistory: newBet is ${newBet}`);
+    // console.log(`CreateOrUpdateBetInHistory: newBet is ${newBet}`);
     return false;
   }
 
@@ -57,7 +57,7 @@ function CreateOrUpdateBetInHistory(betQueue, newBet) {
  */
 function updateCurrentBets(currentBets, newBet) {
   if (_.isUndefined(newBet)) {
-    console.log(`CreateOrUpdateCurrentBet: newBet is ${newBet}`);
+    // console.log(`CreateOrUpdateCurrentBet: newBet is ${newBet}`);
     return false;
   }
 

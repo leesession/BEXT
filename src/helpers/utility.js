@@ -10,8 +10,6 @@ const fetch = require('node-fetch');
  * @return {object}           The response data
  */
 export function request(url, options) {
-  console.log('url:', url, 'options:', options);
-
   return fetch(url, options)
     .then(parseJSON)
     .then(checkStatus);

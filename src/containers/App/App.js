@@ -13,7 +13,7 @@ import Topbar from '../topbar';
 import AppRouter from './AppRouter';
 import { AppLocale } from '../../index';
 import themes from '../../config/themes';
-import { themeConfig, siteConfig } from '../../config';
+import { themeConfig } from '../../config';
 import AppHolder from './commonStyle';
 import FooterComponent from '../../components/footer';
 const { Content, Footer } = Layout;
@@ -27,14 +27,14 @@ export class App extends React.PureComponent {
     this.onWaypointEnter = this.onWaypointEnter.bind(this);
   }
 
-  onWaypointLeave({ currentPosition, previousPosition, waypointTop }) {
+  onWaypointLeave({ currentPosition }) {
     const { toggleTopbarReq } = this.props;
     if (currentPosition === Waypoint.above) {
       toggleTopbarReq(false);
     }
   }
 
-  onWaypointEnter({ currentPosition, previousPosition, waypointTop }) {
+  onWaypointEnter({ currentPosition }) {
     const { toggleTopbarReq } = this.props;
 
     if (currentPosition === Waypoint.inside) {
