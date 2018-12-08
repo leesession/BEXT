@@ -58,6 +58,10 @@ const content = [{
   {
     title: 'faq.dividend.title.3',
     text: 'faq.dividend.text.3',
+  },
+  {
+    title: 'faq.dividend.title.4',
+    text: 'faq.dividend.text.4',
     imgId: 'betx/faq-timeline',
   },
   ],
