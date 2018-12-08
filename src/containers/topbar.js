@@ -64,8 +64,6 @@ class Topbar extends React.PureComponent {
       languageDropdown: null,
     };
 
-    this.location = window.location;
-
     this.toggleCollapsed = this.toggleCollapsed.bind(this);
     this.selectedMenu = this.selectedMenu.bind(this);
 
@@ -121,8 +119,7 @@ class Topbar extends React.PureComponent {
   }
 
   componentDidMount() {
-    const { setRefReq } = this.props;
-    const { search } = this.location;
+    const { setRefReq, locationURL: { search } } = this.props;
 
     // preload language flag img
     langSettings.forEach((item) => {
@@ -174,13 +171,13 @@ class Topbar extends React.PureComponent {
     } = this.state;
 
     const {
-      locale, username, isTopbarTransparent,
+      locale, username, isTopbarTransparent, locationURL,
     } = this.props;
 
     const btnClassName = `triggerBtn  ${collapsed ? 'menuCollapsed' : 'menuOpen'}`;
     const menuClassName = `menu  ${collapsed ? 'menuCollapsed' : 'menuOpen'}`;
 
-    const referralLink = `${this.location.protocol}//${this.location.hostname}?ref=${username || ''}`;
+    const referralLink = `${locationURL.protocol}//${locationURL.hostname}?ref=${username || ''}`;
 
     const menuItemElements = _.map(menuItems, (item) => {
       if (item.url) {
@@ -333,6 +330,7 @@ Topbar.propTypes = {
   errorMessage: PropTypes.string,
   intl: intlShape.isRequired,
   isTopbarTransparent: PropTypes.bool.isRequired,
+  locationURL: PropTypes.object,
 };
 
 Topbar.defaultProps = {
@@ -342,6 +340,7 @@ Topbar.defaultProps = {
   setRefReq: undefined,
   username: undefined,
   errorMessage: undefined,
+  locationURL: window.location,
 };
 
 const mapStateToProps = (state) => ({
