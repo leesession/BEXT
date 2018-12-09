@@ -8,7 +8,7 @@ import IntlMessages from './utility/intlMessages';
 import { appConfig } from '../settings';
 
 function CalculateColorByPercentage(startColor, endColor, percentage) {
-  const lowerBound = 80;
+  const lowerBound = 60;
   const upperBound = 100;
 
   if (percentage < lowerBound) {
@@ -61,12 +61,14 @@ class StatsWidget extends React.Component {
     if (cpuUsage) {
       const cpuPercent = _.toInteger(cpuUsage * 100);
 
-      const color = CalculateColorByPercentage(startColor, endColor, _.floor(cpuUsage, 2));
+      const color = CalculateColorByPercentage(startColor, endColor, cpuPercent);
 
-      const progressStyle = _.cloneDeep(style); _.extend(progressStyle, { strokeColor: color });
+      const progressStyle = _.cloneDeep(style);
+      _.extend(progressStyle, { strokeColor: color });
+
       cpuElement = (<div className="topbar-statswidget-cpu">
         <a href={appConfig.cpuBankUrl} target="_self">
-          <Progress {...progressStyle} percent={cpuPercent} />
+          <Progress {...progressStyle} percent={cpuPercent} format={(percent) => `${percent}%`} />
           <div className="topbar-statswidget-title"><IntlMessages id="topbar.stats.cpu" /></div>
         </a>
       </div>);
@@ -75,10 +77,17 @@ class StatsWidget extends React.Component {
     if (netUsage) {
       const netPercent = _.toInteger(netUsage * 100);
 
-      const color = CalculateColorByPercentage(startColor, endColor, _.floor(netUsage, 2));
+      const color = CalculateColorByPercentage(startColor, endColor, netPercent);
 
       const progressStyle = _.cloneDeep(style);
-      _.extend(progressStyle, { strokeColor: color }); netElement = (<div className="topbar-statswidget-net"><Progress {...progressStyle} percent={netPercent} /><div className="topbar-statswidget-title"><IntlMessages id="topbar.stats.net" /></div></div>);
+      _.extend(progressStyle, { strokeColor: color });
+      
+      netElement = (<div className="topbar-statswidget-net">
+        <Progress {...progressStyle} percent={netPercent} format={(percent) => `${percent}%`} />
+        <div className="topbar-statswidget-title">
+          <IntlMessages id="topbar.stats.net" />
+        </div>
+      </div>);
     }
 
     return (
