@@ -41,7 +41,7 @@ class ParseHelper {
     }
 
     const payoutAsset = parseObject.get('payout') && Eos.modules.format.parseAsset(parseObject.get('payout'));
-    const resolveTrxId = parseObject.get('receipt') && parseObject.get('receipt').trx_id;
+    const resolveTrxId = parseObject.get('t_id');
 
     return {
       id: parseObject.id,
