@@ -23,6 +23,7 @@ class ScatterHelper {
 
     this.connect = this.connect.bind(this);
     this.getIdentity = this.getIdentity.bind(this);
+    this.logout = this.logout.bind(this);
     this.getEOSBalance = this.getEOSBalance.bind(this);
     this.getBETXBalance = this.getBETXBalance.bind(this);
     this.transfer = this.transfer.bind(this);
@@ -82,6 +83,11 @@ class ScatterHelper {
 
       return Promise.resolve(that.account);
     });
+  }
+
+  logout() {
+    const { scatter } = this;
+    return scatter.forgetIdentity();
   }
 
   transfer(params) {

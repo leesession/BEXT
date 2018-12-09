@@ -12,6 +12,8 @@ const initState = new Map({
   username: undefined,
   eosBalance: undefined,
   betxBalance: undefined,
+  cpuUsage: undefined,
+  netUsage: undefined,
   successMessage: undefined,
   errorMessage: undefined,
   ref: '', // Don't want undefined here
@@ -39,6 +41,12 @@ export default function appReducer(state = initState, action) {
       return state.set('eosBalance', action.value);
     case actions.GET_BETX_BALANCE_RESULT:
       return state.set('betxBalance', action.value);
+    case actions.CLEAR_USER_INFO:
+      return state.set('username', undefined)
+        .set('cpuUsage', undefined)
+        .set('netUsage', undefined)
+        .set('eosBalance', undefined)
+        .set('betxBalance', undefined);
     case actions.SUCCESS_MESSAGE:
       return state.set('successMessage', action.message);
     case actions.CLEAR_SUCCESS_MESSAGE:

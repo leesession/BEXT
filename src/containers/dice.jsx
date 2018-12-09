@@ -181,17 +181,9 @@ class DicePage extends React.Component {
     const fieldsToUpdate = {};
 
     // Update username in state if we received one from props; this means Scatter login succeeded
-    if (username) {
-      fieldsToUpdate.username = username;
-    }
-
-    if (_.isNumber(eosBalance)) {
-      fieldsToUpdate.eosBalance = eosBalance;
-    }
-
-    if (_.isNumber(betxBalance)) {
-      fieldsToUpdate.betxBalance = betxBalance;
-    }
+    fieldsToUpdate.username = username || this.defaultUsername;
+    fieldsToUpdate.eosBalance = _.isNumber(eosBalance) ? eosBalance : 0;
+    fieldsToUpdate.betxBalance = _.isNumber(betxBalance) ? betxBalance : 0;
 
     // console.log('componentWillReceiveProps.currentBets', currentBets);
 

@@ -20,7 +20,7 @@ import appActions from '../redux/app/actions';
 import { parseQuery } from '../helpers/utility';
 
 const { Header } = Layout;
-const { getIdentity, setRef } = appActions;
+const { getIdentity, setRef, logout } = appActions;
 
 cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
@@ -66,6 +66,7 @@ class Topbar extends React.PureComponent {
     this.selectedMenu = this.selectedMenu.bind(this);
 
     this.onLanguageDropdownClicked = this.onLanguageDropdownClicked.bind(this);
+    this.onAccountDropdownClicked = this.onAccountDropdownClicked.bind(this);
     this.onLoginClicked = this.onLoginClicked.bind(this);
   }
 
@@ -136,6 +137,18 @@ class Topbar extends React.PureComponent {
     changeLanguage(key);
   }
 
+  onAccountDropdownClicked({ key }) {
+    const { logoutReq } = this.props;
+    // changeLanguage(key);
+    switch (key) {
+      case 'logout':
+        logoutReq();
+        break;
+      default:
+        break;
+    }
+  }
+
   toggleCollapsed() {
     this.setState({
       collapsed: !this.state.collapsed,
@@ -194,20 +207,16 @@ class Topbar extends React.PureComponent {
       return <li role="menuitem" key={item.id}><a href={item.url} onClick={() => this.setRefModalVisible(true)} target="_blank"><IntlMessages id={item.id} /></a></li>;
     });
     menuItemElementsMobile.push(<li role="menuitem" key="login"><a href={null} style={{ width: '100%' }} onClick={this.onLoginClicked}><IntlMessages id="topbar.login" /></a></li>);
-    /*
-    const languageDropdown = (
-            <Menu onClick={this.onLanguageDropdownClicked} className="lang-menu">
-              {_.map(langSettings, (lang) => (
-                <Menu.Item key={lang.key} className="lang-menu-item">
-                  <img src={lang.imgSrc} alt="" />
-                  <span style={{ paddingLeft: '12px' }}>
-                    {lang.text}
-                  </span>
-                </Menu.Item>
-              ))}
-            </Menu>
-          );
-     */
+
+
+    const accountDropdown = (
+      <Menu onClick={this.onAccountDropdownClicked} >
+        <Menu.Item key="logout">
+          <IntlMessages id="topbar.account.logout" />
+        </Menu.Item>
+      </Menu>
+    );
+
     const topbarClassname = classNames({
       topbar: true,
       transparent: isTopbarTransparent,
@@ -237,7 +246,16 @@ class Topbar extends React.PureComponent {
                   </li>
 
                   <li className="nav-btn hideOnMobile" role="menuitem" key="login">
-                    {username ? (<div className="message"><IntlMessages id="topbar.welcome"></IntlMessages><span>{username}</span></div>) : <Button type="primary" size="large" onClick={this.onLoginClicked}><IntlMessages id="topbar.login" />
+                    {username ? (
+                      <div className="account-menu">
+                        <Dropdown overlay={accountDropdown}>
+                          <div className="account-menu-inner">
+                            <IntlMessages id="topbar.welcome"></IntlMessages>
+                            <span>{username}</span>
+                          </div>
+                        </Dropdown>
+                      </div>
+                    ) : <Button type="primary" size="large" onClick={this.onLoginClicked}><IntlMessages id="topbar.login" />
                     </Button>}
                   </li>
                   <li role="menuitem" key="lang">
@@ -322,6 +340,7 @@ Topbar.propTypes = {
   locale: PropTypes.string,
   changeLanguage: PropTypes.func,
   getIdentityReq: PropTypes.func,
+  logoutReq: PropTypes.func,
   setRefReq: PropTypes.func,
   username: PropTypes.string,
   errorMessage: PropTypes.string,
@@ -334,6 +353,7 @@ Topbar.defaultProps = {
   locale: 'en',
   changeLanguage: undefined,
   getIdentityReq: undefined,
+  logoutReq: undefined,
   setRefReq: undefined,
   username: undefined,
   errorMessage: undefined,
@@ -351,6 +371,7 @@ const mapDispatchToProps = (dispatch) => ({
   setRefReq: (ref) => dispatch(setRef(ref)),
   changeLanguage: (lanId) => dispatch(languageSwitcherActions.changeLanguage(lanId)),
   getIdentityReq: () => dispatch(getIdentity()),
+  logoutReq: () => dispatch(logout()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(withRouter(Topbar)));

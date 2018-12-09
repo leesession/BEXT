@@ -20,6 +20,7 @@
   "topbar.copy.description":"推荐朋友，终身获得其0.2％的投注! 只需要将上面的链接发送给朋友，您就会在他们下注时自动成为推荐人。",
   "topbar.stats.cpu":"CPU",
   "topbar.stats.net":"NET",
+  "topbar.account.logout":"登出",
 
   "dice.asset.eos":"EOS",
   "dice.asset.betx":"BETX",

@@ -159,7 +159,7 @@
                     margin-top: -2.6em;
                 }
 
-                @media @xxl{
+                @media @xxl {
                     font-size: 9px;
                     margin-top: -2em;
                 }
@@ -267,6 +267,7 @@ ul.menu-list {
 
 .isoRight {
     margin-bottom: 0;
+
     .triggerBtn {
         position: relative;
         padding: 9px 10px;
@@ -345,22 +346,28 @@ ul.menu-list {
 
             }
 
-            .message {
+            .account-menu {
                 height: @height;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
 
-                span {
-                    line-height: 1.5em;
-                }
+                .account-menu-inner {
+                    display: flex;
+                    flex-direction: column;
 
-                span:nth-of-type(1) {
-                    color: @topbarFontColor
-                }
+                    span {
+                        line-height: 1.5em;
+                    }
 
-                span:nth-of-type(2) {
-                    color: @topbarFontColor
+                    span:nth-of-type(1) {
+                        color: @topbarFontColor
+                    }
+
+                    span:nth-of-type(2) {
+                        color: @topbarFontColor
+                    }
+
                 }
 
             }

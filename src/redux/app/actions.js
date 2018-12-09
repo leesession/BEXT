@@ -12,6 +12,8 @@ const actions = {
   TOGGLE_ALL: 'TOGGLE_ALL',
   GET_IDENTITY: 'GET_IDENTITY',
   GET_IDENTITY_RESULT: 'GET_IDENTITY_RESULT',
+  LOG_OUT: 'LOG_OUT',
+  CLEAR_USER_INFO: 'CLEAR_USER_INFO',
   GET_USERNAME_RESULT: 'GET_USERNAME_RESULT',
   GET_BALANCES: 'GET_BALANCES',
   GET_ACCOUNT: 'GET_ACCOUNT',
@@ -64,6 +66,9 @@ const actions = {
   getBalances: (name) => ({
     type: actions.GET_BALANCES,
     name,
+  }),
+  logout: () => ({
+    type: actions.LOG_OUT,
   }),
 };
 

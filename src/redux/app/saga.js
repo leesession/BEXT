@@ -5,7 +5,7 @@ import betActions from '../bet/actions';
 import ScatterHelper from '../../helpers/scatter';
 
 const {
-  handleScatterError, getIdentity, transfer, getBETXBalance, getAccount,
+  handleScatterError, getIdentity, transfer, getBETXBalance, getAccount, logout,
 } = ScatterHelper;
 
 function* getIdentityRequest() {
@@ -69,7 +69,6 @@ function* getAccountRequest(action) {
       type: actions.GET_CPU_USAGE_RESULT,
       value: response.cpuUsage,
     });
-
 
     yield put({
       type: actions.GET_NET_USAGE_RESULT,
@@ -321,6 +320,26 @@ function* setErrorMessageRequest(action) {
   });
 }
 
+function* logoutRequest() {
+  try {
+    const response = yield call(logout);
+    console.log(response);
+
+    if (response) {
+      yield put({
+        type: actions.CLEAR_USER_INFO,
+      });
+    }
+  } catch (err) {
+    const message = yield call(handleScatterError, err);
+
+    yield put({
+      type: actions.SET_ERROR_MESSAGE,
+      message,
+    });
+  }
+}
+
 export default function* () {
   yield all([
     takeEvery(actions.GET_IDENTITY, getIdentityRequest),
@@ -329,5 +348,6 @@ export default function* () {
     takeEvery(actions.TRANSFER_REQUEST, transferRequest),
     takeEvery(actions.SET_ERROR_MESSAGE, setErrorMessageRequest),
     takeEvery(actions.SET_SUCCESS_MESSAGE, setSuccessMessageRequest),
+    takeEvery(actions.LOG_OUT, logoutRequest),
   ]);
 }

@@ -53,42 +53,32 @@ class StatsWidget extends React.Component {
       style.width = 45;
     }
 
-    let cpuElement;
-    let netElement;
 
     // Calculate gradient color based on percentage
 
-    if (cpuUsage) {
-      const cpuPercent = _.toInteger(cpuUsage * 100);
+    const cpuPercent = cpuUsage ? _.toInteger(cpuUsage * 100) : 0;
+    const cpuColor = CalculateColorByPercentage(startColor, endColor, cpuPercent);
+    const cpuStyle = _.cloneDeep(style);
+    _.extend(cpuStyle, { strokeColor: cpuColor });
 
-      const color = CalculateColorByPercentage(startColor, endColor, cpuPercent);
+    const cpuElement = (<div className="topbar-statswidget-cpu">
+      <a href={appConfig.cpuBankUrl} target="_self">
+        <Progress {...cpuStyle} percent={cpuPercent} format={(percent) => `${percent}%`} />
+        <div className="topbar-statswidget-title"><IntlMessages id="topbar.stats.cpu" /></div>
+      </a>
+    </div>);
 
-      const progressStyle = _.cloneDeep(style);
-      _.extend(progressStyle, { strokeColor: color });
+    const netPercent = netUsage ? _.toInteger(netUsage * 100) : 0;
+    const netColor = CalculateColorByPercentage(startColor, endColor, netPercent);
+    const netStyle = _.cloneDeep(style);
+    _.extend(netStyle, { strokeColor: netColor });
 
-      cpuElement = (<div className="topbar-statswidget-cpu">
-        <a href={appConfig.cpuBankUrl} target="_self">
-          <Progress {...progressStyle} percent={cpuPercent} format={(percent) => `${percent}%`} />
-          <div className="topbar-statswidget-title"><IntlMessages id="topbar.stats.cpu" /></div>
-        </a>
-      </div>);
-    }
-
-    if (netUsage) {
-      const netPercent = _.toInteger(netUsage * 100);
-
-      const color = CalculateColorByPercentage(startColor, endColor, netPercent);
-
-      const progressStyle = _.cloneDeep(style);
-      _.extend(progressStyle, { strokeColor: color });
-      
-      netElement = (<div className="topbar-statswidget-net">
-        <Progress {...progressStyle} percent={netPercent} format={(percent) => `${percent}%`} />
-        <div className="topbar-statswidget-title">
-          <IntlMessages id="topbar.stats.net" />
-        </div>
-      </div>);
-    }
+    const netElement = (<div className="topbar-statswidget-net">
+      <Progress {...netStyle} percent={netPercent} format={(percent) => `${percent}%`} />
+      <div className="topbar-statswidget-title">
+        <IntlMessages id="topbar.stats.net" />
+      </div>
+    </div>);
 
     return (
       <div className="topbar-statswidget">
