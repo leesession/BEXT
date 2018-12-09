@@ -181,7 +181,7 @@ class Topbar extends React.PureComponent {
     } = this.state;
 
     const {
-      locale, username, isTopbarTransparent, locationURL,
+      locale, username, isTopbarTransparent, locationURL, logoutReq,
     } = this.props;
 
     const btnClassName = `triggerBtn  ${collapsed ? 'menuCollapsed' : 'menuOpen'}`;
@@ -206,7 +206,7 @@ class Topbar extends React.PureComponent {
       }
       return <li role="menuitem" key={item.id}><a href={item.url} onClick={() => this.setRefModalVisible(true)} target="_blank"><IntlMessages id={item.id} /></a></li>;
     });
-    menuItemElementsMobile.push(<li role="menuitem" key="login"><a href={null} style={{ width: '100%' }} onClick={this.onLoginClicked}><IntlMessages id="topbar.login" /></a></li>);
+    menuItemElementsMobile.push(<li role="menuitem" key="login"><a href={null} style={{ width: '100%' }} onClick={username ? logoutReq : this.onLoginClicked}><IntlMessages id={username ? 'topbar.account.logout' : 'topbar.login'} /></a></li>);
 
 
     const accountDropdown = (
