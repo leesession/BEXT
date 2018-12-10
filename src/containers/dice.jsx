@@ -127,23 +127,36 @@ class DicePage extends React.Component {
     ];
 
     this.mobileColumns = [{
-      title: intl.formatMessage({ id: 'dice.history.form.time' }),
-      dataIndex: 'time',
-      key: 'time',
-      width: 105,
-    },
-    {
       title: intl.formatMessage({ id: 'dice.history.form.bettor' }),
       dataIndex: 'bettor',
       key: 'bettor',
-      width: 105,
+      render: (text) => (
+        <span className="player-td">{text}</span>
+      ),
+    },
+    {
+      title: intl.formatMessage({ id: 'dice.history.form.unber' }),
+      dataIndex: 'rollUnder',
+      key: 'rollUnder',
+    },
+    {
+      title: intl.formatMessage({ id: 'dice.history.form.bet' }),
+      dataIndex: 'betAmount',
+      key: 'betAmount',
+    },
+    {
+      title: intl.formatMessage({ id: 'dice.history.form.roll' }),
+      dataIndex: 'roll',
+      key: 'roll',
+      render: (text) => (
+        <span style={{ color: '#e6c36b' }}>{text}</span>
+      ),
     },
     {
       title: intl.formatMessage({ id: 'dice.history.form.payout' }),
       dataIndex: 'payout',
       key: 'payout',
-      width: 105,
-      render: (text) => (text ? <span style={{ color: 'lightgreen' }}>{text}</span> : <span></span>),
+      render: (text) => text ? <span style={{ color: 'lightgreen' }}>{text}</span> : '',
     },
     ];
 
