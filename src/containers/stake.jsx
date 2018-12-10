@@ -112,12 +112,14 @@ class StakePage extends React.Component {
 
   render() {
     const {
-      intl, dailyVolume, allVolume, betxStakeAmount, betxCirculation, myBetxBalance, myStakedBetxBalance, mySnapshot, platformSnapshot,
+      intl, dailyVolume, allVolume, betxStakeAmount, betxCirculation, myBetxBalance, myStakedBetxBalance, mySnapshot, platformSnapshot, locale,
     } = this.props;
     const { time, inputStake, inputReclaim } = this.state;
 
+    // const termText =
+    // (<div><p><IntlMessages id="stake.rule.body1" /></p><p className="highlight"><IntlMessages id="stake.rule.body2" /> </p><p><IntlMessages id="stake.rule.body3" /> </p></div>);
     const termText =
-    (<div><p><IntlMessages id="stake.rule.body1" /></p><p className="highlight"><IntlMessages id="stake.rule.body2" /> </p><p><IntlMessages id="stake.rule.body3" /> </p></div>);
+    (<div><p><IntlMessages id="stake.rule.body1" /></p><div className="formula-img"><CloudinaryImage publicId={`${'betx/first-divid'}-${locale}`} /></div><p><IntlMessages id="stake.rule.body3" /> </p></div>);
 
     const totalDividend = allVolume * appConfig.dividendRatio;
     const myExpectedDiv = totalDividend * (myBetxBalance / betxCirculation);
@@ -300,6 +302,7 @@ StakePage.propTypes = {
   mySnapshot: PropTypes.number,
   platformSnapshot: PropTypes.number,
   allVolume: PropTypes.number,
+  locale: PropTypes.string,
 };
 
 StakePage.defaultProps = {
@@ -313,6 +316,7 @@ StakePage.defaultProps = {
   myStakedBetxBalance: 0,
   mySnapshot: 0,
   platformSnapshot: 0,
+  locale: 'en',
 };
 
 const mapStateToProps = (state) => ({
@@ -321,12 +325,14 @@ const mapStateToProps = (state) => ({
   betxStakeAmount: state.Bet.get('betxStakeAmount'),
   betxCirculation: state.Bet.get('betxCirculation'),
   myBetxBalance: state.App.get('betxBalance'),
+  locale: state.LanguageSwitcher.language.locale,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   getBetVolume: () => dispatch(betActions.getBetVolume()),
   getBETXStakeAmount: () => dispatch(betActions.getBETXStakeAmount()),
 });
+
 
 // Wrap the component to inject dispatch and state into it
 export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(StakePage));
