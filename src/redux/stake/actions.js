@@ -1,0 +1,17 @@
+const actions = {
+
+  GET_MY_SNAPSHOT_TOTAL: 'GET_MY_SNAPSHOT_TOTAL',
+  GET_MY_SNAPSHOT_TOTAL_RESULT: 'GET_MY_SNAPSHOT_TOTAL_RESULT',
+  GET_CONTRACT_SNAPSHOT_TOTAL: 'GET_CONTRACT_SNAPSHOT_TOTAL',
+  GET_CONTRACT_SNAPSHOT_TOTAL_RESULT: 'GET_CONTRACT_SNAPSHOT_TOTAL_RESULT',
+
+  getMySnapshotTotal: () => ({
+    type: actions.GET_MY_SNAPSHOT_TOTAL,
+  }),
+
+  getContractSnapshotTotal: () => ({
+    type: actions.GET_CONTRACT_SNAPSHOT_TOTAL,
+  }),
+};
+
+export default actions;
