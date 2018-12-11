@@ -57,11 +57,17 @@ const content = [{
   },
   {
     title: 'faq.dividend.title.3',
+    imgId: 'betx/daily-divid',
     text: 'faq.dividend.text.3',
   },
   {
     title: 'faq.dividend.title.4',
     text: 'faq.dividend.text.4',
+    imgId: 'betx/first-divid',
+  },
+  {
+    title: 'faq.dividend.title.5',
+    text: 'faq.dividend.text.5',
     imgId: 'betx/faq-timeline',
   },
   ],
@@ -143,7 +149,7 @@ class FAQPage extends React.Component {
           const body = _.map(item.body, (bodyItem, innerIndex) => {
             const parts = intl.formatMessage({ id: bodyItem.text }).split('\n');
             const text = _.map(parts, (part, partIndex) => <p key={partIndex}>{part}</p>);
-            const img = bodyItem.imgId && <div><CloudinaryImage publicId={`${bodyItem.imgId}-${locale}`} /></div>;
+            const img = bodyItem.imgId && <div className="faq-img"><CloudinaryImage publicId={`${bodyItem.imgId}-${locale}`} /></div>;
 
             return (<div key={innerIndex} style={{ marginBottom: '12px' }}><h3>{<IntlMessages id={bodyItem.title} />}</h3>{text}{img}</div>);
           });

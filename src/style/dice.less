@@ -65,6 +65,19 @@
             background-color: @panelGrey;
             border: 1px solid @borderColor;
             overflow: hidden;
+            th{
+                white-space:nowrap;
+                padding: 10px 2px;
+            }
+            td{
+                &>.player-td{
+                    display: block;
+                    width:60px;
+                    white-space:nowrap;
+                    overflow: hidden;
+                    text-overflow:ellipsis;
+                }
+            }
         }
 
         .container-top {
@@ -517,7 +530,6 @@
             & * {
                 background-color: transparent;
             }
-
             .ant-table-placeholder {
                 border-bottom: none;
                 color: white;
@@ -535,12 +547,22 @@
                 color: white;
                 text-align: center;
                 font-size: 1.5em;
-
+                background: @panelGrey;
                 @media @phone {
-                    font-size: 1.0em;
+                    font-size: 0.8em;
                 }
 
             }
+            .ant-table-tbody td {
+                @media @phone {
+                    font-size: 0.8em;
+                }
+
+            }
+            .ant-table-row:nth-child(2n-1){
+                background: rgba(0,0,0,0.2);
+            }
+
 
         }
 
