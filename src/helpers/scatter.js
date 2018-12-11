@@ -30,6 +30,7 @@ class ScatterHelper {
     this.handleScatterError = this.handleScatterError.bind(this);
     this.parseAsset = this.parseAsset.bind(this);
     this.getAccount = this.getAccount.bind(this);
+    this.getTotalBetAmount = this.getTotalBetAmount.bind(this);
   }
 
   // static async createInstance() {
@@ -158,6 +159,29 @@ class ScatterHelper {
     const { Eos } = this;
 
     return Eos.modules.format.parseAsset(quantity);
+  }
+
+  getTotalBetAmount() {
+    const { readEos } = this;
+
+    const json = true;
+    const code = BETX_DICE_CONTRACT;
+    const scope = BETX_DICE_CONTRACT;
+    const table = 'globalvars';
+
+    return readEos.getTableRows(json, code, scope, table).then((result) => {
+      console.log(result);
+
+      const rows = result && result.rows;
+
+      const betAmountVar = _.find(rows, { id: 2 });
+
+      if (_.isUndefined(betAmountVar)) {
+        return Promise.resolve(0);
+      }
+
+      return Promise.resolve(_.floor(betAmountVar.val / 10000, 2));
+    });
   }
 
   handleScatterError(err) {
