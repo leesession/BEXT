@@ -186,8 +186,6 @@ class ScatterHelper {
     const table = 'globalvars';
 
     return readEos.getTableRows(json, code, scope, table).then((result) => {
-      console.log(result);
-
       const rows = result && result.rows;
 
       const betAmountVar = _.find(rows, { id: 2 });
@@ -270,8 +268,6 @@ class ScatterHelper {
     };
 
     return readEos.getTableRows(options).then((result) => {
-      console.log(result);
-
       const rows = result && result.rows;
       const matchRow = _.find(rows, { name: username });
 
@@ -314,8 +310,6 @@ class ScatterHelper {
     };
 
     return readEos.getTableRows(options).then((result) => {
-      console.log(result);
-
       const rows = result && result.rows;
       const lastRow = _.last(rows);
 

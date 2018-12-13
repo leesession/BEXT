@@ -205,7 +205,7 @@ class StakePage extends React.Component {
   render() {
     const {
       intl, dailyVolume, allVolume, betxStakeAmount, betxCirculation,
-      myBetxBalance, mySnapshotTotal, myStake, myDividend, platformSnapshotTotal, platformDividend, platformStake, locale,
+      myBetxBalance, mySnapshotTotal, mySnapshotEffective, myStake, myDividend, platformSnapshotTotal, platformDividend, platformStake, locale,
     } = this.props;
     const {
       time, inputStake, inputUnstake, isLoginModalVisible,
@@ -261,23 +261,29 @@ class StakePage extends React.Component {
                     </Col>
                     <Col span={24}>
                       <div className="page-dividend-detail panel-trans">
-                        <Row className="border-bottom">
-                          <Col span={8}>
+                        <Row className="border-bottom page-dividend-detail-top">
+                          <Col span={12}>
                             <div className="page-dividend-detail-box">
-                              <p className="page-third-title third_title_stake" ><IntlMessages id="stake.income.mySnapshot" /></p>
+                              <p className="page-third-title third_title_stake" ><IntlMessages id="stake.income.mySnapshotEffective" /></p>
+                              <p className="page-third-title third_title_stake" >{_.floor(mySnapshotEffective, 4)} BETX</p>
+                            </div>
+                          </Col>
+                          <Col span={12}>
+                            <div className="page-dividend-detail-box">
+                              <p className="page-third-title third_title_stake" ><IntlMessages id="stake.income.mySnapshotTotal" /></p>
                               <p className="page-third-title third_title_stake" >{_.floor(mySnapshotTotal, 4)} BETX</p>
                             </div>
                           </Col>
-                          <Col span={8}>
+                          <Col span={12}>
                             <div className="page-dividend-detail-box">
                               <p className="page-third-title third_title_stake" ><IntlMessages id="stake.income.platformSnapshot" /></p>
                               <p className="page-third-title third_title_stake" >{_.floor(platformSnapshotTotal, 4)} BETX</p>
                             </div>
                           </Col>
-                          <Col span={8}>
+                          <Col span={12}>
                             <div className="page-dividend-detail-box">
                               <p className="page-third-title third_title_stake" ><IntlMessages id="stake.income.predicate" /></p>
-                              <p className="page-third-title third_title_stake" >{_.floor(myDividend, 4)} EOS</p>
+                              <p className="page-third-title third_title_stake" >{_.floor(((1.0 * mySnapshotEffective) / platformSnapshotTotal) * platformDividend, 4)} EOS</p>
                             </div>
                           </Col>
                           {/* <Col span={12}>
@@ -287,7 +293,7 @@ class StakePage extends React.Component {
                             </div>
                           </Col> */}
                         </Row>
-                        <Row type="flex" align="middle" className="page-dividend-detail-bottom dividend_stake">
+                        <Row type="flex" align="middle" className="page-dividend-detail-bottom">
                           <div className="page-third-title third_title_stake text-right"><IntlMessages id="stake.income.rest" /></div>
                           <div><CloudinaryImage publicId="eos-logo-grey" options={{ height: 30, crop: 'scale' }} /></div>
                           <div className="page-third-title third_title_stake text-left" style={{ color: 'white' }} >{myDividend} EOS</div>
@@ -321,7 +327,7 @@ class StakePage extends React.Component {
                     <Col span={24} >
                       <div className="stake-container-body panel-trans">
                         <Row>
-                          <Col span={12} className="border-right">
+                          <Col span={24} >
                             <div className="stake-container-body-inner">
                               <Row >
                                 <Col span={24} className="page-third-title third_title_stake text-left"><IntlMessages id="stake.token.betx" /></Col>
@@ -341,7 +347,7 @@ class StakePage extends React.Component {
                               </Row>
                             </div>
                           </Col>
-                          <Col span={12}>
+                          <Col span={24}>
                             <div className="stake-container-body-inner">
                               <Row >
                                 <Col span={24} className="page-third-title third_title_stake text-left"><IntlMessages id="stake.betx.redemption" /></Col>
