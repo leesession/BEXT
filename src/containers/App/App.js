@@ -42,7 +42,6 @@ export class App extends React.PureComponent {
     }
   }
 
-
   render() {
     const {
       match: { url }, locale, toggleAllReq,
