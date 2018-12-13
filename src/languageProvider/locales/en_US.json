@@ -21,8 +21,10 @@
   "topbar.stats.cpu":"CPU",
   "topbar.stats.net":"NET",
   "topbar.account.logout":"Log out",
-
-  "modal.button.login":"Log In",
+  
+  "modal.login.title":"Please Log In first",
+  "modal.login.description":"Connect to Scatter to retrieve username and account related values.",
+  "modal.login.button":"Log In",
 
   "dice.asset.eos":"EOS",
   "dice.asset.betx":"BETX",
@@ -110,9 +112,9 @@
   "stake.title":"BETX Staking & Dividend",
   "stake.subtitle":"Dividend in current period",
   "stake.rule.title":"Dividend & Stake Rules",
-  "stake.rule.body1":"The BETX platform pioneered POS dividends and introduced Coin-days as a measure of equity.The core idea is that the more BETX a user holds and the longer the holding time, the greater dividend he will obtain from the platform.",
+  "stake.rule.body1":"The BETX platform pioneered POS dividends and introduced Coin-days as a measure of equity. The core idea is that the more BETX a user holds and the longer the holding time, the greater dividend he will obtain from the platform.",
   "stake.rule.body2":"User's first dividend = My effective snapshot total / Platform effective snapshot total * total platform dividend",
-  "stake.rule.body3":"the platform's first dividend distribution will be after the 2.5% tokens mined at 12:00 PM Beijing time (UTC + 8) the next day.",
+  "stake.rule.body3":"The platform's first dividend distribution will be after first 2.5% tokens mined at 12:00 PM Beijing time (UTC + 8) the next day.",
   "stake.dividend.rest":"Current Dividend Period",
   "stake.dividend.total":"Total Dividend",
   "stake.dividend.allday":"Today's Dividend",

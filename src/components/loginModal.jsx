@@ -18,24 +18,18 @@ class LoginModal extends React.Component {
       visible: props.isVisible,
     };
 
-    this.setModalVisibility = this.setModalVisibility.bind(this);
     this.onLoginClicked = this.onLoginClicked.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
     const { isVisible } = nextProps;
+    const { visible } = this.state;
 
     if (!_.isUndefined(isVisible)) {
       this.setState({
         visible: isVisible,
       });
     }
-  }
-
-  setModalVisibility(value) {
-    this.setState({
-      visible: value,
-    });
   }
 
   onLoginClicked() {
@@ -48,25 +42,23 @@ class LoginModal extends React.Component {
     const { visible } = this.state;
 
     return (<Modal
-      className="loginModal"
-      title={<IntlMessages id="topbar.copy.title" />}
+      className="refModal loginModal"
+      title={<IntlMessages id="modal.login.title" />}
       centered
       visible={visible}
-      onOk={() => this.setModalVisibility(false)}
+      onOk={() => this.props.closeModal(false)}
       onCancel={() => {
-        this.setModalVisibility(false);
+        this.props.closeModal(false);
       }}
       footer={null}
     >
       <div className="refmodal-container">
-        <div className="refmodal-container-input">
-          <div><span>abc</span></div>
-          <div>
-            <Button type="primary" size="large" onClicked={this.onLoginClicked}><IntlMessages id="modal.button.login" /></Button>
-          </div>
+        <div className="refmodal-container-description">
+          <p><IntlMessages id="modal.login.description" /></p>
         </div>
-        <div>
-          <span><IntlMessages id="topbar.copy.description" /></span></div>
+        <div className="refmodal-container-button">
+          <Button type="primary" size="large" onClick={this.onLoginClicked}><IntlMessages id="modal.login.button" /></Button>
+        </div>
       </div>
     </Modal>);
   }
@@ -75,19 +67,16 @@ class LoginModal extends React.Component {
 LoginModal.propTypes = {
   isVisible: PropTypes.bool.isRequired,
   getIdentity: PropTypes.func,
+  closeModal: PropTypes.func,
 };
 
 LoginModal.defaultProps = {
   getIdentity: undefined,
+  closeModal: undefined,
 };
-
-const mapStateToProps = (state) => ({
-  locale: state.LanguageSwitcher.language.locale,
-  username: state.App.get('username'),
-});
 
 const mapDispatchToProps = (dispatch) => ({
   getIdentity: () => dispatch(appActions.getIdentity()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(LoginModal));
+export default connect(null, mapDispatchToProps)(injectIntl(LoginModal));
