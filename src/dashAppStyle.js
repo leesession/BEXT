@@ -24,7 +24,7 @@ const DashAppHolder = styled.div`
       color: #fff;
     }
   }
-
+  
   .ant-row {
     ${'' /* margin-left: -8px;
     margin-right: -8px; */};
