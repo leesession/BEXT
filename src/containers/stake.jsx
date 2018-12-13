@@ -90,9 +90,14 @@ class StakePage extends React.Component {
     const { username } = nextProps;
 
     const { getMyStakeAndDividend } = this.props;
+    const { isLoginModalVisible } = this.state;
 
     if (username) {
       getMyStakeAndDividend(username);
+
+      if (isLoginModalVisible) {
+        this.toggleLoginModal(false);
+      }
     }
   }
 
