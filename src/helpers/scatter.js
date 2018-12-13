@@ -12,6 +12,15 @@ ScatterJS.plugins(new ScatterEOS());
 const BETX_TOKEN_CONTRACT = 'thebetxtoken';
 const BETX_DICE_CONTRACT = 'thebetxowner';
 const EOS_TOKEN_CONTRACT = 'eosio.token';
+const BETX_DIVID_CONTRACT = 'thebetxdivid';
+
+// Same constants as contracts
+const GLOBAL_ID_UNSTAKE_REQUEST = 1;
+const GLOBAL_ID_NEW_DIVIDEND = 2;
+const GLOBAL_ID_STAKE_TOTAL = 3;
+const GLOBAL_ID_CLAIM_ENABLED = 4;
+
+const INITAL_OWNER_BETX_BALANCE = 6600000000 * 0.9;
 
 class ScatterHelper {
   constructor() {
@@ -31,6 +40,13 @@ class ScatterHelper {
     this.parseAsset = this.parseAsset.bind(this);
     this.getAccount = this.getAccount.bind(this);
     this.getTotalBetAmount = this.getTotalBetAmount.bind(this);
+    this.stake = this.stake.bind(this);
+    this.unstake = this.unstake.bind(this);
+    this.getMyStakeAndDividend = this.getMyStakeAndDividend.bind(this);
+    this.getContractSnapshot = this.getContractSnapshot.bind(this);
+    this.getContractStakeAndDividend = this.getContractStakeAndDividend.bind(this);
+    this.getBETXCirculation = this.getBETXCirculation.bind(this);
+    this.claimDividend = this.claimDividend.bind(this);
   }
 
   // static async createInstance() {
@@ -180,8 +196,228 @@ class ScatterHelper {
         return Promise.resolve(0);
       }
 
-      return Promise.resolve(_.floor(betAmountVar.val / 10000, 2));
+      return Promise.resolve(_.floor(betAmountVar.val / 1000000, 2));
     });
+  }
+
+  stake(params) {
+    const { api, account } = this;
+
+    const {
+      quantity, username,
+    } = params;
+
+    if (_.isUndefined(username)) {
+      throw new Error('message.warn.loginFirst');
+    }
+
+    // Construct json params
+    const data = {
+      from: username,
+      to: BETX_DIVID_CONTRACT,
+      quantity,
+      memo: 'betx.fun stake',
+    };
+
+    if (_.isUndefined(api)) {
+      return Promise.reject('error.scatter.notAuthenticated');
+    }
+
+    // Never assume the account's permission/authority. Always take it from the returned account.
+    const transactionOptions = { authorization: [`${account.name}@${account.authority}`] };
+
+    return api.transaction(BETX_TOKEN_CONTRACT, (contract) =>
+      contract.transfer(data, transactionOptions));
+  }
+
+  unstake(params) {
+    const { api, account } = this;
+
+    const {
+      quantity, username,
+    } = params;
+
+    if (_.isUndefined(username)) {
+      throw new Error('message.warn.loginFirst');
+    }
+
+    // Construct json params
+    const data = {
+      user: username,
+      unstakeAsset: quantity,
+    };
+
+    if (_.isUndefined(api)) {
+      return Promise.reject('error.scatter.notAuthenticated');
+    }
+
+    // Never assume the account's permission/authority. Always take it from the returned account.
+    const transactionOptions = { authorization: [`${account.name}@${account.authority}`] };
+
+    return api.transaction(BETX_DIVID_CONTRACT, (contract) =>
+      contract.unstake(data, transactionOptions));
+  }
+
+  getMyStakeAndDividend(username) {
+    const { readEos } = this;
+
+    const options = {
+      json: true,
+      code: BETX_DIVID_CONTRACT,
+      scope: BETX_DIVID_CONTRACT,
+      table: 'stakers',
+      limit: 1000,
+    };
+
+    return readEos.getTableRows(options).then((result) => {
+      console.log(result);
+
+      const rows = result && result.rows;
+      const matchRow = _.find(rows, { name: username });
+
+      const returnResult = {
+        stake: 0,
+        frozen: 0,
+        available: 0,
+
+        ssTotal: 0,
+        ssEffective: 0,
+        ssCount: 0,
+        dividend: 0,
+      };
+
+      if (_.isUndefined(matchRow)) {
+        return Promise.resolve(returnResult);
+      }
+
+      _.each(returnResult, (value, key) => {
+        if (key === 'ssCount') {
+          returnResult[key] = matchRow[key];
+        } else {
+          returnResult[key] = (1.0 * matchRow[key]) / 10000;
+        }
+      });
+
+      return Promise.resolve(returnResult);
+    });
+  }
+
+  getContractSnapshot() {
+    const { readEos } = this;
+
+    const options = {
+      json: true,
+      code: BETX_DIVID_CONTRACT,
+      scope: BETX_DIVID_CONTRACT,
+      table: 'snapshots',
+      limit: 1000,
+    };
+
+    return readEos.getTableRows(options).then((result) => {
+      console.log(result);
+
+      const rows = result && result.rows;
+      const lastRow = _.last(rows);
+
+      const returnResult = {
+        total: 0,
+        effective: 0,
+        eosBalance: 0,
+        betxBalance: 0,
+        userCount: 0,
+      };
+
+      if (_.isUndefined(lastRow)) {
+        return Promise.resolve(returnResult);
+      }
+
+      _.each(returnResult, (value, key) => {
+        if (key === 'userCount') {
+          returnResult[key] = lastRow[key];
+        } else {
+          returnResult[key] = (1.0 * lastRow[key]) / 10000;
+        }
+      });
+
+      return Promise.resolve(returnResult);
+    });
+  }
+
+  getContractStakeAndDividend() {
+    const { readEos } = this;
+
+    const options = {
+      json: true,
+      code: BETX_DIVID_CONTRACT,
+      scope: BETX_DIVID_CONTRACT,
+      table: 'globalvars',
+    };
+
+    return readEos.getTableRows(options).then((result) => {
+      console.log(result);
+
+      const rows = result && result.rows;
+
+      const returnResult = {
+        stake: 0,
+        dividend: 0,
+      };
+
+      _.each(rows, (row) => {
+        if (row.id === GLOBAL_ID_STAKE_TOTAL) {
+          returnResult.stake = (1.0 * row.val) / 10000;
+        } else if (row.id === GLOBAL_ID_NEW_DIVIDEND) {
+          returnResult.dividend = (1.0 * row.val) / 10000;
+        }
+      });
+
+      return Promise.resolve(returnResult);
+    });
+  }
+
+  /**
+ * Get BETX circulation, done by deduct currency thebetxowner balance from initial balance
+ * @return {[type]} [description]
+ */
+  getBETXCirculation() {
+    const { readEos, parseAsset } = this;
+    return readEos.getCurrencyBalance(BETX_TOKEN_CONTRACT, BETX_DICE_CONTRACT, 'BETX').then((result) => {
+      if (!_.isEmpty(result)) {
+        const balObj = parseAsset(result[0]);
+        if (balObj && balObj.amount) {
+          return Promise.resolve(INITAL_OWNER_BETX_BALANCE - _.toNumber(balObj.amount));
+        }
+      }
+      return Promise.resolve(0);
+    });
+  }
+
+  claimDividend(params) {
+    const { api, account } = this;
+
+    const {
+      quantity, username,
+    } = params;
+
+    if (_.isUndefined(username)) {
+      throw new Error('message.warn.loginFirst');
+    }
+
+    // Construct json params
+    const data = {
+      user: username,
+      claimAsset: quantity,
+    };
+
+    if (_.isUndefined(api)) {
+      return Promise.reject('error.scatter.notAuthenticated');
+    }
+
+    // Never assume the account's permission/authority. Always take it from the returned account.
+    const transactionOptions = { authorization: [`${account.name}@${account.authority}`] };
+
+    return api.transaction(BETX_DIVID_CONTRACT, (contract) =>
+      contract.claimdivid(data, transactionOptions));
   }
 
   handleScatterError(err) {

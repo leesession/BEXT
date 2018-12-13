@@ -22,6 +22,8 @@
   "topbar.stats.net":"NET",
   "topbar.account.logout":"Log out",
 
+  "modal.button.login":"Log In",
+
   "dice.asset.eos":"EOS",
   "dice.asset.betx":"BETX",
   "dice.balance.eos":"EOS Balance",
@@ -139,12 +141,17 @@
   "message.success.waitForBetResult":"Waiting for roll result",
   "message.success.resultWon":"Rolled {roll}, won {payout}",
   "message.success.resultLose":"Rolled {roll}, lost {betAmount}!",
+  "message.success.stake":"Stake {asset} Successfully!",
+  "message.success.unstake":"Unstake {asset} Successfully!",
+  "message.success.claimdividend":"Claim {asset} Successfully!",
 
   "message.warn.lessThanMinBet":"The minimum bet amount is {amount} {asset}.",
   "message.warn.greaterThanMaxBet":"The maximum bet amount is {amount} {asset}.",
 
   "message.warn.loginFirst":"Please login first",
   "message.warn.emptyInput":"Chat input cannot be empty.",
+
+  "message.error.amountInvalid":"Input amount is invalid.",
 
   "error.scatter.locked":"Scatter is locked. Please unlock it and refresh page.",
   "error.scatter.rejected":"Signature request is rejected in Scatter.",

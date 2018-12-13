@@ -24,10 +24,8 @@ const actions = {
   TRANSFER_REQUEST: 'TRANSFER_REQUEST',
   SET_SUCCESS_MESSAGE: 'SET_SUCCESS_MESSAGE',
   SUCCESS_MESSAGE: 'SUCCESS_MESSAGE',
-  CLEAR_SUCCESS_MESSAGE: 'CLEAR_SUCCESS_MESSAGE',
   SET_ERROR_MESSAGE: 'SET_ERROR_MESSAGE',
   ERROR_MESSAGE: 'ERROR_MESSAGE',
-  CLEAR_ERROR_MESSAGE: 'CLEAR_ERROR_MESSAGE',
   SET_REF: 'SET_REF',
   TOGGLE_TOPBAR: 'TOGGLE_TOPBAR',
   toggleAll: (width, height) => {
@@ -49,6 +47,10 @@ const actions = {
   }),
   setErrorMessage: (message) => ({
     type: actions.SET_ERROR_MESSAGE,
+    message,
+  }),
+  setSuccessMessage: (message) => ({
+    type: actions.SET_SUCCESS_MESSAGE,
     message,
   }),
   setRef: (params) => ({

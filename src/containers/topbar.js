@@ -89,8 +89,8 @@ class Topbar extends React.PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { errorMessage, username } = nextProps;
-    const { intl } = this.props;
+    const { errorMessage, username, successMessage } = nextProps;
+    const { intl, setErrorMessage, setSuccessMessage } = this.props;
     const { isLoggedIn } = this.state;
 
     if (username && !isLoggedIn) {
@@ -114,6 +114,13 @@ class Topbar extends React.PureComponent {
           message.error(intl.formatMessage({ id: errorMessage }));
           break;
       }
+
+      setErrorMessage(undefined);
+    }
+
+    if (successMessage) {
+      message.success(intl.formatMessage(successMessage.id, successMessage.values));
+      setSuccessMessage(undefined);
     }
   }
 
@@ -347,6 +354,9 @@ Topbar.propTypes = {
   intl: intlShape.isRequired,
   isTopbarTransparent: PropTypes.bool.isRequired,
   locationURL: PropTypes.object,
+  successMessage: PropTypes.object,
+  setErrorMessage: PropTypes.func,
+  setSuccessMessage: PropTypes.func,
 };
 
 Topbar.defaultProps = {
@@ -358,12 +368,16 @@ Topbar.defaultProps = {
   username: undefined,
   errorMessage: undefined,
   locationURL: window.location,
+  successMessage: undefined,
+  setErrorMessage: undefined,
+  setSuccessMessage: undefined,
 };
 
 const mapStateToProps = (state) => ({
   locale: state.LanguageSwitcher.language.locale,
   username: state.App.get('username'),
   errorMessage: state.App.get('errorMessage'),
+  successMessage: state.App.get('successMessage'),
   isTopbarTransparent: state.App.get('isTopbarTransparent'),
 });
 
@@ -372,6 +386,8 @@ const mapDispatchToProps = (dispatch) => ({
   changeLanguage: (lanId) => dispatch(languageSwitcherActions.changeLanguage(lanId)),
   getIdentityReq: () => dispatch(getIdentity()),
   logoutReq: () => dispatch(logout()),
+  setErrorMessage: (errorMessage) => dispatch(appActions.setErrorMessage(errorMessage)),
+  setSuccessMessage: (successMessage) => dispatch(appActions.setSuccessMessage(successMessage)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(withRouter(Topbar)));

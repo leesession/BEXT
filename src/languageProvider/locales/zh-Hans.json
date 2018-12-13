@@ -22,6 +22,8 @@
   "topbar.stats.net":"NET",
   "topbar.account.logout":"登出",
 
+  "modal.button.login":"登录",
+
   "dice.asset.eos":"EOS",
   "dice.asset.betx":"BETX",
   "dice.balance.eos":"EOS余额",
@@ -138,13 +140,17 @@
   "message.success.waitForBetResult":"正在等待结果",
   "message.success.resultWon":"掷出 {roll}, 赢得 {payout}",
   "message.success.resultLose":"掷出 {roll}, 失去 {betAmount}!",
-
+  "message.success.stake":"成功质押 {asset}",
+  "message.success.unstake":"成功解除质押 {asset}",
+  "message.success.claimdividend":"成功提取分红 {asset}",
 
   "message.warn.lessThanMinBet":"当前下注允许的最小值为 {amount} {asset}",
   "message.warn.greaterThanMaxBet":"当前下注允许的最大值为 {amount} {asset}.",
 
   "message.warn.loginFirst":"请先登录",
   "message.warn.emptyInput":"聊天框输入为空",
+
+  "message.error.amountInvalid":"无效的输入数额",
 
   "error.scatter.locked":"Scatter未解锁，请先解锁并刷新页面重试",
   "error.scatter.rejected":"Scatter的签名请求被拒绝",

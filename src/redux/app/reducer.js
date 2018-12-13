@@ -49,12 +49,8 @@ export default function appReducer(state = initState, action) {
         .set('betxBalance', undefined);
     case actions.SUCCESS_MESSAGE:
       return state.set('successMessage', action.message);
-    case actions.CLEAR_SUCCESS_MESSAGE:
-      return state.set('successMessage', undefined);
     case actions.ERROR_MESSAGE:
       return state.set('errorMessage', action.message);
-    case actions.CLEAR_ERROR_MESSAGE:
-      return state.set('errorMessage', undefined);
     case actions.SET_REF:
       return state.set('ref', action.ref);
     case actions.TOGGLE_TOPBAR:

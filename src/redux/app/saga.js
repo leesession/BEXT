@@ -14,6 +14,11 @@ function* getIdentityRequest() {
 
     yield put({ type: actions.GET_USERNAME_RESULT, value: response.name });
 
+    yield put({
+      type: actions.SET_SUCCESS_MESSAGE,
+      messsage: { id: { id: 'topbar.message.welcome' }, values: { name: response.name } },
+    });
+
     yield put({ type: actions.GET_ACCOUNT, name: response.name });
 
     yield put({ type: actions.GET_BALANCES, name: response.name });
@@ -300,10 +305,6 @@ function* setSuccessMessageRequest(action) {
     type: actions.SUCCESS_MESSAGE,
     message,
   });
-  // 2. Clear error message immediately
-  yield put({
-    type: actions.CLEAR_SUCCESS_MESSAGE,
-  });
 }
 
 function* setErrorMessageRequest(action) {
@@ -313,10 +314,6 @@ function* setErrorMessageRequest(action) {
   yield put({
     type: actions.ERROR_MESSAGE,
     message,
-  });
-  // 2. Clear error message immediately
-  yield put({
-    type: actions.CLEAR_ERROR_MESSAGE,
   });
 }
 

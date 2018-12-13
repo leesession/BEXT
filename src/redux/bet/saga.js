@@ -3,12 +3,18 @@ import { eventChannel } from 'redux-saga';
 import actions from './actions';
 import appActions from '../app/actions';
 import ParseHelper from '../../helpers/parse';
+import ScatterHelper from '../../helpers/scatter';
 import { delay } from '../../helpers/utility';
 import { appConfig } from '../../settings';
 
 const {
   subscribe, unsubscribe, fetchBetHistory, handleParseError, getBetVolume, getBetxStakeAmount,
 } = ParseHelper;
+
+
+const {
+  handleScatterError, getTotalBetAmount,
+} = ScatterHelper;
 
 
 function websocketInitChannel(payload) {
