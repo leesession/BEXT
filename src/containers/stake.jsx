@@ -66,6 +66,7 @@ class StakePage extends React.Component {
     this.onClaimBtnClicked = this.onClaimBtnClicked.bind(this);
     this.onInputStakeChange = this.onInputStakeChange.bind(this);
     this.onInputUnstakeChange = this.onInputUnstakeChange.bind(this);
+    this.toggleLoginModal = this.toggleLoginModal.bind(this);
   }
 
   componentWillMount() {
@@ -157,6 +158,11 @@ class StakePage extends React.Component {
 
     const amount = _.toNumber(inputStake);
 
+    if (!username) {
+      this.toggleLoginModal(true);
+      return;
+    }
+
     if (!_.isNumber(amount) || amount <= 0) {
       setErrorMessage('message.error.amountInvalid');
       return;
@@ -176,6 +182,11 @@ class StakePage extends React.Component {
 
     const amount = _.toNumber(inputUnstake);
 
+    if (!username) {
+      this.toggleLoginModal(true);
+      return;
+    }
+
     if (!_.isNumber(amount) || amount <= 0) {
       setErrorMessage('message.error.amountInvalid');
       return;
@@ -189,10 +200,20 @@ class StakePage extends React.Component {
     });
   }
 
-  onClaimBtnClicked() {
+  toggleLoginModal(visible) {
+    this.setState({
+      isLoginModalVisible: visible,
+    });
+  }
+
+  onClaimBtnClicked(e) {
     const {
       username, claimDividend, myDividend, setErrorMessage,
     } = this.props;
+    if (!username) {
+      this.toggleLoginModal(true);
+      return;
+    }
 
     const quantity = `${_.floor(myDividend, 4).toFixed(4)} EOS`;
 
@@ -381,7 +402,7 @@ class StakePage extends React.Component {
           </Row>
         </div>
 
-        <LoginModal isVisible={isLoginModalVisible} />
+        <LoginModal isVisible={isLoginModalVisible} closeModal={this.toggleLoginModal} />
       </div>
     );
   }

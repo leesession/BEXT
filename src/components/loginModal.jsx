@@ -52,9 +52,10 @@ class LoginModal extends React.Component {
       title={<IntlMessages id="topbar.copy.title" />}
       centered
       visible={visible}
-      onOk={() => this.setModalVisibility(false)}
+      onOk={() => this.props.closeModal(false)}
       onCancel={() => {
-        this.setModalVisibility(false);
+        // this.setModalVisibility(false);
+        this.props.closeModal(false);
       }}
       footer={null}
     >
@@ -62,7 +63,7 @@ class LoginModal extends React.Component {
         <div className="refmodal-container-input">
           <div><span>abc</span></div>
           <div>
-            <Button type="primary" size="large" onClicked={this.onLoginClicked}><IntlMessages id="modal.button.login" /></Button>
+            <Button type="primary" size="large" onClick={this.onLoginClicked}><IntlMessages id="modal.button.login" /></Button>
           </div>
         </div>
         <div>
@@ -75,10 +76,12 @@ class LoginModal extends React.Component {
 LoginModal.propTypes = {
   isVisible: PropTypes.bool.isRequired,
   getIdentity: PropTypes.func,
+  closeModal: PropTypes.func,
 };
 
 LoginModal.defaultProps = {
   getIdentity: undefined,
+  closeModal: undefined,
 };
 
 const mapStateToProps = (state) => ({
