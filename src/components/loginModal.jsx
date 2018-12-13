@@ -48,7 +48,7 @@ class LoginModal extends React.Component {
     const { visible } = this.state;
 
     return (<Modal
-      className="loginModal"
+      className="refModal loginModal"
       title={<IntlMessages id="topbar.copy.title" />}
       centered
       visible={visible}
