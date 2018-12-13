@@ -154,6 +154,10 @@
 				display: flex;
 				justify-content: center;
 
+				@media @phone{
+					height: 65px;
+				}
+
 
 				&>div:nth-of-type(1){
 					max-width: 30%;
@@ -293,7 +297,11 @@
 			.stake-container-body-inner-input{
 				display: flex;
 				flex-direction: row;
-				height: 45px;
+				height: 52px;
+
+				@media @phone{
+					height: 45px;
+				}
 
 				&>*{
 					display: inline-block;
@@ -335,6 +343,10 @@
 					border-radius: 0px;
 					color: @bgColor;
 					font-size: 0.8em;
+					width: 120px;
+					@media @phone{
+						width: 100px;
+					}
 				}
 			}
 		}
