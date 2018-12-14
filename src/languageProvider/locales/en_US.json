@@ -145,7 +145,7 @@
   "message.success.resultWon":"Rolled {roll}, won {payout}",
   "message.success.resultLose":"Rolled {roll}, lost {betAmount}!",
   "message.success.stake":"Stake {asset} Successfully!",
-  "message.success.unstake":"Unstake {asset} Successfully!",
+  "message.success.unstake":"Unstake {asset} Successfully! (It takes 24 hours to unstake)",
   "message.success.claimdividend":"Claim {asset} Successfully!",
 
   "message.warn.lessThanMinBet":"The minimum bet amount is {amount} {asset}.",
