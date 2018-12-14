@@ -4,7 +4,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { injectIntl, intlShape } from 'react-intl';
-import { Icon, Row, Col, Table, Input, Button, Tabs, Popover, message } from 'antd';
+import { Icon, Row, Col, Table, Input, Button, Tabs, Popover, message, Switch, Tooltip } from 'antd';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import moment from 'moment';
@@ -12,6 +12,7 @@ import 'moment/locale/zh-cn';
 import 'animate.css/animate.min.css';
 
 import ReactNotification from '../components/react-notification-component';
+import FairModal from '../components/fairModal';
 import '../components/react-notification-component/less/notification.less';
 import { cloudinaryConfig, CloudinaryImage } from '../components/react-cloudinary';
 
@@ -23,6 +24,7 @@ import appActions from '../redux/app/actions';
 import IntlMessages from '../components/utility/intlMessages';
 import { appConfig } from '../settings';
 import { randomString } from '../helpers/utility';
+import LoginModal from '../components/loginModal';
 
 cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
@@ -82,6 +84,7 @@ class DicePage extends React.Component {
       betAsset: 'EOS',
       seed: undefined,
       notifications: [],
+      fairModalShow: false,
     };
 
     this.desktopColumns = [{
@@ -166,6 +169,7 @@ class DicePage extends React.Component {
     this.onBetClicked = this.onBetClicked.bind(this);
     this.onLogInClicked = this.onLogInClicked.bind(this);
     this.formatBetAmountStr = this.formatBetAmountStr.bind(this);
+    this.toggleFairModal = this.toggleFairModal.bind(this);
     this.notificationDOMRef = React.createRef();
   }
 
@@ -438,6 +442,12 @@ class DicePage extends React.Component {
     return `${parts[0]}.${parts[1].substring(0, MAX_FLOAT_DIGITS)}`;
   }
 
+  toggleFairModal(visible) {
+    this.setState({
+      fairModalShow: visible,
+    });
+  }
+
   render() {
     const { desktopColumns, mobileColumns } = this;
     const {
@@ -482,7 +492,12 @@ class DicePage extends React.Component {
 
                       <div className="container-top">
                         <Row>
-                          <Col span={24}>
+                          <Col span={12}>
+                            <div className="currency-switch">
+                              <Button onClick={() => this.toggleFairModal(true)} className="fair-btn" icon="trophy"><IntlMessages id="dice.play.fairBtn" /></Button>
+                            </div>
+                          </Col>
+                          <Col span={12}>
                             <div className="currency-switch">
                               <div className="currency-switch-btns">
                                 <Button size="large" className="bet_button active" type="default" data-value="EOS">EOS
@@ -539,7 +554,6 @@ class DicePage extends React.Component {
                                 </div>
                               </div>
                             </div>
-
                           </Col>
                           <Col span={8}>
                             <div className="box box-value">
@@ -553,6 +567,13 @@ class DicePage extends React.Component {
                         <Row type="flex" justify="center">
                           <Col span={24}>
                             <Slider getValue={this.getSliderValue} defaultValue={DEFAULT_ROLL_NUMBER} min={MIN_SELECT_ROLL_NUMBER} max={MAX_SELECT_ROLL_NUMBER} step={1} />
+                          </Col>
+                          <Col span={24} className="auto-bet">
+                            <IntlMessages id="dice.play.autoBet" />
+                            <Switch checkedChildren={this.props.locale === 'zh' ? '开' : 'On'} unCheckedChildren={this.props.locale === 'zh' ? '关' : 'Off'}></Switch>
+                            <Tooltip title={(<IntlMessages id="dice.play.autoTool" />)}>
+                              <Icon type="question-circle" />
+                            </Tooltip>
                           </Col>
                         </Row>
 
@@ -686,6 +707,7 @@ class DicePage extends React.Component {
                 </section>
               </Col>
             </Row>
+            <FairModal isVisible={this.state.fairModalShow} closeModal={this.toggleFairModal} />
           </div>
         </div>
       </div>

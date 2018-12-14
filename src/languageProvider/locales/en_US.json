@@ -21,7 +21,7 @@
   "topbar.stats.cpu":"CPU",
   "topbar.stats.net":"NET",
   "topbar.account.logout":"Log out",
-  
+
   "modal.login.title":"Please Log In first",
   "modal.login.description":"Connect to Scatter to retrieve username and account related values.",
   "modal.login.button":"Log In",
@@ -47,8 +47,15 @@
   "dice.play.payout":"Payout",
   "dice.play.win":"Win Chance",
   "dice.play.amount":"Play amount",
+  "dice.play.autoBet": "Auto Bete",
+  "dice.play.autoTool": "WARNING:Turning Auto Bet on will result in your bet continuing to be placed until Auto Bet is turned off.There may be a slight delay when turning Auto Bet off that results in an additional roll",
+  "dice.play.fairBtn": "Rules & Fairness",
   "dice.alert.comingsoon":"Coming soon",
   "dice.send":"Send",
+
+  "modal.fair.title":"请先登录",
+  "modal.fair.description":"连接Scatter以获取账户名称，以及有关账户信息",
+  "modal.fair.button":"登录",
 
   "faq.title":"FAQ",
 
