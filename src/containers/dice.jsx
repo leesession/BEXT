@@ -36,7 +36,7 @@ const DEFAULT_ROLL_NUMBER = 50;
 const DIVIDEND = 0.98;
 
 const MIN_INPUT_BET_AMOUNT = 0.1;
-const MAX_INPUT_BET_AMOUNT = 50;
+const MAX_INPUT_BET_AMOUNT = 100000;
 const MAX_FLOAT_DIGITS = 4;
 
 const { initSocketConnection, fetchBetHistory, deleteCurrentBet } = betActions;

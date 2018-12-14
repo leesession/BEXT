@@ -348,8 +348,6 @@ class ScatterHelper {
     };
 
     return readEos.getTableRows(options).then((result) => {
-      console.log(result);
-
       const rows = result && result.rows;
 
       const returnResult = {
@@ -469,5 +467,4 @@ class ScatterHelper {
 
 // const scatterHelper = await ScatterHelper.createInstance();
 
-// console.log("scatterHelper is ", scatterHelper);
 export default new ScatterHelper();
