@@ -251,7 +251,7 @@ class StakePage extends React.Component {
       xxl: 18,
     };
 
-    const myExpectedDiv = platformSnapshotTotal === 0 ? ((1.0 * mySnapshotEffective) / platformSnapshotTotal) * platformDividend : 0;
+    const myExpectedDiv = platformSnapshotTotal === 0 ? 0 : ((1.0 * mySnapshotEffective) / platformSnapshotTotal) * platformDividend;
 
     return (
       <div id="faq-page">
