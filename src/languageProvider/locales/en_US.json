@@ -53,9 +53,10 @@
   "dice.alert.comingsoon":"Coming soon",
   "dice.send":"Send",
 
-  "modal.fair.title":"请先登录",
-  "modal.fair.description":"连接Scatter以获取账户名称，以及有关账户信息",
-  "modal.fair.button":"登录",
+  "modal.fair.title":"Rules & Fairness",
+  "modal.fair.description":"A fair bet requires an unbiased random number.\nWhat BIG.GAME does is to put the two seeds (Player Seed & House Seed) generated respectively by the player and the House, on an open-source smart contract which generates an ultimate random number based on the two seeds.\nMathematically, this ultimate random number is determined by both parties, thus ensuring fairness. The House publishes the hash of the House Seed before the Player bets, and the Player can verify the House hash after the roll, thereby proving that the House is not cheating.",
+  "modal.fair.buttonReset":"Reset",
+  "modal.fair.buttonUpdate":"Update",
 
   "faq.title":"FAQ",
 

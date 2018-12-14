@@ -5,10 +5,9 @@ import { connect } from 'react-redux';
 import { injectIntl, intlShape } from 'react-intl';
 
 import PropTypes from 'prop-types';
-import { Layout, Menu, message, Button, Modal } from 'antd';
+import { message, Button, Modal, Input, Col, Row } from 'antd';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import IntlMessages from '../components/utility/intlMessages';
-import appActions from '../redux/app/actions';
 
 class FairModal extends React.Component {
   constructor(props) {
@@ -17,9 +16,6 @@ class FairModal extends React.Component {
     this.state = {
       visible: props.isVisible,
     };
-
-    this.onLoginClicked = this.onLoginClicked.bind(this);
-    this.fiarText = React.createRef();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -33,17 +29,14 @@ class FairModal extends React.Component {
     }
   }
 
-  onLoginClicked() {
-    const { getIdentity } = this.props;
-
-    getIdentity();
-  }
 
   render() {
     const { visible } = this.state;
-
+    const { intl } = this.props;
+    const descriptions = intl.formatMessage({ id: 'modal.fair.description' }).split('\n');
+    const text = _.map(descriptions, (part, partIndex) => <p key={partIndex}>{part}</p>);
     return (<Modal
-      className="refModal loginModal"
+      className="refModal fairModal"
       title={<IntlMessages id="modal.fair.title" />}
       centered
       visible={visible}
@@ -55,39 +48,32 @@ class FairModal extends React.Component {
     >
       <div className="refmodal-container">
         <div className="refmodal-container-input">
-          <div><span ref={this.fairText}>dsUX8fhzFl1om0u3HKgP</span></div>
-          <div>
-            <CopyToClipboard
-              text="dsUX8fhzFl1om0u3HKgP"
-              onCopy={() => {
-                this.fairText.current.style.background = 'blue';
-              }}
-            >
-              <Button type="primary" size="large" onClick={this.onLoginClicked}><IntlMessages id="modal.fair.buttonReset" /></Button>
-              <Button type="primary" size="large" onClick={this.onLoginClicked}><IntlMessages id="modal.fair.buttonUpdate" /></Button>
-            </CopyToClipboard>
-          </div>
+          <section style={{ width: '100%' }}>
+            <Row>
+              <Col lg={14} ><Input className="fairCode" placeholder="Basic usage" defaultValue="dsUX8fhzFl1om0u3HKgP" /></Col>
+              <Col lg={10} className="fair-modal-btns">
+                <Button size="large"><IntlMessages id="modal.fair.buttonReset" /></Button>
+                <Button type="primary" size="large"><IntlMessages id="modal.fair.buttonUpdate" /></Button>
+              </Col>
+            </Row>
+          </section>
         </div>
         <div>
-          <span><IntlMessages id="modal.fair.description" /></span></div>
+          {text}
+        </div>
       </div>
     </Modal>);
   }
 }
 
 FairModal.propTypes = {
+  intl: intlShape.isRequired,
   isVisible: PropTypes.bool.isRequired,
-  getIdentity: PropTypes.func,
   closeModal: PropTypes.func,
 };
 
 FairModal.defaultProps = {
-  getIdentity: undefined,
   closeModal: undefined,
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  getIdentity: () => dispatch(appActions.getIdentity()),
-});
-
-export default connect(null, mapDispatchToProps)(injectIntl(FairModal));
+export default connect(null)(injectIntl(FairModal));

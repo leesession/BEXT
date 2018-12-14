@@ -24,7 +24,6 @@ import appActions from '../redux/app/actions';
 import IntlMessages from '../components/utility/intlMessages';
 import { appConfig } from '../settings';
 import { randomString } from '../helpers/utility';
-import LoginModal from '../components/loginModal';
 
 cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
