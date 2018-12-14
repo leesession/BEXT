@@ -468,14 +468,21 @@ class DicePage extends React.Component {
 
     const columns = view === 'MobileView' ? mobileColumns : desktopColumns;
 
+    const colWidthLeft = {
+      xs: 24,
+      lg: 16,
+      xxl: 16,
+    };
+
+    const colWidthRight = _.map(colWidthLeft, (value) => 24 - value);
+
     return (
       <div>
         <div id="dicepage">
-          <div className="wrapper">
+          <div className="horizontalWrapper">
             <Row gutter={40}>
-              <Col xs={24} lg={16}>
+              <Col {...colWidthLeft}>
                 <section>
-                  {/* <div className="horizontalWrapper"> */}
                   <div className="container">
                     <ReactNotification ref={this.notificationDOMRef} />
                     <div className="holderBorder">
@@ -631,7 +638,7 @@ class DicePage extends React.Component {
                   {/* </div> */}
                 </section>
               </Col>
-              <Col xs={24} lg={8}>
+              <Col {...colWidthRight}>
 
                 <section className="hideOnMobile">
                   <div className="container">
@@ -641,10 +648,9 @@ class DicePage extends React.Component {
                   </div>
                 </section>
               </Col>
-              <Col xs={24} lg={24}>
+              <Col xs={24}>
 
                 <section id="tables" >
-                  {/* <div className="horizontalWrapper"> */}
                   <div className="container">
                     <Tabs size="large">
                       <TabPane tab={<IntlMessages id="dice.history.all" />} key="allbet">

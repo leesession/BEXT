@@ -247,15 +247,15 @@ class StakePage extends React.Component {
 
     const colWidth = {
       xs: 24,
-      xl: 20,
-      xxl: 18,
+      xl: 24,
+      xxl: 24,
     };
 
     const myExpectedDiv = platformSnapshotTotal === 0 ? 0 : ((1.0 * mySnapshotEffective) / platformSnapshotTotal) * platformDividend;
 
     return (
       <div id="faq-page">
-        <div className="wrapper wrapper_stake">
+        <div className="horizontalWrapper">
           <Row type="flex" justify="center">
             <Col {...colWidth}>
               <h1 className="page-title"><IntlMessages id="stake.title" /></h1>
