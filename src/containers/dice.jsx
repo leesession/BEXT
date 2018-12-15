@@ -84,7 +84,7 @@ class DicePage extends React.Component {
       seed: undefined,
       notifications: [],
       fairModalShow: false,
-      autoBetEnabled: false,  // True if auto-bet switch is turned on 
+      autoBetEnabled: false, // True if auto-bet switch is turned on
       lastBetNotificationId: undefined, // Guard start of the next auto-bet so we don't start twice
     };
 
@@ -194,7 +194,12 @@ class DicePage extends React.Component {
     const {
       intl, deleteCurrentBetReq, getBalancesReq, getAccountInfoReq,
     } = this.props;
-    const { notifications, username: stateUsername, lastBetNotificationId,autoBetEnabled } = this.state;
+    const {
+      notifications,
+      username: stateUsername,
+      lastBetNotificationId,
+      autoBetEnabled,
+    } = this.state;
     const { notificationDOMRef, onBetClicked } = this;
 
     const fieldsToUpdate = {};
@@ -461,7 +466,6 @@ class DicePage extends React.Component {
   }
 
   onAutoBetSwitchChagne(checked) {
-
     // Kick off a bet if there's no ongoing bet
     if (checked) {
       this.onBetClicked();
@@ -505,6 +509,7 @@ class DicePage extends React.Component {
 
     const columns = view === 'MobileView' ? mobileColumns : desktopColumns;
 
+    const screenWidth = document.body.clientWidth; // If the screenWidth<1024, the autoBet tooltip will be actived by click;
     return (
       <div>
         <div id="dicepage">
@@ -602,8 +607,8 @@ class DicePage extends React.Component {
                               unCheckedChildren={intl.formatMessage({ id: 'dice.play.autoBet.switch.off' })}
                               onChange={this.onAutoBetSwitchChagne}
                             />
-                            <Tooltip title={(<IntlMessages id="dice.play.autoTool" />)}>
-                              <Icon type="question-circle" />
+                            <Tooltip title={(<IntlMessages id="dice.play.autoTool" />)} trigger={screenWidth <= 1024 ? 'click' : 'hover'}>
+                              <Icon type="question-circle" style={{ fontSize: '1.5em' }} />
                             </Tooltip>
                           </Col>
                         </Row>
