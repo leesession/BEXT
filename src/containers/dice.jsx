@@ -195,7 +195,10 @@ class DicePage extends React.Component {
       intl, deleteCurrentBetReq, getBalancesReq, getAccountInfoReq,
     } = this.props;
     const {
-      notifications, username: stateUsername, lastBetNotificationId, autoBetEnabled,
+      notifications,
+      username: stateUsername,
+      lastBetNotificationId,
+      autoBetEnabled,
     } = this.state;
     const { notificationDOMRef, onBetClicked } = this;
 
@@ -506,6 +509,7 @@ class DicePage extends React.Component {
 
     const columns = view === 'MobileView' ? mobileColumns : desktopColumns;
 
+    const screenWidth = document.body.clientWidth; // If the screenWidth<1024, the autoBet tooltip will be actived by click;
     return (
       <div>
         <div id="dicepage">
@@ -603,8 +607,8 @@ class DicePage extends React.Component {
                               unCheckedChildren={intl.formatMessage({ id: 'dice.play.autoBet.switch.off' })}
                               onChange={this.onAutoBetSwitchChagne}
                             />
-                            <Tooltip title={(<IntlMessages id="dice.play.autoTool" />)}>
-                              <Icon type="question-circle" />
+                            <Tooltip title={(<IntlMessages id="dice.play.autoTool" />)} trigger={screenWidth <= 1024 ? 'click' : 'hover'}>
+                              <Icon type="question-circle" style={{ fontSize: '1.5em' }} />
                             </Tooltip>
                           </Col>
                         </Row>
