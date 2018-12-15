@@ -49,6 +49,11 @@
   "dice.play.amount":"抵押金额",
   "dice.alert.comingsoon":"即将上线",
   "dice.send":"发送",
+  "dice.rank.rank":"排名",
+  "dice.rank.bettor":"投注者",
+  "dice.rank.wager":"总投注额",
+  "dice.rank.prize":"奖励",
+  "dice.rank.leadboard":"每日排行榜",
 
   "faq.title":"常见问题",
   "faq.account.header":"账户",

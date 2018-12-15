@@ -103,7 +103,7 @@ class StakePage extends React.Component {
 
   componentDidMount() {
     const utcNow = moment.utc();
-    const endOfDay = moment.utc().endOf('day');
+    const endOfDay = moment.utc().endOf('day').subtract(8, 'hours');
     const diffDuration = moment.duration(endOfDay.diff(utcNow)).asSeconds();
     // const remainingTimeOfDay = `${diffDuration.hours()}:${diffDuration.minutes()}:${diffDuration.seconds()}`;
 

@@ -49,6 +49,12 @@
   "dice.play.amount":"Play amount",
   "dice.alert.comingsoon":"Coming soon",
   "dice.send":"Send",
+  "dice.rank.rank":"Rank",
+  "dice.rank.bettor":"Bettor",
+  "dice.rank.wager":"Total Wager",
+  "dice.rank.prize":"Prize",
+  "dice.rank.leadboard":"Leaderboard",
+
 
   "faq.title":"FAQ",
 
