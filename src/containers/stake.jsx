@@ -141,7 +141,14 @@ class StakePage extends React.Component {
 
     // Check if we're at zero.
     if (seconds <= 0) {
-      clearInterval(this.timer);
+      const utcNow = moment.utc();
+      const endOfDay = moment.utc().endOf('day').subtract(8, 'hours');
+      const newSeconds = moment.duration(endOfDay.diff(utcNow)).asSeconds();
+
+      this.setState({
+        seconds: newSeconds,
+        time: secondsToTime(newSeconds),
+      });
     }
   }
 

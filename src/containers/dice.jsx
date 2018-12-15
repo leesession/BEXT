@@ -424,7 +424,14 @@ class DicePage extends React.Component {
 
     // Check if we're at zero.
     if (seconds <= 0) {
-      clearInterval(this.timer);
+      const utcNow = moment.utc();
+      const endOfDay = moment.utc().endOf('day').subtract(8, 'hours');
+      const newSeconds = moment.duration(endOfDay.diff(utcNow)).asSeconds();
+
+      this.setState({
+        seconds: newSeconds,
+        time: secondsToTime(newSeconds),
+      });
     }
   }
 
@@ -818,7 +825,7 @@ class DicePage extends React.Component {
                           </Col>
                           <Col xs={24} lg={24} className="countdownHolder">
                             <p className="countdown">{time.h}:{time.m}:{time.s}</p>
-                            <p><IntlMessages id="dice.rank.leadboard" /></p>
+                            <p className="countdownDescription"><IntlMessages id="dice.rank.leadboard" /></p>
                           </Col>
                           <Col xs={24} lg={0}>
                             <Row className="myRank">
