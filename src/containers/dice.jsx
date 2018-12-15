@@ -453,7 +453,9 @@ class DicePage extends React.Component {
       betAmount, payoutOnWin, winChance, payout, rollNumber, eosBalance, betxBalance, username,
     } = this.state;
 
-    const { betHistory, locale, view } = this.props;
+    const {
+      betHistory, locale, view, intl,
+    } = this.props;
 
 
     const momentLocale = (locale === 'en') ? 'en' : 'zh-cn';
@@ -569,7 +571,11 @@ class DicePage extends React.Component {
                           </Col>
                           <Col span={24} className="auto-bet">
                             <IntlMessages id="dice.play.autoBet" />
-                            <Switch checkedChildren={this.props.locale === 'zh' ? '开' : 'On'} unCheckedChildren={this.props.locale === 'zh' ? '关' : 'Off'}></Switch>
+                            <Switch
+                              checkedChildren={intl.formatMessage({ id: 'dice.play.autoBet.switch.on' })}
+                              unCheckedChildren={intl.formatMessage({ id: 'dice.play.autoBet.switch.off' })}
+                              onChange={this.onAutoBetSwitchChagne}
+                            />
                             <Tooltip title={(<IntlMessages id="dice.play.autoTool" />)}>
                               <Icon type="question-circle" />
                             </Tooltip>

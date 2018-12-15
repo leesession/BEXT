@@ -48,6 +48,8 @@
   "dice.play.win":"Win Chance",
   "dice.play.amount":"Play amount",
   "dice.play.autoBet": "Auto Bet",
+  "dice.play.autoBet.switch.on": "On",
+  "dice.play.autoBet.switch.off": "Off",
   "dice.play.autoTool": "WARNING:Turning Auto Bet on will result in your bet continuing to be placed until Auto Bet is turned off.There may be a slight delay when turning Auto Bet off that results in an additional roll",
   "dice.play.fairBtn": "Rules & Fairness",
   "dice.alert.comingsoon":"Coming soon",

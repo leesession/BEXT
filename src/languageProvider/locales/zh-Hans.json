@@ -48,6 +48,8 @@
   "dice.play.win":"中奖概率",
   "dice.play.amount":"抵押金额",
   "dice.play.autoBet": "自动下注",
+  "dice.play.autoBet.switch.on": "开",
+  "dice.play.autoBet.switch.off": "关",
   "dice.play.autoTool": "警告：打开自动投注将导致您的赌注继续放置，直到自动投注被关闭。当关闭自动投注时可能会有轻微的延迟，从而导致额外的流动",
   "dice.play.fairBtn": "玩法与公平",
   "dice.alert.comingsoon":"即将上线",
