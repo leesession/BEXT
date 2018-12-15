@@ -24,6 +24,7 @@
         border-radius: 0px 0px 4px 4px;
 
         @media @phone {
+            padding-top: 0px;
             padding-left: 30px;
             padding-right: 30px;
         }
@@ -34,89 +35,101 @@
         border: none
     }
 
-    .refmodal-container{
-
+    .refmodal-container {
         text-align: center;
 
-    .refmodal-container-description{
-        margin-bottom: 18px;
-    }
-    .refmodal-container-button{
-        button{
-            width: 120px;
+        .refmodal-container-description {
+            margin-bottom: 18px;
         }
-    }
-    .refmodal-container-input {
-        display: flex;
-        flex-wrap: wrap;
 
-        &>div {
-            margin-bottom: 20px;
-
-            @media @phone {
-                width: 100%
+        .refmodal-container-button {
+            button {
+                width: 120px;
             }
 
-            &:first-of-type {
-                flex-grow: 2;
-                margin-right: 20px;
-                background-color: #444444;
-                padding: 0px 0 0px 10px;
-                border-radius: 5px;
-                font-size: 1.5em;
-                height: 32px;
+        }
+
+        .refmodal-container-input {
+            display: flex;
+            flex-wrap: wrap;
+
+            &>div {
+                margin-bottom: 20px;
 
                 @media @phone {
-                    font-size: 1.2em;
-                    margin-right: 0px;
+                    width: 100%
                 }
 
-                span {
-                    text-align: center;
-                    width: 100%;
-                    line-height: 32px;
+                &:first-of-type {
+                    flex-grow: 2;
+                    margin-right: 20px;
+                    background-color: #444444;
+                    padding: 0px 0 0px 10px;
+                    border-radius: 5px;
+                    font-size: 1.5em;
+                    height: 32px;
 
-                    &:hover {
-                        cursor: pointer
+                    @media @phone {
+                        font-size: 1.2em;
+                        margin-right: 0px;
+                    }
+
+                    span {
+                        text-align: center;
+                        width: 100%;
+                        line-height: 32px;
+
+                        &:hover {
+                            cursor: pointer
+                        }
+
+                    }
+
+                }
+
+                &:nth-of-type(2) {
+                    button {
+                        max-width: 100%;
+                        width: 8em;
                     }
 
                 }
 
             }
 
-            &:nth-of-type(2) {
-                button {
-                    max-width: 100%;
-                    width: 8em;
-                }
-
-            }
-
         }
+
     }
-    }
-    &.fairModal{
-        .refmodal-container{
+
+    &.fairModal {
+        .refmodal-container {
             text-align: left;
         }
-        .fairCode{
-            color:#FFF;
+
+        .fairCode {
+            color: #FFF;
             background-color: #444444;
             padding: 5px 10px;
             border-radius: 5px;
             font-size: 1.3em;
-            margin-bottom: 10px;
-            height: 38px;
+            margin-bottom: 15px;
+            height: 40px;
+            line-height: 40px;
         }
-        .fair-modal-btns{
+
+        .fair-modal-btns {
             margin-bottom: 20px;
             text-align: center;
-            button{
-                margin: 0 5px;
-            }
-        }
-    }
 
+            button {
+                margin: 0 5px;
+                width: 100px;
+                height: 40px;
+            }
+
+        }
+
+    }
 
 }
 
