@@ -53,7 +53,7 @@ class FairModal extends React.Component {
         <div className="refmodal-container-input">
           <section style={{ width: '100%' }}>
             <Row>
-              <Col xs={24} lg={18} ><Input className="fairCode" placeholder="Basic usage" value={value} /></Col>
+              <Col xs={24} lg={18} ><Input className="fairCode" placeholder="Basic usage" value={value} readOnly /></Col>
               <Col xs={24} lg={6} className="fair-modal-btns">
                 <Button type="primary" size="large" onClick={onReset}><IntlMessages id="modal.fair.buttonReset" /></Button>
                 {/* <Button size="large"><IntlMessages id="modal.fair.buttonUpdate" /></Button> */}
