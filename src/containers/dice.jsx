@@ -84,6 +84,8 @@ class DicePage extends React.Component {
       seed: undefined,
       notifications: [],
       fairModalShow: false,
+      autoBetEnabled: false,  // True if auto-bet switch is turned on 
+      lastBetNotificationId: undefined, // Guard start of the next auto-bet so we don't start twice
     };
 
     this.desktopColumns = [{
@@ -170,6 +172,7 @@ class DicePage extends React.Component {
     this.formatBetAmountStr = this.formatBetAmountStr.bind(this);
     this.toggleFairModal = this.toggleFairModal.bind(this);
     this.notificationDOMRef = React.createRef();
+    this.onAutoBetSwitchChagne = this.onAutoBetSwitchChagne.bind(this);
   }
 
   componentWillMount() {
@@ -191,8 +194,8 @@ class DicePage extends React.Component {
     const {
       intl, deleteCurrentBetReq, getBalancesReq, getAccountInfoReq,
     } = this.props;
-    const { notifications, username: stateUsername } = this.state;
-    const { notificationDOMRef } = this;
+    const { notifications, username: stateUsername, lastBetNotificationId,autoBetEnabled } = this.state;
+    const { notificationDOMRef, onBetClicked } = this;
 
     const fieldsToUpdate = {};
 
@@ -268,6 +271,15 @@ class DicePage extends React.Component {
             </div>,
           }
         );
+
+        // Send the next bet is autobet is enabled; lastBetNotificationId is here to prevent we enter this code twice
+        if (autoBetEnabled && lastBetNotificationId !== notificationId) {
+          onBetClicked();
+
+          this.setState({
+            lastBetNotificationId: notificationId,
+          });
+        }
 
         setTimeout(() => {
           if (!notificationDOMRef.current) { return; }
@@ -385,6 +397,7 @@ class DicePage extends React.Component {
     const {
       rollNumber, username, betAmount, betAsset, seed,
     } = this.state;
+
     const { transferReq, setErrorMessageReq, referrer } = this.props;
 
     if (username === this.defaultUsername) {
@@ -444,6 +457,19 @@ class DicePage extends React.Component {
   toggleFairModal(visible) {
     this.setState({
       fairModalShow: visible,
+    });
+  }
+
+  onAutoBetSwitchChagne(checked) {
+
+    // Kick off a bet if there's no ongoing bet
+    if (checked) {
+      this.onBetClicked();
+    }
+
+    // Set state value autoBetEnabled
+    this.setState({
+      autoBetEnabled: checked,
     });
   }
 
