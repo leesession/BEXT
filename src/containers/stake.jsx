@@ -271,7 +271,7 @@ class StakePage extends React.Component {
                       <p className="page-sub-title sub_title_stake"><IntlMessages id="stake.dividend.allday" /></p>
                       <div className="page-third-title panel icon-container third_title_stake">
                         <div><CloudinaryImage publicId="eos-logo-grey" options={{ height: 40, crop: 'scale' }} /></div>
-                        {formatNumberThousands(_.floor(dailyVolume * appConfig.dividendRatio, 4))} EOS
+                        {formatNumberThousands(_.floor(dailyVolume * appConfig.dividendRatio, 2))} EOS
                       </div>
                     </Col>
                     <Col span={12}>
