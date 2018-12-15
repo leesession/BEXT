@@ -20,6 +20,7 @@ const siteConfig = {
   announcement: 'https://betxhelp.zendesk.com/hc/zh-cn/sections/360002532612-%E5%85%AC%E5%91%8A%E4%B8%AD%E5%BF%83',
   terms: 'https://betxhelp.zendesk.com/hc/zh-cn/articles/360018256011',
   ethscan: 'https://rinkeby.etherscan.io/',
+  fairnessVerificationUrl: 'https://github.com/TheBETX/tools.git',
 };
 
 const appConfig = {

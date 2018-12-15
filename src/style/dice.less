@@ -57,7 +57,7 @@
         @containerPadding: 60px;
 
         @media @phone {
-            margin: 20px 0px 40px;
+            margin: 0px 0px 40px;
         }
 
         .holderBorder {
@@ -82,16 +82,29 @@
 
         .container-top {
             padding-right: @containerPadding;
-
+            padding-left:@containerPadding;
+            padding-top: 25px;
             @media @phone {
                 padding-right: 8px;
+                padding-left: 8px;
+                padding-top: 12px;
             }
 
             .currency-switch {
-                padding-top: 15px;
-                padding-bottom: 15px;
                 position: relative;
-
+                .fair-btn{
+                    float: left;
+                    height: 50px;
+                    background-color: #d5bd7a;
+                    color: black;
+                    border-color: white;
+                    border: none;
+                    border-radius: 20px;
+                    font-size:1.4em;
+                    @media @phone{
+                        height: 40px;
+                    }
+                }
                 .currency-switch-btns {
                     float: right;
                     width: 200px;
@@ -425,9 +438,45 @@
                 border: none;
                 transform: translateY(-3px);
             }
-
         }
+        .auto-bet{
+            font-size:1.6em;
+            color: #939393;
+            text-transform: uppercase;
+            word-break: break-word;
+            font-weight: 500;
+            display: flex;
+            justify-content: center;
+            align-items: center;
 
+            .ant-switch{
+                margin:0 10px;
+                border:1px solid @primaryColor;
+                .ant-switch-inner{
+                    font-size:14px;
+                    color: @primaryColor;
+                }
+            }
+
+            .ant-switch-loading-icon, .ant-switch:after{
+                background:#e74f4b;
+            }
+            
+            .ant-switch-checked {
+                background-color: #E8AC57;
+                .ant-switch-inner{
+                    color: #fff;
+                }
+            }
+
+            .auto-bet-icon {
+                font-size: 1.2em;
+
+                @media @phone{
+                    font-size: 1.5em;
+                }
+            }
+        }
         .history {
             text-align: center;
 

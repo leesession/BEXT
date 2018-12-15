@@ -21,7 +21,7 @@
   "topbar.stats.cpu":"CPU",
   "topbar.stats.net":"NET",
   "topbar.account.logout":"Log out",
-  
+
   "modal.login.title":"Please Log In first",
   "modal.login.description":"Connect to Scatter to retrieve username and account related values.",
   "modal.login.button":"Log In",
@@ -47,8 +47,19 @@
   "dice.play.payout":"Payout",
   "dice.play.win":"Win Chance",
   "dice.play.amount":"Play amount",
+  "dice.play.autoBet": "Auto Bet",
+  "dice.play.autoBet.switch.on": "On",
+  "dice.play.autoBet.switch.off": "Off",
+  "dice.play.autoTool": "WARNING:Turning Auto Bet on will result in your bet continuing to be placed until Auto Bet is turned off.There may be a slight delay when turning Auto Bet off that results in an additional roll",
+  "dice.play.fairBtn": "Rules & Fairness",
   "dice.alert.comingsoon":"Coming soon",
   "dice.send":"Send",
+
+  "modal.fair.title":"Rules & Fairness",
+  "modal.fair.description":"A fair bet requires an unbiased random number.\nWhat BETX does is to put the two seeds (Player Seed & House Seed) generated respectively by the player and the House, on an open-source smart contract which generates an ultimate random number based on the two seeds.\nMathematically, this ultimate random number is determined by both parties, thus ensuring fairness. The House publishes the hash of the House Seed before the Player bets, and the Player can verify the House hash after the roll, thereby proving that the House is not cheating.",
+  "modal.fair.buttonReset":"Reset",
+  "modal.fair.buttonUpdate":"Update",
+  "modal.fair.verificationTool":"Fairness Verification Tool",
 
   "faq.title":"FAQ",
 
