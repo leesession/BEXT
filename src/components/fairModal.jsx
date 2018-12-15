@@ -44,6 +44,7 @@ class FairModal extends React.Component {
       onCancel={() => {
         this.props.closeModal(false);
       }}
+      width={640}
       footer={null}
     >
       <div className="refmodal-container">
