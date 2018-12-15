@@ -39,6 +39,7 @@ const DIVIDEND = 0.98;
 const MIN_INPUT_BET_AMOUNT = 0.1;
 const MAX_INPUT_BET_AMOUNT = 50;
 const MAX_FLOAT_DIGITS = 4;
+const SEED_STR_LENGTH = 21;
 
 const { initSocketConnection, fetchBetHistory, deleteCurrentBet } = betActions;
 const {
@@ -81,7 +82,7 @@ class DicePage extends React.Component {
       betxBalance: 0,
       username: this.defaultUsername,
       betAsset: 'EOS',
-      seed: undefined,
+      seed: randomString(SEED_STR_LENGTH),
       notifications: [],
       fairModalShow: false,
       autoBetEnabled: false, // True if auto-bet switch is turned on
@@ -172,7 +173,8 @@ class DicePage extends React.Component {
     this.formatBetAmountStr = this.formatBetAmountStr.bind(this);
     this.toggleFairModal = this.toggleFairModal.bind(this);
     this.notificationDOMRef = React.createRef();
-    this.onAutoBetSwitchChagne = this.onAutoBetSwitchChagne.bind(this);
+    this.onAutoBetSwitchChange = this.onAutoBetSwitchChange.bind(this);
+    this.resetSeed = this.resetSeed.bind(this);
   }
 
   componentWillMount() {
@@ -416,7 +418,7 @@ class DicePage extends React.Component {
       betAsset,
       rollUnder: rollNumber,
       referrer,
-      seed: seed || randomString(16), // We haven't set up a function for user custom seed
+      seed, // We haven't set up a function for user custom seed
     });
   }
 
@@ -465,7 +467,7 @@ class DicePage extends React.Component {
     });
   }
 
-  onAutoBetSwitchChagne(checked) {
+  onAutoBetSwitchChange(checked) {
     // Kick off a bet if there's no ongoing bet
     if (checked) {
       this.onBetClicked();
@@ -477,10 +479,16 @@ class DicePage extends React.Component {
     });
   }
 
+  resetSeed() {
+    this.setState({
+      seed: randomString(SEED_STR_LENGTH),
+    });
+  }
+
   render() {
     const { desktopColumns, mobileColumns } = this;
     const {
-      betAmount, payoutOnWin, winChance, payout, rollNumber, eosBalance, betxBalance, username,
+      betAmount, payoutOnWin, winChance, payout, rollNumber, eosBalance, betxBalance, username, seed,
     } = this.state;
 
     const {
@@ -603,12 +611,14 @@ class DicePage extends React.Component {
                           <Col span={24} className="auto-bet">
                             <IntlMessages id="dice.play.autoBet" />
                             <Switch
+                              disabled={username === this.defaultUsername}
                               checkedChildren={intl.formatMessage({ id: 'dice.play.autoBet.switch.on' })}
                               unCheckedChildren={intl.formatMessage({ id: 'dice.play.autoBet.switch.off' })}
-                              onChange={this.onAutoBetSwitchChagne}
+                              onChange={this.onAutoBetSwitchChange}
+                              size="default"
                             />
                             <Tooltip title={(<IntlMessages id="dice.play.autoTool" />)} trigger={screenWidth <= 1024 ? 'click' : 'hover'}>
-                              <Icon type="question-circle" style={{ fontSize: '1.5em' }} />
+                              <Icon type="question-circle" className="auto-bet-icon" />
                             </Tooltip>
                           </Col>
                         </Row>
@@ -743,7 +753,12 @@ class DicePage extends React.Component {
                 </section>
               </Col>
             </Row>
-            <FairModal isVisible={this.state.fairModalShow} closeModal={this.toggleFairModal} />
+            <FairModal
+              value={seed}
+              isVisible={this.state.fairModalShow}
+              onReset={this.resetSeed}
+              closeModal={this.toggleFairModal}
+            />
           </div>
         </div>
       </div>

@@ -5,9 +5,10 @@ import { connect } from 'react-redux';
 import { injectIntl, intlShape } from 'react-intl';
 
 import PropTypes from 'prop-types';
-import { message, Button, Modal, Input, Col, Row } from 'antd';
+import { message, Button, Modal, Input, Row, Col } from 'antd';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import IntlMessages from '../components/utility/intlMessages';
+import { siteConfig } from '../settings';
 
 class FairModal extends React.Component {
   constructor(props) {
@@ -32,8 +33,9 @@ class FairModal extends React.Component {
 
   render() {
     const { visible } = this.state;
-    const { intl } = this.props;
+    const { intl, value, onReset } = this.props;
     const descriptions = intl.formatMessage({ id: 'modal.fair.description' }).split('\n');
+
     const text = _.map(descriptions, (part, partIndex) => <p key={partIndex}>{part}</p>);
     return (<Modal
       className="refModal fairModal"
@@ -51,15 +53,16 @@ class FairModal extends React.Component {
         <div className="refmodal-container-input">
           <section style={{ width: '100%' }}>
             <Row>
-              <Col lg={14} ><Input className="fairCode" placeholder="Basic usage" defaultValue="dsUX8fhzFl1om0u3HKgP" /></Col>
-              <Col lg={10} className="fair-modal-btns">
-                <Button size="large"><IntlMessages id="modal.fair.buttonReset" /></Button>
-                <Button type="primary" size="large"><IntlMessages id="modal.fair.buttonUpdate" /></Button>
+              <Col xs={24} lg={18} ><Input className="fairCode" placeholder="Basic usage" value={value} /></Col>
+              <Col xs={24} lg={6} className="fair-modal-btns">
+                <Button type="primary" size="large" onClick={onReset}><IntlMessages id="modal.fair.buttonReset" /></Button>
+                {/* <Button size="large"><IntlMessages id="modal.fair.buttonUpdate" /></Button> */}
               </Col>
             </Row>
           </section>
         </div>
         <div>
+          <div className="modal-url"><a href={siteConfig.fairnessVerificationUrl} target="_black"><IntlMessages id="modal.fair.verificationTool" /></a></div>
           {text}
         </div>
       </div>
@@ -71,6 +74,8 @@ FairModal.propTypes = {
   intl: intlShape.isRequired,
   isVisible: PropTypes.bool.isRequired,
   closeModal: PropTypes.func,
+  value: PropTypes.string.isRequired,
+  onReset: PropTypes.func.isRequired,
 };
 
 FairModal.defaultProps = {

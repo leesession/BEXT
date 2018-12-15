@@ -59,6 +59,7 @@
   "modal.fair.description":"A fair bet requires an unbiased random number.\nWhat BETX does is to put the two seeds (Player Seed & House Seed) generated respectively by the player and the House, on an open-source smart contract which generates an ultimate random number based on the two seeds.\nMathematically, this ultimate random number is determined by both parties, thus ensuring fairness. The House publishes the hash of the House Seed before the Player bets, and the Player can verify the House hash after the roll, thereby proving that the House is not cheating.",
   "modal.fair.buttonReset":"Reset",
   "modal.fair.buttonUpdate":"Update",
+  "modal.fair.verificationTool":"Fairness Verification Tool",
 
   "faq.title":"FAQ",
 
