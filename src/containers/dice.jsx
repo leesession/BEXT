@@ -281,11 +281,12 @@ class DicePage extends React.Component {
 
         // Send the next bet is autobet is enabled; lastBetNotificationId is here to prevent we enter this code twice
         if (autoBetEnabled && lastBetNotificationId !== notificationId) {
-          onBetClicked();
-
           this.setState({
             lastBetNotificationId: notificationId,
           });
+          setTimeout(() => {
+            onBetClicked();
+          }, 1500);
         }
 
         setTimeout(() => {
@@ -300,7 +301,7 @@ class DicePage extends React.Component {
 
           getAccountInfoReq(stateUsername);
           getBalancesReq(stateUsername);
-        }, 5000);
+        }, 3000);
       }
     });
 
