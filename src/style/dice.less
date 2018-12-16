@@ -11,44 +11,10 @@
     padding-bottom: 40px;
 
     @media @phone {
+        padding-top: 80px;
         padding-bottom: 0px;
-        width:100vw;
+        width: 100vw;
     }
-
-    // .wrapper {
-    //     margin-left: auto;
-    //     margin-right: auto;
-    //     padding: 0px;
-
-    //     @media @phone {
-    //         padding-left: 16px;
-    //         padding-right: 16px;
-    //     }
-
-    //     @media @tablet-strict {
-    //         padding-left: 24px;
-    //         padding-right: 24px;
-    //     }
-
-    //     @media @desktop-strict {
-    //         max-width: 940px;
-    //         padding-left: 0px;
-    //         padding-right: 0px;
-    //     }
-
-    //     @media @xl {
-    //         max-width: 90%;
-    //         padding-left: 0px;
-    //         padding-right: 0px;
-    //     }
-
-    //     @media @xxl {
-    //         max-width: 80%;
-    //         padding-left: 0px;
-    //         padding-right: 0px;
-    //     }
-
-    // }
 
     .container {
         margin: 50px 0px 20px;
@@ -65,25 +31,30 @@
             background-color: @panelGrey;
             border: 1px solid @borderColor;
             overflow: hidden;
-            th{
-                white-space:nowrap;
+
+            th {
+                white-space: nowrap;
                 padding: 10px 2px;
             }
-            td{
-                &>.player-td{
+
+            td {
+                &>.player-td {
                     display: block;
-                    width:60px;
-                    white-space:nowrap;
+                    width: 60px;
+                    white-space: nowrap;
                     overflow: hidden;
-                    text-overflow:ellipsis;
+                    text-overflow: ellipsis;
                 }
+
             }
+
         }
 
-        .container-top {
+        .container-header {
             padding-right: @containerPadding;
-            padding-left:@containerPadding;
+            padding-left: @containerPadding;
             padding-top: 25px;
+
             @media @phone {
                 padding-right: 8px;
                 padding-left: 8px;
@@ -92,7 +63,8 @@
 
             .currency-switch {
                 position: relative;
-                .fair-btn{
+
+                .fair-btn {
                     float: left;
                     height: 50px;
                     background-color: #d5bd7a;
@@ -100,11 +72,14 @@
                     border-color: white;
                     border: none;
                     border-radius: 20px;
-                    font-size:1.4em;
-                    @media @phone{
+                    font-size: 1.4em;
+
+                    @media @phone {
                         height: 40px;
                     }
+
                 }
+
                 .currency-switch-btns {
                     float: right;
                     width: 200px;
@@ -117,6 +92,7 @@
                     @media @phone {
                         width: 160px;
                         height: 40px;
+                        border-width: 1px;
                     }
 
                     .bet_button {
@@ -128,7 +104,12 @@
                         background-color: transparent;
 
                         &:first-child {
-                            border-right: 2px solid @borderColor
+                            border-right: 2px solid @borderColor;
+
+                            @media @phone {
+                                border-right-width: 1px;
+                            }
+
                         }
 
                         &.active {
@@ -144,9 +125,9 @@
 
         }
 
-        .action {
+        .container-body {
             color: white;
-            padding: @containerPadding/2 @containerPadding @containerPadding @containerPadding;
+            padding: @containerPadding/2 @containerPadding @containerPadding/2 @containerPadding;
 
             @media @phone {
                 padding: 20px 12px;
@@ -181,7 +162,7 @@
                 }
 
                 &.box-value {
-                    height: 100px;
+                    height: 80px;
 
                     @media @phone {
                         height: 40px;
@@ -327,6 +308,51 @@
 
             }
 
+            .container-body-numbers {
+                padding-bottom: 20px;
+
+                @media @phone {
+                    padding-bottom: 0px;
+                }
+
+            }
+
+            .container-body-input {
+                .container-body-input-slider {
+                    margin-bottom: 20px;
+
+                    @media @phone {
+                        margin-bottom: 0px;
+                    }
+
+                }
+
+            }
+
+            .container-body-btn {
+                padding-top: 20px;
+
+                @media @phone {
+                    padding-top: 10px;
+                }
+
+                .container-body-btn-description {
+                    font-size: 1.5em;
+                    color: @fontColor;
+                    letter-spacing: 2px;
+
+                    i {
+                        margin-right: 6px;
+                    }
+
+                    &.container-body-btn-description-firstbet {
+                        margin-top: 12px;
+                    }
+
+                }
+
+            }
+
             .btn-login {
                 width: 70%;
                 height: 50px;
@@ -346,17 +372,6 @@
                     border-radius: 10px;
                     font-size: 1.8em;
                     letter-spacing: 2px;
-                }
-
-            }
-
-            .bet_description {
-                font-size: 1.5em;
-                color: @fontColor;
-                letter-spacing: 2px;
-
-                i {
-                    margin-right: 6px;
                 }
 
             }
@@ -438,9 +453,11 @@
                 border: none;
                 transform: translateY(-3px);
             }
+
         }
-        .auto-bet{
-            font-size:1.6em;
+
+        .auto-bet {
+            font-size: 1.6em;
             color: #939393;
             text-transform: uppercase;
             word-break: break-word;
@@ -449,34 +466,41 @@
             justify-content: center;
             align-items: center;
 
-            .ant-switch{
-                margin:0 10px;
-                border:1px solid @primaryColor;
-                .ant-switch-inner{
-                    font-size:14px;
+            .ant-switch {
+                margin: 0 10px;
+                border: 1px solid @primaryColor;
+
+                .ant-switch-inner {
+                    font-size: 14px;
                     color: @primaryColor;
                 }
+
             }
 
-            .ant-switch-loading-icon, .ant-switch:after{
-                background:#e74f4b;
+            .ant-switch-loading-icon, .ant-switch:after {
+                background: #e74f4b;
             }
-            
+
             .ant-switch-checked {
                 background-color: #E8AC57;
-                .ant-switch-inner{
+
+                .ant-switch-inner {
                     color: #fff;
                 }
+
             }
 
             .auto-bet-icon {
                 font-size: 1.2em;
 
-                @media @phone{
+                @media @phone {
                     font-size: 1.5em;
                 }
+
             }
+
         }
+
         .history {
             text-align: center;
 
@@ -579,6 +603,7 @@
             & * {
                 background-color: transparent;
             }
+
             .ant-table-placeholder {
                 border-bottom: none;
                 color: white;
@@ -597,21 +622,23 @@
                 text-align: center;
                 font-size: 1.5em;
                 background: @panelGrey;
+
                 @media @phone {
                     font-size: 0.8em;
                 }
 
             }
+
             .ant-table-tbody td {
                 @media @phone {
                     font-size: 0.8em;
                 }
 
             }
-            .ant-table-row:nth-child(2n-1){
-                background: rgba(0,0,0,0.2);
-            }
 
+            .ant-table-row:nth-child(2n-1) {
+                background: rgba(0, 0, 0, 0.2);
+            }
 
         }
 
@@ -644,10 +671,11 @@
             border-top: 1px solid white;
             margin: 0 0px;
 
-            @media @phone{
+            @media @phone {
                 margin-left: 0px;
                 margin-right: 0px;
             }
+
         }
 
         .ant-table-row {
@@ -719,18 +747,20 @@
             text-align: left;
             font-size: 1.6em;
 
-            @media @phone{
+            @media @phone {
                 font-size: 1.8em;
             }
+
         }
 
         .notification-title {
             font-weight: 700;
             margin-bottom: 15px;
 
-            @media @phone{
+            @media @phone {
                 margin-bottom: 8px;
             }
+
         }
 
         .notification-message {

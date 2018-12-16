@@ -98,7 +98,7 @@ class DicePage extends React.Component {
       dataIndex: 'bettor',
       key: 'bettor',
     }, {
-      title: intl.formatMessage({ id: 'dice.history.form.unber' }),
+      title: intl.formatMessage({ id: 'dice.history.form.under' }),
       dataIndex: 'rollUnder',
       key: 'rollUnder',
     },
@@ -140,7 +140,7 @@ class DicePage extends React.Component {
       ),
     },
     {
-      title: intl.formatMessage({ id: 'dice.history.form.unber' }),
+      title: intl.formatMessage({ id: 'dice.history.form.under' }),
       dataIndex: 'rollUnder',
       key: 'rollUnder',
     },
@@ -519,6 +519,20 @@ class DicePage extends React.Component {
     const columns = view === 'MobileView' ? mobileColumns : desktopColumns;
 
     const screenWidth = document.body.clientWidth; // If the screenWidth<1024, the autoBet tooltip will be actived by click;
+
+    const autoBetElement = (<div className="auto-bet">
+      <IntlMessages id="dice.play.autoBet" />
+      <Switch
+        disabled={username === this.defaultUsername}
+        checkedChildren={intl.formatMessage({ id: 'dice.play.autoBet.switch.on' })}
+        unCheckedChildren={intl.formatMessage({ id: 'dice.play.autoBet.switch.off' })}
+        onChange={this.onAutoBetSwitchChange}
+        size="default"
+      />
+      <Tooltip title={(<IntlMessages id="dice.play.autoTool" />)} trigger={screenWidth <= 1024 ? 'click' : 'hover'}>
+        <Icon type="question-circle" className="auto-bet-icon" />
+      </Tooltip>
+    </div>);
     return (
       <div>
         <div id="dicepage">
@@ -530,7 +544,7 @@ class DicePage extends React.Component {
                     <ReactNotification ref={this.notificationDOMRef} />
                     <div className="holderBorder">
 
-                      <div className="container-top">
+                      <div className="container-header">
                         <Row>
                           <Col span={12}>
                             <div className="currency-switch">
@@ -551,13 +565,13 @@ class DicePage extends React.Component {
                           </Col>
                         </Row>
                       </div>
-                      <div className="action">
+                      <div className="container-body">
 
-                        <Row type="flex" gutter={0}>
+                        <Row className="container-body-numbers" type="flex">
                           <Col span={8}>
                             <div className="box box-label">
                               <div className="box-inner">
-                                <div className="label"><IntlMessages id="dice.play.notice" />
+                                <div className="label">{view === 'DesktopView' ? <IntlMessages id="dice.play.rollUnderToWin" /> : <IntlMessages id="dice.play.rollUnder" />}
                                 </div>
                               </div>
                             </div>
@@ -604,26 +618,12 @@ class DicePage extends React.Component {
                             </div>
                           </Col>
                         </Row>
-                        <Row type="flex" justify="center">
-                          <Col span={24}>
-                            <Slider getValue={this.getSliderValue} defaultValue={DEFAULT_ROLL_NUMBER} min={MIN_SELECT_ROLL_NUMBER} max={MAX_SELECT_ROLL_NUMBER} step={1} />
+                        <Row className="container-body-input" type="flex" justify="center" align="middle">
+                          <Col xs={24} lg={20}>
+                            <div className="container-body-input-slider">
+                              <Slider getValue={this.getSliderValue} defaultValue={DEFAULT_ROLL_NUMBER} min={MIN_SELECT_ROLL_NUMBER} max={MAX_SELECT_ROLL_NUMBER} step={1} />
+                            </div>
                           </Col>
-                          <Col span={24} className="auto-bet">
-                            <IntlMessages id="dice.play.autoBet" />
-                            <Switch
-                              disabled={username === this.defaultUsername}
-                              checkedChildren={intl.formatMessage({ id: 'dice.play.autoBet.switch.on' })}
-                              unCheckedChildren={intl.formatMessage({ id: 'dice.play.autoBet.switch.off' })}
-                              onChange={this.onAutoBetSwitchChange}
-                              size="default"
-                            />
-                            <Tooltip title={(<IntlMessages id="dice.play.autoTool" />)} trigger={screenWidth <= 1024 ? 'click' : 'hover'}>
-                              <Icon type="question-circle" className="auto-bet-icon" />
-                            </Tooltip>
-                          </Col>
-                        </Row>
-
-                        <Row className="input-group-container" type="flex" justify="center" align="middle">
                           <Col xs={{ span: 12, order: 2 }} lg={{ span: 8, order: 1 }} >
 
                             <div className="box box-input">
@@ -678,18 +678,29 @@ class DicePage extends React.Component {
                             </div>
                           </Col>
                         </Row>
-                        <Row type="flex" justify="center" align="middle" gutter={{ xs: 12, lg: 24, xxl: 36 }}>
+                        <Row className="container-body-btn" type="flex" justify="center" align="middle" >
+                          {/* <Col span={24}>{autoBetElement}</Col> */}
                           <Col span={6}>
-                            <div className="bet_description"><IntlMessages id="dice.balance.eos" /></div>
+                            <div className="container-body-btn-description"><IntlMessages id="dice.balance.eos" /></div>
                             <div className="bet_value">{_.floor(eosBalance, 2)}<span className="highlight"> <IntlMessages id="dice.asset.eos" /></span></div>
                           </Col>
                           <Col span={12}>
-                            {username === this.defaultUsername ? <Button className="btn-login" size="large" type="primary" onClick={this.onLogInClicked}><IntlMessages id="dice.button.login" /></Button> : <Button className="btn-login" size="large" type="primary" onClick={this.onBetClicked}><IntlMessages id="dice.button.bet" /></Button>}
-                            <div className="bet_description"><Icon type="question-circle" /><IntlMessages id="dice.reward.firstbet" values={{ amount: appConfig.firstBetReward }} /></div>
+                            {autoBetElement}
+                            {username === this.defaultUsername
+                              ? <Button className="btn-login" size="large" type="primary" onClick={this.onLogInClicked}><IntlMessages id="dice.button.login" /></Button>
+                              : <Button className="btn-login" size="large" type="primary" onClick={this.onBetClicked}><IntlMessages id="dice.button.bet" /></Button>}
                           </Col>
                           <Col span={6}>
-                            <div className="bet_description"><IntlMessages id="dice.balance.betx" /></div>
+                            <div className="container-body-btn-description"><IntlMessages id="dice.balance.betx" /></div>
                             <div className="bet_value">{_.floor(betxBalance, 2)}<span className="highlight"> <IntlMessages id="dice.asset.betx" /></span></div>
+                          </Col>
+                          <Col xs={20} lg={16}>
+                            <div className="container-body-btn-description container-body-btn-description-firstbet">
+                              <Tooltip title={(<IntlMessages id="dice.reward.firstbet.tooltip" />)} trigger={screenWidth <= 1024 ? 'click' : 'hover'}>
+                                <Icon type="question-circle" />
+                              </Tooltip>
+                              <IntlMessages id="dice.reward.firstbet" values={{ amount: appConfig.firstBetReward }} />
+                            </div>
                           </Col>
                         </Row>
                       </div>
