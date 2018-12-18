@@ -28,8 +28,7 @@
 
   "dice.asset.eos":"EOS",
   "dice.asset.betx":"BETX",
-  "dice.balance.eos":"EOS Balance",
-  "dice.balance.betx":"BETX Balance",
+  "dice.balance":"{symbol} Balance",
   "dice.reward.firstbet":"Bet over 1 EOS to win {amount} BETX (distributed 20:00 UTC daily)",
   "dice.reward.firstbet.tooltip":"This reward can only apply to each account once, and will be distributed daily at 16:00 UTC (00:00 Beijing Time). If you have any question, please join our Telegram group.",
   "dice.reward.total":"Reward",
@@ -166,8 +165,10 @@
 
   "message.warn.loginFirst":"Please login first",
   "message.warn.emptyInput":"Chat input cannot be empty.",
+  "message.warn.autoBetTurnedOff": "Auto-bet is turned off due to currency switch",
 
   "message.error.amountInvalid":"Input amount is invalid.",
+  "message.error.unknownSymbol":"Unknown symbol.",
 
   "error.scatter.locked":"Scatter is locked. Please unlock it and refresh page.",
   "error.scatter.rejected":"Signature request is rejected in Scatter.",

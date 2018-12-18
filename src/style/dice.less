@@ -11,19 +11,74 @@
     padding-bottom: 40px;
 
     @media @phone {
-        padding-top: 80px;
+        padding-top: 70px;
         padding-bottom: 0px;
         width: 100vw;
     }
 
+    .currency-bar {
+        display: flex;
+
+        .currency-bar-item {
+            height: 60px;
+            width: 120px;
+            text-align: center;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid @borderColor;
+            border-radius: 10px;
+            margin: 0px 10px;
+
+            @media @phone {
+                border-width: 1px;
+                height: 40px;
+                margin: 0px 4px;
+            }
+
+            .img-container {
+                text-align: center;
+                margin-right: 8px;
+
+                img {
+                    height: 30px;
+                    width: auto;
+                }
+
+                @media @phone {
+                    margin-right: 0px;
+
+                    img {
+                        height: 25px;
+                    }
+
+                }
+
+            }
+
+            .text {
+                font-size: 1.5em;
+                color: @borderColor;
+
+                @media @phone {
+                    display: none;
+                }
+
+            }
+
+        }
+
+    }
+
     .container {
-        margin: 50px 0px 20px;
+        margin: 30px 0px 20px;
         text-align: center;
         position: relative;
         @containerPadding: 60px;
 
         @media @phone {
-            margin: 0px 0px 40px;
+            margin: 12px 0px 40px;
         }
 
         .holderBorder {
@@ -61,64 +116,18 @@
                 padding-top: 12px;
             }
 
-            .currency-switch {
-                position: relative;
+            .fair-btn {
+                float: right;
+                height: 50px;
+                background-color: #d5bd7a;
+                color: black;
+                border-color: white;
+                border: none;
+                border-radius: 20px;
+                font-size: 1.4em;
 
-                .fair-btn {
-                    float: left;
-                    height: 50px;
-                    background-color: #d5bd7a;
-                    color: black;
-                    border-color: white;
-                    border: none;
-                    border-radius: 20px;
-                    font-size: 1.4em;
-
-                    @media @phone {
-                        height: 40px;
-                    }
-
-                }
-
-                .currency-switch-btns {
-                    float: right;
-                    width: 200px;
-                    height: 50px;
-                    border: 2px solid @borderColor;
-                    font-size: 2em;
-                    border-radius: 28px;
-                    overflow: hidden;
-
-                    @media @phone {
-                        width: 160px;
-                        height: 40px;
-                        border-width: 1px;
-                    }
-
-                    .bet_button {
-                        height: 100%;
-                        width: 50%;
-                        border-radius: 0;
-                        color: @fontColor;
-                        border: none;
-                        background-color: transparent;
-
-                        &:first-child {
-                            border-right: 2px solid @borderColor;
-
-                            @media @phone {
-                                border-right-width: 1px;
-                            }
-
-                        }
-
-                        &.active {
-                            color: @borderColor;
-                            background-color: #313131;
-                        }
-
-                    }
-
+                @media @phone {
+                    height: 40px;
                 }
 
             }
@@ -127,10 +136,10 @@
 
         .container-body {
             color: white;
-            padding: @containerPadding/2 @containerPadding @containerPadding/2 @containerPadding;
+            padding: @containerPadding/4 @containerPadding @containerPadding/2 @containerPadding;
 
             @media @phone {
-                padding: 20px 12px;
+                padding: 20px 12px 20px;
             }
 
             .box {
@@ -156,7 +165,7 @@
                     height: 60px;
 
                     @media @phone {
-                        height: 60px;
+                        height: 24px;
                     }
 
                 }
@@ -223,41 +232,49 @@
 
                         }
 
-                        &.box-input-inner-reward>* {
-                            width: 80%;
+                        &.box-input-inner-reward{
 
-                            @media @phone {
-                                width: 100%;
+                            margin-left: 24px;
+                            
+                            @media @phone{
+                                margin-left: 12px;
                             }
+                        }
 
+                        .box-input-inner-input {
+                            padding-right: 32px;
+                        }
+
+                        .box-input-inner-addOn {
+                            position: absolute;
+                            top: 50%;
+                            .translate(0, -50%);
+                            right: 0;
+                            padding-right: 8px;
+                            color: @fontColor;
+                            font-size: 1.2em;
+
+                            @media @phone{
+                                font-weight: 500;
+                                font-size: 1.5em;
+                            }
                         }
 
                     }
 
                     .box-input-round-btn {
                         display: block;
-                        height: 40px;
-                        width: 40px;
                         background-color: @borderColor;
                         color: black;
-                        border: none;
-                        border-radius: 50%;
-                        font-size: 2em;
-                        font-weight: 100;
-                        cursor: pointer;
                         margin: 12px auto;
+                        border-color: @borderColor;
 
                         @media @phone {
-                            height: 30px;
-                            width: 30px;
                             margin: 5px auto;
-                            line-height: 30px;
-                            font-size: 3em;
-                            padding: 0px;
                         }
 
                         &:focus {
-                            outline: none;
+                            // outline: none;
                         }
 
                         &:hover {
@@ -470,6 +487,10 @@
                 margin: 0 10px;
                 border: 1px solid @primaryColor;
 
+                @media @phone{
+                    margin: 0 8px;
+                }
+
                 .ant-switch-inner {
                     font-size: 14px;
                     color: @primaryColor;
@@ -522,7 +543,7 @@
             ul {
                 display: block;
                 color: white;
-                height: 467px;
+                height: 550px;
                 margin: 0;
                 overflow-y: scroll;
                 border-radius: 10px;

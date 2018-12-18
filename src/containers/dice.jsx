@@ -4,7 +4,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { injectIntl, intlShape } from 'react-intl';
-import { Icon, Row, Col, Table, Input, Button, Tabs, Popover, message, Switch, Tooltip } from 'antd';
+import { Icon, Row, Col, Table, Input, Button, Tabs, message, Switch, Tooltip } from 'antd';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import moment from 'moment';
@@ -24,6 +24,7 @@ import appActions from '../redux/app/actions';
 import IntlMessages from '../components/utility/intlMessages';
 import { appConfig } from '../settings';
 import { randomString } from '../helpers/utility';
+import CurrencyBar from '../components/currencyBar';
 
 cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
@@ -36,8 +37,6 @@ const MAX_SELECT_ROLL_NUMBER = 96;
 const DEFAULT_ROLL_NUMBER = 50;
 const DIVIDEND = 0.98;
 
-const MIN_INPUT_BET_AMOUNT = 0.1;
-const MAX_INPUT_BET_AMOUNT = 100000;
 const MAX_FLOAT_DIGITS = 4;
 const SEED_STR_LENGTH = 21;
 
@@ -58,6 +57,43 @@ function calculatePayoutOnWin(betAmount, payout) {
   return betAmount * payout;
 }
 
+const symbols = [
+  {
+    symbol: 'EOS', min: 0.1, max: 10000,
+  },
+  {
+    symbol: 'BETX', min: 10, max: 10000,
+  },
+  {
+    symbol: 'EBTC', min: 0.001, max: 10000,
+  },
+  {
+    symbol: 'EETH', min: 0.01, max: 10000,
+  },
+  {
+    symbol: 'EUSD', min: 1, max: 10000,
+  },
+];
+
+function getMinBySymbol(symbol) {
+  const symbolMatch = _.find(symbols, { symbol });
+
+  if (_.isUndefined(symbolMatch)) {
+    return 1;
+  }
+
+  return symbolMatch.min;
+}
+
+function getMaxBySymbol(symbol) {
+  const symbolMatch = _.find(symbols, { symbol });
+
+  if (_.isUndefined(symbolMatch)) {
+    return 10000;
+  }
+
+  return symbolMatch.max;
+}
 
 class DicePage extends React.Component {
   constructor(props) {
@@ -72,16 +108,13 @@ class DicePage extends React.Component {
 
     this.defaultUsername = `Guest-${_.random(100000, 999999, false)}`;
     this.state = {
-
       betAmount,
       rollNumber,
       payout,
       payoutOnWin,
       winChance,
-      eosBalance: 0,
-      betxBalance: 0,
+      balance: 0,
       username: this.defaultUsername,
-      betAsset: 'EOS',
       seed: randomString(SEED_STR_LENGTH),
       notifications: [],
       fairModalShow: false,
@@ -175,6 +208,7 @@ class DicePage extends React.Component {
     this.notificationDOMRef = React.createRef();
     this.onAutoBetSwitchChange = this.onAutoBetSwitchChange.bind(this);
     this.resetSeed = this.resetSeed.bind(this);
+    this.getBalanceBySymbol = this.getBalanceBySymbol.bind(this);
   }
 
   componentWillMount() {
@@ -190,26 +224,37 @@ class DicePage extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const {
-      username, eosBalance, betxBalance, currentBets,
+      username, selectedSymbol: newSelectedSymbol, currentBets,
     } = nextProps;
 
     const {
-      intl, deleteCurrentBetReq, getBalancesReq, getAccountInfoReq,
+      intl, deleteCurrentBetReq, getBalancesReq, getAccountInfoReq, selectedSymbol,
     } = this.props;
     const {
       notifications,
       username: stateUsername,
       lastBetNotificationId,
-      autoBetEnabled,
     } = this.state;
+    let { autoBetEnabled } = this.state;
     const { notificationDOMRef, onBetClicked } = this;
 
     const fieldsToUpdate = {};
 
     // Update username in state if we received one from props; this means Scatter login succeeded
     fieldsToUpdate.username = username || this.defaultUsername;
-    fieldsToUpdate.eosBalance = _.isNumber(eosBalance) ? eosBalance : 0;
-    fieldsToUpdate.betxBalance = _.isNumber(betxBalance) ? betxBalance : 0;
+
+    // Turn off autobet when switching symbol and change betAmount to min
+    if (newSelectedSymbol !== selectedSymbol) {
+      if (autoBetEnabled) {
+        autoBetEnabled = false;
+        fieldsToUpdate.autoBetEnabled = autoBetEnabled;
+        message.warning(intl.formatMessage({
+          id: 'message.warn.autoBetTurnedOff',
+        }));
+      }
+
+      fieldsToUpdate.betAmount = getMinBySymbol(newSelectedSymbol);
+    }
 
     // console.log('componentWillReceiveProps.currentBets', currentBets);
 
@@ -314,8 +359,8 @@ class DicePage extends React.Component {
   }
 
   onInputNumberChange(evt) {
-    const { payout, betAsset } = this.state;
-    const { intl } = this.props;
+    const { payout } = this.state;
+    const { intl, selectedSymbol } = this.props;
     const { formatBetAmountStr } = this;
 
     const { value } = evt.target;
@@ -329,13 +374,15 @@ class DicePage extends React.Component {
       return;
     }
 
+    const minAmount = getMinBySymbol(selectedSymbol);
+
     if ((!_.isNaN(value) && reg.test(value))) {
-      if (_.toNumber(value) < MIN_INPUT_BET_AMOUNT) {
+      if (_.toNumber(value) < minAmount) {
         message.warning(intl.formatMessage({
           id: 'message.warn.lessThanMinBet',
         }, {
-          amount: MIN_INPUT_BET_AMOUNT.toFixed(4),
-          asset: betAsset,
+          amount: minAmount.toFixed(4),
+          asset: selectedSymbol,
         }));
       }
 
@@ -403,10 +450,12 @@ class DicePage extends React.Component {
 
   onBetClicked() {
     const {
-      rollNumber, username, betAmount, betAsset, seed,
+      rollNumber, username, betAmount, seed,
     } = this.state;
 
-    const { transferReq, setErrorMessageReq, referrer } = this.props;
+    const {
+      transferReq, setErrorMessageReq, referrer, selectedSymbol,
+    } = this.props;
 
     if (username === this.defaultUsername) {
       setErrorMessageReq('error.page.usernamenotfound');
@@ -416,11 +465,31 @@ class DicePage extends React.Component {
     transferReq({
       bettor: username,
       betAmount,
-      betAsset,
+      betAsset: selectedSymbol,
       rollUnder: rollNumber,
       referrer,
       seed, // We haven't set up a function for user custom seed
     });
+  }
+
+  getBalanceBySymbol(symbol) {
+    const {
+      eosBalance, betxBalance, ebtcBalance, eethBalance, eusdBalance,
+    } = this.props;
+    switch (symbol) {
+      case 'EOS':
+        return eosBalance;
+      case 'BETX':
+        return betxBalance;
+      case 'EBTC':
+        return ebtcBalance;
+      case 'EETH':
+        return eethBalance;
+      case 'EUSD':
+        return eusdBalance;
+      default:
+        return 0;
+    }
   }
 
   /**
@@ -428,19 +497,22 @@ class DicePage extends React.Component {
  * @return {[type]} [description]
  */
   formatBetAmountStr(betAmountStr) {
-    const { balance, betAsset } = this.state;
-    const { intl } = this.props;
+    const { balance } = this.state;
+    const { intl, selectedSymbol } = this.props;
 
-    const lowBound = MIN_INPUT_BET_AMOUNT;
-    const highBound = _.min([MAX_INPUT_BET_AMOUNT, balance]);
+    const minAmount = getMinBySymbol(selectedSymbol);
+    const maxAmount = getMaxBySymbol(selectedSymbol);
+
+    const lowBound = minAmount;
+    const highBound = maxAmount;
     _.clamp(_.toNumber(betAmountStr), lowBound, highBound);
 
     if (_.toNumber(betAmountStr) < lowBound) {
       message.warning(intl.formatMessage({
         id: 'message.warn.lessThanMinBet',
       }, {
-        amount: MIN_INPUT_BET_AMOUNT,
-        asset: betAsset,
+        amount: minAmount,
+        asset: selectedSymbol,
       }));
 
       return lowBound;
@@ -448,8 +520,8 @@ class DicePage extends React.Component {
       message.warning(intl.formatMessage({
         id: 'message.warn.greaterThanMaxBet',
       }, {
-        amount: MAX_INPUT_BET_AMOUNT,
-        asset: betAsset,
+        amount: maxAmount,
+        asset: selectedSymbol,
       }));
       return highBound;
     }
@@ -489,13 +561,12 @@ class DicePage extends React.Component {
   render() {
     const { desktopColumns, mobileColumns } = this;
     const {
-      betAmount, payoutOnWin, winChance, payout, rollNumber, eosBalance, betxBalance, username, seed,
+      betAmount, payoutOnWin, winChance, payout, rollNumber, username, seed,
     } = this.state;
 
     const {
-      betHistory, locale, view, intl,
+      betHistory, locale, view, intl, selectedSymbol,
     } = this.props;
-
 
     const momentLocale = (locale === 'en') ? 'en' : 'zh-cn';
 
@@ -533,6 +604,9 @@ class DicePage extends React.Component {
         <Icon type="question-circle" className="auto-bet-icon" />
       </Tooltip>
     </div>);
+
+    const currentSymbol = (selectedSymbol === 'BETX') ? 'EOS' : selectedSymbol;
+
     return (
       <div>
         <div id="dicepage">
@@ -540,29 +614,19 @@ class DicePage extends React.Component {
             <Row gutter={40}>
               <Col xs={24} lg={16}>
                 <section>
+                  <CurrencyBar />
                   <div className="container">
                     <ReactNotification ref={this.notificationDOMRef} />
                     <div className="holderBorder">
 
                       <div className="container-header">
                         <Row>
-                          <Col span={12}>
+                          <Col span={24}>
                             <div className="currency-switch">
                               <Button onClick={() => this.toggleFairModal(true)} className="fair-btn" icon="trophy"><IntlMessages id="dice.play.fairBtn" /></Button>
                             </div>
                           </Col>
-                          <Col span={12}>
-                            <div className="currency-switch">
-                              <div className="currency-switch-btns">
-                                <Button size="large" className="bet_button active" type="default" data-value="EOS">EOS
-                                </Button>
-                                <Popover content={(<IntlMessages id="dice.alert.comingsoon" />)}>
-                                  <Button size="large" className="bet_button" type="default" data-value="BETX" >BETX
-                                  </Button>
-                                </Popover>
-                              </div>
-                            </div>
-                          </Col>
+
                         </Row>
                       </div>
                       <div className="container-body">
@@ -624,20 +688,21 @@ class DicePage extends React.Component {
                               <Slider getValue={this.getSliderValue} defaultValue={DEFAULT_ROLL_NUMBER} min={MIN_SELECT_ROLL_NUMBER} max={MAX_SELECT_ROLL_NUMBER} step={1} />
                             </div>
                           </Col>
-                          <Col xs={{ span: 12, order: 2 }} lg={{ span: 8, order: 1 }} >
+                          <Col xs={{ span: 14, order: 2 }} lg={{ span: 8, order: 1 }} >
 
                             <div className="box box-input">
                               <div className="box-inner">
                                 <Row type="flex" justify="center" align="middle">
-                                  <Col span={16}>
+                                  <Col xs={18} lg={16}>
                                     <div className="box-input-inner">
                                       <span className="label"><IntlMessages id="dice.play.amount" /></span>
-                                      <Input size="large" className="inputBorder" onChange={this.onInputNumberChange} value={betAmount} />
+                                      <Input className="box-input-inner-input inputBorder" size="large" onChange={this.onInputNumberChange} value={betAmount} />
+                                      <span className="box-input-inner-addOn">{selectedSymbol}</span>
                                     </div>
                                   </Col>
-                                  <Col span={8}>
-                                    <button className="box-input-round-btn" onClick={this.onBetAmountButtonClick} data-value="1">+</button>
-                                    <button className="box-input-round-btn" onClick={this.onBetAmountButtonClick} data-value="-1">-</button>
+                                  <Col xs={6} lg={8}>
+                                    <Button type="default" className="box-input-round-btn" shape="circle" icon="plus" size={view === 'DesktopView' ? 'default' : 'small'} onClick={this.onBetAmountButtonClick} data-value="1" />
+                                    <Button type="default" className="box-input-round-btn" shape="circle" icon="minus" size={view === 'DesktopView' ? 'default' : 'small'} onClick={this.onBetAmountButtonClick} data-value="-1" />
                                   </Col>
 
                                 </Row>
@@ -667,12 +732,13 @@ class DicePage extends React.Component {
                               </div>
                             </div>
                           </Col>
-                          <Col xs={{ span: 12, order: 3 }} lg={{ span: 8, order: 3 }} >
+                          <Col xs={{ span: 10, order: 3 }} lg={{ span: 8, order: 3 }} >
                             <div className="box box-input">
                               <div className="box-inner">
                                 <div className="box-input-inner box-input-inner-reward">
                                   <span className="label"><IntlMessages id="dice.reward.total" /></span>
-                                  <Input size="large" disabled className="inputBorder" value={_.floor(payoutOnWin, 4)} />
+                                  <Input className="box-input-inner-input inputBorder" size="large" disabled value={_.floor(payoutOnWin, 4)} />
+                                  <span className="box-input-inner-addOn">{selectedSymbol}</span>
                                 </div>
                               </div>
                             </div>
@@ -681,8 +747,8 @@ class DicePage extends React.Component {
                         <Row className="container-body-btn" type="flex" justify="center" align="middle" >
                           {/* <Col span={24}>{autoBetElement}</Col> */}
                           <Col span={6}>
-                            <div className="container-body-btn-description"><IntlMessages id="dice.balance.eos" /></div>
-                            <div className="bet_value">{_.floor(eosBalance, 2)}<span className="highlight"> <IntlMessages id="dice.asset.eos" /></span></div>
+                            <div className="container-body-btn-description"><IntlMessages id="dice.balance" values={{ symbol: currentSymbol }} /></div>
+                            <div className="bet_value">{_.floor(this.getBalanceBySymbol(currentSymbol), 2)}<span className="highlight"> { currentSymbol }</span></div>
                           </Col>
                           <Col span={12}>
                             {autoBetElement}
@@ -691,8 +757,8 @@ class DicePage extends React.Component {
                               : <Button className="btn-login" size="large" type="primary" onClick={this.onBetClicked}><IntlMessages id="dice.button.bet" /></Button>}
                           </Col>
                           <Col span={6}>
-                            <div className="container-body-btn-description"><IntlMessages id="dice.balance.betx" /></div>
-                            <div className="bet_value">{_.floor(betxBalance, 2)}<span className="highlight"> <IntlMessages id="dice.asset.betx" /></span></div>
+                            <div className="container-body-btn-description"><IntlMessages id="dice.balance" values={{ symbol: 'BETX' }} /></div>
+                            <div className="bet_value">{_.floor(this.getBalanceBySymbol('BETX'), 2)}<span className="highlight"> <IntlMessages id="dice.asset.betx" /></span></div>
                           </Col>
                           <Col xs={20} lg={16}>
                             <div className="container-body-btn-description container-body-btn-description-firstbet">
@@ -712,6 +778,8 @@ class DicePage extends React.Component {
               <Col xs={24} lg={8}>
 
                 <section className="hideOnMobile">
+                  <div style={{ height: '60px' }} />
+
                   <div className="container">
                     <div className="holderBorder">
                       <Chatroom username={username} />
@@ -787,6 +855,10 @@ DicePage.propTypes = {
   username: PropTypes.string,
   eosBalance: PropTypes.number,
   betxBalance: PropTypes.number,
+  ebtcBalance: PropTypes.number,
+  eethBalance: PropTypes.number,
+  eusdBalance: PropTypes.number,
+
   intl: intlShape.isRequired,
   successMessage: PropTypes.string,
   fetchBetHistoryReq: PropTypes.func,
@@ -796,6 +868,7 @@ DicePage.propTypes = {
   deleteCurrentBetReq: PropTypes.func,
   getBalancesReq: PropTypes.func,
   getAccountInfoReq: PropTypes.func,
+  selectedSymbol: PropTypes.string,
 };
 
 DicePage.defaultProps = {
@@ -807,6 +880,9 @@ DicePage.defaultProps = {
   username: undefined,
   eosBalance: undefined,
   betxBalance: undefined,
+  ebtcBalance: undefined,
+  eethBalance: undefined,
+  eusdBalance: undefined,
   getIdentityReq: undefined,
   setErrorMessageReq: undefined,
   successMessage: undefined,
@@ -816,6 +892,7 @@ DicePage.defaultProps = {
   deleteCurrentBetReq: undefined,
   getBalancesReq: undefined,
   getAccountInfoReq: undefined,
+  selectedSymbol: undefined,
 };
 
 const mapStateToProps = (state) => ({
@@ -825,10 +902,14 @@ const mapStateToProps = (state) => ({
   username: state.App.get('username'),
   eosBalance: state.App.get('eosBalance'),
   betxBalance: state.App.get('betxBalance'),
+  ebtcBalance: state.App.get('ebtcBalance'),
+  eethBalance: state.App.get('eethBalance'),
+  eusdBalance: state.App.get('eusdBalance'),
   successMessage: state.App.get('successMessage'),
   referrer: state.App.get('ref'),
   view: state.App.get('view'),
   currentBets: state.Bet.get('currentBets'),
+  selectedSymbol: state.App.get('selectedSymbol'),
 });
 
 const mapDispatchToProps = (dispatch) => ({
