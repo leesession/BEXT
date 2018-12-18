@@ -6,7 +6,6 @@ import { injectIntl, intlShape } from 'react-intl';
 
 import PropTypes from 'prop-types';
 import { message, Button, Modal, Input, Row, Col } from 'antd';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 import IntlMessages from '../components/utility/intlMessages';
 import { siteConfig } from '../settings';
 
