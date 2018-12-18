@@ -11,7 +11,6 @@ ScatterJS.plugins(new ScatterEOS());
 
 const BETX_TOKEN_CONTRACT = 'thebetxtoken';
 const BETX_DICE_CONTRACT = 'thebetxowner';
-const EOS_TOKEN_CONTRACT = 'eosio.token';
 const BETX_DIVID_CONTRACT = 'thebetxdivid';
 
 // Same constants as contracts
@@ -33,8 +32,6 @@ class ScatterHelper {
     this.connect = this.connect.bind(this);
     this.getIdentity = this.getIdentity.bind(this);
     this.logout = this.logout.bind(this);
-    this.getEOSBalance = this.getEOSBalance.bind(this);
-    this.getBETXBalance = this.getBETXBalance.bind(this);
     this.transfer = this.transfer.bind(this);
     this.handleScatterError = this.handleScatterError.bind(this);
     this.parseAsset = this.parseAsset.bind(this);
@@ -47,6 +44,7 @@ class ScatterHelper {
     this.getContractStakeAndDividend = this.getContractStakeAndDividend.bind(this);
     this.getBETXCirculation = this.getBETXCirculation.bind(this);
     this.claimDividend = this.claimDividend.bind(this);
+    this.getCurrencyBalance = this.getCurrencyBalance.bind(this);
   }
 
   // static async createInstance() {
@@ -111,7 +109,7 @@ class ScatterHelper {
     const { api, account } = this;
 
     const {
-      bettor, betAmount, betAsset, rollUnder, referrer, seed,
+      bettor, betAmount, betAsset, rollUnder, referrer, seed, contract,
     } = params;
 
     const amount = _.floor(betAmount, 4).toFixed(4);
@@ -131,8 +129,8 @@ class ScatterHelper {
     // Never assume the account's permission/authority. Always take it from the returned account.
     const transactionOptions = { authorization: [`${account.name}@${account.authority}`] };
 
-    return api.transaction(EOS_TOKEN_CONTRACT, (contract) =>
-      contract.transfer(data, transactionOptions));
+    return api.transaction(contract, (contractObj) =>
+      contractObj.transfer(data, transactionOptions));
   }
 
   getAccount(name) {
@@ -144,30 +142,17 @@ class ScatterHelper {
     }));
   }
 
-  getEOSBalance(name) {
-    const { readEos, Eos } = this;
-    return readEos.getCurrencyBalance(EOS_TOKEN_CONTRACT, name, 'EOS').then((result) => {
+  getCurrencyBalance(params) {
+    const { name, contract, symbol } = params;
+    const { readEos, parseAsset } = this;
+    return readEos.getCurrencyBalance(contract, name, symbol).then((result) => {
       if (!_.isEmpty(result)) {
-        const balObj = Eos.modules.format.parseAsset(result[0]);
+        const balObj = parseAsset(result[0]);
         if (balObj && balObj.amount) {
           return Promise.resolve(_.toNumber(balObj.amount));
         }
       }
-
-      return Promise.resolve();
-    });
-  }
-
-  getBETXBalance(name) {
-    const { readEos, Eos } = this;
-    return readEos.getCurrencyBalance(BETX_TOKEN_CONTRACT, name, 'BETX').then((result) => {
-      if (!_.isEmpty(result)) {
-        const balObj = Eos.modules.format.parseAsset(result[0]);
-        if (balObj && balObj.amount) {
-          return Promise.resolve(_.toNumber(balObj.amount));
-        }
-      }
-      return Promise.resolve();
+      return Promise.resolve(0);
     });
   }
 
