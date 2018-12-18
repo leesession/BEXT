@@ -21,6 +21,9 @@ const actions = {
   GET_NET_USAGE_RESULT: 'GET_NET_USAGE_RESULT',
   GET_EOS_BALANCE_RESULT: 'GET_EOS_BALANCE_RESULT',
   GET_BETX_BALANCE_RESULT: 'GET_BETX_BALANCE_RESULT',
+  GET_EBTC_BALANCE_RESULT: 'GET_EBTC_BALANCE_RESULT',
+  GET_EETH_BALANCE_RESULT: 'GET_EETH_BALANCE_RESULT',
+  GET_EUSD_BALANCE_RESULT: 'GET_EUSD_BALANCE_RESULT',
   TRANSFER_REQUEST: 'TRANSFER_REQUEST',
   SET_SUCCESS_MESSAGE: 'SET_SUCCESS_MESSAGE',
   SUCCESS_MESSAGE: 'SUCCESS_MESSAGE',
@@ -28,6 +31,7 @@ const actions = {
   ERROR_MESSAGE: 'ERROR_MESSAGE',
   SET_REF: 'SET_REF',
   TOGGLE_TOPBAR: 'TOGGLE_TOPBAR',
+  SET_CURRENCY: 'SET_CURRENCY',
   toggleAll: (width, height) => {
     const view = getView(width);
     const collapsed = view !== 'DesktopView';
@@ -68,6 +72,10 @@ const actions = {
   getBalances: (name) => ({
     type: actions.GET_BALANCES,
     name,
+  }),
+  setCurrency: (value) => ({
+    type: actions.SET_CURRENCY,
+    value,
   }),
   logout: () => ({
     type: actions.LOG_OUT,

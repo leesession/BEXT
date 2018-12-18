@@ -1,12 +1,32 @@
+/* eslint no-restricted-syntax:0 */
 import { call, all, takeEvery, put } from 'redux-saga/effects';
+import _ from 'lodash';
 
 import actions from './actions';
 import betActions from '../bet/actions';
 import ScatterHelper from '../../helpers/scatter';
 
 const {
-  handleScatterError, getIdentity, transfer, getBETXBalance, getAccount, logout,
+  handleScatterError, getIdentity, transfer, getAccount, logout, getCurrencyBalance,
 } = ScatterHelper;
+
+const symbols = [
+  {
+    symbol: 'EOS', contract: 'eosio.token', putType: actions.GET_EOS_BALANCE_RESULT,
+  },
+  {
+    symbol: 'BETX', contract: 'thebetxtoken', putType: actions.GET_BETX_BALANCE_RESULT,
+  },
+  {
+    symbol: 'EBTC', contract: 'bitpietokens', putType: actions.GET_EBTC_BALANCE_RESULT,
+  },
+  {
+    symbol: 'EETH', contract: 'bitpietokens', putType: actions.GET_EETH_BALANCE_RESULT,
+  },
+  {
+    symbol: 'EUSD', contract: 'bitpietokens', putType: actions.GET_EUSD_BALANCE_RESULT,
+  },
+];
 
 function* getIdentityRequest() {
   try {
@@ -32,23 +52,28 @@ function* getIdentityRequest() {
   }
 }
 
+// function getBalanceForAll(){
+//   return Promise.all(symbols.map(entry=>{
+
+//   }));
+// }
+
 function* getBalancesRequest(action) {
   const { name } = action;
 
   try {
-    // const eosBalance = yield call(getEOSBalance, name);
+    for (const entry of Array.from(symbols)) {
+      const balance = yield call(getCurrencyBalance, { name, contract: entry.contract, symbol: entry.symbol });
+      yield put({
+        type: entry.putType,
+        value: balance,
+      });
+    }
 
-    // yield put({
-    //   type: actions.GET_EOS_BALANCE_RESULT,
-    //   value: eosBalance,
+    // yield Promise.all(files.map(file => fs.readFileAsync(file)))
+    // _.each(symbols, function* (entry) {
+
     // });
-
-    const betxBalance = yield call(getBETXBalance, name);
-
-    yield put({
-      type: actions.GET_BETX_BALANCE_RESULT,
-      value: betxBalance,
-    });
   } catch (err) {
     const message = yield call(handleScatterError, err);
 
@@ -64,11 +89,6 @@ function* getAccountRequest(action) {
 
   try {
     const response = yield call(getAccount, name);
-
-    yield put({
-      type: actions.GET_EOS_BALANCE_RESULT,
-      value: response.eosBalance,
-    });
 
     yield put({
       type: actions.GET_CPU_USAGE_RESULT,
@@ -89,6 +109,19 @@ function* getAccountRequest(action) {
 
 function* transferRequest(action) {
   const params = action.payload;
+
+  const matchSymbol = _.find(symbols, { symbol: params.betAsset });
+
+  if (_.isUndefined(matchSymbol)) {
+    yield put({
+      type: actions.SET_ERROR_MESSAGE,
+      message: 'message.error.unknownSymbol',
+    });
+
+    return;
+  }
+
+  params.contract = matchSymbol.contract;
 
   try {
     const response = yield call(transfer, params);
