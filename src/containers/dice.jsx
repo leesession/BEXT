@@ -234,6 +234,7 @@ class DicePage extends React.Component {
       notifications,
       username: stateUsername,
       lastBetNotificationId,
+      payout,
     } = this.state;
     let { autoBetEnabled } = this.state;
     const { notificationDOMRef, onBetClicked } = this;
@@ -254,6 +255,8 @@ class DicePage extends React.Component {
       }
 
       fieldsToUpdate.betAmount = getMinBySymbol(newSelectedSymbol);
+      const payoutOnWin = calculatePayoutOnWin(fieldsToUpdate.betAmount, payout);
+      fieldsToUpdate.payoutOnWin = payoutOnWin;
     }
 
     // console.log('componentWillReceiveProps.currentBets', currentBets);
