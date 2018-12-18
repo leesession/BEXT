@@ -12,19 +12,19 @@ const {
 
 const symbols = [
   {
-    symbol: 'EOS', contract: 'eosio.token', putType: actions.GET_EOS_BALANCE_RESULT,
+    symbol: 'EOS', precision: 4, contract: 'eosio.token', putType: actions.GET_EOS_BALANCE_RESULT,
   },
   {
-    symbol: 'BETX', contract: 'thebetxtoken', putType: actions.GET_BETX_BALANCE_RESULT,
+    symbol: 'BETX', precision: 4, contract: 'thebetxtoken', putType: actions.GET_BETX_BALANCE_RESULT,
   },
   {
-    symbol: 'EBTC', contract: 'bitpietokens', putType: actions.GET_EBTC_BALANCE_RESULT,
+    symbol: 'EBTC', precision: 8, contract: 'bitpietokens', putType: actions.GET_EBTC_BALANCE_RESULT,
   },
   {
-    symbol: 'EETH', contract: 'bitpietokens', putType: actions.GET_EETH_BALANCE_RESULT,
+    symbol: 'EETH', precision: 8, contract: 'bitpietokens', putType: actions.GET_EETH_BALANCE_RESULT,
   },
   {
-    symbol: 'EUSD', contract: 'bitpietokens', putType: actions.GET_EUSD_BALANCE_RESULT,
+    symbol: 'EUSD', precision: 8, contract: 'bitpietokens', putType: actions.GET_EUSD_BALANCE_RESULT,
   },
 ];
 
@@ -52,28 +52,19 @@ function* getIdentityRequest() {
   }
 }
 
-// function getBalanceForAll(){
-//   return Promise.all(symbols.map(entry=>{
-
-//   }));
-// }
-
 function* getBalancesRequest(action) {
   const { name } = action;
 
   try {
     for (const entry of Array.from(symbols)) {
-      const balance = yield call(getCurrencyBalance, { name, contract: entry.contract, symbol: entry.symbol });
+      const balance = yield call(getCurrencyBalance, {
+        name, contract: entry.contract, symbol: entry.symbol,
+      });
       yield put({
         type: entry.putType,
         value: balance,
       });
     }
-
-    // yield Promise.all(files.map(file => fs.readFileAsync(file)))
-    // _.each(symbols, function* (entry) {
-
-    // });
   } catch (err) {
     const message = yield call(handleScatterError, err);
 
@@ -122,6 +113,7 @@ function* transferRequest(action) {
   }
 
   params.contract = matchSymbol.contract;
+  params.precision = matchSymbol.precision;
 
   try {
     const response = yield call(transfer, params);

@@ -109,10 +109,10 @@ class ScatterHelper {
     const { api, account } = this;
 
     const {
-      bettor, betAmount, betAsset, rollUnder, referrer, seed, contract,
+      bettor, betAmount, betAsset, rollUnder, referrer, seed, contract, precision,
     } = params;
 
-    const amount = _.floor(betAmount, 4).toFixed(4);
+    const amount = _.floor(betAmount, precision).toFixed(precision);
 
     // Construct json params
     const data = {
@@ -416,7 +416,7 @@ class ScatterHelper {
             if (assertMessageObj) {
               if (assertMessageObj.message.indexOf('Bet less than max') >= 0) {
                 return Promise.resolve('error.scatter.betLessThanMax');
-              } else if (assertMessageObj.message.indexOf('overdrawn balance') >= 0) {
+              } else if (assertMessageObj.message.indexOf('overdrawn balance') >= 0 || assertMessageObj.message.indexOf('no balance object found') >= 0) {
                 return Promise.resolve('error.scatter.overdrawnBalance');
               }
             }
