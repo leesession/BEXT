@@ -2,6 +2,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
+import classNames from 'classnames';
 
 import PropTypes from 'prop-types';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -48,16 +49,20 @@ class CurrenyBar extends React.Component {
     const { selectedSymbol } = this.props;
 
     return (<div className="currency-bar">
-      {_.map(currencyArray, (item) => (
-        <div className="currency-bar-item" key={item.value} onClick={this.onItemClicked} data-value={item.value}>
+      {_.map(currencyArray, (item) => {
+        const itemClassname = classNames({
+          'currency-bar-item': true,
+          'currency-bar-item-highlight': selectedSymbol === item.value,
+        });
+        return (<div className={itemClassname} key={item.value} onClick={this.onItemClicked} data-value={item.value}>
           <div className="img-container" data-value={item.value}>
             <CloudinaryImage publicId={item.imgId} options={{ height: 40, crop: 'scale' }} />
           </div>
           <div className="text">
             {item.value}
           </div>
-        </div>
-      ))}
+        </div>);
+      })}
     </div>);
   }
 }
