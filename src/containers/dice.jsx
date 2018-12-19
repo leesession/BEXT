@@ -377,19 +377,8 @@ class DicePage extends React.Component {
       return;
     }
 
-    const minAmount = getMinBySymbol(selectedSymbol);
-
     if ((!_.isNaN(value) && reg.test(value))) {
-      if (_.toNumber(value) < minAmount) {
-        message.warning(intl.formatMessage({
-          id: 'message.warn.lessThanMinBet',
-        }, {
-          amount: minAmount.toFixed(4),
-          asset: selectedSymbol,
-        }));
-      }
-
-      const betAmount = formatBetAmountStr(value);
+      const betAmount = value;
       const payoutOnWin = calculatePayoutOnWin(betAmount, payout);
 
       this.setState({
@@ -453,8 +442,10 @@ class DicePage extends React.Component {
 
   onBetClicked() {
     const {
-      rollNumber, username, betAmount, seed,
+      rollNumber, username, seed,
     } = this.state;
+
+    let { betAmount } = this.state;
 
     const {
       transferReq, setErrorMessageReq, referrer, selectedSymbol,
@@ -463,6 +454,15 @@ class DicePage extends React.Component {
     if (username === this.defaultUsername) {
       setErrorMessageReq('error.page.usernamenotfound');
       return;
+    }
+
+    const minAmount = getMinBySymbol(selectedSymbol);
+
+    if (betAmount < minAmount) {
+      betAmount = minAmount;
+      this.setState({
+        betAmount,
+      });
     }
 
     transferReq({
