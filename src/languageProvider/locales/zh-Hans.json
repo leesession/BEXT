@@ -52,7 +52,7 @@
   "dice.play.autoBet.switch.on": "开",
   "dice.play.autoBet.switch.off": "关",
   "dice.play.autoTool": "警告：打开自动投注将导致您的赌注继续放置，直到自动投注被关闭。当关闭自动投注时可能会有轻微的延迟，从而导致额外的流动",
-  "dice.play.fairBtn": "玩法与公平",
+  "dice.play.fairBtn": "公平性验证",
 
   "dice.alert.comingsoon":"即将上线",
   "dice.send":"发送",
