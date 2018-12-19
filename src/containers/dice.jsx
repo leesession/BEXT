@@ -65,13 +65,13 @@ const symbols = [
     symbol: 'BETX', min: 10, max: 10000,
   },
   {
-    symbol: 'EBTC', min: 0.001, max: 10000,
+    symbol: 'EBTC', min: 0.0001, max: 10000,
   },
   {
-    symbol: 'EETH', min: 0.01, max: 10000,
+    symbol: 'EETH', min: 0.001, max: 10000,
   },
   {
-    symbol: 'EUSD', min: 1, max: 10000,
+    symbol: 'EUSD', min: 0.1, max: 10000,
   },
 ];
 
