@@ -4,6 +4,7 @@ import ScatterEOS from 'scatterjs-plugin-eosjs';
 import _ from 'lodash';
 import Eosjs from 'eosjs';
 import { appConfig } from '../settings';
+import { parseAsset } from './utility';
 const EosApi = require('eosjs-api');
 
 // Don't forget to tell ScatterJS which plugins you are using.
@@ -34,7 +35,6 @@ class ScatterHelper {
     this.logout = this.logout.bind(this);
     this.transfer = this.transfer.bind(this);
     this.handleScatterError = this.handleScatterError.bind(this);
-    this.parseAsset = this.parseAsset.bind(this);
     this.getAccount = this.getAccount.bind(this);
     this.getTotalBetAmount = this.getTotalBetAmount.bind(this);
     this.stake = this.stake.bind(this);
@@ -134,9 +134,9 @@ class ScatterHelper {
   }
 
   getAccount(name) {
-    const { readEos, Eos } = this;
+    const { readEos } = this;
     return readEos.getAccount(name).then((result) => Promise.resolve({
-      eosBalance: _.toNumber(Eos.modules.format.parseAsset(result.core_liquid_balance).amount),
+      eosBalance: _.toNumber(parseAsset(result.core_liquid_balance).amount),
       cpuUsage: result.cpu_limit.used / result.cpu_limit.max,
       netUsage: result.net_limit.used / result.net_limit.max,
     }));
@@ -144,7 +144,8 @@ class ScatterHelper {
 
   getCurrencyBalance(params) {
     const { name, contract, symbol } = params;
-    const { readEos, parseAsset } = this;
+    const { readEos } = this;
+
     return readEos.getCurrencyBalance(contract, name, symbol).then((result) => {
       if (!_.isEmpty(result)) {
         const balObj = parseAsset(result[0]);
@@ -154,12 +155,6 @@ class ScatterHelper {
       }
       return Promise.resolve(0);
     });
-  }
-
-  parseAsset(quantity) {
-    const { Eos } = this;
-
-    return Eos.modules.format.parseAsset(quantity);
   }
 
   getTotalBetAmount() {
@@ -357,7 +352,7 @@ class ScatterHelper {
  * @return {[type]} [description]
  */
   getBETXCirculation() {
-    const { readEos, parseAsset } = this;
+    const { readEos } = this;
     return readEos.getCurrencyBalance(BETX_TOKEN_CONTRACT, BETX_DICE_CONTRACT, 'BETX').then((result) => {
       if (!_.isEmpty(result)) {
         const balObj = parseAsset(result[0]);
