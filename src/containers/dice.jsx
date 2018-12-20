@@ -625,7 +625,6 @@ class DicePage extends React.Component {
                   <div className="container">
                     <ReactNotification ref={this.notificationDOMRef} />
                     <div className="holderBorder">
-
                       <div className="container-header">
                         <Row>
                           <Col span={24}>
@@ -703,7 +702,7 @@ class DicePage extends React.Component {
                                   <Col xs={18} lg={16}>
                                     <div className="box-input-inner">
                                       <span className="label"><IntlMessages id="dice.play.amount" /></span>
-                                      <Input className="box-input-inner-input inputBorder" size="large" onChange={this.onInputNumberChange} value={betAmount} />
+                                      <Input className="box-input-inner-input inputBorder" size="large" onBlur={() => window.scroll(0, 0)} onChange={this.onInputNumberChange} value={betAmount} />
                                       <span className="box-input-inner-addOn">{selectedSymbol}</span>
                                     </div>
                                   </Col>
@@ -786,7 +785,6 @@ class DicePage extends React.Component {
 
                 <section className="hideOnMobile">
                   <div style={{ height: '60px' }} />
-
                   <div className="container">
                     <div className="holderBorder">
                       <Chatroom username={username} />
