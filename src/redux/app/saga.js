@@ -5,6 +5,7 @@ import _ from 'lodash';
 import actions from './actions';
 import betActions from '../bet/actions';
 import ScatterHelper from '../../helpers/scatter';
+import { trimZerosFromAsset } from '../../helpers/utility';
 
 const {
   handleScatterError, getIdentity, transfer, getAccount, logout, getCurrencyBalance,
@@ -118,10 +119,15 @@ function* transferRequest(action) {
   try {
     const response = yield call(transfer, params);
 
+    let betAmount = response.processed.action_traces[0].act.data.quantity;
+
+    // We treat all symbols as their precision is 4
+    betAmount = trimZerosFromAsset(betAmount);
+
     yield put({
       type: betActions.ADD_CURRENT_BET,
       value: {
-        betAmount: response.processed.action_traces[0].act.data.quantity,
+        betAmount,
         transactionId: response.transaction_id,
       },
     });

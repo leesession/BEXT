@@ -1,9 +1,9 @@
 import Parse from 'parse';
 import _ from 'lodash';
-import Eos from 'eosjs';
 import moment from 'moment';
 
-import { appConfig, parseConfig } from '../settings';
+import { parseConfig, appConfig } from '../settings';
+import { parseAsset, trimZerosFromAsset } from './utility';
 
 Parse.initialize(parseConfig.appId, parseConfig.javascriptKey, '0x2d2e81f6db11144f9a51c1bac41b4ebffecec391c19d74322b2a8917da357208');
 Parse.serverURL = parseConfig.serverURL;
@@ -40,7 +40,9 @@ class ParseHelper {
       return undefined;
     }
 
-    const payoutAsset = parseObject.get('payout') && Eos.modules.format.parseAsset(parseObject.get('payout'));
+    const payoutAsset = parseObject.get('payout') && parseAsset(parseObject.get('payout'));
+    let payout = (_.isUndefined(payoutAsset) || _.toNumber(payoutAsset.amount) === 0) ? '' : parseObject.get('payout');
+    payout = trimZerosFromAsset(payout);
     const resolveTrxId = parseObject.get('t_id');
 
     return {
@@ -48,10 +50,10 @@ class ParseHelper {
       time: moment.utc(parseObject.get('resolved_block_time')).toDate(), // Convert server UTC time to local here
       bettor: parseObject.get('bettor'),
       rollUnder: parseObject.get('roll_under'),
-      betAmount: parseObject.get('bet_amt'),
+      betAmount: trimZerosFromAsset(parseObject.get('bet_amt')),
       roll: parseObject.get('roll'),
       transferTx: parseObject.get('transferTx'),
-      payout: (_.isUndefined(payoutAsset) || _.toNumber(payoutAsset.amount) === 0) ? '' : parseObject.get('payout'),
+      payout,
       payoutAsset: {
         amount: payoutAsset && _.toNumber(payoutAsset.amount),
         symbol: payoutAsset && payoutAsset.symbol,

@@ -59,19 +59,19 @@ function calculatePayoutOnWin(betAmount, payout) {
 
 const symbols = [
   {
-    symbol: 'EOS', min: 0.1, max: 10000,
+    symbol: 'EOS', min: 0.1, max: 10000, precision: 2,
   },
   {
-    symbol: 'BETX', min: 10, max: 10000,
+    symbol: 'BETX', min: 10, max: 10000, precision: 2,
   },
   {
-    symbol: 'EBTC', min: 0.0001, max: 10000,
+    symbol: 'EBTC', min: 0.0001, max: 10000, precision: 4,
   },
   {
-    symbol: 'EETH', min: 0.001, max: 10000,
+    symbol: 'EETH', min: 0.001, max: 10000, precision: 4,
   },
   {
-    symbol: 'EUSD', min: 0.1, max: 10000,
+    symbol: 'EUSD', min: 0.1, max: 10000, precision: 2,
   },
 ];
 
@@ -479,17 +479,21 @@ class DicePage extends React.Component {
     const {
       eosBalance, betxBalance, ebtcBalance, eethBalance, eusdBalance,
     } = this.props;
+
+    const match = _.find(symbols, { symbol });
+    const precision = _.isUndefined(match) ? 4 : match.precision;
+
     switch (symbol) {
       case 'EOS':
-        return eosBalance;
+        return _.floor(eosBalance, precision);
       case 'BETX':
-        return betxBalance;
+        return _.floor(betxBalance, precision);
       case 'EBTC':
-        return ebtcBalance;
+        return _.floor(ebtcBalance, precision);
       case 'EETH':
-        return eethBalance;
+        return _.floor(eethBalance, precision);
       case 'EUSD':
-        return eusdBalance;
+        return _.floor(eusdBalance, precision);
       default:
         return 0;
     }
@@ -751,7 +755,7 @@ class DicePage extends React.Component {
                           {/* <Col span={24}>{autoBetElement}</Col> */}
                           <Col span={6}>
                             <div className="container-body-btn-description"><IntlMessages id="dice.balance" values={{ symbol: currentSymbol }} /></div>
-                            <div className="bet_value">{_.floor(this.getBalanceBySymbol(currentSymbol), 2)}<span className="highlight"> { currentSymbol }</span></div>
+                            <div className="bet_value">{this.getBalanceBySymbol(currentSymbol)}<span className="highlight"> { currentSymbol }</span></div>
                           </Col>
                           <Col span={12}>
                             {autoBetElement}
@@ -761,7 +765,7 @@ class DicePage extends React.Component {
                           </Col>
                           <Col span={6}>
                             <div className="container-body-btn-description"><IntlMessages id="dice.balance" values={{ symbol: 'BETX' }} /></div>
-                            <div className="bet_value">{_.floor(this.getBalanceBySymbol('BETX'), 2)}<span className="highlight"> <IntlMessages id="dice.asset.betx" /></span></div>
+                            <div className="bet_value">{this.getBalanceBySymbol('BETX')}<span className="highlight"> <IntlMessages id="dice.asset.betx" /></span></div>
                           </Col>
                           <Col xs={20} lg={16}>
                             <div className="container-body-btn-description container-body-btn-description-firstbet">
