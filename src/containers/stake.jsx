@@ -360,7 +360,7 @@ class StakePage extends React.Component {
                                 <Col span={24} className="page-third-title third_title_stake panel-trans">
                                   <div className="stake-container-body-inner-input">
                                     <div><CloudinaryImage publicId="betx-logo-grey" options={{ height: 30, crop: 'scale' }} /></div>
-                                    <Input className="clear-input" value={inputStake} onChange={this.onInputStakeChange} ></Input>
+                                    <Input className="clear-input" value={inputStake} onChange={this.onInputStakeChange} onBlur={() => window.scroll(0, 0)} ></Input>
                                     <Button className="clear-btn" onClick={this.onStakeBtnClicked}><IntlMessages id="stake.action.pledge" /></Button>
                                   </div>
                                 </Col>
@@ -380,7 +380,7 @@ class StakePage extends React.Component {
                                 <Col span={24} className="page-third-title third_title_stake panel-trans">
                                   <div className="stake-container-body-inner-input">
                                     <div className="img-container"><CloudinaryImage publicId="betx-logo-grey" options={{ height: 30, crop: 'scale' }} /></div>
-                                    <Input className="clear-input" value={inputUnstake} onChange={this.onInputUnstakeChange} ></Input>
+                                    <Input className="clear-input" value={inputUnstake} onChange={this.onInputUnstakeChange} onBlur={() => window.scroll(0, 0)} ></Input>
                                     <Button className="clear-btn" onClick={this.onUnstakeBtnClicked}><IntlMessages id="stake.action.redemption" /></Button>
                                   </div>
                                 </Col>
