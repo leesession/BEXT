@@ -138,6 +138,7 @@ class DicePage extends React.Component {
       fairModalShow: false,
       autoBetEnabled: false, // True if auto-bet switch is turned on
       lastBetNotificationId: undefined, // Guard start of the next auto-bet so we don't start twice
+      myBetHistoryFetched: false, // Guard to make sure myBetHistory only fetched once
     };
 
     this.desktopColumns = [{
@@ -254,6 +255,7 @@ class DicePage extends React.Component {
       username: stateUsername,
       lastBetNotificationId,
       payout,
+      myBetHistoryFetched,
     } = this.state;
     let { autoBetEnabled } = this.state;
     const { notificationDOMRef, onBetClicked } = this;
@@ -263,8 +265,10 @@ class DicePage extends React.Component {
     // Update username in state if we received one from props; this means Scatter login succeeded
     fieldsToUpdate.username = username || this.defaultUsername;
 
-    if (username && username !== this.defaultUsername) {
+    if (username && username !== this.defaultUsername && !myBetHistoryFetched) {
       fetchMyBetHistory({ username });
+
+      fieldsToUpdate.myBetHistoryFetched = true;
     }
 
     // Turn off autobet when switching symbol and change betAmount to min
