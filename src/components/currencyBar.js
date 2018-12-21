@@ -5,8 +5,6 @@ import { connect } from 'react-redux';
 import classNames from 'classnames';
 
 import PropTypes from 'prop-types';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { siteConfig } from '../settings';
 import betActions from '../redux/bet/actions';
 import { cloudinaryConfig, CloudinaryImage } from '../components/react-cloudinary';
 
