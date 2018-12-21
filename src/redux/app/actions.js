@@ -31,7 +31,6 @@ const actions = {
   ERROR_MESSAGE: 'ERROR_MESSAGE',
   SET_REF: 'SET_REF',
   TOGGLE_TOPBAR: 'TOGGLE_TOPBAR',
-  SET_CURRENCY: 'SET_CURRENCY',
   toggleAll: (width, height) => {
     const view = getView(width);
     const collapsed = view !== 'DesktopView';
@@ -73,10 +72,7 @@ const actions = {
     type: actions.GET_BALANCES,
     name,
   }),
-  setCurrency: (value) => ({
-    type: actions.SET_CURRENCY,
-    value,
-  }),
+
   logout: () => ({
     type: actions.LOG_OUT,
   }),

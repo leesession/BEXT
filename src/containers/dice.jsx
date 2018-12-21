@@ -40,7 +40,7 @@ const DIVIDEND = 0.98;
 const MAX_FLOAT_DIGITS = 4;
 const SEED_STR_LENGTH = 21;
 
-const { initSocketConnection, fetchBetHistory, deleteCurrentBet } = betActions;
+const { initSocketConnection, deleteCurrentBet } = betActions;
 const {
   getIdentity, getAccountInfo, getBalances, transfer, setErrorMessage,
 } = appActions;
@@ -93,6 +93,24 @@ function getMaxBySymbol(symbol) {
   }
 
   return symbolMatch.max;
+}
+
+function prepareTableData(historyQueue, momentLocale) {
+  const tableData = historyQueue.all();
+
+  const rawBetData = _.isEmpty(tableData) ? [] : _.reverse(_.map(tableData, (bet) => ({
+    key: bet.id,
+    time: moment(bet.time).locale(momentLocale).format('HH:mm:ss'),
+    bettor: bet.bettor,
+    rollUnder: bet.rollUnder,
+    betAmount: bet.betAmount,
+    roll: bet.roll,
+    payout: bet.payout,
+    payoutAsset: bet.payoutAsset,
+    trxUrl: bet.trxUrl,
+  })));
+
+  return rawBetData;
 }
 
 class DicePage extends React.Component {
@@ -212,9 +230,10 @@ class DicePage extends React.Component {
   }
 
   componentWillMount() {
-    const { fetchBetHistoryReq } = this.props;
+    const { fetchBetHistory, fetchHugeBetHistory, selectedSymbol } = this.props;
 
-    fetchBetHistoryReq();
+    fetchBetHistory();
+    fetchHugeBetHistory({ symbol: selectedSymbol, limit: appConfig.hugeBetAmount });
   }
 
   componentDidMount() {
@@ -228,7 +247,7 @@ class DicePage extends React.Component {
     } = nextProps;
 
     const {
-      intl, deleteCurrentBetReq, getBalancesReq, getAccountInfoReq, selectedSymbol,
+      intl, deleteCurrentBetReq, getBalancesReq, getAccountInfoReq, selectedSymbol, fetchMyBetHistory,
     } = this.props;
     const {
       notifications,
@@ -243,6 +262,10 @@ class DicePage extends React.Component {
 
     // Update username in state if we received one from props; this means Scatter login succeeded
     fieldsToUpdate.username = username || this.defaultUsername;
+
+    if (username && username !== this.defaultUsername) {
+      fetchMyBetHistory({ username });
+    }
 
     // Turn off autobet when switching symbol and change betAmount to min
     if (newSelectedSymbol !== selectedSymbol) {
@@ -259,8 +282,7 @@ class DicePage extends React.Component {
       fieldsToUpdate.payoutOnWin = payoutOnWin;
     }
 
-    // console.log('componentWillReceiveProps.currentBets', currentBets);
-
+    // Add or remove notification box based currentBets update
     _.each(currentBets, (bet) => {
       const existingNotification = _.find(notifications, { transactionId: bet.transactionId });
 
@@ -572,27 +594,15 @@ class DicePage extends React.Component {
     } = this.state;
 
     const {
-      betHistory, locale, view, intl, selectedSymbol,
+      betHistory, myBetHistory, hugeBetHistory, locale, view, intl, selectedSymbol,
     } = this.props;
 
     const momentLocale = (locale === 'en') ? 'en' : 'zh-cn';
 
-    const rawBetData = _.isEmpty(betHistory.all()) ? [] : _.reverse(_.map(betHistory.all(), (bet) => ({
-      key: bet.id,
-      time: moment(bet.time).locale(momentLocale).format('HH:mm:ss'),
-      bettor: bet.bettor,
-      rollUnder: bet.rollUnder,
-      betAmount: bet.betAmount,
-      roll: bet.roll,
-      payout: bet.payout,
-      payoutAsset: bet.payoutAsset,
-      trxUrl: bet.trxUrl,
-    })));
-
-    const allBetData = _.slice(rawBetData, 0, appConfig.betHistoryTableSize);
-
-    const myBetData = _.slice(_.filter(rawBetData, (o) => o.bettor === username), 0, appConfig.betHistoryTableSize);
-    const hugeBetData = _.slice(_.filter(rawBetData, (o) => o.payoutAsset.amount >= appConfig.hugeBetAmount), 0, appConfig.betHistoryTableSize);
+    // Prepare data for three tables at bottom
+    const allBetData = prepareTableData(betHistory, momentLocale);
+    const myBetData = prepareTableData(myBetHistory, momentLocale);
+    const hugeBetData = prepareTableData(hugeBetHistory, momentLocale);
 
     const columns = view === 'MobileView' ? mobileColumns : desktopColumns;
 
@@ -856,6 +866,8 @@ DicePage.propTypes = {
   transferReq: PropTypes.func,
   initSocketConnectionReq: PropTypes.func,
   betHistory: PropTypes.object,
+  myBetHistory: PropTypes.object,
+  hugeBetHistory: PropTypes.object,
   refresh: PropTypes.bool,
   getIdentityReq: PropTypes.func,
   setErrorMessageReq: PropTypes.func,
@@ -868,7 +880,9 @@ DicePage.propTypes = {
 
   intl: intlShape.isRequired,
   successMessage: PropTypes.string,
-  fetchBetHistoryReq: PropTypes.func,
+  fetchBetHistory: PropTypes.func,
+  fetchMyBetHistory: PropTypes.func,
+  fetchHugeBetHistory: PropTypes.func,
   referrer: PropTypes.string.isRequired,
   view: PropTypes.string,
   currentBets: PropTypes.array,
@@ -883,6 +897,8 @@ DicePage.defaultProps = {
   transferReq: undefined,
   initSocketConnectionReq: undefined,
   betHistory: undefined,
+  myBetHistory: undefined,
+  hugeBetHistory: undefined,
   refresh: false,
   username: undefined,
   eosBalance: undefined,
@@ -893,7 +909,9 @@ DicePage.defaultProps = {
   getIdentityReq: undefined,
   setErrorMessageReq: undefined,
   successMessage: undefined,
-  fetchBetHistoryReq: undefined,
+  fetchBetHistory: undefined,
+  fetchMyBetHistory: undefined,
+  fetchHugeBetHistory: undefined,
   view: undefined,
   currentBets: [],
   deleteCurrentBetReq: undefined,
@@ -905,6 +923,8 @@ DicePage.defaultProps = {
 const mapStateToProps = (state) => ({
   locale: state.LanguageSwitcher.language.locale,
   betHistory: state.Bet.get('history'),
+  myBetHistory: state.Bet.get('myHistory'),
+  hugeBetHistory: state.Bet.get('hugeHistory'),
   refresh: state.Bet.get('refresh'),
   username: state.App.get('username'),
   eosBalance: state.App.get('eosBalance'),
@@ -916,7 +936,7 @@ const mapStateToProps = (state) => ({
   referrer: state.App.get('ref'),
   view: state.App.get('view'),
   currentBets: state.Bet.get('currentBets'),
-  selectedSymbol: state.App.get('selectedSymbol'),
+  selectedSymbol: state.Bet.get('selectedSymbol'),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -924,7 +944,9 @@ const mapDispatchToProps = (dispatch) => ({
   initSocketConnectionReq: (obj) => dispatch(initSocketConnection(obj)),
   getIdentityReq: () => dispatch(getIdentity()),
   setErrorMessageReq: (errorMessage) => dispatch(setErrorMessage(errorMessage)),
-  fetchBetHistoryReq: () => dispatch(fetchBetHistory()),
+  fetchBetHistory: () => dispatch(betActions.fetchBetHistory()),
+  fetchMyBetHistory: (params) => dispatch(betActions.fetchMyBetHistory(params)),
+  fetchHugeBetHistory: (params) => dispatch(betActions.fetchHugeBetHistory(params)),
   deleteCurrentBetReq: (transactionId) => dispatch(deleteCurrentBet(transactionId)),
   getBalancesReq: (name) => dispatch(getBalances(name)),
   getAccountInfoReq: (name) => dispatch(getAccountInfo(name)),

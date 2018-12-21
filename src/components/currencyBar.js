@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { siteConfig } from '../settings';
-import appActions from '../redux/app/actions';
+import betActions from '../redux/bet/actions';
 import { cloudinaryConfig, CloudinaryImage } from '../components/react-cloudinary';
 
 cloudinaryConfig({ cloud_name: 'forgelab-io' });
@@ -78,11 +78,11 @@ CurrenyBar.defaultProps = {
 };
 
 const mapStateToProps = (state) => ({
-  selectedSymbol: state.App.get('selectedSymbol'),
+  selectedSymbol: state.Bet.get('selectedSymbol'),
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  setCurrency: (value) => dispatch(appActions.setCurrency(value)),
+  setCurrency: (value) => dispatch(betActions.setCurrency(value)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CurrenyBar);

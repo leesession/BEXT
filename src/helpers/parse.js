@@ -4,6 +4,7 @@ import moment from 'moment';
 
 import { parseConfig, appConfig } from '../settings';
 import { parseAsset, trimZerosFromAsset } from './utility';
+import betActions from '../redux/bet/actions';
 
 Parse.initialize(parseConfig.appId, parseConfig.javascriptKey, '0x2d2e81f6db11144f9a51c1bac41b4ebffecec391c19d74322b2a8917da357208');
 Parse.serverURL = parseConfig.serverURL;
@@ -40,9 +41,8 @@ class ParseHelper {
       return undefined;
     }
 
-    const payoutAsset = parseObject.get('payout') && parseAsset(parseObject.get('payout'));
-    let payout = (_.isUndefined(payoutAsset) || _.toNumber(payoutAsset.amount) === 0) ? '' : parseObject.get('payout');
-    payout = trimZerosFromAsset(payout);
+    const payoutAsset = parseObject.get('payoutAsset');
+    const payout = (payoutAsset && payoutAsset.amount === 0) ? '' : trimZerosFromAsset(parseObject.get('payout'));
     const resolveTrxId = parseObject.get('t_id');
 
     return {
@@ -54,11 +54,7 @@ class ParseHelper {
       roll: parseObject.get('roll'),
       transferTx: parseObject.get('transferTx'),
       payout,
-      payoutAsset: {
-        amount: payoutAsset && _.toNumber(payoutAsset.amount),
-        symbol: payoutAsset && payoutAsset.symbol,
-      },
-      resolvedBlockNum: parseObject.get('resolved_block_num'),
+      payoutAsset,
       trxUrl: `https://eostracker.io/transactions/${parseObject.get('resolved_block_num')}/${resolveTrxId}`,
     };
   }
@@ -84,11 +80,30 @@ class ParseHelper {
     return message.save({}, { useMasterKey: true });
   }
 
-  fetchBetHistory() {
+  /**
+   * Fetch Bet history based on type and params
+   * @param  {object} params [description]
+   * @param  {string} type [description]
+   * @param  {string} username effective when type equals to MY
+   * @param  {number} limit The threshold across which a bet is treated as huge;effective when type equals to HUGE
+   * @return {[type]}        [description]
+   */
+  fetchBetHistory(params = {}) {
     const { parseBetReceipt } = this;
+    const {
+      type, username, limit, symbol,
+    } = params;
     const query = new Parse.Query(ParseBet);
     query.equalTo('status', STATUS.RESOLVED);
     query.descending('resolved_block_num');
+
+    if (params.type === betActions.BET_HISTORY_TYPE.MY) {
+      query.equalTo('bettor', username);
+    } else if (params.type === betActions.BET_HISTORY_TYPE.HUGE) {
+      query.greaterThanOrEqualTo('payoutAsset.amount', limit);
+      query.equalTo('payoutAsset.symbol', symbol);
+    }
+
     query.limit(appConfig.betHistoryMemorySize);
 
     // Bet history need to be inserted to the queue in ascending order, so we need to reserve the array here

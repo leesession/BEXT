@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { Map } from 'immutable';
 
 import actions from './actions';
+import appActions from '../app/actions';
 import Queue from '../../helpers/queue';
 import { appConfig } from '../../settings';
 import ParseHelper from '../../helpers/parse';
@@ -12,12 +13,16 @@ const { parseBetReceipt } = ParseHelper;
 
 const initState = new Map({
   history: new Queue(appConfig.betHistoryMemorySize),
+  myHistory: new Queue(appConfig.betHistoryMemorySize),
+  hugeHistory: new Queue(appConfig.betHistoryMemorySize),
   refresh: false,
   dailyVolume: 0,
   allVolume: 0,
   betxStakeAmount: 0,
   betxCirculation: 0,
   currentBets: [],
+  username: undefined,
+  selectedSymbol: 'EOS',
 });
 
 /**
@@ -28,7 +33,6 @@ const initState = new Map({
  */
 function CreateOrUpdateBetInHistory(betQueue, newBet) {
   if (_.isUndefined(newBet)) {
-    // console.log(`CreateOrUpdateBetInHistory: newBet is ${newBet}`);
     return false;
   }
 
@@ -89,11 +93,30 @@ export default function (state = initState, action) {
     // case actions.SUBSCRIPTION_CLOSED:
     //   console.log('reducer.SUBSCRIPTION_CLOSED');
     //   break;
+    case appActions.GET_USERNAME_RESULT:
+      return state.set('username', action.value);
     case actions.FETCH_BET_HISTORY_RESULT:
     {
-      const items = action.value;
-      _.each(items, (item) => {
+      _.each(action.value, (item) => {
         state.get('history').enq(item);
+      });
+
+      return state
+        .set('refresh', !state.get('refresh'));
+    }
+    case actions.FETCH_MY_BET_HISTORY_RESULT:
+    {
+      _.each(action.value, (item) => {
+        state.get('myHistory').enq(item);
+      });
+
+      return state
+        .set('refresh', !state.get('refresh'));
+    }
+    case actions.FETCH_HUGE_BET_HISTORY_RESULT:
+    {
+      _.each(action.value, (item) => {
+        state.get('hugeHistory').enq(item);
       });
 
       return state
@@ -108,10 +131,19 @@ export default function (state = initState, action) {
 
       // Update bet history table
       if (CreateOrUpdateBetInHistory(state.get('history'), newBet)) {
+        if (newBet.bettor === state.get('username')) {
+          state.get('myHistory').enq(newBet);
+        }
+
+        // Only add bet over than appConfig.hugeBetAmount to huge bet table
+        if (newBet.payoutAsset && newBet.payoutAsset.symbol === state.get('selectedSymbol') && newBet.payoutAsset.amount >= appConfig.hugeBetAmount) {
+          state.get('hugeHistory').enq(newBet);
+        }
+
         needRefresh = true;
       }
 
-      // Update bet history table
+      // Update current bets for notification
       if (updateCurrentBets(state.get('currentBets'), newBet)) {
         needRefresh = true;
       }
@@ -158,6 +190,9 @@ export default function (state = initState, action) {
       }
       break;
     }
+
+    case actions.SET_CURRENCY:
+      return state.set('selectedSymbol', action.value);
     default:
       return state;
   }

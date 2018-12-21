@@ -10,7 +10,6 @@ const initState = new Map({
   height: window.innerHeight,
   current: preKeys,
   username: undefined,
-  selectedSymbol: 'EOS',
   eosBalance: 0,
   betxBalance: 0,
   ebtcBalance: 0,
@@ -65,8 +64,7 @@ export default function appReducer(state = initState, action) {
       return state.set('ref', action.ref);
     case actions.TOGGLE_TOPBAR:
       return state.set('isTopbarTransparent', action.isTransparent);
-    case actions.SET_CURRENCY:
-      return state.set('selectedSymbol', action.value);
+
     default:
       return state;
   }
