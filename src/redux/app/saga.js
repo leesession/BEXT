@@ -164,11 +164,19 @@ function* setErrorMessageRequest(action) {
 function* logoutRequest() {
   try {
     const response = yield call(logout);
-    console.log(response);
 
     if (response) {
+      // Clear user balance and cpu usage
       yield put({
         type: actions.CLEAR_USER_INFO,
+      });
+
+      // Remove username from betRankPoll params
+      yield put({
+        type: betActions.START_POLL_BET_RANK,
+        payload: {
+          username: undefined,
+        },
       });
     }
   } catch (err) {

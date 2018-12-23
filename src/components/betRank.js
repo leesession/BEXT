@@ -78,6 +78,15 @@ class BetRank extends React.Component {
     this.startTimer(diffDuration);
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { username } = nextProps;
+    const { startPollBetRank } = this.props;
+
+    if (username) {
+      startPollBetRank({ username });
+    }
+  }
+
   componentWillUnmount() {
     const { timer } = this;
 
@@ -136,6 +145,10 @@ class BetRank extends React.Component {
     const thirdPlace = tableData.shift();
     const myPlace = betRank && betRank.myRank;
 
+    if (myPlace) {
+      myPlace.betAmount = formatNumberThousands(_.floor(myPlace.betAmount, 2));
+    }
+
     return (<div className="container rank">
       <div className="holderBorder">
         <Row>
@@ -187,7 +200,7 @@ class BetRank extends React.Component {
 
               <Col xs={24} lg={0}>
                 <Row className="myRank">
-                  <Col span={6}>{myPlace && myPlace.rank ? myPlace.rank : '-' } (<IntlMessages id="dice.rank.me" />)</Col>
+                  <Col span={6}>{myPlace && myPlace.rank ? myPlace.rank : '-' }(<IntlMessages id="dice.rank.me" />)</Col>
                   <Col span={6}>{myPlace && myPlace.bettor ? myPlace.bettor : '-'}</Col>
                   <Col span={6}>{myPlace && myPlace.betAmount ? myPlace.betAmount : '-'}</Col>
                   <Col span={6}>{myPlace && myPlace.reward ? myPlace.reward : '-'}</Col>
@@ -206,7 +219,7 @@ class BetRank extends React.Component {
               // style={{ height: '300px' }}
             />
             <Row className="myRankLg">
-              <Col span={6}>{myPlace && myPlace.rank ? myPlace.rank : '-'}</Col>
+              <Col span={6}>{myPlace && myPlace.rank ? myPlace.rank : '-'}(<IntlMessages id="dice.rank.me" />)</Col>
               <Col span={6}>{myPlace && myPlace.bettor ? myPlace.bettor : '-'}</Col>
               <Col span={6}>{myPlace && myPlace.betAmount ? myPlace.betAmount : '-'}</Col>
               <Col span={6}>{myPlace && myPlace.reward ? myPlace.reward : '-'}</Col>

@@ -17,6 +17,9 @@ const {
   handleScatterError,
 } = ScatterHelper;
 
+let betRankPollStarted = false;
+let betrankPollParams;
+
 function websocketInitChannel(payload) {
   return eventChannel((emitter) => {
     const subscription = subscribe(payload.collection);
@@ -200,10 +203,16 @@ export function* getBetVolumeRequest() {
 }
 
 export function* startPollBetRankRequest(action) {
-  const params = action.payload;
+  betrankPollParams = action.payload;
+
+  if (betRankPollStarted) {
+    return;
+  }
+
+  betRankPollStarted = true;
   while (true) {
     try {
-      const response = yield call(getBetRank, params);
+      const response = yield call(getBetRank, betrankPollParams);
 
       yield put({
         type: actions.BET_RANK_RESULT,

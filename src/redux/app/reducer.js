@@ -51,14 +51,14 @@ export default function appReducer(state = initState, action) {
     case actions.GET_EUSD_BALANCE_RESULT:
       return state.set('eusdBalance', action.value);
     case actions.CLEAR_USER_INFO:
-      return state.set('username', undefined)
-        .set('cpuUsage', undefined)
-        .set('netUsage', undefined)
-        .set('eosBalance', undefined)
-        .set('betxBalance', undefined)
-        .set('ebtcBalance', undefined)
-        .set('eethBalance', undefined)
-        .set('eusdBalance', undefined);
+      return state.set('username', initState.get('username'))
+        .set('cpuUsage', initState.get('cpuUsage'))
+        .set('netUsage', initState.get('netUsage'))
+        .set('eosBalance', initState.get('eosBalance'))
+        .set('betxBalance', initState.get('betxBalance'))
+        .set('ebtcBalance', initState.get('ebtcBalance'))
+        .set('eethBalance', initState.get('eethBalance'))
+        .set('eusdBalance', initState.get('eusdBalance'));
     case actions.SUCCESS_MESSAGE:
       return state.set('successMessage', action.message);
     case actions.ERROR_MESSAGE:
