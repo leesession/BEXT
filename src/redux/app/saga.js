@@ -1,12 +1,33 @@
+/* eslint no-restricted-syntax:0 */
 import { call, all, takeEvery, put } from 'redux-saga/effects';
+import _ from 'lodash';
 
 import actions from './actions';
 import betActions from '../bet/actions';
 import ScatterHelper from '../../helpers/scatter';
+import { trimZerosFromAsset } from '../../helpers/utility';
 
 const {
-  handleScatterError, getIdentity, transfer, getBETXBalance, getAccount, logout,
+  handleScatterError, getIdentity, transfer, getAccount, logout, getCurrencyBalance,
 } = ScatterHelper;
+
+const symbols = [
+  {
+    symbol: 'EOS', precision: 4, contract: 'eosio.token', putType: actions.GET_EOS_BALANCE_RESULT,
+  },
+  {
+    symbol: 'BETX', precision: 4, contract: 'thebetxtoken', putType: actions.GET_BETX_BALANCE_RESULT,
+  },
+  {
+    symbol: 'EBTC', precision: 8, contract: 'bitpietokens', putType: actions.GET_EBTC_BALANCE_RESULT,
+  },
+  {
+    symbol: 'EETH', precision: 8, contract: 'bitpietokens', putType: actions.GET_EETH_BALANCE_RESULT,
+  },
+  {
+    symbol: 'EUSD', precision: 8, contract: 'bitpietokens', putType: actions.GET_EUSD_BALANCE_RESULT,
+  },
+];
 
 function* getIdentityRequest() {
   try {
@@ -36,19 +57,15 @@ function* getBalancesRequest(action) {
   const { name } = action;
 
   try {
-    // const eosBalance = yield call(getEOSBalance, name);
-
-    // yield put({
-    //   type: actions.GET_EOS_BALANCE_RESULT,
-    //   value: eosBalance,
-    // });
-
-    const betxBalance = yield call(getBETXBalance, name);
-
-    yield put({
-      type: actions.GET_BETX_BALANCE_RESULT,
-      value: betxBalance,
-    });
+    for (const entry of Array.from(symbols)) {
+      const balance = yield call(getCurrencyBalance, {
+        name, contract: entry.contract, symbol: entry.symbol,
+      });
+      yield put({
+        type: entry.putType,
+        value: balance,
+      });
+    }
   } catch (err) {
     const message = yield call(handleScatterError, err);
 
@@ -64,11 +81,6 @@ function* getAccountRequest(action) {
 
   try {
     const response = yield call(getAccount, name);
-
-    yield put({
-      type: actions.GET_EOS_BALANCE_RESULT,
-      value: response.eosBalance,
-    });
 
     yield put({
       type: actions.GET_CPU_USAGE_RESULT,
@@ -90,203 +102,35 @@ function* getAccountRequest(action) {
 function* transferRequest(action) {
   const params = action.payload;
 
+  const matchSymbol = _.find(symbols, { symbol: params.betAsset });
+
+  if (_.isUndefined(matchSymbol)) {
+    yield put({
+      type: actions.SET_ERROR_MESSAGE,
+      message: 'message.error.unknownSymbol',
+    });
+
+    return;
+  }
+
+  params.contract = matchSymbol.contract;
+  params.precision = matchSymbol.precision;
+
   try {
     const response = yield call(transfer, params);
+
+    let betAmount = response.processed.action_traces[0].act.data.quantity;
+
+    // We treat all symbols as their precision is 4
+    betAmount = trimZerosFromAsset(betAmount);
 
     yield put({
       type: betActions.ADD_CURRENT_BET,
       value: {
-        betAmount: response.processed.action_traces[0].act.data.quantity,
+        betAmount,
         transactionId: response.transaction_id,
       },
     });
-
-    // {
-    //   "broadcast": true,
-    //   "transaction": {
-    //     "compression": "none",
-    //     "transaction": {
-    //       "expiration": "2018-11-26T05:45:10",
-    //       "ref_block_num": 6748,
-    //       "ref_block_prefix": 3588480797,
-    //       "max_net_usage_words": 0,
-    //       "max_cpu_usage_ms": 0,
-    //       "delay_sec": 0,
-    //       "context_free_actions": [],
-    //       "actions": [
-    //         {
-    //           "account": "eosio.token",
-    //           "name": "transfer",
-    //           "authorization": [
-    //             {
-    //               "actor": "bilibilibooo",
-    //               "permission": "active"
-    //             }
-    //           ],
-    //           "data": "40293d2ebae3a23b70d5e4b4677554cbe80300000000000004454f53000000000435302d2d"
-    //         }
-    //       ],
-    //       "transaction_extensions": []
-    //     },
-    //     "signatures": [
-    //       "SIG_K1_KYS5seSqphnwU5DNSNCEe3nFkuCYZh3J2Z5hsEYaEgo4kndDGXQVxmTG5BXZ1HDFsaWpT56drQHfiqwJeJjUE8RXKLc1Sh"
-    //     ]
-    //   },
-    //   "transaction_id": "8b25b9ec09d3431b99ad12ae7df7334d8a926321df684c0a1938f16ec79a81fc",
-    //   "processed": {
-    //     "id": "8b25b9ec09d3431b99ad12ae7df7334d8a926321df684c0a1938f16ec79a81fc",
-    //     "block_num": 28908468,
-    //     "block_time": "2018-11-26T05:44:16.000",
-    //     "producer_block_id": null,
-    //     "receipt": {
-    //       "status": "executed",
-    //       "cpu_usage_us": 802,
-    //       "net_usage_words": 17
-    //     },
-    //     "elapsed": 802,
-    //     "net_usage": 136,
-    //     "scheduled": false,
-    //     "action_traces": [
-    //       {
-    //         "receipt": {
-    //           "receiver": "eosio.token",
-    //           "act_digest": "651ca4fe9392023f5c62dbe182f162e350fb36af4fc84e94fe0779fa5a137671",
-    //           "global_sequence": 2097920190,
-    //           "recv_sequence": 326060555,
-    //           "auth_sequence": [
-    //             [
-    //               "bilibilibooo",
-    //               160
-    //             ]
-    //           ],
-    //           "code_sequence": 2,
-    //           "abi_sequence": 2
-    //         },
-    //         "act": {
-    //           "account": "eosio.token",
-    //           "name": "transfer",
-    //           "authorization": [
-    //             {
-    //               "actor": "bilibilibooo",
-    //               "permission": "active"
-    //             }
-    //           ],
-    //           "data": {
-    //             "from": "bilibilibooo",
-    //             "to": "thebetxowner",
-    //             "quantity": "0.1000 EOS",
-    //             "memo": "50--"
-    //           },
-    //           "hex_data": "40293d2ebae3a23b70d5e4b4677554cbe80300000000000004454f53000000000435302d2d"
-    //         },
-    //         "context_free": false,
-    //         "elapsed": 175,
-    //         "console": "",
-    //         "trx_id": "8b25b9ec09d3431b99ad12ae7df7334d8a926321df684c0a1938f16ec79a81fc",
-    //         "block_num": 28908468,
-    //         "block_time": "2018-11-26T05:44:16.000",
-    //         "producer_block_id": null,
-    //         "account_ram_deltas": [],
-    //         "except": null,
-    //         "inline_traces": [
-    //           {
-    //             "receipt": {
-    //               "receiver": "bilibilibooo",
-    //               "act_digest": "651ca4fe9392023f5c62dbe182f162e350fb36af4fc84e94fe0779fa5a137671",
-    //               "global_sequence": 2097920191,
-    //               "recv_sequence": 180,
-    //               "auth_sequence": [
-    //                 [
-    //                   "bilibilibooo",
-    //                   161
-    //                 ]
-    //               ],
-    //               "code_sequence": 2,
-    //               "abi_sequence": 2
-    //             },
-    //             "act": {
-    //               "account": "eosio.token",
-    //               "name": "transfer",
-    //               "authorization": [
-    //                 {
-    //                   "actor": "bilibilibooo",
-    //                   "permission": "active"
-    //                 }
-    //               ],
-    //               "data": {
-    //                 "from": "bilibilibooo",
-    //                 "to": "thebetxowner",
-    //                 "quantity": "0.1000 EOS",
-    //                 "memo": "50--"
-    //               },
-    //               "hex_data": "40293d2ebae3a23b70d5e4b4677554cbe80300000000000004454f53000000000435302d2d"
-    //             },
-    //             "context_free": false,
-    //             "elapsed": 8,
-    //             "console": "",
-    //             "trx_id": "8b25b9ec09d3431b99ad12ae7df7334d8a926321df684c0a1938f16ec79a81fc",
-    //             "block_num": 28908468,
-    //             "block_time": "2018-11-26T05:44:16.000",
-    //             "producer_block_id": null,
-    //             "account_ram_deltas": [],
-    //             "except": null,
-    //             "inline_traces": []
-    //           },
-    //           {
-    //             "receipt": {
-    //               "receiver": "thebetxowner",
-    //               "act_digest": "651ca4fe9392023f5c62dbe182f162e350fb36af4fc84e94fe0779fa5a137671",
-    //               "global_sequence": 2097920192,
-    //               "recv_sequence": 2301,
-    //               "auth_sequence": [
-    //                 [
-    //                   "bilibilibooo",
-    //                   162
-    //                 ]
-    //               ],
-    //               "code_sequence": 2,
-    //               "abi_sequence": 2
-    //             },
-    //             "act": {
-    //               "account": "eosio.token",
-    //               "name": "transfer",
-    //               "authorization": [
-    //                 {
-    //                   "actor": "bilibilibooo",
-    //                   "permission": "active"
-    //                 }
-    //               ],
-    //               "data": {
-    //                 "from": "bilibilibooo",
-    //                 "to": "thebetxowner",
-    //                 "quantity": "0.1000 EOS",
-    //                 "memo": "50--"
-    //               },
-    //               "hex_data": "40293d2ebae3a23b70d5e4b4677554cbe80300000000000004454f53000000000435302d2d"
-    //             },
-    //             "context_free": false,
-    //             "elapsed": 386,
-    //             "console": "",
-    //             "trx_id": "8b25b9ec09d3431b99ad12ae7df7334d8a926321df684c0a1938f16ec79a81fc",
-    //             "block_num": 28908468,
-    //             "block_time": "2018-11-26T05:44:16.000",
-    //             "producer_block_id": null,
-    //             "account_ram_deltas": [
-    //               {
-    //                 "account": "thebetxowner",
-    //                 "delta": 188
-    //               }
-    //             ],
-    //             "except": null,
-    //             "inline_traces": []
-    //           }
-    //         ]
-    //       }
-    //     ],
-    //     "except": null
-    //   },
-    //   "returnedFields": {}
-    // }
   } catch (err) {
     const message = yield call(handleScatterError, err);
 

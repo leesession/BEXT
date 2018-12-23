@@ -20,14 +20,15 @@ const siteConfig = {
   announcement: 'https://betxhelp.zendesk.com/hc/zh-cn/sections/360002532612-%E5%85%AC%E5%91%8A%E4%B8%AD%E5%BF%83',
   terms: 'https://betxhelp.zendesk.com/hc/zh-cn/articles/360018256011',
   ethscan: 'https://rinkeby.etherscan.io/',
+  fairnessVerificationUrl: 'https://github.com/TheBETX/tools.git',
 };
 
 const appConfig = {
   firstBetReward: 300,
-  betHistoryMemorySize: 500,
+  betHistoryMemorySize: 20,
   betHistoryTableSize: 20,
   betChannelReconnectInterval: 5000,
-  hugeBetAmount: 100,
+  hugeBetAmount: 250,
   chatHistoryMemorySize: 500,
   chatChannelReconnectInterval: 5000,
   dividendRatio: 0.01, // Dividend ratio compared to betVolume

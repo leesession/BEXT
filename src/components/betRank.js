@@ -6,7 +6,6 @@ import { Row, Col, Table } from 'antd';
 import _ from 'lodash';
 
 import IntlMessages from './utility/intlMessages';
-import { appConfig } from '../settings';
 import betActions from '../redux/bet/actions';
 import { cloudinaryConfig, CloudinaryImage } from '../components/react-cloudinary';
 import { secondsToTime, formatNumberThousands } from '../helpers/utility';
@@ -125,7 +124,7 @@ class BetRank extends React.Component {
     const { time } = this.state;
     const { betRank } = this.props;
 
-    const tableData = _.isUndefined(betRank) ? [] : _.map(betRank.top, (entry, index) => ({
+    const tableData = _.isUndefined(betRank) ? [] : _.map(betRank.top, (entry) => ({
       key: entry.rank,
       bettor: entry.bettor,
       betAmount: formatNumberThousands(_.floor(entry.betAmount, 2)),

@@ -13,11 +13,9 @@ const {
   subscribe, unsubscribe, fetchBetHistory, handleParseError, getBetVolume, getBetRank,
 } = ParseHelper;
 
-
 const {
-  handleScatterError, getTotalBetAmount,
+  handleScatterError,
 } = ScatterHelper;
-
 
 function websocketInitChannel(payload) {
   return eventChannel((emitter) => {
@@ -134,7 +132,47 @@ export function* fetchBetHistoryRequest() {
     });
   } catch (err) {
     const message = yield call(handleParseError, err);
+    console.log(err);
+    yield put({
+      type: appActions.SET_ERROR_MESSAGE,
+      message,
+    });
+  }
+}
 
+export function* fetchMyBetHistoryRequest(action) {
+  try {
+    const params = action.payload;
+    params.type = actions.BET_HISTORY_TYPE.MY;
+    const response = yield call(fetchBetHistory, params);
+
+    yield put({
+      type: actions.FETCH_MY_BET_HISTORY_RESULT,
+      value: response,
+    });
+  } catch (err) {
+    const message = yield call(handleParseError, err);
+    console.log(err);
+    yield put({
+      type: appActions.SET_ERROR_MESSAGE,
+      message,
+    });
+  }
+}
+
+export function* fetchHugeBetHistoryRequest(action) {
+  try {
+    const params = action.payload;
+    params.type = actions.BET_HISTORY_TYPE.HUGE;
+    const response = yield call(fetchBetHistory, params);
+
+    yield put({
+      type: actions.FETCH_HUGE_BET_HISTORY_RESULT,
+      value: response,
+    });
+  } catch (err) {
+    const message = yield call(handleParseError, err);
+    console.log(err);
     yield put({
       type: appActions.SET_ERROR_MESSAGE,
       message,
@@ -162,7 +200,7 @@ export function* getBetVolumeRequest() {
 }
 
 export function* startPollBetRankRequest(action) {
-  const params = actions.payload;
+  const params = action.payload;
   while (true) {
     try {
       const response = yield call(getBetRank, params);
@@ -184,6 +222,8 @@ export default function* topicSaga() {
   yield all([
     takeEvery(actions.INIT_SOCKET_CONNECTION_BET, initLiveBetHistory),
     takeEvery(actions.FETCH_BET_HISTORY, fetchBetHistoryRequest),
+    takeEvery(actions.FETCH_MY_BET_HISTORY, fetchMyBetHistoryRequest),
+    takeEvery(actions.FETCH_HUGE_BET_HISTORY, fetchHugeBetHistoryRequest),
     takeEvery(actions.GET_BET_VOLUME, getBetVolumeRequest),
     takeEvery(actions.START_POLL_BET_RANK, startPollBetRankRequest),
   ]);

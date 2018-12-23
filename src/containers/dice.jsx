@@ -4,7 +4,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { injectIntl, intlShape } from 'react-intl';
-import { Icon, Row, Col, Table, Input, Button, Tabs, Popover, message } from 'antd';
+import { Icon, Row, Col, Table, Input, Button, Tabs, message, Switch, Tooltip } from 'antd';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import moment from 'moment';
@@ -13,8 +13,9 @@ import 'animate.css/animate.min.css';
 
 import ReactNotification from '../components/react-notification-component';
 import BetRank from '../components/betRank';
+import FairModal from '../components/fairModal';
 import '../components/react-notification-component/less/notification.less';
-import { cloudinaryConfig, CloudinaryImage } from '../components/react-cloudinary';
+// import { cloudinaryConfig, CloudinaryImage } from '../components/react-cloudinary';
 
 import Slider from '../components/slider';
 import Dice from '../components/dice';
@@ -24,8 +25,9 @@ import appActions from '../redux/app/actions';
 import IntlMessages from '../components/utility/intlMessages';
 import { appConfig } from '../settings';
 import { randomString } from '../helpers/utility';
+import CurrencyBar from '../components/currencyBar';
 
-cloudinaryConfig({ cloud_name: 'forgelab-io' });
+// cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
 const { TabPane } = Tabs;
 const MAX_BALANCE_STR = 'MAX';
@@ -36,12 +38,10 @@ const MAX_SELECT_ROLL_NUMBER = 96;
 const DEFAULT_ROLL_NUMBER = 50;
 const DIVIDEND = 0.98;
 
-const MIN_INPUT_BET_AMOUNT = 0.1;
-const MAX_INPUT_BET_AMOUNT = 100000;
 const MAX_FLOAT_DIGITS = 4;
+const SEED_STR_LENGTH = 21;
 
-
-const { initSocketConnection, fetchBetHistory, deleteCurrentBet } = betActions;
+const { initSocketConnection, deleteCurrentBet } = betActions;
 const {
   getIdentity, getAccountInfo, getBalances, transfer, setErrorMessage,
 } = appActions;
@@ -56,6 +56,62 @@ function calculatePayout(winChance) {
 
 function calculatePayoutOnWin(betAmount, payout) {
   return betAmount * payout;
+}
+
+const symbols = [
+  {
+    symbol: 'EOS', min: 0.1, max: 10000, precision: 2,
+  },
+  {
+    symbol: 'BETX', min: 10, max: 10000, precision: 2,
+  },
+  {
+    symbol: 'EBTC', min: 0.0001, max: 10000, precision: 4,
+  },
+  {
+    symbol: 'EETH', min: 0.001, max: 10000, precision: 4,
+  },
+  {
+    symbol: 'EUSD', min: 0.1, max: 10000, precision: 2,
+  },
+];
+
+function getMinBySymbol(symbol) {
+  const symbolMatch = _.find(symbols, { symbol });
+
+  if (_.isUndefined(symbolMatch)) {
+    return 1;
+  }
+
+  return symbolMatch.min;
+}
+
+function getMaxBySymbol(symbol) {
+  const symbolMatch = _.find(symbols, { symbol });
+
+  if (_.isUndefined(symbolMatch)) {
+    return 10000;
+  }
+
+  return symbolMatch.max;
+}
+
+function prepareTableData(historyQueue, momentLocale) {
+  const tableData = historyQueue.all();
+
+  const rawBetData = _.isEmpty(tableData) ? [] : _.reverse(_.map(tableData, (bet) => ({
+    key: bet.id,
+    time: moment(bet.time).locale(momentLocale).format('HH:mm:ss'),
+    bettor: bet.bettor,
+    rollUnder: bet.rollUnder,
+    betAmount: bet.betAmount,
+    roll: bet.roll,
+    payout: bet.payout,
+    payoutAsset: bet.payoutAsset,
+    trxUrl: bet.trxUrl,
+  })));
+
+  return rawBetData;
 }
 
 class DicePage extends React.Component {
@@ -76,12 +132,13 @@ class DicePage extends React.Component {
       payout,
       payoutOnWin,
       winChance,
-      eosBalance: 0,
-      betxBalance: 0,
       username: this.defaultUsername,
-      betAsset: 'EOS',
-      seed: undefined,
+      seed: randomString(SEED_STR_LENGTH),
       notifications: [],
+      fairModalShow: false,
+      autoBetEnabled: false, // True if auto-bet switch is turned on
+      lastBetNotificationId: undefined, // Guard start of the next auto-bet so we don't start twice
+      myBetHistoryFetched: false, // Guard to make sure myBetHistory only fetched once
     };
 
     this.desktopColumns = [{
@@ -93,7 +150,7 @@ class DicePage extends React.Component {
       dataIndex: 'bettor',
       key: 'bettor',
     }, {
-      title: intl.formatMessage({ id: 'dice.history.form.unber' }),
+      title: intl.formatMessage({ id: 'dice.history.form.under' }),
       dataIndex: 'rollUnder',
       key: 'rollUnder',
     },
@@ -135,7 +192,7 @@ class DicePage extends React.Component {
       ),
     },
     {
-      title: intl.formatMessage({ id: 'dice.history.form.unber' }),
+      title: intl.formatMessage({ id: 'dice.history.form.under' }),
       dataIndex: 'rollUnder',
       key: 'rollUnder',
     },
@@ -166,13 +223,18 @@ class DicePage extends React.Component {
     this.onBetClicked = this.onBetClicked.bind(this);
     this.onLogInClicked = this.onLogInClicked.bind(this);
     this.formatBetAmountStr = this.formatBetAmountStr.bind(this);
+    this.toggleFairModal = this.toggleFairModal.bind(this);
     this.notificationDOMRef = React.createRef();
+    this.onAutoBetSwitchChange = this.onAutoBetSwitchChange.bind(this);
+    this.resetSeed = this.resetSeed.bind(this);
+    this.getBalanceBySymbol = this.getBalanceBySymbol.bind(this);
   }
 
   componentWillMount() {
-    const { fetchBetHistoryReq } = this.props;
+    const { fetchBetHistory, fetchHugeBetHistory, selectedSymbol } = this.props;
 
-    fetchBetHistoryReq();
+    fetchBetHistory();
+    fetchHugeBetHistory({ symbol: selectedSymbol, limit: appConfig.hugeBetAmount });
   }
 
   componentDidMount() {
@@ -182,24 +244,49 @@ class DicePage extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const {
-      username, eosBalance, betxBalance, currentBets,
+      username, selectedSymbol: newSelectedSymbol, currentBets,
     } = nextProps;
 
     const {
-      intl, deleteCurrentBetReq, getBalancesReq, getAccountInfoReq,
+      intl, deleteCurrentBetReq, getBalancesReq, getAccountInfoReq, selectedSymbol, fetchMyBetHistory,
     } = this.props;
-    const { notifications, username: stateUsername } = this.state;
-    const { notificationDOMRef } = this;
+    const {
+      notifications,
+      username: stateUsername,
+      lastBetNotificationId,
+      payout,
+      myBetHistoryFetched,
+    } = this.state;
+    let { autoBetEnabled } = this.state;
+    const { notificationDOMRef, onBetClicked } = this;
 
     const fieldsToUpdate = {};
 
     // Update username in state if we received one from props; this means Scatter login succeeded
     fieldsToUpdate.username = username || this.defaultUsername;
-    fieldsToUpdate.eosBalance = _.isNumber(eosBalance) ? eosBalance : 0;
-    fieldsToUpdate.betxBalance = _.isNumber(betxBalance) ? betxBalance : 0;
 
-    // console.log('componentWillReceiveProps.currentBets', currentBets);
+    if (username && username !== this.defaultUsername && !myBetHistoryFetched) {
+      fetchMyBetHistory({ username });
 
+      fieldsToUpdate.myBetHistoryFetched = true;
+    }
+
+    // Turn off autobet when switching symbol and change betAmount to min
+    if (newSelectedSymbol !== selectedSymbol) {
+      if (autoBetEnabled) {
+        autoBetEnabled = false;
+        fieldsToUpdate.autoBetEnabled = autoBetEnabled;
+        message.warning(intl.formatMessage({
+          id: 'message.warn.autoBetTurnedOff',
+        }));
+      }
+
+      fieldsToUpdate.betAmount = getMinBySymbol(newSelectedSymbol);
+      const payoutOnWin = calculatePayoutOnWin(fieldsToUpdate.betAmount, payout);
+      fieldsToUpdate.payoutOnWin = payoutOnWin;
+    }
+
+    // Add or remove notification box based currentBets update
     _.each(currentBets, (bet) => {
       const existingNotification = _.find(notifications, { transactionId: bet.transactionId });
 
@@ -266,6 +353,16 @@ class DicePage extends React.Component {
           }
         );
 
+        // Send the next bet is autobet is enabled; lastBetNotificationId is here to prevent we enter this code twice
+        if (autoBetEnabled && lastBetNotificationId !== notificationId) {
+          this.setState({
+            lastBetNotificationId: notificationId,
+          });
+          setTimeout(() => {
+            onBetClicked();
+          }, 1500);
+        }
+
         setTimeout(() => {
           if (!notificationDOMRef.current) { return; }
           // Remove this notification from notification componnent
@@ -278,7 +375,7 @@ class DicePage extends React.Component {
 
           getAccountInfoReq(stateUsername);
           getBalancesReq(stateUsername);
-        }, 5000);
+        }, 3000);
       }
     });
 
@@ -288,9 +385,7 @@ class DicePage extends React.Component {
   }
 
   onInputNumberChange(evt) {
-    const { payout, betAsset } = this.state;
-    const { intl } = this.props;
-    const { formatBetAmountStr } = this;
+    const { payout } = this.state;
 
     const { value } = evt.target;
     const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
@@ -304,16 +399,7 @@ class DicePage extends React.Component {
     }
 
     if ((!_.isNaN(value) && reg.test(value))) {
-      if (_.toNumber(value) < MIN_INPUT_BET_AMOUNT) {
-        message.warning(intl.formatMessage({
-          id: 'message.warn.lessThanMinBet',
-        }, {
-          amount: MIN_INPUT_BET_AMOUNT.toFixed(4),
-          asset: betAsset,
-        }));
-      }
-
-      const betAmount = formatBetAmountStr(value);
+      const betAmount = value;
       const payoutOnWin = calculatePayoutOnWin(betAmount, payout);
 
       this.setState({
@@ -377,23 +463,61 @@ class DicePage extends React.Component {
 
   onBetClicked() {
     const {
-      rollNumber, username, betAmount, betAsset, seed,
+      rollNumber, username, seed,
     } = this.state;
-    const { transferReq, setErrorMessageReq, referrer } = this.props;
+
+    let { betAmount } = this.state;
+
+    const {
+      transferReq, setErrorMessageReq, referrer, selectedSymbol,
+    } = this.props;
 
     if (username === this.defaultUsername) {
       setErrorMessageReq('error.page.usernamenotfound');
       return;
     }
 
+    const minAmount = getMinBySymbol(selectedSymbol);
+
+    if (betAmount < minAmount) {
+      betAmount = minAmount;
+      this.setState({
+        betAmount,
+      });
+    }
+
     transferReq({
       bettor: username,
       betAmount,
-      betAsset,
+      betAsset: selectedSymbol,
       rollUnder: rollNumber,
       referrer,
-      seed: seed || randomString(16), // We haven't set up a function for user custom seed
+      seed, // We haven't set up a function for user custom seed
     });
+  }
+
+  getBalanceBySymbol(symbol) {
+    const {
+      eosBalance, betxBalance, ebtcBalance, eethBalance, eusdBalance,
+    } = this.props;
+
+    const match = _.find(symbols, { symbol });
+    const precision = _.isUndefined(match) ? 4 : match.precision;
+
+    switch (symbol) {
+      case 'EOS':
+        return _.floor(eosBalance, precision);
+      case 'BETX':
+        return _.floor(betxBalance, precision);
+      case 'EBTC':
+        return _.floor(ebtcBalance, precision);
+      case 'EETH':
+        return _.floor(eethBalance, precision);
+      case 'EUSD':
+        return _.floor(eusdBalance, precision);
+      default:
+        return 0;
+    }
   }
 
   /**
@@ -401,19 +525,21 @@ class DicePage extends React.Component {
  * @return {[type]} [description]
  */
   formatBetAmountStr(betAmountStr) {
-    const { balance, betAsset } = this.state;
-    const { intl } = this.props;
+    const { intl, selectedSymbol } = this.props;
 
-    const lowBound = MIN_INPUT_BET_AMOUNT;
-    const highBound = _.min([MAX_INPUT_BET_AMOUNT, balance]);
+    const minAmount = getMinBySymbol(selectedSymbol);
+    const maxAmount = getMaxBySymbol(selectedSymbol);
+
+    const lowBound = minAmount;
+    const highBound = maxAmount;
     _.clamp(_.toNumber(betAmountStr), lowBound, highBound);
 
     if (_.toNumber(betAmountStr) < lowBound) {
       message.warning(intl.formatMessage({
         id: 'message.warn.lessThanMinBet',
       }, {
-        amount: MIN_INPUT_BET_AMOUNT,
-        asset: betAsset,
+        amount: minAmount,
+        asset: selectedSymbol,
       }));
 
       return lowBound;
@@ -421,8 +547,8 @@ class DicePage extends React.Component {
       message.warning(intl.formatMessage({
         id: 'message.warn.greaterThanMaxBet',
       }, {
-        amount: MAX_INPUT_BET_AMOUNT,
-        asset: betAsset,
+        amount: maxAmount,
+        asset: selectedSymbol,
       }));
       return highBound;
     }
@@ -435,71 +561,95 @@ class DicePage extends React.Component {
     return `${parts[0]}.${parts[1].substring(0, MAX_FLOAT_DIGITS)}`;
   }
 
+  toggleFairModal(visible) {
+    this.setState({
+      fairModalShow: visible,
+    });
+  }
+
+  onAutoBetSwitchChange(checked) {
+    // Kick off a bet if there's no ongoing bet
+    if (checked) {
+      this.onBetClicked();
+    }
+
+    // Set state value autoBetEnabled
+    this.setState({
+      autoBetEnabled: checked,
+    });
+  }
+
+  resetSeed() {
+    this.setState({
+      seed: randomString(SEED_STR_LENGTH),
+    });
+  }
+
   render() {
     const { desktopColumns, mobileColumns } = this;
     const {
-      betAmount, payoutOnWin, winChance, payout, rollNumber, eosBalance, betxBalance, username, time,
+      betAmount, payoutOnWin, winChance, payout, rollNumber, username, seed,
     } = this.state;
 
-    const { betHistory, locale, view } = this.props;
-
+    const {
+      betHistory, myBetHistory, hugeBetHistory, locale, view, intl, selectedSymbol,
+    } = this.props;
 
     const momentLocale = (locale === 'en') ? 'en' : 'zh-cn';
 
-    const rawBetData = _.isEmpty(betHistory.all()) ? [] : _.reverse(_.map(betHistory.all(), (bet) => ({
-      key: bet.id,
-      time: moment(bet.time).locale(momentLocale).format('HH:mm:ss'),
-      bettor: bet.bettor,
-      rollUnder: bet.rollUnder,
-      betAmount: bet.betAmount,
-      roll: bet.roll,
-      payout: bet.payout,
-      payoutAsset: bet.payoutAsset,
-      trxUrl: bet.trxUrl,
-    })));
-
-    const allBetData = _.slice(rawBetData, 0, appConfig.betHistoryTableSize);
-
-    const myBetData = _.slice(_.filter(rawBetData, (o) => o.bettor === username), 0, appConfig.betHistoryTableSize);
-    const hugeBetData = _.slice(_.filter(rawBetData, (o) => o.payoutAsset.amount >= appConfig.hugeBetAmount), 0, appConfig.betHistoryTableSize);
+    // Prepare data for three tables at bottom
+    const allBetData = prepareTableData(betHistory, momentLocale);
+    const myBetData = prepareTableData(myBetHistory, momentLocale);
+    const hugeBetData = prepareTableData(hugeBetHistory, momentLocale);
 
     const columns = view === 'MobileView' ? mobileColumns : desktopColumns;
+
+    const screenWidth = document.body.clientWidth; // If the screenWidth<1024, the autoBet tooltip will be actived by click;
+
+    const autoBetElement = (<div className="auto-bet">
+      <IntlMessages id="dice.play.autoBet" />
+      <Switch
+        disabled={username === this.defaultUsername}
+        checkedChildren={intl.formatMessage({ id: 'dice.play.autoBet.switch.on' })}
+        unCheckedChildren={intl.formatMessage({ id: 'dice.play.autoBet.switch.off' })}
+        onChange={this.onAutoBetSwitchChange}
+        size="default"
+      />
+      <Tooltip title={(<IntlMessages id="dice.play.autoTool" />)} trigger={screenWidth <= 1024 ? 'click' : 'hover'}>
+        <Icon type="question-circle" className="auto-bet-icon" />
+      </Tooltip>
+    </div>);
+
+    const currentSymbol = (selectedSymbol === 'BETX') ? 'EOS' : selectedSymbol;
 
     return (
       <div>
         <div id="dicepage">
-          <div className="wrapper">
+          <div className="horizontalWrapper">
             <Row gutter={40}>
               <Col xs={24} lg={16}>
                 <section>
-                  {/* <div className="horizontalWrapper"> */}
+                  <CurrencyBar />
                   <div className="container">
                     <ReactNotification ref={this.notificationDOMRef} />
                     <div className="holderBorder">
-
-                      <div className="container-top">
+                      <div className="container-header">
                         <Row>
                           <Col span={24}>
                             <div className="currency-switch">
-                              <div className="currency-switch-btns">
-                                <Button size="large" className="bet_button active" type="default" data-value="EOS">EOS
-                                </Button>
-                                <Popover content={(<IntlMessages id="dice.alert.comingsoon" />)}>
-                                  <Button size="large" className="bet_button" type="default" data-value="BETX" >BETX
-                                  </Button>
-                                </Popover>
-                              </div>
+                              <Button onClick={() => this.toggleFairModal(true)} className="fair-btn" icon="trophy"><IntlMessages id="dice.play.fairBtn" /></Button>
                             </div>
                           </Col>
+
                         </Row>
                       </div>
-                      <div className="action">
+                      <div className="container-body">
 
-                        <Row type="flex" gutter={0}>
+                        <Row className="container-body-numbers" type="flex">
                           <Col span={8}>
                             <div className="box box-label">
                               <div className="box-inner">
-                                <div className="label"><IntlMessages id="dice.play.notice" />
+                                <div className="label">{view === 'DesktopView' ? <IntlMessages id="dice.play.rollUnderToWin" /> : <IntlMessages id="dice.play.rollUnder" />}
                                 </div>
                               </div>
                             </div>
@@ -536,7 +686,6 @@ class DicePage extends React.Component {
                                 </div>
                               </div>
                             </div>
-
                           </Col>
                           <Col span={8}>
                             <div className="box box-value">
@@ -547,27 +696,27 @@ class DicePage extends React.Component {
                             </div>
                           </Col>
                         </Row>
-                        <Row type="flex" justify="center">
-                          <Col span={24}>
-                            <Slider getValue={this.getSliderValue} defaultValue={DEFAULT_ROLL_NUMBER} min={MIN_SELECT_ROLL_NUMBER} max={MAX_SELECT_ROLL_NUMBER} step={1} />
+                        <Row className="container-body-input" type="flex" justify="center" align="middle">
+                          <Col xs={24} lg={20}>
+                            <div className="container-body-input-slider">
+                              <Slider getValue={this.getSliderValue} defaultValue={DEFAULT_ROLL_NUMBER} min={MIN_SELECT_ROLL_NUMBER} max={MAX_SELECT_ROLL_NUMBER} step={1} />
+                            </div>
                           </Col>
-                        </Row>
-
-                        <Row className="input-group-container" type="flex" justify="center" align="middle">
-                          <Col xs={{ span: 12, order: 2 }} lg={{ span: 8, order: 1 }} >
+                          <Col xs={{ span: 14, order: 2 }} lg={{ span: 8, order: 1 }} >
 
                             <div className="box box-input">
                               <div className="box-inner">
                                 <Row type="flex" justify="center" align="middle">
-                                  <Col span={16}>
+                                  <Col xs={18} lg={16}>
                                     <div className="box-input-inner">
                                       <span className="label"><IntlMessages id="dice.play.amount" /></span>
-                                      <Input size="large" className="inputBorder" onChange={this.onInputNumberChange} value={betAmount} />
+                                      <Input className="box-input-inner-input inputBorder" size="large" onBlur={() => window.scroll(0, 0)} onChange={this.onInputNumberChange} value={betAmount} />
+                                      <span className="box-input-inner-addOn">{selectedSymbol}</span>
                                     </div>
                                   </Col>
-                                  <Col span={8}>
-                                    <button className="box-input-round-btn" onClick={this.onBetAmountButtonClick} data-value="1">+</button>
-                                    <button className="box-input-round-btn" onClick={this.onBetAmountButtonClick} data-value="-1">-</button>
+                                  <Col xs={6} lg={8}>
+                                    <Button type="default" className="box-input-round-btn" shape="circle" icon="plus" size={view === 'DesktopView' ? 'default' : 'small'} onClick={this.onBetAmountButtonClick} data-value="1" />
+                                    <Button type="default" className="box-input-round-btn" shape="circle" icon="minus" size={view === 'DesktopView' ? 'default' : 'small'} onClick={this.onBetAmountButtonClick} data-value="-1" />
                                   </Col>
 
                                 </Row>
@@ -597,29 +746,41 @@ class DicePage extends React.Component {
                               </div>
                             </div>
                           </Col>
-                          <Col xs={{ span: 12, order: 3 }} lg={{ span: 8, order: 3 }} >
+                          <Col xs={{ span: 10, order: 3 }} lg={{ span: 8, order: 3 }} >
                             <div className="box box-input">
                               <div className="box-inner">
                                 <div className="box-input-inner box-input-inner-reward">
                                   <span className="label"><IntlMessages id="dice.reward.total" /></span>
-                                  <Input size="large" disabled className="inputBorder" value={_.floor(payoutOnWin, 4)} />
+                                  <Input className="box-input-inner-input inputBorder" size="large" disabled value={_.floor(payoutOnWin, 4)} />
+                                  <span className="box-input-inner-addOn">{selectedSymbol}</span>
                                 </div>
                               </div>
                             </div>
                           </Col>
                         </Row>
-                        <Row type="flex" justify="center" align="middle" gutter={{ xs: 12, lg: 24, xxl: 36 }}>
+                        <Row className="container-body-btn" type="flex" justify="center" align="middle" >
+                          {/* <Col span={24}>{autoBetElement}</Col> */}
                           <Col span={6}>
-                            <div className="bet_description"><IntlMessages id="dice.balance.eos" /></div>
-                            <div className="bet_value">{_.floor(eosBalance, 2)}<span className="highlight"> <IntlMessages id="dice.asset.eos" /></span></div>
+                            <div className="container-body-btn-description"><IntlMessages id="dice.balance" values={{ symbol: currentSymbol }} /></div>
+                            <div className="bet_value">{this.getBalanceBySymbol(currentSymbol)}<span className="highlight"> { currentSymbol }</span></div>
                           </Col>
                           <Col span={12}>
-                            {username === this.defaultUsername ? <Button className="btn-login" size="large" type="primary" onClick={this.onLogInClicked}><IntlMessages id="dice.button.login" /></Button> : <Button className="btn-login" size="large" type="primary" onClick={this.onBetClicked}><IntlMessages id="dice.button.bet" /></Button>}
-                            <div className="bet_description"><Icon type="question-circle" /><IntlMessages id="dice.reward.firstbet" values={{ amount: appConfig.firstBetReward }} /></div>
+                            {autoBetElement}
+                            {username === this.defaultUsername
+                              ? <Button className="btn-login" size="large" type="primary" onClick={this.onLogInClicked}><IntlMessages id="dice.button.login" /></Button>
+                              : <Button className="btn-login" size="large" type="primary" onClick={this.onBetClicked}><IntlMessages id="dice.button.bet" /></Button>}
                           </Col>
                           <Col span={6}>
-                            <div className="bet_description"><IntlMessages id="dice.balance.betx" /></div>
-                            <div className="bet_value">{_.floor(betxBalance, 2)}<span className="highlight"> <IntlMessages id="dice.asset.betx" /></span></div>
+                            <div className="container-body-btn-description"><IntlMessages id="dice.balance" values={{ symbol: 'BETX' }} /></div>
+                            <div className="bet_value">{this.getBalanceBySymbol('BETX')}<span className="highlight"> <IntlMessages id="dice.asset.betx" /></span></div>
+                          </Col>
+                          <Col xs={20} lg={16}>
+                            <div className="container-body-btn-description container-body-btn-description-firstbet">
+                              <Tooltip title={(<IntlMessages id="dice.reward.firstbet.tooltip" />)} trigger={screenWidth <= 1024 ? 'click' : 'hover'}>
+                                <Icon type="question-circle" />
+                              </Tooltip>
+                              <IntlMessages id="dice.reward.firstbet" values={{ amount: appConfig.firstBetReward }} />
+                            </div>
                           </Col>
                         </Row>
                       </div>
@@ -631,6 +792,7 @@ class DicePage extends React.Component {
               <Col xs={24} lg={8}>
 
                 <section className="hideOnMobile">
+                  <div style={{ height: '60px' }} />
                   <div className="container">
                     <div className="holderBorder">
                       <Chatroom username={username} />
@@ -638,16 +800,12 @@ class DicePage extends React.Component {
                   </div>
                 </section>
               </Col>
-
               <Col xs={24} lg={24}>
                 <BetRank />
               </Col>
-
-
               <Col xs={24} lg={24}>
 
                 <section id="tables" >
-                  {/* <div className="horizontalWrapper"> */}
                   <div className="container">
                     <Tabs size="large">
                       <TabPane tab={<IntlMessages id="dice.history.all" />} key="allbet">
@@ -689,6 +847,12 @@ class DicePage extends React.Component {
                 </section>
               </Col>
             </Row>
+            <FairModal
+              value={seed}
+              isVisible={this.state.fairModalShow}
+              onReset={this.resetSeed}
+              closeModal={this.toggleFairModal}
+            />
           </div>
         </div>
       </div>
@@ -701,21 +865,30 @@ DicePage.propTypes = {
   transferReq: PropTypes.func,
   initSocketConnectionReq: PropTypes.func,
   betHistory: PropTypes.object,
+  myBetHistory: PropTypes.object,
+  hugeBetHistory: PropTypes.object,
   refresh: PropTypes.bool,
   getIdentityReq: PropTypes.func,
   setErrorMessageReq: PropTypes.func,
   username: PropTypes.string,
   eosBalance: PropTypes.number,
   betxBalance: PropTypes.number,
+  ebtcBalance: PropTypes.number,
+  eethBalance: PropTypes.number,
+  eusdBalance: PropTypes.number,
+
   intl: intlShape.isRequired,
   successMessage: PropTypes.string,
-  fetchBetHistoryReq: PropTypes.func,
+  fetchBetHistory: PropTypes.func,
+  fetchMyBetHistory: PropTypes.func,
+  fetchHugeBetHistory: PropTypes.func,
   referrer: PropTypes.string.isRequired,
   view: PropTypes.string,
   currentBets: PropTypes.array,
   deleteCurrentBetReq: PropTypes.func,
   getBalancesReq: PropTypes.func,
   getAccountInfoReq: PropTypes.func,
+  selectedSymbol: PropTypes.string,
 };
 
 DicePage.defaultProps = {
@@ -723,32 +896,46 @@ DicePage.defaultProps = {
   transferReq: undefined,
   initSocketConnectionReq: undefined,
   betHistory: undefined,
+  myBetHistory: undefined,
+  hugeBetHistory: undefined,
   refresh: false,
   username: undefined,
   eosBalance: undefined,
   betxBalance: undefined,
+  ebtcBalance: undefined,
+  eethBalance: undefined,
+  eusdBalance: undefined,
   getIdentityReq: undefined,
   setErrorMessageReq: undefined,
   successMessage: undefined,
-  fetchBetHistoryReq: undefined,
+  fetchBetHistory: undefined,
+  fetchMyBetHistory: undefined,
+  fetchHugeBetHistory: undefined,
   view: undefined,
   currentBets: [],
   deleteCurrentBetReq: undefined,
   getBalancesReq: undefined,
   getAccountInfoReq: undefined,
+  selectedSymbol: undefined,
 };
 
 const mapStateToProps = (state) => ({
   locale: state.LanguageSwitcher.language.locale,
   betHistory: state.Bet.get('history'),
+  myBetHistory: state.Bet.get('myHistory'),
+  hugeBetHistory: state.Bet.get('hugeHistory'),
   refresh: state.Bet.get('refresh'),
   username: state.App.get('username'),
   eosBalance: state.App.get('eosBalance'),
   betxBalance: state.App.get('betxBalance'),
+  ebtcBalance: state.App.get('ebtcBalance'),
+  eethBalance: state.App.get('eethBalance'),
+  eusdBalance: state.App.get('eusdBalance'),
   successMessage: state.App.get('successMessage'),
   referrer: state.App.get('ref'),
   view: state.App.get('view'),
   currentBets: state.Bet.get('currentBets'),
+  selectedSymbol: state.Bet.get('selectedSymbol'),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -756,7 +943,9 @@ const mapDispatchToProps = (dispatch) => ({
   initSocketConnectionReq: (obj) => dispatch(initSocketConnection(obj)),
   getIdentityReq: () => dispatch(getIdentity()),
   setErrorMessageReq: (errorMessage) => dispatch(setErrorMessage(errorMessage)),
-  fetchBetHistoryReq: () => dispatch(fetchBetHistory()),
+  fetchBetHistory: () => dispatch(betActions.fetchBetHistory()),
+  fetchMyBetHistory: (params) => dispatch(betActions.fetchMyBetHistory(params)),
+  fetchHugeBetHistory: (params) => dispatch(betActions.fetchHugeBetHistory(params)),
   deleteCurrentBetReq: (transactionId) => dispatch(deleteCurrentBet(transactionId)),
   getBalancesReq: (name) => dispatch(getBalances(name)),
   getAccountInfoReq: (name) => dispatch(getAccountInfo(name)),
