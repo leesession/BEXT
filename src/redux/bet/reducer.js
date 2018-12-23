@@ -18,6 +18,7 @@ const initState = new Map({
   betxStakeAmount: 0,
   betxCirculation: 0,
   currentBets: [],
+  betRank: undefined,
 });
 
 /**
@@ -158,6 +159,10 @@ export default function (state = initState, action) {
       }
       break;
     }
+
+    case actions.BET_RANK_RESULT:
+      return state.set('betRank', action.value)
+        .set('refresh', !state.get('refresh'));
     default:
       return state;
   }

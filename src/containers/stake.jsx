@@ -13,33 +13,10 @@ import stakeActions from '../redux/stake/actions';
 import betActions from '../redux/bet/actions';
 import appActions from '../redux/app/actions';
 import { appConfig } from '../settings';
-import { formatNumberThousands } from '../helpers/utility';
+import { formatNumberThousands, secondsToTime } from '../helpers/utility';
 import LoginModal from '../components/loginModal';
 
 cloudinaryConfig({ cloud_name: 'forgelab-io' });
-
-/**
- * Convert seconds to days hours mins and seconds
- * @param  {[type]} secs [description]
- * @return {[type]}      [description]
- */
-export function secondsToTime(secs) {
-  const days = Math.floor(secs / 86400);
-  let numSeconds = secs % 86400;
-  const hours = Math.floor(numSeconds / 3600);
-  numSeconds %= 3600;
-  const minutes = Math.floor(numSeconds / 60);
-  const seconds = Math.ceil(numSeconds % 60);
-
-  const obj = {
-    d: days,
-    h: hours,
-    m: minutes,
-    s: seconds,
-  };
-
-  return obj;
-}
 
 class StakePage extends React.Component {
   constructor(props) {
