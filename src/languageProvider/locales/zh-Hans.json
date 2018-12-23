@@ -56,6 +56,12 @@
 
   "dice.alert.comingsoon":"即将上线",
   "dice.send":"发送",
+  "dice.rank.rank":"排名",
+  "dice.rank.bettor":"投注者",
+  "dice.rank.wager":"总投注额",
+  "dice.rank.prize":"奖励",
+  "dice.rank.leadboard":"每日排行榜",
+  "dice.rank.me":"我",
 
   "modal.fair.title":"玩法和公平性",
   "modal.fair.description":"一次公平的下注，需要公平的随机数。\nBETX的做法是，由玩家（Player）和服务端（House）分别生成一个种子（House Seed和Player Seed)，然后把种子交给开源的智能合约，智能合约根据这两个Seed生成一个最终的随机数。\n从数学算法上，最终的随机数是由双方的Seed共同决定的，保证了公平性。而且在玩家下注前，服务端首先公布了House Seed的hash值，开奖后玩家可以验证此House Hash，从而证明服务端没有作弊。",

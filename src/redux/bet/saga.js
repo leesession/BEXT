@@ -1,3 +1,5 @@
+/* eslint no-console: 0 */
+
 import { all, take, takeEvery, put, call } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import actions from './actions';
@@ -8,11 +10,11 @@ import { delay } from '../../helpers/utility';
 import { appConfig } from '../../settings';
 
 const {
-  subscribe, unsubscribe, fetchBetHistory, handleParseError, getBetVolume, getBetxStakeAmount,
+  subscribe, unsubscribe, fetchBetHistory, handleParseError, getBetVolume, getBetRank,
 } = ParseHelper;
 
 const {
-  handleScatterError, getTotalBetAmount,
+  handleScatterError,
 } = ScatterHelper;
 
 function websocketInitChannel(payload) {
@@ -40,8 +42,6 @@ function websocketInitChannel(payload) {
       // console.log('object left', object);
       emitter({ type: actions.BET_OBJECT_LEFT, data: object });
     const unsubscribeHandler = () => {
-      // console.log('subscription close');
-      // betSubscription = undefined;
       console.log('unsubscribeHandler() emitting BET_UNSUBSCRIBED');
       return emitter({ type: actions.BET_UNSUBSCRIBED, payload });
     };
@@ -122,7 +122,7 @@ export function* reconnectLiveBetRequest(action) {
   }
 }
 
-export function* fetchBetHistoryRequest(action) {
+export function* fetchBetHistoryRequest() {
   try {
     const response = yield call(fetchBetHistory);
 
@@ -199,20 +199,22 @@ export function* getBetVolumeRequest() {
   }
 }
 
-export function* getBetxStakeAmountRequest() {
-  try {
-    const result = yield call(getBetxStakeAmount);
-    yield put({
-      type: actions.GET_BETX_STAKE_AMOUNT_RESULT,
-      value: result,
-    });
-  } catch (err) {
-    const message = yield call(handleParseError, err);
-    // console.log(message);
-    // yield put({
-    //   type: actions.SET_ERROR_MESSAGE,
-    //   message,
-    // });
+export function* startPollBetRankRequest(action) {
+  const params = action.payload;
+  while (true) {
+    try {
+      const response = yield call(getBetRank, params);
+
+      yield put({
+        type: actions.BET_RANK_RESULT,
+        value: response,
+      });
+
+      yield call(delay, appConfig.pollBetRankInterval);
+    } catch (err) {
+      const message = yield call(handleParseError, err);
+      console.log(err);
+    }
   }
 }
 
@@ -223,7 +225,6 @@ export default function* topicSaga() {
     takeEvery(actions.FETCH_MY_BET_HISTORY, fetchMyBetHistoryRequest),
     takeEvery(actions.FETCH_HUGE_BET_HISTORY, fetchHugeBetHistoryRequest),
     takeEvery(actions.GET_BET_VOLUME, getBetVolumeRequest),
-    takeEvery(actions.GET_BETX_STAKE_AMOUNT, getBetxStakeAmountRequest),
-    // takeEvery(actions.BET_UNSUBSCRIBED, reconnectLiveBetRequest),
+    takeEvery(actions.START_POLL_BET_RANK, startPollBetRankRequest),
   ]);
 }

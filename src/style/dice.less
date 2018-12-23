@@ -109,6 +109,242 @@
 
         }
 
+        // Ranking style
+        &.rank{
+            margin-top: 20px;
+            margin-bottom: 10px;
+
+            color: white;
+
+            @media @phone{
+                margin-top: 0px;
+                margin-bottom: 12px;
+            }
+
+            .holderBorder{
+                padding:10px 20px;
+
+                @media @phone {
+                    padding:10px 0px;
+                }
+            }
+
+            .countdownHolder{
+                transform: translateY(-1.5em);
+            }
+
+            p{
+                margin-bottom: 0;
+
+                &.countdown{
+                    color: @borderColor;
+                    font-size: 2em;
+                    letter-spacing: 2px;
+                    margin-top: 30px;
+                    @media @phone {
+                        font-size:3em;
+                    }
+                }
+
+                &.countdownDescription{
+                    font-size:1.4em;
+                    @media @phone {
+                        font-size:2em;
+                    }
+                }
+            }
+
+            .contentWrapper{
+                height:300px;
+
+                @media @phone {
+                    height:250px;
+                }
+            }
+
+            .rankingHolder{
+                display: flex;
+                justify-content: center;
+                align-items: flex-end;
+                flex-direction: row;
+                .crown-box{
+                    position: relative;
+                    width: 4em;
+                    margin: 0 auto;
+                    color: #fff;
+                    margin-bottom: 15px;
+                    .crown-text{
+                        position: absolute;
+                        top: 50%;
+                        font-size: 1.2em;
+                        font-weight: bold;
+                        left: 50%;
+                        transform:translate(-50%,-40%)
+                    }
+                    .crown-img{
+                        display: block;
+                        width: 100%;
+                    }
+                    @media @phone{
+                        width: 3em;
+                        margin-bottom: 8px;
+                        .crown-text{
+                            font-size: 1em;
+                        }
+                    }
+                }
+
+                .rankingItem{
+                    flex:1;
+                    font-size: 1.2em;
+
+                    span{
+                        display: block;
+                    }
+
+                    .description{
+                        font-size: 0.8em;
+                        color: @fontColor;
+
+                        @media @phone {
+                            font-size: 1.5em;
+                            display: none;
+                        }
+                    }
+
+                    @media @phone {
+                        font-size: 2em;
+                    }
+                }
+            }
+
+            .myRank, .myRankLg{
+                height:40px;
+                background: rgb(30,30,30);
+                font-size: 1.2em;
+                display: flex;
+                align-items: center;
+
+                @media @phone {
+                    font-size: 2em;
+                }
+            }
+
+            .myRankLg{
+                border-top: 1px solid @fontColor;
+            }
+
+            // stylize table
+            td{
+                padding-top: 5px;
+                padding-bottom: 5px;
+            }
+
+            .ranking-td{
+                color: @borderColor;
+            }
+
+            .ant-table {
+                color: white;
+                background-color: @panelGrey;
+
+                & * {
+                    background-color: transparent;
+                }
+                .ant-table-placeholder {
+                    border-bottom: none;
+                    color: white;
+                }
+
+                .ant-table-body::after {
+                    content: ' ';
+                    height: 1px;
+                    color: white;
+                    background: #fff;
+                    width: 300px;
+                }
+
+                .ant-table-thead th {
+                    color: white;
+                    text-align: center;
+                    font-size: 1.2em;
+                    background: @panelGrey;
+                    @media @phone {
+                        font-size: 0.8em;
+                    }
+
+                }
+                .ant-table-tbody td {
+                    @media @phone {
+                        font-size: 0.8em;
+                    }
+
+                }
+                .ant-table-row:nth-child(2n-1){
+                    background: rgba(0,0,0,0.2);
+                }
+
+
+            }
+
+            .ant-tabs-nav-scroll {
+                border-bottom: none;
+            }
+
+            .ant-tabs-ink-bar {
+                display: none !important;
+            }
+
+            .ant-tabs-tab {
+                color: @borderColor;
+                font-size: 1.2em;
+
+                @media @phone {
+                    font-size: 1.0em;
+                    margin-right: 12px;
+                }
+
+            }
+
+            .ant-tabs-tab-active {
+                color: @panelGrey;
+                background: @borderColor;
+                border-radius: 20px;
+            }
+
+            .ant-table-placeholder {
+                border-top: 1px solid white;
+                margin: 0 0px;
+
+                @media @phone{
+                    margin-left: 0px;
+                    margin-right: 0px;
+                }
+            }
+
+            .ant-table-row {
+                &>* {
+                    border: none;
+                }
+
+                td {
+                    text-align: center;
+                    font-size: 1.2em;
+
+                    @media @phone {
+                        font-size: 1.0em;
+                        padding: 12px 4px;
+                    }
+
+                }
+
+            }
+
+            .ant-tabs-bar {
+                border-bottom: none;
+            }
+        }
+
         .container-header {
             padding-right: @containerPadding;
             padding-left: @containerPadding;
@@ -645,7 +881,7 @@
             .ant-table-thead th {
                 color: white;
                 text-align: center;
-                font-size: 1.5em;
+                font-size: 1.2em;
                 background: @panelGrey;
 
                 @media @phone {
@@ -710,7 +946,7 @@
 
             td {
                 text-align: center;
-                font-size: 1.5em;
+                font-size: 1.2em;
 
                 @media @phone {
                     font-size: 1.0em;

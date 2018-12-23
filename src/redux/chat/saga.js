@@ -1,3 +1,4 @@
+/* eslint no-console: 0 */
 import _ from 'lodash';
 import { all, take, takeEvery, put, call } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
@@ -9,7 +10,6 @@ import { appConfig } from '../../settings';
 const {
   subscribe, unsubscribe, sendMessage, fetchChatHistory, handleParseError,
 } = ParseHelper;
-let messageGlobalChannel;
 
 function websocketInitChannel(payload) {
   return eventChannel((emitter) => {
@@ -36,7 +36,6 @@ function websocketInitChannel(payload) {
       // console.log('object left', object);
       emitter({ type: actions.MESSAGE_OBJECT_LEFT, data: object });
     const unsubscribeHandler = () => {
-      messageGlobalChannel = undefined;
       console.log('unsubscribeHandler emitting MESSAGE_UNSUBSCRIBED');
       return emitter({ type: actions.MESSAGE_UNSUBSCRIBED, payload });
     };
@@ -73,29 +72,32 @@ function websocketInitChannel(payload) {
 }
 
 export function* initLiveMessages(action) {
+  let chatChannel;
+
   try {
-    if (!_.isUndefined(messageGlobalChannel)) {
-      return;
-    }
-    messageGlobalChannel = yield call(websocketInitChannel, action.payload);
+    chatChannel = yield call(websocketInitChannel, action.payload);
 
     while (true) {
-      const payload = yield take(messageGlobalChannel);
+      const payload = yield take(chatChannel);
 
       yield put(payload);
     }
   } catch (err) {
-    // console.error('socket error:', err);
-    // socketChannel is still open in catch block
-    // if we want end the socketChannel, we need close it explicitly
-    // socketChannel.close()
+    console.error('socket error:', err);
+  } finally {
+    console.log('initLiveMessages.saga, finally close:');
+
+    if (chatChannel) {
+      chatChannel.close();
+      console.log('initLiveMessages.finally: eventChannel is, ', chatChannel);
+    }
+
+    yield call(reconnectLiveMessgeRequest, action);
   }
 }
 
 export function* reconnectLiveMessgeRequest(action) {
   try {
-    console.log(`Chat live stream terminated; waiting for ${appConfig.chatChannelReconnectInterval} ms before reconnect.`);
-
     yield call(delay, appConfig.chatChannelReconnectInterval);
 
     // Reconnect

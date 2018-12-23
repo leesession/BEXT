@@ -21,6 +21,7 @@ const initState = new Map({
   betxStakeAmount: 0,
   betxCirculation: 0,
   currentBets: [],
+  betRank: undefined,
   username: undefined,
   selectedSymbol: 'EOS',
 });
@@ -191,6 +192,9 @@ export default function (state = initState, action) {
       break;
     }
 
+    case actions.BET_RANK_RESULT:
+      return state.set('betRank', action.value)
+        .set('refresh', !state.get('refresh'));
     case actions.SET_CURRENCY:
       return state.set('selectedSymbol', action.value);
     default:

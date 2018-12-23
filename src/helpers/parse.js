@@ -3,7 +3,7 @@ import _ from 'lodash';
 import moment from 'moment';
 
 import { parseConfig, appConfig } from '../settings';
-import { parseAsset, trimZerosFromAsset } from './utility';
+import { trimZerosFromAsset } from './utility';
 import betActions from '../redux/bet/actions';
 
 Parse.initialize(parseConfig.appId, parseConfig.javascriptKey, '0x2d2e81f6db11144f9a51c1bac41b4ebffecec391c19d74322b2a8917da357208');
@@ -27,7 +27,7 @@ class ParseHelper {
     this.handleParseError = this.handleParseError.bind(this);
     this.parseBetReceipt = this.parseBetReceipt.bind(this);
     this.getBetVolume = this.getBetVolume.bind(this);
-    this.getBetxStakeAmount = this.getBetxStakeAmount.bind(this);
+    this.getBetRank = this.getBetRank.bind(this);
   }
 
   /**
@@ -97,9 +97,9 @@ class ParseHelper {
     query.equalTo('status', STATUS.RESOLVED);
     query.descending('resolved_block_num');
 
-    if (params.type === betActions.BET_HISTORY_TYPE.MY) {
+    if (type === betActions.BET_HISTORY_TYPE.MY) {
       query.equalTo('bettor', username);
-    } else if (params.type === betActions.BET_HISTORY_TYPE.HUGE) {
+    } else if (type === betActions.BET_HISTORY_TYPE.HUGE) {
       query.greaterThanOrEqualTo('payoutAsset.amount', limit);
       query.equalTo('payoutAsset.symbol', symbol);
     }
@@ -126,8 +126,8 @@ class ParseHelper {
     return this.parse.Cloud.run('getBetVolume', { types: ['day', 'all'] });
   }
 
-  getBetxStakeAmount() {
-    return this.parse.Cloud.run('getBetxStakeAmount');
+  getBetRank(params) {
+    return this.parse.Cloud.run('getBetRank', params);
   }
 
   handleParseError(err) {

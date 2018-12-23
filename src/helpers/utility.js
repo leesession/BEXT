@@ -136,8 +136,35 @@ export function formatNumberThousands(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
+/**
+ * Usage: await delay(1000)
+ * @param  {[type]} ms) [description]
+ * @return {[type]}     [description]
+ */
 export const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
+/**
+ * Convert a number of secend to an object containing days, hours, minutes and seconds
+ * @param  {[type]} secs [description]
+ * @return {[type]}      [description]
+ */
+export function secondsToTime(secs) {
+  const days = Math.floor(secs / 86400);
+  let numSeconds = secs % 86400;
+  const hours = Math.floor(numSeconds / 3600);
+  numSeconds %= 3600;
+  const minutes = Math.floor(numSeconds / 60);
+  const seconds = Math.ceil(numSeconds % 60);
+
+  const obj = {
+    d: days,
+    h: hours,
+    m: minutes,
+    s: seconds,
+  };
+
+  return obj;
+}
 /**
   Normalize and validate decimal string (potentially large values).  Should
   avoid internationalization issues if possible but will be safe and

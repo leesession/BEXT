@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 const actions = {
   INIT_SOCKET_CONNECTION_BET: 'INIT_SOCKET_CONNECTION_BET',
   CLOSE_SOCKET_CONNECTION_BET: 'CLOSE_SOCKET_CONNECTION_BET',
@@ -28,8 +26,9 @@ const actions = {
   GET_BETX_STAKE_AMOUNT_RESULT: 'GET_BETX_STAKE_AMOUNT_RESULT',
   ADD_CURRENT_BET: 'ADD_CURRENT_BET',
   DELETE_CURRENT_BET: 'DELETE_CURRENT_BET',
+  START_POLL_BET_RANK: 'START_POLL_BET_RANK',
+  BET_RANK_RESULT: 'BET_RANK_RESULT',
   SET_CURRENCY: 'SET_CURRENCY',
-
   initSocketConnection: (obj) => ({
     type: actions.INIT_SOCKET_CONNECTION_BET,
     payload: obj,
@@ -54,6 +53,10 @@ const actions = {
   deleteCurrentBet: (transactionId) => ({
     type: actions.DELETE_CURRENT_BET,
     value: transactionId,
+  }),
+  startPollBetRank: (params) => ({
+    type: actions.START_POLL_BET_RANK,
+    payload: params,
   }),
   setCurrency: (value) => ({
     type: actions.SET_CURRENCY,

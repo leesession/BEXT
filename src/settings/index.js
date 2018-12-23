@@ -32,6 +32,7 @@ const appConfig = {
   chatHistoryMemorySize: 500,
   chatChannelReconnectInterval: 5000,
   dividendRatio: 0.01, // Dividend ratio compared to betVolume
+  pollBetRankInterval: 5000, // Interval of which rank data polls
   eosNetwork: {
     blockchain: 'eos',
     protocol: 'https',

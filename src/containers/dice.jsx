@@ -12,9 +12,10 @@ import 'moment/locale/zh-cn';
 import 'animate.css/animate.min.css';
 
 import ReactNotification from '../components/react-notification-component';
+import BetRank from '../components/betRank';
 import FairModal from '../components/fairModal';
 import '../components/react-notification-component/less/notification.less';
-import { cloudinaryConfig, CloudinaryImage } from '../components/react-cloudinary';
+// import { cloudinaryConfig, CloudinaryImage } from '../components/react-cloudinary';
 
 import Slider from '../components/slider';
 import Dice from '../components/dice';
@@ -26,7 +27,7 @@ import { appConfig } from '../settings';
 import { randomString } from '../helpers/utility';
 import CurrencyBar from '../components/currencyBar';
 
-cloudinaryConfig({ cloud_name: 'forgelab-io' });
+// cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
 const { TabPane } = Tabs;
 const MAX_BALANCE_STR = 'MAX';
@@ -131,7 +132,6 @@ class DicePage extends React.Component {
       payout,
       payoutOnWin,
       winChance,
-      balance: 0,
       username: this.defaultUsername,
       seed: randomString(SEED_STR_LENGTH),
       notifications: [],
@@ -384,13 +384,8 @@ class DicePage extends React.Component {
     this.setState(fieldsToUpdate);
   }
 
-  componentWillUnmount() {
-  }
-
   onInputNumberChange(evt) {
     const { payout } = this.state;
-    const { intl, selectedSymbol } = this.props;
-    const { formatBetAmountStr } = this;
 
     const { value } = evt.target;
     const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
@@ -530,7 +525,6 @@ class DicePage extends React.Component {
  * @return {[type]} [description]
  */
   formatBetAmountStr(betAmountStr) {
-    const { balance } = this.state;
     const { intl, selectedSymbol } = this.props;
 
     const minAmount = getMinBySymbol(selectedSymbol);
@@ -806,7 +800,10 @@ class DicePage extends React.Component {
                   </div>
                 </section>
               </Col>
-              <Col xs={24}>
+              <Col xs={24} lg={24}>
+                <BetRank />
+              </Col>
+              <Col xs={24} lg={24}>
 
                 <section id="tables" >
                   <div className="container">
