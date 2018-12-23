@@ -55,7 +55,10 @@ export default function appReducer(state = initState, action) {
         .set('cpuUsage', undefined)
         .set('netUsage', undefined)
         .set('eosBalance', undefined)
-        .set('betxBalance', undefined);
+        .set('betxBalance', undefined)
+        .set('ebtcBalance', undefined)
+        .set('eethBalance', undefined)
+        .set('eusdBalance', undefined);
     case actions.SUCCESS_MESSAGE:
       return state.set('successMessage', action.message);
     case actions.ERROR_MESSAGE:
