@@ -16,6 +16,7 @@ import themes from '../../config/themes';
 import { themeConfig } from '../../config';
 import AppHolder from './commonStyle';
 import FooterComponent from '../../components/footer';
+import Snow from '../../components/snowBg';
 const { Content, Footer } = Layout;
 const { toggleAll, toggleTopbar } = appActions;
 
@@ -69,6 +70,7 @@ export class App extends React.PureComponent {
                 />
                 <Topbar url={url} />
                 <Layout style={{ flexDirection: 'row', overflowX: 'hidden' }}>
+                  <Snow />
                   <Layout>
                     <Waypoint onEnter={this.onWaypointEnter} onLeave={this.onWaypointLeave} />
                     <Content

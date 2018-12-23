@@ -37,8 +37,45 @@ const DEFAULT_ROLL_NUMBER = 50;
 const DIVIDEND = 0.98;
 
 const MIN_INPUT_BET_AMOUNT = 0.1;
-const MAX_INPUT_BET_AMOUNT = 50;
+const MAX_INPUT_BET_AMOUNT = 100000;
 const MAX_FLOAT_DIGITS = 4;
+
+const fakeRankData = [{
+  key: '4',
+  name: 'Mike',
+  bet: '1000',
+  reward: '100',
+}, {
+  key: '5',
+  name: 'Mike',
+  bet: '1000',
+  reward: '100',
+}, {
+  key: '6',
+  name: 'Mike',
+  bet: '1000',
+  reward: '100',
+}, {
+  key: '7',
+  name: 'Mike',
+  bet: '1000',
+  reward: '100',
+}, {
+  key: '8',
+  name: 'Mike',
+  bet: '1000',
+  reward: '100',
+}, {
+  key: '9',
+  name: 'Mike',
+  bet: '1000',
+  reward: '100',
+}, {
+  key: '10',
+  name: 'Mike',
+  bet: '1000',
+  reward: '100',
+}];
 
 const { initSocketConnection, fetchBetHistory, deleteCurrentBet } = betActions;
 const {
@@ -55,6 +92,24 @@ function calculatePayout(winChance) {
 
 function calculatePayoutOnWin(betAmount, payout) {
   return betAmount * payout;
+}
+
+function secondsToTime(secs) {
+  const days = Math.floor(secs / 86400);
+  let numSeconds = secs % 86400;
+  const hours = Math.floor(numSeconds / 3600);
+  numSeconds %= 3600;
+  const minutes = Math.floor(numSeconds / 60);
+  const seconds = Math.ceil(numSeconds % 60);
+
+  const obj = {
+    d: days,
+    h: hours,
+    m: minutes,
+    s: seconds,
+  };
+
+  return obj;
 }
 
 
@@ -86,7 +141,18 @@ class DicePage extends React.Component {
       fairModalShow: false,
       autoBetEnabled: false, // True if auto-bet switch is turned on
       lastBetNotificationId: undefined, // Guard start of the next auto-bet so we don't start twice
+      time: {
+        d: 0,
+        h: 0,
+        m: 0,
+        s: 0,
+      },
+      seconds: 0,
     };
+
+    this.timer = 0;
+    this.startTimer = this.startTimer.bind(this);
+    this.countDown = this.countDown.bind(this);
 
     this.desktopColumns = [{
       title: intl.formatMessage({ id: 'dice.history.form.time' }),
@@ -164,6 +230,39 @@ class DicePage extends React.Component {
     },
     ];
 
+    this.rankColumn = [{
+      title: <IntlMessages id="dice.rank.rank" />,
+      dataIndex: 'key',
+      key: 'key',
+      render: (text) => (
+        <span>{text}</span>
+      ),
+      width: '25%',
+    }, {
+      title: <IntlMessages id="dice.rank.bettor" />,
+      dataIndex: 'name',
+      key: 'name',
+      render: (text) => (
+        <span>{text}</span>
+      ),
+      width: '25%',
+    }, {
+      title: <IntlMessages id="dice.rank.wager" />,
+      dataIndex: 'bet',
+      key: 'bet',
+      render: (text) => (
+        <span>{text}</span>
+      ),
+      width: '25%',
+    }, {
+      title: <IntlMessages id="dice.rank.prize" />,
+      dataIndex: 'reward',
+      key: 'reward',
+      render: (text) => (
+        <span className="ranking-td">{text}</span>
+      ),
+      width: '25%',
+    }];
     this.onInputNumberChange = this.onInputNumberChange.bind(this);
     this.onBetAmountButtonClick = this.onBetAmountButtonClick.bind(this);
     this.getSliderValue = this.getSliderValue.bind(this);
@@ -184,6 +283,13 @@ class DicePage extends React.Component {
   componentDidMount() {
     const { initSocketConnectionReq } = this.props;
     initSocketConnectionReq({ collection: 'Bet' });
+
+    const utcNow = moment.utc();
+    const endOfDay = moment.utc().endOf('day').subtract(8, 'hours');
+    const diffDuration = moment.duration(endOfDay.diff(utcNow)).asSeconds();
+    // const remainingTimeOfDay = `${diffDuration.hours()}:${diffDuration.minutes()}:${diffDuration.seconds()}`;
+
+    this.startTimer(diffDuration);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -308,6 +414,45 @@ class DicePage extends React.Component {
   }
 
   componentWillUnmount() {
+    const { timer } = this;
+
+    // Clear countdown timer on page
+    clearInterval(timer);
+  }
+
+  startTimer(seconds) {
+    if (seconds > 0 && this.timer === 0) {
+      this.setState({
+        seconds,
+        time: secondsToTime(seconds),
+      });
+
+      this.timer = setInterval(this.countDown, 1000);
+    }
+  }
+
+  countDown() {
+    const { seconds } = this.state;
+
+    // Check isMounted to try not to setState after unmount
+    if (this.timer && seconds !== 0) {
+      this.setState({
+        time: secondsToTime(seconds - 1),
+        seconds: seconds - 1,
+      });
+    }
+
+    // Check if we're at zero.
+    if (seconds <= 0) {
+      const utcNow = moment.utc();
+      const endOfDay = moment.utc().endOf('day').subtract(8, 'hours');
+      const newSeconds = moment.duration(endOfDay.diff(utcNow)).asSeconds();
+
+      this.setState({
+        seconds: newSeconds,
+        time: secondsToTime(newSeconds),
+      });
+    }
   }
 
   onInputNumberChange(evt) {
@@ -480,7 +625,7 @@ class DicePage extends React.Component {
   render() {
     const { desktopColumns, mobileColumns } = this;
     const {
-      betAmount, payoutOnWin, winChance, payout, rollNumber, eosBalance, betxBalance, username,
+      betAmount, payoutOnWin, winChance, payout, rollNumber, eosBalance, betxBalance, username, time,
     } = this.state;
 
     const {
@@ -698,6 +843,90 @@ class DicePage extends React.Component {
                   </div>
                 </section>
               </Col>
+
+              <Col xs={24} lg={24}>
+                <div className="container rank">
+                  <div className="holderBorder">
+                    <Row>
+                      <Col xs={24} lg={12} className="contentWrapper">
+                        <Row type="flex" justify="center" align="middle" style={{ height: '100%' }}>
+                          <Col xs={24} lg={24} className="countdownHolder">
+                            <p className="countdown">{time.h}:{time.m}:{time.s}</p>
+                            <p className="countdownDescription"><IntlMessages id="dice.rank.leadboard" /></p>
+                          </Col>
+                          <Col xs={24} lg={24}>
+                            <div className="rankingHolder">
+                              <div className="rankingItem ">
+                                <div className="crown-box second">
+                                  <span className="crown-text">2</span>
+                                  <CloudinaryImage className="crown-img" publicId="betx/crown-silver" />
+                                </div>
+                              </div>
+                              <div className="rankingItem ">
+                                <div className="crown-box first">
+                                  <span className="crown-text">1</span>
+                                  <CloudinaryImage className="crown-img" publicId="betx/crown-gold" />
+                                </div>
+                              </div>
+                              <div className="rankingItem ">
+                                <div className="crown-box third">
+                                  <span className="crown-text">3</span>
+                                  <CloudinaryImage className="crown-img" publicId="betx/crown-bronze" />
+                                </div>
+                              </div>
+                            </div>
+                            <div className="rankingHolder">
+                              <div className="rankingItem second">
+                                <span>Name</span>
+                                <span className="description">Bet</span>
+                                <span className="description reward">Reward</span>
+                              </div>
+                              <div className="rankingItem first">
+                                <span>Name</span>
+                                <span className="description">Bet</span>
+                                <span className="description reward">Reward</span>
+                              </div>
+                              <div className="rankingItem third">
+                                <span>Name</span>
+                                <span className="description">Bet</span>
+                                <span className="description reward">Reward</span>
+                              </div>
+                            </div>
+                          </Col>
+
+                          <Col xs={24} lg={0}>
+                            <Row className="myRank">
+                              <Col span={6}>No.265</Col>
+                              <Col span={6}>Name</Col>
+                              <Col span={6}>Bet</Col>
+                              <Col span={6}>-</Col>
+                            </Row>
+                          </Col>
+                        </Row>
+                      </Col>
+                      <Col xs={0} lg={12}>
+                        <Table
+                          showHeader
+                          dataSource={fakeRankData}
+                          columns={this.rankColumn}
+                          bordered={false}
+                          pagination={false}
+                          scroll={{ y: 300 }}
+                        // style={{ height: '300px' }}
+                        />
+                        <Row className="myRankLg">
+                          <Col span={6}>265</Col>
+                          <Col span={6}>Ann</Col>
+                          <Col span={6}>300</Col>
+                          <Col span={6}>-</Col>
+                        </Row>
+                      </Col>
+                    </Row>
+                  </div>
+                </div>
+              </Col>
+
+
               <Col xs={24} lg={24}>
 
                 <section id="tables" >

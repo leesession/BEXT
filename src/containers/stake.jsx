@@ -103,7 +103,7 @@ class StakePage extends React.Component {
 
   componentDidMount() {
     const utcNow = moment.utc();
-    const endOfDay = moment.utc().endOf('day');
+    const endOfDay = moment.utc().endOf('day').subtract(8, 'hours');
     const diffDuration = moment.duration(endOfDay.diff(utcNow)).asSeconds();
     // const remainingTimeOfDay = `${diffDuration.hours()}:${diffDuration.minutes()}:${diffDuration.seconds()}`;
 
@@ -141,7 +141,14 @@ class StakePage extends React.Component {
 
     // Check if we're at zero.
     if (seconds <= 0) {
-      clearInterval(this.timer);
+      const utcNow = moment.utc();
+      const endOfDay = moment.utc().endOf('day').subtract(8, 'hours');
+      const newSeconds = moment.duration(endOfDay.diff(utcNow)).asSeconds();
+
+      this.setState({
+        seconds: newSeconds,
+        time: secondsToTime(newSeconds),
+      });
     }
   }
 
@@ -242,16 +249,16 @@ class StakePage extends React.Component {
     const termText =
     (<div><p><IntlMessages id="stake.rule.body1" /></p><div className="formula-img"><CloudinaryImage publicId={`${'betx/first-divid'}-${locale}`} options={{ height: 100, crop: 'scale' }} /></div><p><IntlMessages id="stake.rule.body3" /> </p></div>);
 
-    const totalDividend = allVolume * appConfig.dividendRatio;
     // const totalDividend = platformDividend;
-    const myExpectedDiv = totalDividend * (myBetxBalance / betxCirculation);
-    const DivPer10KBETX = totalDividend * (10000.0 / betxCirculation);
+    // const DivPer10KBETX = totalDividend * (10000.0 / betxCirculation);
 
     const colWidth = {
       xs: 24,
       xl: 20,
       xxl: 18,
     };
+
+    const myExpectedDiv = platformSnapshotTotal === 0 ? 0 : ((1.0 * mySnapshotEffective) / platformSnapshotTotal) * platformDividend;
 
     return (
       <div id="faq-page">
@@ -271,14 +278,14 @@ class StakePage extends React.Component {
                       <p className="page-sub-title sub_title_stake"><IntlMessages id="stake.dividend.allday" /></p>
                       <div className="page-third-title panel icon-container third_title_stake">
                         <div><CloudinaryImage publicId="eos-logo-grey" options={{ height: 40, crop: 'scale' }} /></div>
-                        {_.floor(dailyVolume * appConfig.dividendRatio, 4)} EOS
+                        {formatNumberThousands(_.floor(dailyVolume * appConfig.dividendRatio, 4))} EOS
                       </div>
                     </Col>
                     <Col span={12}>
                       <p className="page-sub-title sub_title_stake"><IntlMessages id="stake.dividend.total" /></p>
                       <div className="page-third-title panel icon-container third_title_stake">
                         <div><CloudinaryImage publicId="eos-logo-grey" options={{ height: 40, crop: 'scale' }} /></div>
-                        {_.floor(totalDividend, 4)} EOS</div>
+                        {formatNumberThousands(_.floor(platformDividend, 2))} EOS</div>
                     </Col>
                   </Row>
                   <Row>
@@ -291,25 +298,25 @@ class StakePage extends React.Component {
                           <Col span={12}>
                             <div className="page-dividend-detail-box">
                               <p className="page-third-title third_title_stake" ><IntlMessages id="stake.income.mySnapshotEffective" /></p>
-                              <p className="page-third-title third_title_stake" >{_.floor(mySnapshotEffective, 4)} BETX</p>
+                              <p className="page-third-title third_title_stake" >{formatNumberThousands(_.floor(mySnapshotEffective, 2))} BETX</p>
                             </div>
                           </Col>
                           <Col span={12}>
                             <div className="page-dividend-detail-box">
                               <p className="page-third-title third_title_stake" ><IntlMessages id="stake.income.mySnapshotTotal" /></p>
-                              <p className="page-third-title third_title_stake" >{_.floor(mySnapshotTotal, 4)} BETX</p>
+                              <p className="page-third-title third_title_stake" >{formatNumberThousands(_.floor(mySnapshotTotal, 2))} BETX</p>
                             </div>
                           </Col>
                           <Col span={12}>
                             <div className="page-dividend-detail-box">
                               <p className="page-third-title third_title_stake" ><IntlMessages id="stake.income.platformSnapshot" /></p>
-                              <p className="page-third-title third_title_stake" >{_.floor(platformSnapshotTotal, 4)} BETX</p>
+                              <p className="page-third-title third_title_stake" >{formatNumberThousands(_.floor(platformSnapshotTotal, 2))} BETX</p>
                             </div>
                           </Col>
                           <Col span={12}>
                             <div className="page-dividend-detail-box">
                               <p className="page-third-title third_title_stake" ><IntlMessages id="stake.income.predicate" /></p>
-                              <p className="page-third-title third_title_stake" >{_.floor(((1.0 * mySnapshotEffective) / platformSnapshotTotal) * platformDividend, 4)} EOS</p>
+                              <p className="page-third-title third_title_stake" >{formatNumberThousands(_.floor(myExpectedDiv, 2))} EOS</p>
                             </div>
                           </Col>
                           {/* <Col span={12}>
@@ -336,7 +343,7 @@ class StakePage extends React.Component {
                       <p className="page-sub-title sub_title_stake"><IntlMessages id="stake.betx.pledge" /></p>
                       <div className="page-third-title third_title_stake panel icon-container" >
                         <div><CloudinaryImage publicId="betx-logo-grey" options={{ height: 40, crop: 'scale' }} /></div>
-                        {formatNumberThousands(platformStake)} BETX
+                        {formatNumberThousands(_.floor(platformStake, 2))} BETX
                       </div>
                     </Col>
                     <Col span={12}>
@@ -387,7 +394,7 @@ class StakePage extends React.Component {
                                 <Col span={24} className="page-third-title third_title_stake" style={{ color: 'white' }}>
                                   <Row type="flex" justify="space-around" align="middle">
                                     <Col className="text-left" span={12}><IntlMessages id="stake.available" /></Col>
-                                    <Col className="text-right" span={12}>{myStake} BETX</Col>
+                                    <Col className="text-right" span={12}>{formatNumberThousands(_.floor(myStake, 2))} BETX</Col>
                                   </Row>
                                 </Col>
                               </Row>

@@ -54,6 +54,12 @@
   "dice.play.fairBtn": "Rules & Fairness",
   "dice.alert.comingsoon":"Coming soon",
   "dice.send":"Send",
+  "dice.rank.rank":"Rank",
+  "dice.rank.bettor":"Bettor",
+  "dice.rank.wager":"Total Wager",
+  "dice.rank.prize":"Prize",
+  "dice.rank.leadboard":"Leaderboard",
+
 
   "modal.fair.title":"Rules & Fairness",
   "modal.fair.description":"A fair bet requires an unbiased random number.\nWhat BETX does is to put the two seeds (Player Seed & House Seed) generated respectively by the player and the House, on an open-source smart contract which generates an ultimate random number based on the two seeds.\nMathematically, this ultimate random number is determined by both parties, thus ensuring fairness. The House publishes the hash of the House Seed before the Player bets, and the Player can verify the House hash after the roll, thereby proving that the House is not cheating.",
