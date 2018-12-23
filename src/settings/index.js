@@ -31,6 +31,7 @@ const appConfig = {
   chatHistoryMemorySize: 500,
   chatChannelReconnectInterval: 5000,
   dividendRatio: 0.01, // Dividend ratio compared to betVolume
+  pollBetRankInterval: 5000, // Interval of which rank data polls
   eosNetwork: {
     blockchain: 'eos',
     protocol: 'https',
@@ -43,6 +44,7 @@ const appConfig = {
 
 const parseConfig = {
   serverURL: 'https://betx.fun/parse',
+  // serverURL: 'http://localhost:1338/parse',
   appId: 'BETX-APP',
   javascriptKey: 'betx-js-key',
 };

@@ -26,7 +26,7 @@ class ParseHelper {
     this.handleParseError = this.handleParseError.bind(this);
     this.parseBetReceipt = this.parseBetReceipt.bind(this);
     this.getBetVolume = this.getBetVolume.bind(this);
-    this.getBetxStakeAmount = this.getBetxStakeAmount.bind(this);
+    this.getBetRank = this.getBetRank.bind(this);
   }
 
   /**
@@ -109,8 +109,8 @@ class ParseHelper {
     return this.parse.Cloud.run('getBetVolume', { types: ['day', 'all'] });
   }
 
-  getBetxStakeAmount() {
-    return this.parse.Cloud.run('getBetxStakeAmount');
+  getBetRank(params) {
+    return this.parse.Cloud.run('getBetRank', params);
   }
 
   handleParseError(err) {
