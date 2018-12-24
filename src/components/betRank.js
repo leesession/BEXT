@@ -161,39 +161,39 @@ class BetRank extends React.Component {
               <Col xs={24} lg={24}>
                 <div className="rankingHolder">
                   <div className="rankingItem">
-                    <div className="crown-box">
+                    <div className="crown-box second">
                       <span className="crown-text">2</span>
                       <CloudinaryImage className="crown-img" publicId="betx/crown-silver" />
                     </div>
                   </div>
-                  <div className="rankingItem">
-                    <div className="crown-box">
+                  <div className="rankingItem ">
+                    <div className="crown-box first">
                       <span className="crown-text">1</span>
                       <CloudinaryImage className="crown-img" publicId="betx/crown-gold" />
                     </div>
                   </div>
-                  <div className="rankingItem">
-                    <div className="crown-box">
+                  <div className="rankingItem ">
+                    <div className="crown-box third">
                       <span className="crown-text">3</span>
                       <CloudinaryImage className="crown-img" publicId="betx/crown-bronze" />
                     </div>
                   </div>
                 </div>
                 <div className="rankingHolder">
-                  <div className="rankingItem">
+                  <div className="rankingItem second">
                     <span>{secondPlace && secondPlace.bettor}</span>
                     <span className="description">{secondPlace && secondPlace.betAmount}</span>
-                    <span className="description">{secondPlace && secondPlace.reward}</span>
+                    <span className="description reward">{secondPlace && secondPlace.reward}</span>
                   </div>
-                  <div className="rankingItem">
+                  <div className="rankingItem first">
                     <span>{firstPlace && firstPlace.bettor}</span>
                     <span className="description">{firstPlace && firstPlace.betAmount}</span>
-                    <span className="description">{firstPlace && firstPlace.reward}</span>
+                    <span className="description reward">{firstPlace && firstPlace.reward}</span>
                   </div>
-                  <div className="rankingItem">
+                  <div className="rankingItem third">
                     <span>{thirdPlace && thirdPlace.bettor}</span>
                     <span className="description">{thirdPlace && thirdPlace.betAmount}</span>
-                    <span className="description">{thirdPlace && thirdPlace.reward}</span>
+                    <span className="description reward">{thirdPlace && thirdPlace.reward}</span>
                   </div>
                 </div>
               </Col>
