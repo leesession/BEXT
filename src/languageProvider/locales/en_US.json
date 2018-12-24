@@ -28,9 +28,9 @@
 
   "dice.asset.eos":"EOS",
   "dice.asset.betx":"BETX",
-  "dice.balance.eos":"EOS Balance",
-  "dice.balance.betx":"BETX Balance",
-  "dice.reward.firstbet":"Bet 1 EOS cumulatively to win {amount} BETX",
+  "dice.balance":"{symbol} Balance",
+  "dice.reward.firstbet":"Bet over 1 EOS to win {amount} BETX (distributed 20:00 UTC daily)",
+  "dice.reward.firstbet.tooltip":"This reward can only apply to each account once, and will be distributed daily at 16:00 UTC (00:00 Beijing Time). If you have any question, please join our Telegram group.",
   "dice.reward.total":"Reward",
   "dice.button.login":"Log In",
   "dice.button.bet":"Bet",
@@ -39,11 +39,12 @@
   "dice.history.huge":"Huge Wins",
   "dice.history.form.time":"Time",
   "dice.history.form.bettor":"Player",
-  "dice.history.form.unber":"Roll Under",
+  "dice.history.form.under":"Roll Under",
   "dice.history.form.bet":"Bet",
   "dice.history.form.roll":"Roll",
   "dice.history.form.payout":"Payout",
-  "dice.play.notice":"Roll Under to Win",
+  "dice.play.rollUnderToWin":"Roll Under to Win",
+  "dice.play.rollUnder":"Roll Under",
   "dice.play.payout":"Payout",
   "dice.play.win":"Win Chance",
   "dice.play.amount":"Play amount",
@@ -59,12 +60,14 @@
   "dice.rank.wager":"Total Wager",
   "dice.rank.prize":"Prize",
   "dice.rank.leadboard":"Leaderboard",
+  "dice.rank.me":"Me",
 
 
   "modal.fair.title":"Rules & Fairness",
   "modal.fair.description":"A fair bet requires an unbiased random number.\nWhat BETX does is to put the two seeds (Player Seed & House Seed) generated respectively by the player and the House, on an open-source smart contract which generates an ultimate random number based on the two seeds.\nMathematically, this ultimate random number is determined by both parties, thus ensuring fairness. The House publishes the hash of the House Seed before the Player bets, and the Player can verify the House hash after the roll, thereby proving that the House is not cheating.",
   "modal.fair.buttonReset":"Reset",
   "modal.fair.buttonUpdate":"Update",
+  "modal.fair.verificationTool":"Fairness Verification Tool",
 
   "faq.title":"FAQ",
 
@@ -161,7 +164,7 @@
   "message.success.resultWon":"Rolled {roll}, won {payout}",
   "message.success.resultLose":"Rolled {roll}, lost {betAmount}!",
   "message.success.stake":"Stake {asset} Successfully!",
-  "message.success.unstake":"Unstake {asset} Successfully!",
+  "message.success.unstake":"Unstake {asset} Successfully! (It takes 24 hours to unstake)",
   "message.success.claimdividend":"Claim {asset} Successfully!",
 
   "message.warn.lessThanMinBet":"The minimum bet amount is {amount} {asset}.",
@@ -169,8 +172,10 @@
 
   "message.warn.loginFirst":"Please login first",
   "message.warn.emptyInput":"Chat input cannot be empty.",
+  "message.warn.autoBetTurnedOff": "Auto-bet is turned off due to currency switch",
 
   "message.error.amountInvalid":"Input amount is invalid.",
+  "message.error.unknownSymbol":"Unknown symbol.",
 
   "error.scatter.locked":"Scatter is locked. Please unlock it and refresh page.",
   "error.scatter.rejected":"Signature request is rejected in Scatter.",

@@ -1,3 +1,5 @@
+/* eslint no-console: 0 */
+
 import { all, take, takeEvery, put, call } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import actions from './actions';
@@ -8,14 +10,15 @@ import { delay } from '../../helpers/utility';
 import { appConfig } from '../../settings';
 
 const {
-  subscribe, unsubscribe, fetchBetHistory, handleParseError, getBetVolume, getBetxStakeAmount,
+  subscribe, unsubscribe, fetchBetHistory, handleParseError, getBetVolume, getBetRank,
 } = ParseHelper;
 
-
 const {
-  handleScatterError, getTotalBetAmount,
+  handleScatterError,
 } = ScatterHelper;
 
+let betRankPollStarted = false;
+let betrankPollParams;
 
 function websocketInitChannel(payload) {
   return eventChannel((emitter) => {
@@ -42,8 +45,6 @@ function websocketInitChannel(payload) {
       // console.log('object left', object);
       emitter({ type: actions.BET_OBJECT_LEFT, data: object });
     const unsubscribeHandler = () => {
-      // console.log('subscription close');
-      // betSubscription = undefined;
       console.log('unsubscribeHandler() emitting BET_UNSUBSCRIBED');
       return emitter({ type: actions.BET_UNSUBSCRIBED, payload });
     };
@@ -134,7 +135,47 @@ export function* fetchBetHistoryRequest() {
     });
   } catch (err) {
     const message = yield call(handleParseError, err);
+    console.log(err);
+    yield put({
+      type: appActions.SET_ERROR_MESSAGE,
+      message,
+    });
+  }
+}
 
+export function* fetchMyBetHistoryRequest(action) {
+  try {
+    const params = action.payload;
+    params.type = actions.BET_HISTORY_TYPE.MY;
+    const response = yield call(fetchBetHistory, params);
+
+    yield put({
+      type: actions.FETCH_MY_BET_HISTORY_RESULT,
+      value: response,
+    });
+  } catch (err) {
+    const message = yield call(handleParseError, err);
+    console.log(err);
+    yield put({
+      type: appActions.SET_ERROR_MESSAGE,
+      message,
+    });
+  }
+}
+
+export function* fetchHugeBetHistoryRequest(action) {
+  try {
+    const params = action.payload;
+    params.type = actions.BET_HISTORY_TYPE.HUGE;
+    const response = yield call(fetchBetHistory, params);
+
+    yield put({
+      type: actions.FETCH_HUGE_BET_HISTORY_RESULT,
+      value: response,
+    });
+  } catch (err) {
+    const message = yield call(handleParseError, err);
+    console.log(err);
     yield put({
       type: appActions.SET_ERROR_MESSAGE,
       message,
@@ -161,20 +202,28 @@ export function* getBetVolumeRequest() {
   }
 }
 
-export function* getBetxStakeAmountRequest() {
-  try {
-    const result = yield call(getBetxStakeAmount);
-    yield put({
-      type: actions.GET_BETX_STAKE_AMOUNT_RESULT,
-      value: result,
-    });
-  } catch (err) {
-    const message = yield call(handleParseError, err);
-    // console.log(message);
-    // yield put({
-    //   type: actions.SET_ERROR_MESSAGE,
-    //   message,
-    // });
+export function* startPollBetRankRequest(action) {
+  betrankPollParams = action.payload;
+
+  if (betRankPollStarted) {
+    return;
+  }
+
+  betRankPollStarted = true;
+  while (true) {
+    try {
+      const response = yield call(getBetRank, betrankPollParams);
+
+      yield put({
+        type: actions.BET_RANK_RESULT,
+        value: response,
+      });
+
+      yield call(delay, appConfig.pollBetRankInterval);
+    } catch (err) {
+      const message = yield call(handleParseError, err);
+      console.log(err);
+    }
   }
 }
 
@@ -182,8 +231,9 @@ export default function* topicSaga() {
   yield all([
     takeEvery(actions.INIT_SOCKET_CONNECTION_BET, initLiveBetHistory),
     takeEvery(actions.FETCH_BET_HISTORY, fetchBetHistoryRequest),
+    takeEvery(actions.FETCH_MY_BET_HISTORY, fetchMyBetHistoryRequest),
+    takeEvery(actions.FETCH_HUGE_BET_HISTORY, fetchHugeBetHistoryRequest),
     takeEvery(actions.GET_BET_VOLUME, getBetVolumeRequest),
-    takeEvery(actions.GET_BETX_STAKE_AMOUNT, getBetxStakeAmountRequest),
-    // takeEvery(actions.BET_UNSUBSCRIBED, reconnectLiveBetRequest),
+    takeEvery(actions.START_POLL_BET_RANK, startPollBetRankRequest),
   ]);
 }

@@ -13,33 +13,10 @@ import stakeActions from '../redux/stake/actions';
 import betActions from '../redux/bet/actions';
 import appActions from '../redux/app/actions';
 import { appConfig } from '../settings';
-import { formatNumberThousands } from '../helpers/utility';
+import { formatNumberThousands, secondsToTime } from '../helpers/utility';
 import LoginModal from '../components/loginModal';
 
 cloudinaryConfig({ cloud_name: 'forgelab-io' });
-
-/**
- * Convert seconds to days hours mins and seconds
- * @param  {[type]} secs [description]
- * @return {[type]}      [description]
- */
-export function secondsToTime(secs) {
-  const days = Math.floor(secs / 86400);
-  let numSeconds = secs % 86400;
-  const hours = Math.floor(numSeconds / 3600);
-  numSeconds %= 3600;
-  const minutes = Math.floor(numSeconds / 60);
-  const seconds = Math.ceil(numSeconds % 60);
-
-  const obj = {
-    d: days,
-    h: hours,
-    m: minutes,
-    s: seconds,
-  };
-
-  return obj;
-}
 
 class StakePage extends React.Component {
   constructor(props) {
@@ -254,15 +231,15 @@ class StakePage extends React.Component {
 
     const colWidth = {
       xs: 24,
-      xl: 20,
-      xxl: 18,
+      xl: 24,
+      xxl: 24,
     };
 
     const myExpectedDiv = platformSnapshotTotal === 0 ? 0 : ((1.0 * mySnapshotEffective) / platformSnapshotTotal) * platformDividend;
 
     return (
       <div id="faq-page">
-        <div className="wrapper wrapper_stake">
+        <div className="horizontalWrapper">
           <Row type="flex" justify="center">
             <Col {...colWidth}>
               <h1 className="page-title"><IntlMessages id="stake.title" /></h1>
@@ -278,7 +255,7 @@ class StakePage extends React.Component {
                       <p className="page-sub-title sub_title_stake"><IntlMessages id="stake.dividend.allday" /></p>
                       <div className="page-third-title panel icon-container third_title_stake">
                         <div><CloudinaryImage publicId="eos-logo-grey" options={{ height: 40, crop: 'scale' }} /></div>
-                        {formatNumberThousands(_.floor(dailyVolume * appConfig.dividendRatio, 4))} EOS
+                        {formatNumberThousands(_.floor(dailyVolume * appConfig.dividendRatio, 2))} EOS
                       </div>
                     </Col>
                     <Col span={12}>
@@ -367,7 +344,7 @@ class StakePage extends React.Component {
                                 <Col span={24} className="page-third-title third_title_stake panel-trans">
                                   <div className="stake-container-body-inner-input">
                                     <div><CloudinaryImage publicId="betx-logo-grey" options={{ height: 30, crop: 'scale' }} /></div>
-                                    <Input className="clear-input" value={inputStake} onChange={this.onInputStakeChange} ></Input>
+                                    <Input className="clear-input" value={inputStake} onChange={this.onInputStakeChange} onBlur={() => window.scroll(0, 0)} ></Input>
                                     <Button className="clear-btn" onClick={this.onStakeBtnClicked}><IntlMessages id="stake.action.pledge" /></Button>
                                   </div>
                                 </Col>
@@ -387,7 +364,7 @@ class StakePage extends React.Component {
                                 <Col span={24} className="page-third-title third_title_stake panel-trans">
                                   <div className="stake-container-body-inner-input">
                                     <div className="img-container"><CloudinaryImage publicId="betx-logo-grey" options={{ height: 30, crop: 'scale' }} /></div>
-                                    <Input className="clear-input" value={inputUnstake} onChange={this.onInputUnstakeChange} ></Input>
+                                    <Input className="clear-input" value={inputUnstake} onChange={this.onInputUnstakeChange} onBlur={() => window.scroll(0, 0)} ></Input>
                                     <Button className="clear-btn" onClick={this.onUnstakeBtnClicked}><IntlMessages id="stake.action.redemption" /></Button>
                                   </div>
                                 </Col>

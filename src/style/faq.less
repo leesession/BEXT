@@ -14,15 +14,21 @@
 		//
 	// }
 
-	.wrapper{
-		padding-top:100px;
-		padding-left:@phonePadding;
-		padding-right: @phonePadding;
-		&.wrapper_stake{
-			padding-top: 80px;
-		}
-	}
+	padding-top:120px;
+	padding-bottom: 80px;
 
+	@media @phone{
+		padding-top: 80px;
+		padding-bottom: 45px;
+	}
+	// .wrapper{
+	// 	padding-top:100px;
+	// 	padding-left:@phonePadding;
+	// 	padding-right: @phonePadding;
+	// 	&.wrapper_stake{
+	// 		padding-top: 80px;
+	// 	}
+	// }
 	color:white;
 
 	.page-title {
@@ -56,6 +62,7 @@
 			@media @phone{
 				margin: 10px 0;
 				height: auto;
+				font-size: 1.6em;
 			}
 		}
 		&.stake_block{

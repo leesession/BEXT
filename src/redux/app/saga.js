@@ -1,12 +1,33 @@
+/* eslint no-restricted-syntax:0 */
 import { call, all, takeEvery, put } from 'redux-saga/effects';
+import _ from 'lodash';
 
 import actions from './actions';
 import betActions from '../bet/actions';
 import ScatterHelper from '../../helpers/scatter';
+import { trimZerosFromAsset } from '../../helpers/utility';
 
 const {
-  handleScatterError, getIdentity, transfer, getBETXBalance, getAccount, logout,
+  handleScatterError, getIdentity, transfer, getAccount, logout, getCurrencyBalance,
 } = ScatterHelper;
+
+const symbols = [
+  {
+    symbol: 'EOS', precision: 4, contract: 'eosio.token', putType: actions.GET_EOS_BALANCE_RESULT,
+  },
+  {
+    symbol: 'BETX', precision: 4, contract: 'thebetxtoken', putType: actions.GET_BETX_BALANCE_RESULT,
+  },
+  {
+    symbol: 'EBTC', precision: 8, contract: 'bitpietokens', putType: actions.GET_EBTC_BALANCE_RESULT,
+  },
+  {
+    symbol: 'EETH', precision: 8, contract: 'bitpietokens', putType: actions.GET_EETH_BALANCE_RESULT,
+  },
+  {
+    symbol: 'EUSD', precision: 8, contract: 'bitpietokens', putType: actions.GET_EUSD_BALANCE_RESULT,
+  },
+];
 
 function* getIdentityRequest() {
   try {
@@ -36,19 +57,15 @@ function* getBalancesRequest(action) {
   const { name } = action;
 
   try {
-    // const eosBalance = yield call(getEOSBalance, name);
-
-    // yield put({
-    //   type: actions.GET_EOS_BALANCE_RESULT,
-    //   value: eosBalance,
-    // });
-
-    const betxBalance = yield call(getBETXBalance, name);
-
-    yield put({
-      type: actions.GET_BETX_BALANCE_RESULT,
-      value: betxBalance,
-    });
+    for (const entry of Array.from(symbols)) {
+      const balance = yield call(getCurrencyBalance, {
+        name, contract: entry.contract, symbol: entry.symbol,
+      });
+      yield put({
+        type: entry.putType,
+        value: balance,
+      });
+    }
   } catch (err) {
     const message = yield call(handleScatterError, err);
 
@@ -64,11 +81,6 @@ function* getAccountRequest(action) {
 
   try {
     const response = yield call(getAccount, name);
-
-    yield put({
-      type: actions.GET_EOS_BALANCE_RESULT,
-      value: response.eosBalance,
-    });
 
     yield put({
       type: actions.GET_CPU_USAGE_RESULT,
@@ -90,13 +102,32 @@ function* getAccountRequest(action) {
 function* transferRequest(action) {
   const params = action.payload;
 
+  const matchSymbol = _.find(symbols, { symbol: params.betAsset });
+
+  if (_.isUndefined(matchSymbol)) {
+    yield put({
+      type: actions.SET_ERROR_MESSAGE,
+      message: 'message.error.unknownSymbol',
+    });
+
+    return;
+  }
+
+  params.contract = matchSymbol.contract;
+  params.precision = matchSymbol.precision;
+
   try {
     const response = yield call(transfer, params);
+
+    let betAmount = response.processed.action_traces[0].act.data.quantity;
+
+    // We treat all symbols as their precision is 4
+    betAmount = trimZerosFromAsset(betAmount);
 
     yield put({
       type: betActions.ADD_CURRENT_BET,
       value: {
-        betAmount: response.processed.action_traces[0].act.data.quantity,
+        betAmount,
         transactionId: response.transaction_id,
       },
     });
@@ -133,11 +164,19 @@ function* setErrorMessageRequest(action) {
 function* logoutRequest() {
   try {
     const response = yield call(logout);
-    console.log(response);
 
     if (response) {
+      // Clear user balance and cpu usage
       yield put({
         type: actions.CLEAR_USER_INFO,
+      });
+
+      // Remove username from betRankPoll params
+      yield put({
+        type: betActions.START_POLL_BET_RANK,
+        payload: {
+          username: undefined,
+        },
       });
     }
   } catch (err) {

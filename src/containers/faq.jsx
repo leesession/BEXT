@@ -185,13 +185,13 @@ class FAQPage extends React.Component {
 
     const colWidth = {
       xs: 24,
-      xl: 20,
-      xxl: 16,
+      xl: 24,
+      xxl: 24,
     };
 
     return (
       <div id="faq-page">
-        <div className="wrapper">
+        <div className="horizontalWrapper">
           <Row type="flex" justify="center">
             {/* <Col xs={24} sm={4}>
             <div className="container">
