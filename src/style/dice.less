@@ -37,7 +37,7 @@
                 margin: 0px 4px;
             }
 
-            &.currency-bar-item-highlight{
+            &.currency-bar-item-highlight {
                 background-color: @panelGrey;
             }
 
@@ -90,6 +90,8 @@
             background-color: @panelGrey;
             border: 1px solid @borderColor;
             overflow: hidden;
+            // Add on element with overflow
+            -webkit-mask-image: -webkit-radial-gradient(white, black);
 
             th {
                 white-space: nowrap;
@@ -110,137 +112,246 @@
         }
 
         // Ranking style
-        &.rank{
+        &.rank {
             margin-top: 20px;
             margin-bottom: 10px;
-
             color: white;
 
-            @media @phone{
+            @media @phone {
                 margin-top: 0px;
                 margin-bottom: 12px;
             }
 
-            .holderBorder{
-                padding:10px 20px;
+            .rank-container {
+                padding: 20px 20px;
 
                 @media @phone {
-                    padding:10px 0px;
+                    padding: 6px 0px 0px;
                 }
-            }
 
-            .countdownHolder{
-                transform: translateY(-1.5em);
-            }
-
-            p{
-                margin-bottom: 0;
-
-                &.countdown{
+                .rank-title {
+                    padding-top:10px;
+                .rank-title-text {
                     color: @borderColor;
+                    font-size: 1.5em;
+                    margin-bottom:  0px;
+                    @media @phone {
+                        font-size: 2em;
+                    }
+                }
+
+                .rank-title-countdown {
+                    color: white;
                     font-size: 2em;
                     letter-spacing: 2px;
-                    margin-top: 30px;
+                    margin-bottom: 12px;
+
                     @media @phone {
-                        font-size:3em;
+                        font-size: 2.5em;
                     }
                 }
 
-                &.countdownDescription{
-                    font-size:1.4em;
-                    @media @phone {
-                        font-size:2em;
-                    }
                 }
+
             }
 
-            .contentWrapper{
-                height:300px;
 
-                @media @phone {
-                    height:250px;
-                }
-            }
 
-            .rankingHolder{
+            // .contentWrapper {
+            //     height: 300px;
+
+            //     @media @phone {
+            //         height: 250px;
+            //     }
+
+            // }
+
+            .rankingHolder {
                 display: flex;
                 justify-content: center;
                 align-items: flex-end;
                 flex-direction: row;
-                .crown-box{
+
+                .crown-box {
                     position: relative;
                     width: 4em;
                     margin: 0 auto;
                     color: #fff;
                     margin-bottom: 15px;
-                    .crown-text{
+
+                    .crown-text {
                         position: absolute;
                         top: 50%;
                         font-size: 1.2em;
                         font-weight: bold;
                         left: 50%;
-                        transform:translate(-50%,-40%)
+                        transform: translate(-50%, -40%)
                     }
-                    .crown-img{
+
+                    .crown-img {
                         display: block;
                         width: 100%;
                     }
-                    @media @phone{
-                        width: 3em;
+
+                    &.first {
+                        width: 6em;
+
+                        .crown-text {
+                            font-size: 1.4em;
+                        }
+
+                    }
+
+                    &.second {
+                        width: 5em;
+
+                        .crown-text {
+                            font-size: 1.3em;
+                        }
+
+                    }
+
+                    @media @phone {
+                        width: 4em;
                         margin-bottom: 8px;
-                        .crown-text{
+
+                        .crown-text {
                             font-size: 1em;
                         }
+
                     }
+
                 }
 
-                .rankingItem{
-                    flex:1;
+                .rankingItem {
+                    flex: 1 0 0;
                     font-size: 1.2em;
+                    max-width: 34%;
 
-                    span{
+                    span {
                         display: block;
+                        width: 100%;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
                     }
 
-                    .description{
+                    .description {
                         font-size: 0.8em;
                         color: @fontColor;
+
+                        &.reward {
+                            color: #FADC69;
+                        }
 
                         @media @phone {
                             font-size: 1.5em;
                             display: none;
                         }
+
                     }
 
                     @media @phone {
                         font-size: 2em;
                     }
+
+                    &.first {
+                        &>span:first-child {
+                            font-size: 1.4em;
+                            color: #FFD95B;
+
+                            @media @phone {
+                                font-size: 0.8em;
+                            }
+
+                        }
+
+                        .description {
+                            font-size: 1.0em;
+                        }
+
+                        .reward {
+                            color: #FFD95B;
+                        }
+
+                    }
+
+                    &.second {
+                        &>span:first-child {
+                            font-size: 1.2em;
+                            color: #ECF2F5;
+
+                            @media @phone {
+                                font-size: 0.8em;
+                            }
+
+                        }
+
+                        .description {
+                            font-size: 0.9em;
+                        }
+
+                        .reward {
+                            color: #ECF2F5;
+                        }
+
+                    }
+
+                    &.third {
+                        &>span:first-child {
+                            font-size: 1em;
+                            color: #DEBE98;
+
+                            @media @phone {
+                                font-size: 0.8em;
+                            }
+
+                        }
+
+                        .description {
+                            font-size: 0.8em;
+                        }
+
+                        .reward {
+                            color: #DEBE98;
+                        }
+
+                    }
+
                 }
+
             }
 
-            .myRank, .myRankLg{
-                height:40px;
-                background: rgb(30,30,30);
+            .rank-mine, .rank-mine-lg {
+                height: 40px;
+                background: rgb(30, 30, 30);
                 font-size: 1.2em;
+                margin-top: 8px;
                 display: flex;
                 align-items: center;
 
                 @media @phone {
-                    font-size: 2em;
+                    font-size: 1.5em;
                 }
             }
 
-            .myRankLg{
-                border-top: 1px solid @fontColor;
-            }
-
             // stylize table
-            td{
+            td {
                 padding-top: 5px;
                 padding-bottom: 5px;
+
+                &>span {
+                    white-space: nowrap;
+                    width: 100%;
+                    max-width: 200px;
+                    text-overflow: ellipsis;
+                    display: block;
+                    overflow: hidden;
+                }
+
             }
 
-            .ranking-td{
+            .ranking-td {
                 color: @borderColor;
             }
 
@@ -251,17 +362,23 @@
                 & * {
                     background-color: transparent;
                 }
+
                 .ant-table-placeholder {
                     border-bottom: none;
                     color: white;
                 }
 
-                .ant-table-body::after {
-                    content: ' ';
-                    height: 1px;
-                    color: white;
-                    background: #fff;
-                    width: 300px;
+                .ant-table-body{
+                    height: 180px;
+                    overflow-y: scroll;
+
+                    &:after{
+                        content: ' ';
+                        height: 1px;
+                        color: white;
+                        background: #fff;
+                        width: 300px;
+                    }
                 }
 
                 .ant-table-thead th {
@@ -269,21 +386,23 @@
                     text-align: center;
                     font-size: 1.2em;
                     background: @panelGrey;
+
                     @media @phone {
                         font-size: 0.8em;
                     }
 
                 }
+
                 .ant-table-tbody td {
                     @media @phone {
                         font-size: 0.8em;
                     }
 
                 }
-                .ant-table-row:nth-child(2n-1){
-                    background: rgba(0,0,0,0.2);
-                }
 
+                .ant-table-row:nth-child(2n-1) {
+                    background: rgba(0, 0, 0, 0.2);
+                }
 
             }
 
@@ -316,10 +435,11 @@
                 border-top: 1px solid white;
                 margin: 0 0px;
 
-                @media @phone{
+                @media @phone {
                     margin-left: 0px;
                     margin-right: 0px;
                 }
+
             }
 
             .ant-table-row {
@@ -343,6 +463,7 @@
             .ant-tabs-bar {
                 border-bottom: none;
             }
+
         }
 
         .container-header {
@@ -472,13 +593,13 @@
 
                         }
 
-                        &.box-input-inner-reward{
-
+                        &.box-input-inner-reward {
                             margin-left: 24px;
 
-                            @media @phone{
+                            @media @phone {
                                 margin-left: 12px;
                             }
+
                         }
 
                         .box-input-inner-input {
@@ -495,9 +616,10 @@
                             font-size: 1.2em;
                             font-weight: 500;
 
-                            @media @phone{
+                            @media @phone {
                                 font-size: 1.5em;
                             }
+
                         }
 
                     }
@@ -727,7 +849,7 @@
                 margin: 0 10px;
                 border: 1px solid @primaryColor;
 
-                @media @phone{
+                @media @phone {
                     margin: 0 8px;
                 }
 
@@ -777,7 +899,7 @@
         @fontSize: 1.2em;
 
         .chatroom-message-container {
-            padding: 40px 40px 10px 40px;
+            padding: 40px 20px 10px 30px;
             overflow: hidden;
 
             ul {
@@ -914,10 +1036,16 @@
         .ant-tabs-tab {
             color: @borderColor;
             font-size: 1.2em;
+            line-height: 10px;
+            border-radius:10px;
+            padding-left:32px;
+            padding-right:32px;
 
             @media @phone {
                 font-size: 1.0em;
                 margin-right: 12px;
+                padding-left:16px;
+            padding-right:16px;
             }
 
         }
@@ -925,7 +1053,6 @@
         .ant-tabs-tab-active {
             color: @panelGrey;
             background: @borderColor;
-            border-radius: 20px;
         }
 
         .ant-table-placeholder {

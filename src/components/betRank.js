@@ -136,8 +136,8 @@ class BetRank extends React.Component {
     const tableData = _.isUndefined(betRank) ? [] : _.map(betRank.top, (entry) => ({
       key: entry.rank,
       bettor: entry.bettor,
-      betAmount: formatNumberThousands(_.floor(entry.betAmount, 2)),
-      reward: 0,
+      betAmount: `${formatNumberThousands(_.floor(entry.betAmount, 2))} EOS`,
+      reward: '0 EOS',
     }));
 
     const firstPlace = tableData.shift();
@@ -150,56 +150,56 @@ class BetRank extends React.Component {
     }
 
     return (<div className="container rank">
-      <div className="holderBorder">
+      <div className="rank-container holderBorder">
         <Row>
-          <Col xs={24} lg={12} className="contentWrapper">
+          <Col xs={24} lg={12}>
             <Row type="flex" justify="center" align="middle" style={{ height: '100%' }}>
-              <Col xs={24} lg={24} className="countdownHolder">
-                <p className="countdown">{_.padStart(time.h, 2, '0')}:{_.padStart(time.m, 2, '0')}:{_.padStart(time.s, 2, '0')}</p>
-                <p className="countdownDescription"><IntlMessages id="dice.rank.leadboard" /></p>
+              <Col xs={24} lg={24} className="rank-title">
+                <p className="rank-title-text"><IntlMessages id="dice.rank.leadboard" /></p>
+                <p className="rank-title-countdown">{_.padStart(time.h, 2, '0')}:{_.padStart(time.m, 2, '0')}:{_.padStart(time.s, 2, '0')}</p>
               </Col>
               <Col xs={24} lg={24}>
                 <div className="rankingHolder">
                   <div className="rankingItem">
-                    <div className="crown-box">
+                    <div className="crown-box second">
                       <span className="crown-text">2</span>
                       <CloudinaryImage className="crown-img" publicId="betx/crown-silver" />
                     </div>
                   </div>
-                  <div className="rankingItem">
-                    <div className="crown-box">
+                  <div className="rankingItem ">
+                    <div className="crown-box first">
                       <span className="crown-text">1</span>
                       <CloudinaryImage className="crown-img" publicId="betx/crown-gold" />
                     </div>
                   </div>
-                  <div className="rankingItem">
-                    <div className="crown-box">
+                  <div className="rankingItem ">
+                    <div className="crown-box third">
                       <span className="crown-text">3</span>
                       <CloudinaryImage className="crown-img" publicId="betx/crown-bronze" />
                     </div>
                   </div>
                 </div>
                 <div className="rankingHolder">
-                  <div className="rankingItem">
+                  <div className="rankingItem second">
                     <span>{secondPlace && secondPlace.bettor}</span>
                     <span className="description">{secondPlace && secondPlace.betAmount}</span>
-                    <span className="description">{secondPlace && secondPlace.reward}</span>
+                    <span className="description reward">{secondPlace && secondPlace.reward}</span>
                   </div>
-                  <div className="rankingItem">
+                  <div className="rankingItem first">
                     <span>{firstPlace && firstPlace.bettor}</span>
                     <span className="description">{firstPlace && firstPlace.betAmount}</span>
-                    <span className="description">{firstPlace && firstPlace.reward}</span>
+                    <span className="description reward">{firstPlace && firstPlace.reward}</span>
                   </div>
-                  <div className="rankingItem">
+                  <div className="rankingItem third">
                     <span>{thirdPlace && thirdPlace.bettor}</span>
                     <span className="description">{thirdPlace && thirdPlace.betAmount}</span>
-                    <span className="description">{thirdPlace && thirdPlace.reward}</span>
+                    <span className="description reward">{thirdPlace && thirdPlace.reward}</span>
                   </div>
                 </div>
               </Col>
 
               <Col xs={24} lg={0}>
-                <Row className="myRank">
+                <Row className="rank-mine">
                   <Col span={6}>{myPlace && myPlace.rank ? myPlace.rank : '-' }(<IntlMessages id="dice.rank.me" />)</Col>
                   <Col span={6}>{myPlace && myPlace.bettor ? myPlace.bettor : '-'}</Col>
                   <Col span={6}>{myPlace && myPlace.betAmount ? myPlace.betAmount : '-'}</Col>
@@ -218,7 +218,7 @@ class BetRank extends React.Component {
               scroll={{ y: 300 }}
               // style={{ height: '300px' }}
             />
-            <Row className="myRankLg">
+            <Row className="rank-mine rank-mine-lg">
               <Col span={6}>{myPlace && myPlace.rank ? myPlace.rank : '-'}(<IntlMessages id="dice.rank.me" />)</Col>
               <Col span={6}>{myPlace && myPlace.bettor ? myPlace.bettor : '-'}</Col>
               <Col span={6}>{myPlace && myPlace.betAmount ? myPlace.betAmount : '-'}</Col>
