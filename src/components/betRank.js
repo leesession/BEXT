@@ -136,8 +136,8 @@ class BetRank extends React.Component {
     const tableData = _.isUndefined(betRank) ? [] : _.map(betRank.top, (entry) => ({
       key: entry.rank,
       bettor: entry.bettor,
-      betAmount: formatNumberThousands(_.floor(entry.betAmount, 2)),
-      reward: 0,
+      betAmount: `${formatNumberThousands(_.floor(entry.betAmount, 2))} EOS`,
+      reward: '0 EOS',
     }));
 
     const firstPlace = tableData.shift();
@@ -150,13 +150,13 @@ class BetRank extends React.Component {
     }
 
     return (<div className="container rank">
-      <div className="holderBorder">
+      <div className="rank-container holderBorder">
         <Row>
-          <Col xs={24} lg={12} className="contentWrapper">
+          <Col xs={24} lg={12}>
             <Row type="flex" justify="center" align="middle" style={{ height: '100%' }}>
-              <Col xs={24} lg={24} className="countdownHolder">
-                <p className="countdown">{_.padStart(time.h, 2, '0')}:{_.padStart(time.m, 2, '0')}:{_.padStart(time.s, 2, '0')}</p>
-                <p className="countdownDescription"><IntlMessages id="dice.rank.leadboard" /></p>
+              <Col xs={24} lg={24} className="rank-title">
+                <p className="rank-title-text"><IntlMessages id="dice.rank.leadboard" /></p>
+                <p className="rank-title-countdown">{_.padStart(time.h, 2, '0')}:{_.padStart(time.m, 2, '0')}:{_.padStart(time.s, 2, '0')}</p>
               </Col>
               <Col xs={24} lg={24}>
                 <div className="rankingHolder">
@@ -199,7 +199,7 @@ class BetRank extends React.Component {
               </Col>
 
               <Col xs={24} lg={0}>
-                <Row className="myRank">
+                <Row className="rank-mine">
                   <Col span={6}>{myPlace && myPlace.rank ? myPlace.rank : '-' }(<IntlMessages id="dice.rank.me" />)</Col>
                   <Col span={6}>{myPlace && myPlace.bettor ? myPlace.bettor : '-'}</Col>
                   <Col span={6}>{myPlace && myPlace.betAmount ? myPlace.betAmount : '-'}</Col>
@@ -218,7 +218,7 @@ class BetRank extends React.Component {
               scroll={{ y: 300 }}
               // style={{ height: '300px' }}
             />
-            <Row className="myRankLg">
+            <Row className="rank-mine rank-mine-lg">
               <Col span={6}>{myPlace && myPlace.rank ? myPlace.rank : '-'}(<IntlMessages id="dice.rank.me" />)</Col>
               <Col span={6}>{myPlace && myPlace.bettor ? myPlace.bettor : '-'}</Col>
               <Col span={6}>{myPlace && myPlace.betAmount ? myPlace.betAmount : '-'}</Col>
