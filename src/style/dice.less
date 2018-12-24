@@ -126,7 +126,7 @@
                 padding: 20px 20px;
 
                 @media @phone {
-                    padding: 10px 0px 0px;
+                    padding: 6px 0px 0px;
                 }
 
                 .rank-title {
@@ -899,7 +899,7 @@
         @fontSize: 1.2em;
 
         .chatroom-message-container {
-            padding: 40px 40px 10px 40px;
+            padding: 40px 20px 10px 30px;
             overflow: hidden;
 
             ul {
@@ -1036,10 +1036,16 @@
         .ant-tabs-tab {
             color: @borderColor;
             font-size: 1.2em;
+            line-height: 10px;
+            border-radius:10px;
+            padding-left:32px;
+            padding-right:32px;
 
             @media @phone {
                 font-size: 1.0em;
                 margin-right: 12px;
+                padding-left:16px;
+            padding-right:16px;
             }
 
         }
@@ -1047,7 +1053,6 @@
         .ant-tabs-tab-active {
             color: @panelGrey;
             background: @borderColor;
-            border-radius: 20px;
         }
 
         .ant-table-placeholder {
