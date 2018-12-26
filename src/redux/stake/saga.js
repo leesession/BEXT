@@ -3,11 +3,16 @@ import { call, all, takeEvery, put } from 'redux-saga/effects';
 import actions from './actions';
 import appActions from '../app/actions';
 import ScatterHelper from '../../helpers/scatter';
+import ParseHelper from '../../helpers/parse';
 
 const {
-  handleScatterError, getMyStakeAndDividend, getContractSnapshot, getContractStakeAndDividend, stake, unstake, getBETXCirculation, claimDividend,
+  handleScatterError, getMyStakeAndDividend, getContractSnapshot, getContractStakeAndDividend,
+  stake, unstake, getBETXCirculation, claimDividend,
 } = ScatterHelper;
 
+const {
+  getTodayDividend,
+} = ParseHelper;
 
 function* stakeRequest(action) {
   try {
@@ -99,6 +104,22 @@ function* getContractSnapshotRequest() {
   }
 }
 
+function* getTodayDividendRequest() {
+  try {
+    const response = yield call(getTodayDividend);
+
+    yield put({
+      type: actions.GET_TODAY_DIVIDEND_RESULT,
+      value: response,
+    });
+  } catch (err) {
+    const message = yield call(handleScatterError, err);
+
+    // Silence error message
+    console.log(err);
+  }
+}
+
 function* getContractDividendRequest() {
   try {
     const response = yield call(getContractStakeAndDividend);
@@ -175,6 +196,7 @@ export default function* () {
     takeEvery(actions.UNSTAKE, unstakeRequest),
     takeEvery(actions.GET_MY_STAKE_AND_DIVID, getMyStakeAndDividendRequest),
     takeEvery(actions.GET_CONTRACT_SNAPSHOT, getContractSnapshotRequest),
+    takeEvery(actions.GET_TODAY_DIVIDEND, getTodayDividendRequest),
     takeEvery(actions.GET_CONTRACT_DIVIDEND, getContractDividendRequest),
     takeEvery(actions.GET_BETX_CIRCULATION, getBETXCirculationRequest),
     takeEvery(actions.CLAIM_DIVIDEND, claimDividendRequest),

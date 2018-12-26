@@ -48,7 +48,7 @@ class StakePage extends React.Component {
 
   componentWillMount() {
     const {
-      getBetVolume, getBETXStakeAmount, getBETXCirculation, getMyStakeAndDividend, getContractSnapshot, getContractDividend, username,
+      getBetVolume, getBETXStakeAmount, getBETXCirculation, getMyStakeAndDividend, getContractSnapshot, getContractDividend, getTodayDividend, username,
     } = this.props;
 
     getBetVolume();
@@ -57,6 +57,7 @@ class StakePage extends React.Component {
 
     getContractSnapshot();
     getContractDividend();
+    getTodayDividend();
 
     if (username) {
       getMyStakeAndDividend(username);
@@ -214,7 +215,7 @@ class StakePage extends React.Component {
 
   render() {
     const {
-      intl, dailyVolume, allVolume, betxStakeAmount, betxCirculation,
+      intl, dailyVolume, allVolume, betxStakeAmount, betxCirculation, todayDividend,
       myBetxBalance, mySnapshotTotal, mySnapshotEffective, myStake, myDividend, platformSnapshotTotal, platformDividend, platformStake, locale,
     } = this.props;
     const {
@@ -255,7 +256,7 @@ class StakePage extends React.Component {
                       <p className="page-sub-title sub_title_stake"><IntlMessages id="stake.dividend.allday" /></p>
                       <div className="page-third-title panel icon-container third_title_stake">
                         <div><CloudinaryImage publicId="eos-logo-grey" options={{ height: 40, crop: 'scale' }} /></div>
-                        {formatNumberThousands(_.floor(dailyVolume * appConfig.dividendRatio, 2))} EOS
+                        {formatNumberThousands(_.floor(todayDividend, 2))} EOS
                       </div>
                     </Col>
                     <Col span={12}>
@@ -424,11 +425,13 @@ StakePage.propTypes = {
   getMyStakeAndDividend: PropTypes.func,
   getContractSnapshot: PropTypes.func,
   getContractDividend: PropTypes.func,
+  getTodayDividend: PropTypes.func,
   username: PropTypes.string,
   stake: PropTypes.func,
   unstake: PropTypes.func,
   claimDividend: PropTypes.func,
   setErrorMessage: PropTypes.func,
+  todayDividend: PropTypes.number,
 };
 
 StakePage.defaultProps = {
@@ -451,11 +454,13 @@ StakePage.defaultProps = {
   getMyStakeAndDividend: undefined,
   getContractSnapshot: undefined,
   getContractDividend: undefined,
+  getTodayDividend: undefined,
   username: undefined,
   stake: undefined,
   unstake: undefined,
   claimDividend: undefined,
   setErrorMessage: undefined,
+  todayDividend: undefined,
 };
 
 const mapStateToProps = (state) => ({
@@ -473,6 +478,7 @@ const mapStateToProps = (state) => ({
   platformDividend: state.Stake.get('contractDividend'),
   platformStake: state.Stake.get('contractStake'),
   username: state.App.get('username'),
+  todayDividend: state.Stake.get('todayDividend'),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -482,6 +488,7 @@ const mapDispatchToProps = (dispatch) => ({
   getMyStakeAndDividend: (username) => dispatch(stakeActions.getMyStakeAndDividend(username)),
   getContractSnapshot: () => dispatch(stakeActions.getContractSnapshot()),
   getContractDividend: () => dispatch(stakeActions.getContractDividend()),
+  getTodayDividend: () => dispatch(stakeActions.getTodayDividend()),
   stake: (params) => dispatch(stakeActions.stake(params)),
   unstake: (params) => dispatch(stakeActions.unstake(params)),
   claimDividend: (params) => dispatch(stakeActions.claimDividend(params)),

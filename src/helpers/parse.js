@@ -3,7 +3,7 @@ import _ from 'lodash';
 import moment from 'moment';
 
 import { parseConfig, appConfig } from '../settings';
-import { trimZerosFromAsset } from './utility';
+import { trimZerosFromAsset, parseAsset } from './utility';
 import betActions from '../redux/bet/actions';
 
 Parse.initialize(parseConfig.appId, parseConfig.javascriptKey, '0x2d2e81f6db11144f9a51c1bac41b4ebffecec391c19d74322b2a8917da357208');
@@ -28,6 +28,7 @@ class ParseHelper {
     this.parseBetReceipt = this.parseBetReceipt.bind(this);
     this.getBetVolume = this.getBetVolume.bind(this);
     this.getBetRank = this.getBetRank.bind(this);
+    this.getTodayDividend = this.getTodayDividend.bind(this);
   }
 
   /**
@@ -128,6 +129,10 @@ class ParseHelper {
 
   getBetRank(params) {
     return this.parse.Cloud.run('getBetRank', params);
+  }
+
+  getTodayDividend() {
+    return this.parse.Cloud.run('getTodayDividend').then((result) => Promise.resolve(_.toNumber(parseAsset(result).amount)));
   }
 
   handleParseError(err) {

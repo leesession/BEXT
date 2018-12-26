@@ -8,6 +8,7 @@ const initState = new Map({
   myStake: 0,
   contractSnapshotTotal: 0,
   betxCirculation: 0,
+  todayDividend: undefined,
 });
 
 export default function stakeReducer(state = initState, action) {
@@ -25,6 +26,9 @@ export default function stakeReducer(state = initState, action) {
     case actions.GET_CONTRACT_DIVIDEND_RESULT:
       return state.set('contractDividend', action.value && action.value.dividend)
         .set('contractStake', action.value && action.value.stake);
+
+    case actions.GET_TODAY_DIVIDEND_RESULT:
+      return state.set('todayDividend', action.value);
 
     case actions.GET_BETX_CIRCULATION_RESULT:
       return state.set('betxCirculation', action.value);

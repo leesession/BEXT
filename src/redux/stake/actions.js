@@ -6,6 +6,8 @@ const actions = {
   GET_CONTRACT_SNAPSHOT_RESULT: 'GET_CONTRACT_SNAPSHOT_RESULT',
   GET_CONTRACT_DIVIDEND: 'GET_CONTRACT_DIVIDEND',
   GET_CONTRACT_DIVIDEND_RESULT: 'GET_CONTRACT_DIVIDEND_RESULT',
+  GET_TODAY_DIVIDEND: 'GET_TODAY_DIVIDEND',
+  GET_TODAY_DIVIDEND_RESULT: 'GET_TODAY_DIVIDEND_RESULT',
   STAKE: 'STAKE',
   STAKE_RESULT: 'STAKE_RESULT',
   UNSTAKE: 'UNSTAKE',
@@ -42,6 +44,10 @@ const actions = {
   claimDividend: (params) => ({
     type: actions.CLAIM_DIVIDEND,
     payload: params,
+  }),
+
+  getTodayDividend: () => ({
+    type: actions.GET_TODAY_DIVIDEND,
   }),
 };
 
