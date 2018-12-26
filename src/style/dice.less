@@ -4,6 +4,7 @@
 @btnBgColor: #ca890f;
 @fontColor: #939393;
 @sliderRest: #e74f4b;
+@themeGolden: #D5BD7A;
 
 #dicepage {
     background-color: @bgColor;
@@ -128,7 +129,21 @@
                 @media @phone {
                     padding: 6px 0px 0px;
                 }
-
+                .rank-header{
+                    display: flex;
+                    padding: 0 10px;
+                    justify-content: space-around;
+                    align-items: center;
+                    .toggle-rank-btn{
+                        background: @themeGolden;
+                        border: none;
+                       color:#fff;
+                        &:disabled{
+                            background: gray;
+                            color: #555;
+                        }
+                    }
+                }
                 .rank-title {
                     padding-top:10px;
                 .rank-title-text {
@@ -139,16 +154,15 @@
                         font-size: 2em;
                     }
                 }
-
                 .rank-title-countdown {
                     color: white;
                     font-size: 2em;
                     letter-spacing: 2px;
                     margin-bottom: 12px;
 
-                    @media @phone {
-                        font-size: 2.5em;
-                    }
+                    //@media @phone {
+                    //    font-size: 2.5em;
+                    //}
                 }
 
                 }
