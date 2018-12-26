@@ -137,16 +137,17 @@ class BetRank extends React.Component {
       key: entry.rank,
       bettor: entry.bettor,
       betAmount: `${formatNumberThousands(_.floor(entry.betAmount, 2))} EOS`,
-      reward: '0 EOS',
+      reward: `${formatNumberThousands(_.floor(entry.reward, 2))} EOS`,
     }));
 
     const firstPlace = tableData.shift();
     const secondPlace = tableData.shift();
     const thirdPlace = tableData.shift();
-    const myPlace = betRank && betRank.myRank;
+    const myPlace = _.cloneDeep(betRank && betRank.myRank);
 
     if (myPlace) {
-      myPlace.betAmount = formatNumberThousands(_.floor(myPlace.betAmount, 2));
+      myPlace.betAmount = `${myPlace.betAmount ? formatNumberThousands(_.floor(myPlace.betAmount, 2)) : 0} EOS`;
+      myPlace.reward = `${myPlace.reward ? formatNumberThousands(_.floor(myPlace.reward, 2)) : 0} EOS`;
     }
 
     return (<div className="container rank">
