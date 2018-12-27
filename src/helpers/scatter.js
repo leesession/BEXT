@@ -119,7 +119,7 @@ class ScatterHelper {
       from: bettor,
       to: BETX_DICE_CONTRACT,
       quantity: `${amount} ${betAsset}`,
-      memo: `${rollUnder}-${referrer}-${seed}`,
+      memo: `${rollUnder}-${referrer || 'betxresolver'}-${seed}`,
     };
 
     if (_.isUndefined(api)) {
