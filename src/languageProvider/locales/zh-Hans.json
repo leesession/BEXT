@@ -60,8 +60,7 @@
   "dice.rank.bettor":"投注者",
   "dice.rank.wager":"总投注额",
   "dice.rank.prize":"奖励",
-  "dice.rank.leadboard":"排行榜",
-  "dice.rank.leadboardToday":"今日排行榜",
+  "dice.rank.leadboard":"每日排行榜",
   "dice.rank.me":"我",
 
   "modal.fair.title":"玩法和公平性",
