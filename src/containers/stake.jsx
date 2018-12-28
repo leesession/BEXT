@@ -13,7 +13,7 @@ import stakeActions from '../redux/stake/actions';
 import betActions from '../redux/bet/actions';
 import appActions from '../redux/app/actions';
 import { appConfig } from '../settings';
-import { formatNumberThousands, secondsToTime } from '../helpers/utility';
+import { formatNumberThousands, secondsToTime, getRestDaySeconds } from '../helpers/utility';
 import LoginModal from '../components/loginModal';
 
 cloudinaryConfig({ cloud_name: 'forgelab-io' });
@@ -80,12 +80,7 @@ class StakePage extends React.Component {
   }
 
   componentDidMount() {
-    const utcNow = moment.utc();
-    const endOfDay = moment.utc().endOf('day').subtract(8, 'hours');
-    const diffDuration = moment.duration(endOfDay.diff(utcNow)).asSeconds();
-    // const remainingTimeOfDay = `${diffDuration.hours()}:${diffDuration.minutes()}:${diffDuration.seconds()}`;
-
-    this.startTimer(diffDuration);
+    this.startTimer(getRestDaySeconds(8));
   }
 
   componentWillUnmount() {
@@ -119,13 +114,10 @@ class StakePage extends React.Component {
 
     // Check if we're at zero.
     if (seconds <= 0) {
-      const utcNow = moment.utc();
-      const endOfDay = moment.utc().endOf('day').subtract(8, 'hours');
-      const newSeconds = moment.duration(endOfDay.diff(utcNow)).asSeconds();
-
+      const restOfDaySeconds = getRestDaySeconds(8);
       this.setState({
-        seconds: newSeconds,
-        time: secondsToTime(newSeconds),
+        seconds: restOfDaySeconds,
+        time: restOfDaySeconds,
       });
     }
   }

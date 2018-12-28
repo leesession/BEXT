@@ -165,6 +165,28 @@ export function secondsToTime(secs) {
 
   return obj;
 }
+
+/**
+ * Get Rest of the miliseconds to the end of the day
+ * @param  {number} zone [description]
+ * @return {[type]}      [description]
+ */
+export function getRestDaySeconds(numTimezone) {
+  if (!_.isNumber(numTimezone)) {
+    return 0;
+  }
+
+  const d = new Date();
+  const len = d.getTime();
+  const offset = d.getTimezoneOffset() * 60000;
+  const utcTime = len + offset;
+  const newDate = new Date(utcTime + (3600000 * numTimezone));
+  const currentSeconds = (newDate.getHours() * 3600) + (newDate.getMinutes() * 60) + newDate.getSeconds();
+
+  return (86400 - currentSeconds);
+}
+
+
 /**
   Normalize and validate decimal string (potentially large values).  Should
   avoid internationalization issues if possible but will be safe and

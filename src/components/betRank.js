@@ -8,7 +8,7 @@ import _ from 'lodash';
 import IntlMessages from './utility/intlMessages';
 import betActions from '../redux/bet/actions';
 import { cloudinaryConfig, CloudinaryImage } from '../components/react-cloudinary';
-import { secondsToTime, formatNumberThousands } from '../helpers/utility';
+import { secondsToTime, formatNumberThousands, getRestDaySeconds } from '../helpers/utility';
 
 cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
@@ -72,10 +72,7 @@ class BetRank extends React.Component {
 
     startPollBetRank({ username });
 
-    const utcNow = moment.utc();
-    const endOfDay = moment.utc().endOf('day').subtract(8, 'hours');
-    const diffDuration = moment.duration(endOfDay.diff(utcNow)).asSeconds();
-    this.startTimer(diffDuration);
+    this.startTimer(getRestDaySeconds(8));
   }
 
   componentWillReceiveProps(nextProps) {
@@ -118,13 +115,9 @@ class BetRank extends React.Component {
 
     // Check if we're at zero.
     if (seconds <= 0) {
-      const utcNow = moment.utc();
-      const endOfDay = moment.utc().endOf('day').subtract(8, 'hours');
-      const newSeconds = moment.duration(endOfDay.diff(utcNow)).asSeconds();
-
       this.setState({
-        seconds: newSeconds,
-        time: secondsToTime(newSeconds),
+        seconds: getRestDaySeconds(8),
+        time: secondsToTime(getRestDaySeconds(8)),
       });
     }
   }
