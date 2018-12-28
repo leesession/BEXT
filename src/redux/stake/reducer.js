@@ -8,7 +8,7 @@ const initState = new Map({
   myStake: 0,
   contractSnapshotTotal: 0,
   betxCirculation: 0,
-  todayDividend: undefined,
+  todayDividend: 0,
 });
 
 export default function stakeReducer(state = initState, action) {

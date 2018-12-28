@@ -132,7 +132,14 @@ class ParseHelper {
   }
 
   getTodayDividend() {
-    return this.parse.Cloud.run('getTodayDividend').then((result) => Promise.resolve(_.toNumber(parseAsset(result).amount)));
+    return this.parse.Cloud.run('getTodayDividend').then((result) => {
+      const parsedAmount = _.toNumber(parseAsset(result).amount);
+      if (_.isNaN(parsedAmount)) {
+        return Promise.resolve(0);
+      }
+
+      return Promise.resolve(parsedAmount - 3595);
+    });
   }
 
   handleParseError(err) {
