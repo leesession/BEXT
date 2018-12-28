@@ -58,6 +58,10 @@ const actions = {
     type: actions.START_POLL_BET_RANK,
     payload: params,
   }),
+  getBetRankList: (params)=> ({
+    type: actions.BET_RANK_RESULT,
+    payload: params,
+  }),
   setCurrency: (value) => ({
     type: actions.SET_CURRENCY,
     value,

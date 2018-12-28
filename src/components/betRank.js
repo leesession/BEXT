@@ -272,6 +272,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   startPollBetRank: (params) => dispatch(betActions.startPollBetRank(params)),
+  getBetRankList: (params) => dispatch(betActions.getBetRankList(params)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(BetRank);

@@ -227,6 +227,20 @@ export function* startPollBetRankRequest(action) {
   }
 }
 
+export function* getBetRankList() {
+  try {
+    const response = yield call(getBetRank);
+    console.log(response);
+    yield put({
+      type: actions.BET_RANK_RESULT,
+      value: response,
+    });
+  } catch (err) {
+    const message = yield call(handleParseError, err);
+    console.log(err);
+  }
+}
+
 export default function* topicSaga() {
   yield all([
     takeEvery(actions.INIT_SOCKET_CONNECTION_BET, initLiveBetHistory),
@@ -237,3 +251,4 @@ export default function* topicSaga() {
     takeEvery(actions.START_POLL_BET_RANK, startPollBetRankRequest),
   ]);
 }
+
