@@ -149,7 +149,7 @@
   "stake.betx.circulate":"BETX Circulation",
   "stake.betx.redemption":"Unstake BETX",
   "stake.token.pledge":"Stake",
-  "stake.token.betx":"Stake BETX",
+  "stake.token.betx":"Stake BETX (1000 BETX minimum)",
   "stake.action.pledge":"Stake",
   "stake.action.redemption":"Unstake",
   "stake.available":"Available",

@@ -148,7 +148,7 @@
   "stake.betx.circulate":"BETX流通总量",
   "stake.betx.redemption":"赎回BETX代币",
   "stake.token.pledge":"质押代币",
-  "stake.token.betx":"质押BETX代币",
+  "stake.token.betx":"质押BETX代币(最少1000 BETX)",
   "stake.action.pledge":"质押",
   "stake.action.redemption":"赎回",
   "stake.available":"可用",
