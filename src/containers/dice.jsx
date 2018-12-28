@@ -774,14 +774,14 @@ class DicePage extends React.Component {
                             <div className="container-body-btn-description"><IntlMessages id="dice.balance" values={{ symbol: 'BETX' }} /></div>
                             <div className="bet_value">{this.getBalanceBySymbol('BETX')}<span className="highlight"> <IntlMessages id="dice.asset.betx" /></span></div>
                           </Col>
-                          <Col xs={20} lg={16}>
+                          {/*                          <Col xs={20} lg={16}>
                             <div className="container-body-btn-description container-body-btn-description-firstbet">
                               <Tooltip title={(<IntlMessages id="dice.reward.firstbet.tooltip" />)} trigger={screenWidth <= 1024 ? 'click' : 'hover'}>
                                 <Icon type="question-circle" />
                               </Tooltip>
                               <IntlMessages id="dice.reward.firstbet" values={{ amount: appConfig.firstBetReward }} />
                             </div>
-                          </Col>
+                          </Col> */}
                         </Row>
                       </div>
                     </div>
