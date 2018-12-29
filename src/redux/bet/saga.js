@@ -230,7 +230,6 @@ export function* startPollBetRankRequest(action) {
 export function* getBetRankList() {
   try {
     const response = yield call(getBetRank);
-    console.log(response);
     yield put({
       type: actions.BET_RANK_RESULT,
       value: response,
@@ -249,6 +248,7 @@ export default function* topicSaga() {
     takeEvery(actions.FETCH_HUGE_BET_HISTORY, fetchHugeBetHistoryRequest),
     takeEvery(actions.GET_BET_VOLUME, getBetVolumeRequest),
     takeEvery(actions.START_POLL_BET_RANK, startPollBetRankRequest),
+    takeEvery(actions.GET_BET_RANK_LIST, getBetRankList),
   ]);
 }
 

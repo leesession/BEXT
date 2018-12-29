@@ -70,9 +70,7 @@ class BetRank extends React.Component {
 
   componentDidMount() {
     const { startPollBetRank, username } = this.props;
-
     startPollBetRank({ username });
-
     this.startTimer(getRestDaySeconds(8));
   }
 
@@ -125,6 +123,7 @@ class BetRank extends React.Component {
 
   toggleDate(event) {
     // dire : prev/next  toggle prev day or next day leadboard
+    const { getBetRankList } = this.props;
     const dire = event.target.dataset.direction;
     const today = moment.utc().startOf('day');
     const dateBase = !this.state.rankDate ? today : this.state.rankDate;
@@ -139,6 +138,8 @@ class BetRank extends React.Component {
       default:
         dateCalc = moment(dateBase).format('YYYY-MM-DD hh:mm:ss');
     }
+    // get bank list
+    getBetRankList({});
     if (moment(today).isSame(dateCalc, 'day')) {
       dateCalc = '';
     }
@@ -255,11 +256,13 @@ class BetRank extends React.Component {
 
 BetRank.propTypes = {
   startPollBetRank: PropTypes.func,
+  getBetRankList: PropTypes.func,
   betRank: PropTypes.object,
   username: PropTypes.string,
 };
 
 BetRank.defaultProps = {
+  getBetRankList: undefined,
   startPollBetRank: undefined,
   betRank: undefined,
   username: undefined,
