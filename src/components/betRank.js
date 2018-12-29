@@ -138,14 +138,14 @@ class BetRank extends React.Component {
       default:
         dateCalc = moment(dateBase).format('YYYY-MM-DD hh:mm:ss');
     }
-    // get bank list
-    getBetRankList({});
     if (moment(today).isSame(dateCalc, 'day')) {
       dateCalc = '';
     }
     this.setState({
       rankDate: dateCalc,
     });
+    // get bank list,目前传值为空,需确定getBetRank所需参数再做修改
+    getBetRankList({});
   }
   render() {
     const { time, rankDate } = this.state;
