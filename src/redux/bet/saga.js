@@ -94,34 +94,6 @@ export function* initLiveBetHistory(action) {
     console.error('socket error:', err);
     // socketChannel is still open in catch block
     // if we want end the socketChannel, we need close it explicitly
-  } finally {
-    console.log('initLiveBetHistory.saga, finally close:');
-
-    if (betChannel) {
-      betChannel.close();
-      console.log('initLiveBetHistory.finally: eventChannel is, ', betChannel);
-    }
-
-    yield call(reconnectLiveBetRequest, action);
-  }
-}
-
-/**
- * [*reconnectLiveBetRequest description]
- * @param {[type]} action        action.payload should be the same as initLiveBetHistory {collection}
- * @yield {[type]} [description]
- */
-export function* reconnectLiveBetRequest(action) {
-  try {
-    yield call(delay, appConfig.betChannelReconnectInterval);
-
-    // Reconnect to make sure there's always a ws connection
-    yield put({
-      type: actions.INIT_SOCKET_CONNECTION_BET,
-      payload: action.payload,
-    });
-  } catch (err) {
-    console.error(err);
   }
 }
 
