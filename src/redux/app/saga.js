@@ -178,6 +178,11 @@ function* logoutRequest() {
           username: undefined,
         },
       });
+
+      // Log in right away to achieve switch account function
+      yield put({
+        type: actions.GET_IDENTITY,
+      });
     }
   } catch (err) {
     const message = yield call(handleScatterError, err);
