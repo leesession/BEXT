@@ -118,6 +118,5 @@ export default function* topicSaga() {
     takeEvery(actions.INIT_SOCKET_CONNECTION_MESSAGE, initLiveMessages),
     takeEvery(actions.SEND_MESSAGE, sendMessageRequest),
     takeEvery(actions.FETCH_CHAT_HISTORY, fetchChatHistoryRequest),
-    takeEvery(actions.MESSAGE_UNSUBSCRIBED, reconnectLiveMessgeRequest),
   ]);
 }
