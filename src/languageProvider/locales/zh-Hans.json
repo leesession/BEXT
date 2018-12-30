@@ -20,7 +20,7 @@
   "topbar.copy.description":"推荐朋友，终身获得其0.2％的投注! 只需要将上面的链接发送给朋友，您就会在他们下注时自动成为推荐人。",
   "topbar.stats.cpu":"CPU",
   "topbar.stats.net":"NET",
-  "topbar.account.logout":"登出",
+  "topbar.account.logout":"切换账号",
 
   "modal.login.title":"请先登录",
   "modal.login.description":"连接Scatter以获取账户名称，以及有关账户信息",

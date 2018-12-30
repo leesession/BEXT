@@ -20,7 +20,7 @@
   "topbar.copy.description":"Refer a friend now and receive 0.2% of their bets! Send above link to them and your account will automatically be added as a referrer when they bet.",
   "topbar.stats.cpu":"CPU",
   "topbar.stats.net":"NET",
-  "topbar.account.logout":"Log out",
+  "topbar.account.logout":"Switch Account",
 
   "modal.login.title":"Please Log In first",
   "modal.login.description":"Connect to Scatter to retrieve username and account related values.",

@@ -84,29 +84,6 @@ export function* initLiveMessages(action) {
     }
   } catch (err) {
     console.error('socket error:', err);
-  } finally {
-    console.log('initLiveMessages.saga, finally close:');
-
-    if (chatChannel) {
-      chatChannel.close();
-      console.log('initLiveMessages.finally: eventChannel is, ', chatChannel);
-    }
-
-    yield call(reconnectLiveMessgeRequest, action);
-  }
-}
-
-export function* reconnectLiveMessgeRequest(action) {
-  try {
-    yield call(delay, appConfig.chatChannelReconnectInterval);
-
-    // Reconnect
-    yield put({
-      type: actions.INIT_SOCKET_CONNECTION_MESSAGE,
-      payload: action.payload,
-    });
-  } catch (err) {
-    console.error(err);
   }
 }
 
@@ -141,6 +118,5 @@ export default function* topicSaga() {
     takeEvery(actions.INIT_SOCKET_CONNECTION_MESSAGE, initLiveMessages),
     takeEvery(actions.SEND_MESSAGE, sendMessageRequest),
     takeEvery(actions.FETCH_CHAT_HISTORY, fetchChatHistoryRequest),
-    takeEvery(actions.MESSAGE_UNSUBSCRIBED, reconnectLiveMessgeRequest),
   ]);
 }
