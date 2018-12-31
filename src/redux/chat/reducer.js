@@ -35,7 +35,6 @@ export default function (state = initState, action) {
         .set('messageNum', state.get('history').size() + 1)
         .set('refresh', !state.get('refresh'));
     case actions.MESSAGE_CHANNEL_UPDATE:
-      console.log('MESSAGE_CHANNEL_UPDATE.payload', action.payload);
       break;
     case actions.MESSAGE_SUBSCRIBED:
       state.get('history').enq({

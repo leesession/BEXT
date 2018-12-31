@@ -21,19 +21,14 @@ function websocketInitChannel(payload) {
     };
 
     const updateHandler = (object) =>
-      // console.log('object updated', object);
       emitter({ type: actions.MESSAGE_OBJECT_UPDATED, data: object });
     const createHandler = (object) =>
-      // console.log('object created', object);
       emitter({ type: actions.MESSAGE_OBJECT_CREATED, data: object });
     const deleteHandler = (object) =>
-      // console.log('object deleted', object);
       emitter({ type: actions.MESSAGE_OBJECT_DELETED, data: object });
     const enterHandler = (object) =>
-      // console.log('object entered', object);
       emitter({ type: actions.MESSAGE_OBJECT_ENTERED, data: object });
     const leaveHandler = (object) =>
-      // console.log('object left', object);
       emitter({ type: actions.MESSAGE_OBJECT_LEFT, data: object });
     const unsubscribeHandler = () => {
       console.log('unsubscribeHandler emitting MESSAGE_UNSUBSCRIBED');

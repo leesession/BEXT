@@ -307,8 +307,6 @@ class DicePage extends React.Component {
 
       const titleEle = <p className="notification-title">{intl.formatMessage({ id: 'message.success.sentBet' }, { betAmount: bet.betAmount })}</p>;
 
-      console.log('bet.isResolved', bet.isResolved);
-
       // Add a new notification is the new bet doesn't have one yet.
       if (_.isUndefined(existingNotification)) {
         const messageEle = <p className="notification-message">{intl.formatMessage({ id: 'message.success.waitForBetResult' })}</p>;
@@ -370,7 +368,6 @@ class DicePage extends React.Component {
           }
         );
 
-        console.log('notifications.length', notifications.length);
         // Send the next bet is autobet is enabled; lastBetNotificationId is here to prevent we enter this code twice
         if (autoBetEnabled && lastBetNotificationId !== notificationId && notifications.length < MAX_CONCURRENT_AUTOBET) {
           this.setState({

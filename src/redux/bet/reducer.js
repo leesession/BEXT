@@ -62,7 +62,6 @@ function CreateOrUpdateBetInHistory(betQueue, newBet) {
  */
 function updateCurrentBets(currentBets, newBet) {
   if (_.isUndefined(newBet)) {
-    // console.log(`CreateOrUpdateCurrentBet: newBet is ${newBet}`);
     return false;
   }
 
@@ -88,12 +87,6 @@ export default function (state = initState, action) {
 
       return state
         .set('refresh', !state.get('refresh'));
-    // case actions.SUBSCRIPTION_OPENED:
-    //   console.log('reducer.SUBSCRIPTION_OPENED');
-    //   break;
-    // case actions.SUBSCRIPTION_CLOSED:
-    //   console.log('reducer.SUBSCRIPTION_CLOSED');
-    //   break;
     case appActions.GET_USERNAME_RESULT:
       return state.set('username', action.value);
     case actions.FETCH_BET_HISTORY_RESULT:
@@ -126,9 +119,7 @@ export default function (state = initState, action) {
     case actions.BET_OBJECT_CREATED:
     case actions.BET_OBJECT_UPDATED:
     {
-      // console.log('Raw new bet: ', action.data);
       const newBet = parseBetReceipt(action.data);
-      console.log('newBet: ', newBet);
       let needRefresh = false;
 
       // Update bet history table
