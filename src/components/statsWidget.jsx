@@ -21,7 +21,7 @@ function CalculateColorByPercentage(startColor, endColor, percentage) {
     return (x.length === 1) ? `0${x}` : x;
   }
 
-  const ratio = (percentage - lowerBound) / (upperBound - lowerBound);
+  const ratio = (upperBound - percentage) / (upperBound - lowerBound);
 
   const r = Math.ceil((parseInt(startColor.substring(0, 2), 16) * ratio) + (parseInt(endColor.substring(0, 2), 16) * (1 - ratio)));
   const g = Math.ceil((parseInt(startColor.substring(2, 4), 16) * ratio) + (parseInt(endColor.substring(2, 4), 16) * (1 - ratio)));
