@@ -231,10 +231,13 @@ class DicePage extends React.Component {
   }
 
   componentWillMount() {
-    const { fetchBetHistory, fetchHugeBetHistory, selectedSymbol } = this.props;
+    const {
+      fetchBetHistory, fetchHugeBetHistory, selectedSymbol, getPageData,
+    } = this.props;
 
     fetchBetHistory();
     fetchHugeBetHistory({ symbol: selectedSymbol, limit: appConfig.hugeBetAmount });
+    getPageData('dice');
   }
 
   componentDidMount() {
@@ -592,7 +595,7 @@ class DicePage extends React.Component {
     } = this.state;
 
     const {
-      betHistory, myBetHistory, hugeBetHistory, locale, view, intl, selectedSymbol,
+      betHistory, myBetHistory, hugeBetHistory, locale, view, intl, selectedSymbol, pageData,
     } = this.props;
 
     const momentLocale = (locale === 'en') ? 'en' : 'zh-cn';
@@ -801,7 +804,7 @@ class DicePage extends React.Component {
                 </section>
               </Col>
               <Col xs={24} lg={24}>
-                <BetRank />
+                <BetRank data={pageData && pageData.rankHistory} />
               </Col>
               <Col xs={24} lg={24}>
 
@@ -889,6 +892,8 @@ DicePage.propTypes = {
   getBalancesReq: PropTypes.func,
   getAccountInfoReq: PropTypes.func,
   selectedSymbol: PropTypes.string,
+  pageData: PropTypes.object,
+  getPageData: PropTypes.func,
 };
 
 DicePage.defaultProps = {
@@ -917,6 +922,8 @@ DicePage.defaultProps = {
   getBalancesReq: undefined,
   getAccountInfoReq: undefined,
   selectedSymbol: undefined,
+  pageData: undefined,
+  getPageData: undefined,
 };
 
 const mapStateToProps = (state) => ({
@@ -936,9 +943,11 @@ const mapStateToProps = (state) => ({
   view: state.App.get('view'),
   currentBets: state.Bet.get('currentBets'),
   selectedSymbol: state.Bet.get('selectedSymbol'),
+  pageData: state.App.get('dicePageData'),
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  getPageData: (pageName) => dispatch(appActions.getPageData(pageName)),
   transferReq: (obj) => dispatch(transfer(obj)),
   initSocketConnectionReq: (obj) => dispatch(initSocketConnection(obj)),
   getIdentityReq: () => dispatch(getIdentity()),

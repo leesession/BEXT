@@ -25,13 +25,16 @@ class BetRank extends React.Component {
         s: 0,
       },
       seconds: 0,
-      rankDate: '',
+      dataArray: [{
+        date: 'today',
+      }],
+      dataArrayIndex: 0,
     };
 
     this.timer = 0;
     this.startTimer = this.startTimer.bind(this);
     this.countDown = this.countDown.bind(this);
-    this.toggleDate = this.toggleDate.bind(this);
+    this.changeDataArrayIndex = this.changeDataArrayIndex.bind(this);
 
     this.columns = [{
       title: <IntlMessages id="dice.rank.rank" />,
@@ -75,12 +78,79 @@ class BetRank extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { username } = nextProps;
+    const { username, betRank, data } = nextProps;
     const { startPollBetRank } = this.props;
+    const { dataArray } = this.state;
 
     if (username) {
       startPollBetRank({ username });
     }
+
+    if (!_.isEmpty(betRank)) {
+      console.log('betRank', betRank);
+
+      const tableData = _.isUndefined(betRank) ? [] : _.map(betRank.top, (entry) => ({
+        key: entry.rank,
+        bettor: entry.bettor,
+        betAmount: `${formatNumberThousands(_.floor(entry.betAmount, 2))} EOS`,
+        reward: `${formatNumberThousands(_.floor(entry.reward, 2))} EOS`,
+      }));
+
+      const firstPlace = tableData.shift();
+      const secondPlace = tableData.shift();
+      const thirdPlace = tableData.shift();
+      const myPlace = _.cloneDeep(betRank && betRank.myRank);
+
+      if (myPlace) {
+        myPlace.betAmount = `${myPlace.betAmount ? formatNumberThousands(_.floor(myPlace.betAmount, 2)) : 0} EOS`;
+        myPlace.reward = `${myPlace.reward ? formatNumberThousands(_.floor(myPlace.reward, 2)) : 0} EOS`;
+      }
+
+      const todayObj = _.find(dataArray, { date: 'today' });
+
+      todayObj.tableData = tableData;
+      todayObj.firstPlace = firstPlace;
+      todayObj.secondPlace = secondPlace;
+      todayObj.thirdPlace = thirdPlace;
+      todayObj.myPlace = myPlace;
+    }
+
+    if (data) {
+      _.each(data, (dailyData) => {
+        const tableData = _.isUndefined(dailyData.value) ? [] : _.map(dailyData.value, (entry) => ({
+          key: entry.rank,
+          bettor: entry.bettor,
+          betAmount: `${formatNumberThousands(_.floor(entry.betAmount, 2))} EOS`,
+          reward: `${formatNumberThousands(_.floor(entry.reward, 2))} EOS`,
+        }));
+
+        const firstPlace = tableData.shift();
+        const secondPlace = tableData.shift();
+        const thirdPlace = tableData.shift();
+
+        const matchObj = _.find(dataArray, { date: dailyData.date });
+
+        if (_.isUndefined(matchObj)) {
+          console.log('pushing ', dailyData);
+          dataArray.push({
+            date: dailyData.date,
+            tableData,
+            firstPlace,
+            secondPlace,
+            thirdPlace,
+          });
+        } else {
+          matchObj.tableData = tableData;
+          matchObj.firstPlace = firstPlace;
+          matchObj.secondPlace = secondPlace;
+          matchObj.thirdPlace = thirdPlace;
+        }
+      });
+    }
+
+    this.setState({
+      dataArray,
+    });
   }
 
   componentWillUnmount() {
@@ -121,52 +191,42 @@ class BetRank extends React.Component {
     }
   }
 
-  toggleDate(event) {
+  changeDataArrayIndex(event) {
     // dire : prev/next  toggle prev day or next day leadboard
-    const { getBetRankList } = this.props;
-    const dire = event.target.dataset.direction;
-    const today = moment.utc().startOf('day');
-    const dateBase = !this.state.rankDate ? today : this.state.rankDate;
-    let dateCalc;
-    switch (dire) {
+    let { dataArrayIndex } = this.state;
+    const { dataArray } = this.state;
+
+    const { direction } = event.target.dataset;
+
+    switch (direction) {
       case 'prev':
-        dateCalc = moment(dateBase).subtract(1, 'days').format('YYYY-MM-DD hh:mm:ss');
+        dataArrayIndex += 1;
         break;
       case 'next':
-        dateCalc = moment(dateBase).add(1, 'days').format('YYYY-MM-DD hh:mm:ss');
+        dataArrayIndex -= 1;
         break;
       default:
-        dateCalc = moment(dateBase).format('YYYY-MM-DD hh:mm:ss');
+        break;
     }
-    if (moment(today).isSame(dateCalc, 'day')) {
-      dateCalc = '';
-    }
+
+    dataArrayIndex = _.clamp(dataArrayIndex, 0, dataArray.length - 1);
+
     this.setState({
-      rankDate: dateCalc,
+      dataArrayIndex,
     });
-    // get bank list,目前传值为空,需确定getBetRank所需参数再做修改
-    getBetRankList({});
   }
+
   render() {
-    const { time, rankDate } = this.state;
-    const { betRank } = this.props;
+    const {
+      time, dataArray, dataArrayIndex,
+    } = this.state;
 
-    const tableData = _.isUndefined(betRank) ? [] : _.map(betRank.top, (entry) => ({
-      key: entry.rank,
-      bettor: entry.bettor,
-      betAmount: `${formatNumberThousands(_.floor(entry.betAmount, 2))} EOS`,
-      reward: `${formatNumberThousands(_.floor(entry.reward, 2))} EOS`,
-    }));
-
-    const firstPlace = tableData.shift();
-    const secondPlace = tableData.shift();
-    const thirdPlace = tableData.shift();
-    const myPlace = _.cloneDeep(betRank && betRank.myRank);
-
-    if (myPlace) {
-      myPlace.betAmount = `${myPlace.betAmount ? formatNumberThousands(_.floor(myPlace.betAmount, 2)) : 0} EOS`;
-      myPlace.reward = `${myPlace.reward ? formatNumberThousands(_.floor(myPlace.reward, 2)) : 0} EOS`;
-    }
+    const tableData = dataArray[dataArrayIndex] && dataArray[dataArrayIndex].tableData;
+    const firstPlace = dataArray[dataArrayIndex] && dataArray[dataArrayIndex].firstPlace;
+    const secondPlace = dataArray[dataArrayIndex] && dataArray[dataArrayIndex].secondPlace;
+    const thirdPlace = dataArray[dataArrayIndex] && dataArray[dataArrayIndex].thirdPlace;
+    const myPlace = dataArray[dataArrayIndex] && dataArray[dataArrayIndex].myPlace;
+    const date = dataArray[dataArrayIndex] && dataArray[dataArrayIndex].date;
 
     return (<div className="container rank">
       <div className="rank-container holderBorder">
@@ -174,12 +234,12 @@ class BetRank extends React.Component {
           <Col xs={24} lg={12}>
             <Row type="flex" justify="center" align="middle" style={{ height: '100%' }}>
               <Col xs={24} lg={24} className="rank-header">
-                <Button data-direction="prev" onClick={this.toggleDate} className="toggle-rank-btn" shape="circle" icon="left" />
+                <Button data-direction="prev" disabled={dataArrayIndex + 1 >= dataArray.length} onClick={this.changeDataArrayIndex} className="toggle-rank-btn" shape="circle" icon="left" />
                 <div className="rank-title">
-                  <p className={!rankDate ? 'rank-title-countdown' : 'hide'}><IntlMessages id="dice.rank.leadboardToday" /> {_.padStart(time.h, 2, '0')}:{_.padStart(time.m, 2, '0')}:{_.padStart(time.s, 2, '0')}</p>
-                  <p className={!rankDate ? 'hide' : 'rank-title-countdown'} >{rankDate} <IntlMessages id="dice.rank.leadboard" /></p>
+                  <p className="rank-title-text"><IntlMessages id={date === 'today' ? 'dice.rank.leadboardToday' : 'dice.rank.leadboard'} /></p>
+                  <p className="rank-title-countdown">{date === 'today' ? `${_.padStart(time.h, 2, '0')}:${_.padStart(time.m, 2, '0')}:${_.padStart(time.s, 2, '0')}` : date}</p>
                 </div>
-                <Button data-direction="next" disabled={!rankDate} onClick={this.toggleDate} className="toggle-rank-btn" shape="circle" icon="right" />
+                <Button data-direction="next" disabled={dataArrayIndex - 1 < 0} onClick={this.changeDataArrayIndex} className="toggle-rank-btn" shape="circle" icon="right" />
               </Col>
               <Col xs={24} lg={24}>
                 <div className="rankingHolder">
@@ -256,16 +316,16 @@ class BetRank extends React.Component {
 
 BetRank.propTypes = {
   startPollBetRank: PropTypes.func,
-  getBetRankList: PropTypes.func,
   betRank: PropTypes.object,
   username: PropTypes.string,
+  data: PropTypes.array,
 };
 
 BetRank.defaultProps = {
-  getBetRankList: undefined,
   startPollBetRank: undefined,
   betRank: undefined,
   username: undefined,
+  data: [],
 };
 
 const mapStateToProps = (state) => ({
@@ -275,7 +335,6 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   startPollBetRank: (params) => dispatch(betActions.startPollBetRank(params)),
-  getBetRankList: (params) => dispatch(betActions.getBetRankList(params)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(BetRank);

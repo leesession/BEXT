@@ -21,6 +21,8 @@ const initState = new Map({
   errorMessage: undefined,
   ref: '', // Don't want undefined here
   isTopbarTransparent: true,
+  dicePageData: undefined,
+  stakePageData: undefined,
 });
 
 export default function appReducer(state = initState, action) {
@@ -34,6 +36,9 @@ export default function appReducer(state = initState, action) {
           .set('height', height);
       }
       break;
+    case actions.GET_PAGE_DATA_RESULT:
+      return state.set(`${action.name}PageData`, action.value);
+
     case actions.GET_USERNAME_RESULT:
       return state.set('username', action.value);
     case actions.GET_CPU_USAGE_RESULT:

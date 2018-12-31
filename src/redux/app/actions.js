@@ -10,6 +10,8 @@ export function getView(width) {
 
 const actions = {
   TOGGLE_ALL: 'TOGGLE_ALL',
+  GET_PAGE_DATA: 'GET_PAGE_DATA',
+  GET_PAGE_DATA_RESULT: 'GET_PAGE_DATA_RESULT',
   GET_IDENTITY: 'GET_IDENTITY',
   GET_IDENTITY_RESULT: 'GET_IDENTITY_RESULT',
   LOG_OUT: 'LOG_OUT',
@@ -41,6 +43,10 @@ const actions = {
       height,
     };
   },
+  getPageData: (name) => ({
+    type: actions.GET_PAGE_DATA,
+    name,
+  }),
   getIdentity: () => ({
     type: actions.GET_IDENTITY,
   }),
