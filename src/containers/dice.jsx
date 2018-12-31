@@ -414,9 +414,13 @@ class DicePage extends React.Component {
 
   onBetAmountButtonClick(e) {
     const {
-      eosBalance: balance, betAmount, payout, username,
+      betAmount, payout, username,
     } = this.state;
-    const { formatBetAmountStr } = this;
+    const { formatBetAmountStr, getBalanceBySymbol } = this;
+    const { selectedSymbol } = this.props;
+
+    const balance = getBalanceBySymbol(selectedSymbol);
+
     const targetValue = e.currentTarget.getAttribute('data-value');
     let newBetAmount = _.toNumber(betAmount);
 
