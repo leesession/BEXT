@@ -5,11 +5,16 @@ import _ from 'lodash';
 import actions from './actions';
 import betActions from '../bet/actions';
 import ScatterHelper from '../../helpers/scatter';
+import ParseHelper from '../../helpers/parse';
 import { trimZerosFromAsset } from '../../helpers/utility';
 
 const {
   handleScatterError, getIdentity, transfer, getAccount, logout, getCurrencyBalance,
 } = ScatterHelper;
+
+const {
+  getPageData, handleParseError,
+} = ParseHelper;
 
 const symbols = [
   {
@@ -28,6 +33,28 @@ const symbols = [
     symbol: 'EUSD', precision: 8, contract: 'bitpietokens', putType: actions.GET_EUSD_BALANCE_RESULT,
   },
 ];
+
+function* getPageDataRequest(action) {
+  const { name } = action;
+
+  try {
+    const response = yield call(getPageData, name);
+
+    yield put({
+      type: actions.GET_PAGE_DATA_RESULT,
+      name,
+      value: response,
+    });
+  } catch (err) {
+    const message = yield call(handleParseError, err);
+
+    console.error(message);
+    // yield put({
+    //   type: actions.SET_ERROR_MESSAGE,
+    //   message,
+    // });
+  }
+}
 
 function* getIdentityRequest() {
   try {
@@ -196,6 +223,7 @@ function* logoutRequest() {
 
 export default function* () {
   yield all([
+    takeEvery(actions.GET_PAGE_DATA, getPageDataRequest),
     takeEvery(actions.GET_IDENTITY, getIdentityRequest),
     takeEvery(actions.GET_ACCOUNT, getAccountRequest),
     takeEvery(actions.GET_BALANCES, getBalancesRequest),

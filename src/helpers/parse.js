@@ -29,6 +29,7 @@ class ParseHelper {
     this.getBetVolume = this.getBetVolume.bind(this);
     this.getBetRank = this.getBetRank.bind(this);
     this.getTodayDividend = this.getTodayDividend.bind(this);
+    this.getPageData = this.getPageData.bind(this);
   }
 
   /**
@@ -140,6 +141,17 @@ class ParseHelper {
 
       return Promise.resolve(parsedAmount);
     });
+  }
+
+  /**
+   * Get all data fields of a page on load up
+   * Dice - Daily ranking history
+   * Stake -
+   * @param  {[type]} name [description]
+   * @return {[type]}      [description]
+   */
+  getPageData(name) {
+    return this.parse.Cloud.run('getPageData', { name });
   }
 
   handleParseError(err) {

@@ -29,6 +29,7 @@ const actions = {
   START_POLL_BET_RANK: 'START_POLL_BET_RANK',
   BET_RANK_RESULT: 'BET_RANK_RESULT',
   SET_CURRENCY: 'SET_CURRENCY',
+  GET_BET_RANK_LIST: 'GET_BET_RANK_LIST',
   initSocketConnection: (obj) => ({
     type: actions.INIT_SOCKET_CONNECTION_BET,
     payload: obj,
@@ -56,6 +57,10 @@ const actions = {
   }),
   startPollBetRank: (params) => ({
     type: actions.START_POLL_BET_RANK,
+    payload: params,
+  }),
+  getBetRankList: (params) => ({
+    type: actions.GET_BET_RANK_LIST,
     payload: params,
   }),
   setCurrency: (value) => ({
