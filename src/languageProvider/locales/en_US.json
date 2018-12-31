@@ -182,6 +182,7 @@
   "error.scatter.rejected":"Signature request is rejected in Scatter.",
   "error.scatter.notconnected":"Scatter is not connected yet.",
   "error.scatter.overdrawnBalance":"Insufficient balance from account.",
+  "error.scatter.duplicateTransaction":"Duplicate transaction. Please try again",
 
   "error.page.usernamenotfound":"EOS username not found.",
   "error.account.cpuInsufficient":"EOS account CPU time insufficient.",

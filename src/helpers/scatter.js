@@ -413,6 +413,8 @@ class ScatterHelper {
                 return Promise.resolve('error.scatter.betLessThanMax');
               } else if (assertMessageObj.message.indexOf('overdrawn balance') >= 0 || assertMessageObj.message.indexOf('no balance object found') >= 0) {
                 return Promise.resolve('error.scatter.overdrawnBalance');
+              } else if (assertMessageObj.message.indexOf('duplicate transaction') >= 0) {
+                return Promise.resolve('error.scatter.duplicateTransaction');
               }
             }
           }

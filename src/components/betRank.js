@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import moment from 'moment';
 import { Row, Col, Table, Button } from 'antd';
 import _ from 'lodash';
 
@@ -87,8 +86,6 @@ class BetRank extends React.Component {
     }
 
     if (!_.isEmpty(betRank)) {
-      console.log('betRank', betRank);
-
       const tableData = _.isUndefined(betRank) ? [] : _.map(betRank.top, (entry) => ({
         key: entry.rank,
         bettor: entry.bettor,
@@ -131,7 +128,6 @@ class BetRank extends React.Component {
         const matchObj = _.find(dataArray, { date: dailyData.date });
 
         if (_.isUndefined(matchObj)) {
-          console.log('pushing ', dailyData);
           dataArray.push({
             date: dailyData.date,
             tableData,

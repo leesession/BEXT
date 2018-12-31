@@ -181,6 +181,7 @@
   "error.scatter.rejected":"Scatter的签名请求被拒绝",
   "error.scatter.notconnected":"Scatter还未成功连接",
   "error.scatter.overdrawnBalance":"账户没有足够的余额",
+  "error.scatter.duplicateTransaction":"重复的交易，请稍后重试",
 
   "error.page.usernamenotfound":"EOS用户名不存在",
   "error.account.cpuInsufficient":"EOS账户没有足够的CPU Time",

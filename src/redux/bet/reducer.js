@@ -128,6 +128,7 @@ export default function (state = initState, action) {
     {
       // console.log('Raw new bet: ', action.data);
       const newBet = parseBetReceipt(action.data);
+      console.log('newBet: ', newBet);
       let needRefresh = false;
 
       // Update bet history table

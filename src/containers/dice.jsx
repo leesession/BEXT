@@ -41,6 +41,8 @@ const DIVIDEND = 0.98;
 const MAX_FLOAT_DIGITS = 4;
 const SEED_STR_LENGTH = 21;
 
+const MAX_CONCURRENT_AUTOBET = 2;
+
 const { initSocketConnection, deleteCurrentBet } = betActions;
 const {
   getIdentity, getAccountInfo, getBalances, transfer, setErrorMessage,
@@ -247,7 +249,7 @@ class DicePage extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const {
-      username, selectedSymbol: newSelectedSymbol, currentBets,
+      username, selectedSymbol: newSelectedSymbol, currentBets, errorMessage,
     } = nextProps;
 
     const {
@@ -289,11 +291,23 @@ class DicePage extends React.Component {
       fieldsToUpdate.payoutOnWin = payoutOnWin;
     }
 
+    if (errorMessage) {
+      if (autoBetEnabled) {
+        autoBetEnabled = false;
+        fieldsToUpdate.autoBetEnabled = autoBetEnabled;
+        message.warning(intl.formatMessage({
+          id: 'message.warn.autoBetTurnedOff',
+        }));
+      }
+    }
+
     // Add or remove notification box based currentBets update
     _.each(currentBets, (bet) => {
       const existingNotification = _.find(notifications, { transactionId: bet.transactionId });
 
       const titleEle = <p className="notification-title">{intl.formatMessage({ id: 'message.success.sentBet' }, { betAmount: bet.betAmount })}</p>;
+
+      console.log('bet.isResolved', bet.isResolved);
 
       // Add a new notification is the new bet doesn't have one yet.
       if (_.isUndefined(existingNotification)) {
@@ -356,8 +370,9 @@ class DicePage extends React.Component {
           }
         );
 
+        console.log('notifications.length', notifications.length);
         // Send the next bet is autobet is enabled; lastBetNotificationId is here to prevent we enter this code twice
-        if (autoBetEnabled && lastBetNotificationId !== notificationId) {
+        if (autoBetEnabled && lastBetNotificationId !== notificationId && notifications.length < MAX_CONCURRENT_AUTOBET) {
           this.setState({
             lastBetNotificationId: notificationId,
           });
@@ -898,6 +913,7 @@ DicePage.propTypes = {
   selectedSymbol: PropTypes.string,
   pageData: PropTypes.object,
   getPageData: PropTypes.func,
+  errorMessage: PropTypes.string,
 };
 
 DicePage.defaultProps = {
@@ -928,6 +944,7 @@ DicePage.defaultProps = {
   selectedSymbol: undefined,
   pageData: undefined,
   getPageData: undefined,
+  errorMessage: undefined,
 };
 
 const mapStateToProps = (state) => ({
@@ -948,6 +965,7 @@ const mapStateToProps = (state) => ({
   currentBets: state.Bet.get('currentBets'),
   selectedSymbol: state.Bet.get('selectedSymbol'),
   pageData: state.App.get('dicePageData'),
+  errorMessage: state.App.get('errorMessage'),
 });
 
 const mapDispatchToProps = (dispatch) => ({
