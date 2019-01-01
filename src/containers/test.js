@@ -19,11 +19,9 @@ class TestComponent extends React.Component {
 
   componentDidMount() {
     Events.scrollEvent.register('begin', (...args) => {
-      console.log('begin', args);
     });
 
     Events.scrollEvent.register('end', (...args) => {
-      console.log('end', args);
     });
   }
   scrollToTop() {
