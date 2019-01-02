@@ -13,7 +13,6 @@ import stakeActions from '../redux/stake/actions';
 import betActions from '../redux/bet/actions';
 import appActions from '../redux/app/actions';
 import { appConfig } from '../settings';
-import StakeBar from '../components/stakeBar';
 import { formatNumberThousands, secondsToTime, getRestDaySeconds } from '../helpers/utility';
 import LoginModal from '../components/loginModal';
 
@@ -232,12 +231,11 @@ class StakePage extends React.Component {
     const myExpectedDiv = platformSnapshotTotal === 0 ? 0 : ((1.0 * mySnapshotEffective) / platformSnapshotTotal) * platformDividend;
 
     return (
-      <div id="faq-page">
+      <div id="faq-page" className="stake-page">
         <div className="horizontalWrapper">
           <Row type="flex" justify="center">
             <Col {...colWidth}>
               <h1 className="page-title"><IntlMessages id="stake.title" /></h1>
-              <StakeBar></StakeBar>
             </Col>
             <Col {...colWidth} className="border-bottom">
               <h3 className="page-sub-title sub_title_stake stake_block"><IntlMessages id="stake.dividend.rest" /> ({<Icon type="clock-circle" />} <span style={{ color: 'white', letterSpacing: 2 }}>--:--:--</span>)</h3>
@@ -298,7 +296,7 @@ class StakePage extends React.Component {
                             </div>
                           </Col> */}
                         </Row>
-                        <Row type="flex" align="middle" className="page-dividend-detail-bottom">
+                        <Row type="flex" align="middle" className="page-dividend-detail-bottom claim-bottom">
                           <div className="page-third-title third_title_stake text-right"><IntlMessages id="stake.income.rest" /></div>
                           <div><CloudinaryImage publicId="eos-logo-grey" options={{ height: 30, crop: 'scale' }} /></div>
                           <div className="page-third-title third_title_stake text-left" style={{ color: 'white' }} >{myDividend} EOS</div>
@@ -330,7 +328,7 @@ class StakePage extends React.Component {
                       <div className="page-dividend-section-title page-sub-title stake_block sub_title_stake"><IntlMessages id="stake.token.pledge" /></div>
                     </Col>
                     <Col span={24} >
-                      <div className="stake-container-body panel-trans">
+                      <div className="stake-container-body panel-trans  stake-container-body-extend">
                         <Row>
                           <Col span={24} >
                             <div className="stake-container-body-inner">
@@ -355,7 +353,9 @@ class StakePage extends React.Component {
                           <Col span={24}>
                             <div className="stake-container-body-inner">
                               <Row >
-                                <Col span={24} className="page-third-title third_title_stake text-left"><IntlMessages id="stake.betx.redemption" /></Col>
+                                <Col span={24} className="page-third-title third_title_stake text-left">
+                                  <IntlMessages id="stake.betx.redemption" />
+                                </Col>
                                 <Col span={24} className="page-third-title third_title_stake panel-trans">
                                   <div className="stake-container-body-inner-input">
                                     <div className="img-container"><CloudinaryImage publicId="betx-logo-grey" options={{ height: 30, crop: 'scale' }} /></div>
@@ -369,6 +369,14 @@ class StakePage extends React.Component {
                                     <Col className="text-right" span={12}>{formatNumberThousands(_.floor(myStake, 2))} BETX</Col>
                                   </Row>
                                 </Col>
+                                <div className="stake-third-extend">
+                                  <Row type="flex" align="middle" className="page-dividend-detail-bottom claim-bottom">
+                                    <div className="page-third-title third_title_stake text-right"><IntlMessages id="stake.income.betxRest" /></div>
+                                    <div><CloudinaryImage publicId="betx-logo-grey" options={{ height: 30, crop: 'scale' }} /></div>
+                                    <div className="page-third-title third_title_stake text-left" style={{ color: 'white' }} >{myDividend} </div>
+                                    <div className="getStake-btn-holder"><Button className="getStake-btn" onClick={this.onClaimBtnClicked}><IntlMessages id="stake.income.draw" /></Button></div>
+                                  </Row>
+                                </div>
                               </Row>
                             </div>
                           </Col>
