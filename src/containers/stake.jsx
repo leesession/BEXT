@@ -13,6 +13,7 @@ import stakeActions from '../redux/stake/actions';
 import betActions from '../redux/bet/actions';
 import appActions from '../redux/app/actions';
 import { appConfig } from '../settings';
+import StakeBar from '../components/stakeBar';
 import { formatNumberThousands, secondsToTime, getRestDaySeconds } from '../helpers/utility';
 import LoginModal from '../components/loginModal';
 
@@ -236,6 +237,7 @@ class StakePage extends React.Component {
           <Row type="flex" justify="center">
             <Col {...colWidth}>
               <h1 className="page-title"><IntlMessages id="stake.title" /></h1>
+              <StakeBar></StakeBar>
             </Col>
             <Col {...colWidth} className="border-bottom">
               <h3 className="page-sub-title sub_title_stake stake_block"><IntlMessages id="stake.dividend.rest" /> ({<Icon type="clock-circle" />} <span style={{ color: 'white', letterSpacing: 2 }}>--:--:--</span>)</h3>
