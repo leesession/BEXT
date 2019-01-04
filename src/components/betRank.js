@@ -7,7 +7,7 @@ import _ from 'lodash';
 import IntlMessages from './utility/intlMessages';
 import betActions from '../redux/bet/actions';
 import { cloudinaryConfig, CloudinaryImage } from '../components/react-cloudinary';
-import { secondsToTime, formatNumberThousands, getRestDaySeconds } from '../helpers/utility';
+import { secondsToTime, formatNumberThousands, getRestSecondsOfTheHour } from '../helpers/utility';
 
 cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
@@ -25,7 +25,7 @@ class BetRank extends React.Component {
       },
       seconds: 0,
       dataArray: [{
-        date: 'today',
+        name: 'today',
       }],
       dataArrayIndex: 0,
     };
@@ -73,7 +73,7 @@ class BetRank extends React.Component {
   componentDidMount() {
     const { startPollBetRank, username } = this.props;
     startPollBetRank({ username });
-    this.startTimer(getRestDaySeconds(8));
+    this.startTimer(getRestSecondsOfTheHour());
   }
 
   componentWillReceiveProps(nextProps) {
@@ -103,7 +103,7 @@ class BetRank extends React.Component {
         myPlace.reward = `${myPlace.reward ? formatNumberThousands(_.floor(myPlace.reward, 2)) : 0} EOS`;
       }
 
-      const todayObj = _.find(dataArray, { date: 'today' });
+      const todayObj = _.find(dataArray, { name: 'today' });
 
       todayObj.tableData = tableData;
       todayObj.firstPlace = firstPlace;
@@ -125,11 +125,11 @@ class BetRank extends React.Component {
         const secondPlace = tableData.shift();
         const thirdPlace = tableData.shift();
 
-        const matchObj = _.find(dataArray, { date: dailyData.date });
+        const matchObj = _.find(dataArray, { name: dailyData.name });
 
         if (_.isUndefined(matchObj)) {
           dataArray.push({
-            date: dailyData.date,
+            name: dailyData.name,
             tableData,
             firstPlace,
             secondPlace,
@@ -180,9 +180,10 @@ class BetRank extends React.Component {
 
     // Check if we're at zero.
     if (seconds <= 0) {
+      const secondsOfHour = getRestSecondsOfTheHour();
       this.setState({
-        seconds: getRestDaySeconds(8),
-        time: secondsToTime(getRestDaySeconds(8)),
+        seconds: secondsOfHour,
+        time: secondsToTime(secondsOfHour),
       });
     }
   }
@@ -222,7 +223,7 @@ class BetRank extends React.Component {
     const secondPlace = dataArray[dataArrayIndex] && dataArray[dataArrayIndex].secondPlace;
     const thirdPlace = dataArray[dataArrayIndex] && dataArray[dataArrayIndex].thirdPlace;
     const myPlace = dataArray[dataArrayIndex] && dataArray[dataArrayIndex].myPlace;
-    const date = dataArray[dataArrayIndex] && dataArray[dataArrayIndex].date;
+    const name = dataArray[dataArrayIndex] && dataArray[dataArrayIndex].name;
 
     return (<div className="container rank">
       <div className="rank-container holderBorder">
@@ -232,8 +233,8 @@ class BetRank extends React.Component {
               <Col xs={24} lg={24} className="rank-header">
                 <Button data-direction="prev" disabled={dataArrayIndex + 1 >= dataArray.length} onClick={this.changeDataArrayIndex} className="toggle-rank-btn" shape="circle" icon="left" />
                 <div className="rank-title">
-                  <p className="rank-title-text"><IntlMessages id={date === 'today' ? 'dice.rank.leadboardToday' : 'dice.rank.leadboard'} /></p>
-                  <p className="rank-title-countdown">{date === 'today' ? `${_.padStart(time.h, 2, '0')}:${_.padStart(time.m, 2, '0')}:${_.padStart(time.s, 2, '0')}` : date}</p>
+                  <p className="rank-title-text"><IntlMessages id={name === 'today' ? 'dice.rank.leadboardToday' : 'dice.rank.leadboard'} /></p>
+                  <p className="rank-title-countdown">{name === 'today' ? `${_.padStart(time.h, 2, '0')}:${_.padStart(time.m, 2, '0')}:${_.padStart(time.s, 2, '0')}` : name}</p>
                 </div>
                 <Button data-direction="next" disabled={dataArrayIndex - 1 < 0} onClick={this.changeDataArrayIndex} className="toggle-rank-btn" shape="circle" icon="right" />
               </Col>
