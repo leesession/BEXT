@@ -121,26 +121,28 @@ class BetRank extends React.Component {
     }
 
     if (data) {
-      _.each(data, (dailyData) => {
-        const fixedReward = dailyData.fixedReward === 0 ? '' : `${formatNumberThousands(_.floor(dailyData.fixedReward, 2))} EOS + `;
-        const floatReward = `${formatNumberThousands(_.floor(dailyData.floatReward, 2))} EOS`;
+      _.each(data, (hourData) => {
+        const tableData = _.isUndefined(hourData.value) ? [] : _.map(hourData.value, (entry) => {
+          const fixedReward = entry.fixedReward === 0 ? '' : `${formatNumberThousands(_.floor(entry.fixedReward, 2))} EOS + `;
+          const floatReward = `${formatNumberThousands(_.floor(entry.floatReward, 2))} EOS`;
 
-        const tableData = _.isUndefined(dailyData.value) ? [] : _.map(dailyData.value, (entry) => ({
-          key: entry.rank,
-          bettor: entry.bettor,
-          betAmount: `${formatNumberThousands(_.floor(entry.betAmount, 2))} EOS`,
-          reward: `${fixedReward}${floatReward}`,
-        }));
+          return {
+            key: entry.rank,
+            bettor: entry.bettor,
+            betAmount: `${formatNumberThousands(_.floor(entry.betAmount, 2))} EOS`,
+            reward: `${fixedReward}${floatReward}`,
+          };
+        });
 
         const firstPlace = tableData.shift();
         const secondPlace = tableData.shift();
         const thirdPlace = tableData.shift();
 
-        const matchObj = _.find(dataArray, { name: dailyData.name });
+        const matchObj = _.find(dataArray, { name: hourData.name });
 
         if (_.isUndefined(matchObj)) {
           dataArray.push({
-            name: dailyData.name,
+            name: hourData.name,
             tableData,
             firstPlace,
             secondPlace,
@@ -248,7 +250,7 @@ class BetRank extends React.Component {
                   <p className="rank-title-countdown">{name === 'today' ? `${_.padStart(time.h, 2, '0')}:${_.padStart(time.m, 2, '0')}:${_.padStart(time.s, 2, '0')}` : name}</p>
                 </div>
                 <Button data-direction="next" disabled={dataArrayIndex - 1 < 0} onClick={this.changeDataArrayIndex} className="toggle-rank-btn" shape="circle" icon="right" />
-              </Col>x
+              </Col>
               <Col xs={24} lg={24}>
                 <div className="rankingHolder">
                   <div className="rankingItem">
