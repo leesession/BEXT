@@ -86,12 +86,17 @@ class BetRank extends React.Component {
     }
 
     if (!_.isEmpty(betRank)) {
-      const tableData = _.isUndefined(betRank) ? [] : _.map(betRank.top, (entry) => ({
-        key: entry.rank,
-        bettor: entry.bettor,
-        betAmount: `${formatNumberThousands(_.floor(entry.betAmount, 2))} EOS`,
-        reward: `${formatNumberThousands(_.floor(entry.reward, 2))} EOS`,
-      }));
+      const tableData = _.isUndefined(betRank) ? [] : _.map(betRank.top, (entry) => {
+        const fixedReward = entry.fixedReward === 0 ? '' : `${formatNumberThousands(_.floor(entry.fixedReward, 2))} EOS + `;
+        const floatReward = `${formatNumberThousands(_.floor(entry.floatReward, 2))} EOS`;
+
+        return {
+          key: entry.rank,
+          bettor: entry.bettor,
+          betAmount: `${formatNumberThousands(_.floor(entry.betAmount, 2))} EOS`,
+          reward: `${fixedReward}${floatReward}`,
+        };
+      });
 
       const firstPlace = tableData.shift();
       const secondPlace = tableData.shift();
@@ -99,8 +104,11 @@ class BetRank extends React.Component {
       const myPlace = _.cloneDeep(betRank && betRank.myRank);
 
       if (myPlace) {
+        const fixedReward = myPlace.fixedReward === 0 ? '' : `${formatNumberThousands(_.floor(myPlace.fixedReward, 2))} EOS + `;
+        const floatReward = `${formatNumberThousands(_.floor(myPlace.floatReward, 2))} EOS`;
+
         myPlace.betAmount = `${myPlace.betAmount ? formatNumberThousands(_.floor(myPlace.betAmount, 2)) : 0} EOS`;
-        myPlace.reward = `${myPlace.reward ? formatNumberThousands(_.floor(myPlace.reward, 2)) : 0} EOS`;
+        myPlace.reward = `${fixedReward}${floatReward}`;
       }
 
       const todayObj = _.find(dataArray, { name: 'today' });
@@ -114,11 +122,14 @@ class BetRank extends React.Component {
 
     if (data) {
       _.each(data, (dailyData) => {
+        const fixedReward = dailyData.fixedReward === 0 ? '' : `${formatNumberThousands(_.floor(dailyData.fixedReward, 2))} EOS + `;
+        const floatReward = `${formatNumberThousands(_.floor(dailyData.floatReward, 2))} EOS`;
+
         const tableData = _.isUndefined(dailyData.value) ? [] : _.map(dailyData.value, (entry) => ({
           key: entry.rank,
           bettor: entry.bettor,
           betAmount: `${formatNumberThousands(_.floor(entry.betAmount, 2))} EOS`,
-          reward: `${formatNumberThousands(_.floor(entry.reward, 2))} EOS`,
+          reward: `${fixedReward}${floatReward}`,
         }));
 
         const firstPlace = tableData.shift();
@@ -237,7 +248,7 @@ class BetRank extends React.Component {
                   <p className="rank-title-countdown">{name === 'today' ? `${_.padStart(time.h, 2, '0')}:${_.padStart(time.m, 2, '0')}:${_.padStart(time.s, 2, '0')}` : name}</p>
                 </div>
                 <Button data-direction="next" disabled={dataArrayIndex - 1 < 0} onClick={this.changeDataArrayIndex} className="toggle-rank-btn" shape="circle" icon="right" />
-              </Col>
+              </Col>x
               <Col xs={24} lg={24}>
                 <div className="rankingHolder">
                   <div className="rankingItem">
