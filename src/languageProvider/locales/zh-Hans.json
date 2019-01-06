@@ -61,7 +61,7 @@
   "dice.rank.wager":"总投注额",
   "dice.rank.prize":"奖励",
   "dice.rank.leadboard":"历史排行榜",
-  "dice.rank.leadboardToday":"今日排行榜",
+  "dice.rank.leadboardToday":"本小时排行榜",
   "dice.rank.me":"我",
 
   "modal.fair.title":"玩法和公平性",
