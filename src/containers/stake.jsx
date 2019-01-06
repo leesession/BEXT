@@ -48,16 +48,13 @@ class StakePage extends React.Component {
 
   componentWillMount() {
     const {
-      getBetVolume, getBETXStakeAmount, getBETXCirculation, getMyStakeAndDividend, getContractSnapshot, getContractDividend, getTodayDividend, username,
+      getPageData, getMyStakeAndDividend, getContractSnapshot, getContractDividend, username,
     } = this.props;
-
-    getBetVolume();
-    getBETXStakeAmount();
-    getBETXCirculation();
 
     getContractSnapshot();
     getContractDividend();
-    getTodayDividend();
+
+    getPageData('stake');
 
     if (username) {
       getMyStakeAndDividend(username);
@@ -207,9 +204,10 @@ class StakePage extends React.Component {
 
   render() {
     const {
-      intl, dailyVolume, allVolume, betxStakeAmount, betxCirculation, todayDividend,
+      intl, pageData,
       myBetxBalance, mySnapshotTotal, mySnapshotEffective, myStake, myDividend, platformSnapshotTotal, platformDividend, platformStake, locale,
     } = this.props;
+
     const {
       time, inputStake, inputUnstake, isLoginModalVisible,
     } = this.state;
@@ -219,8 +217,6 @@ class StakePage extends React.Component {
     const termText =
     (<div><p><IntlMessages id="stake.rule.body1" /></p><div className="formula-img"><CloudinaryImage publicId={`${'betx/first-divid'}-${locale}`} options={{ height: 100, crop: 'scale' }} /></div><p><IntlMessages id="stake.rule.body3" /> </p></div>);
 
-    // const totalDividend = platformDividend;
-    // const DivPer10KBETX = totalDividend * (10000.0 / betxCirculation);
 
     const colWidth = {
       xs: 24,
@@ -248,14 +244,14 @@ class StakePage extends React.Component {
                       <p className="page-sub-title sub_title_stake"><IntlMessages id="stake.dividend.allday" /></p>
                       <div className="page-third-title panel icon-container third_title_stake">
                         <div><CloudinaryImage publicId="eos-logo-grey" options={{ height: 40, crop: 'scale' }} /></div>
-                        {formatNumberThousands(_.floor(todayDividend, 2))} EOS
+                        {formatNumberThousands(_.floor(pageData && pageData.todayDividend, 2))} EOS
                       </div>
                     </Col>
                     <Col span={12}>
                       <p className="page-sub-title sub_title_stake"><IntlMessages id="stake.dividend.total" /></p>
                       <div className="page-third-title panel icon-container third_title_stake">
                         <div><CloudinaryImage publicId="eos-logo-grey" options={{ height: 40, crop: 'scale' }} /></div>
-                        {formatNumberThousands(_.floor(platformDividend, 2))} EOS</div>
+                        {formatNumberThousands(_.floor(pageData && pageData.currentDividend, 2))} EOS</div>
                     </Col>
                   </Row>
                   <Row>
@@ -313,14 +309,14 @@ class StakePage extends React.Component {
                       <p className="page-sub-title sub_title_stake"><IntlMessages id="stake.betx.pledge" /></p>
                       <div className="page-third-title third_title_stake panel icon-container" >
                         <div><CloudinaryImage publicId="betx-logo-grey" options={{ height: 40, crop: 'scale' }} /></div>
-                        {formatNumberThousands(_.floor(platformStake, 2))} BETX
+                        {formatNumberThousands(_.floor(pageData && pageData.staked, 2))} BETX
                       </div>
                     </Col>
                     <Col span={12}>
                       <p className="page-sub-title sub_title_stake"><IntlMessages id="stake.betx.circulate" /></p>
                       <div className="page-third-title third_title_stake panel icon-container" >
                         <div><CloudinaryImage publicId="betx-logo-grey" options={{ height: 40, crop: 'scale' }} /></div>
-                        {formatNumberThousands(_.floor(betxCirculation, 2))} BETX</div>
+                        {formatNumberThousands(_.floor(pageData && pageData.circulation, 2))} BETX</div>
                     </Col>
                   </Row>
                   <Row className="stake-container" >
@@ -424,6 +420,8 @@ StakePage.propTypes = {
   claimDividend: PropTypes.func,
   setErrorMessage: PropTypes.func,
   todayDividend: PropTypes.number,
+  getPageData: PropTypes.func,
+  pageData: PropTypes.object,
 };
 
 StakePage.defaultProps = {
@@ -453,6 +451,8 @@ StakePage.defaultProps = {
   claimDividend: undefined,
   setErrorMessage: undefined,
   todayDividend: undefined,
+  getPageData: undefined,
+  pageData: undefined,
 };
 
 const mapStateToProps = (state) => ({
@@ -471,6 +471,7 @@ const mapStateToProps = (state) => ({
   platformStake: state.Stake.get('contractStake'),
   username: state.App.get('username'),
   todayDividend: state.Stake.get('todayDividend'),
+  pageData: state.App.get('stakePageData'),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -483,6 +484,7 @@ const mapDispatchToProps = (dispatch) => ({
   getTodayDividend: () => dispatch(stakeActions.getTodayDividend()),
   stake: (params) => dispatch(stakeActions.stake(params)),
   unstake: (params) => dispatch(stakeActions.unstake(params)),
+  getPageData: (name) => dispatch(appActions.getPageData(name)),
   claimDividend: (params) => dispatch(stakeActions.claimDividend(params)),
   setErrorMessage: (message) => dispatch(appActions.setErrorMessage(message)),
 });
