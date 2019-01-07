@@ -41,6 +41,7 @@ class StakePage extends React.Component {
     this.onStakeBtnClicked = this.onStakeBtnClicked.bind(this);
     this.onUnstakeBtnClicked = this.onUnstakeBtnClicked.bind(this);
     this.onClaimBtnClicked = this.onClaimBtnClicked.bind(this);
+    this.onWithdrawBtnClicked = this.onWithdrawBtnClicked.bind(this);
     this.onInputStakeChange = this.onInputStakeChange.bind(this);
     this.onInputUnstakeChange = this.onInputUnstakeChange.bind(this);
     this.toggleLoginModal = this.toggleLoginModal.bind(this);
@@ -202,10 +203,29 @@ class StakePage extends React.Component {
     });
   }
 
+  onWithdrawBtnClicked() {
+    const {
+      username, withdraw, myAvailable,
+    } = this.props;
+
+    if (!username) {
+      this.toggleLoginModal(true);
+      return;
+    }
+
+    const quantity = `${_.floor(myAvailable, 4).toFixed(4)} BETX`;
+
+    withdraw({
+      username,
+      quantity,
+    });
+  }
+
   render() {
     const {
       intl, pageData,
-      myBetxBalance, mySnapshotTotal, mySnapshotEffective, myStake, myDividend, platformSnapshotTotal, platformDividend, platformStake, locale,
+      myBetxBalance, mySnapshotTotal, mySnapshotEffective, myStake, myDividend, myFrozen, myAvailable,
+      platformSnapshotTotal, platformDividend, platformStake, locale,
     } = this.props;
 
     const {
@@ -226,8 +246,11 @@ class StakePage extends React.Component {
 
     const myExpectedDiv = platformSnapshotTotal === 0 ? 0 : ((1.0 * mySnapshotEffective) / platformSnapshotTotal) * platformDividend;
 
+    const fronzeStr = formatNumberThousands(_.floor(myFrozen, 2));
+    const availableStr = `${formatNumberThousands(_.floor(myAvailable, 2))} BETX`;
+
     return (
-      <div id="faq-page">
+      <div id="faq-page" className="stake-page">
         <div className="horizontalWrapper">
           <Row type="flex" justify="center">
             <Col {...colWidth}>
@@ -292,7 +315,7 @@ class StakePage extends React.Component {
                             </div>
                           </Col> */}
                         </Row>
-                        <Row type="flex" align="middle" className="page-dividend-detail-bottom">
+                        <Row type="flex" align="middle" className="page-dividend-detail-bottom claim-bottom">
                           <div className="page-third-title third_title_stake text-right"><IntlMessages id="stake.income.rest" /></div>
                           <div><CloudinaryImage publicId="eos-logo-grey" options={{ height: 30, crop: 'scale' }} /></div>
                           <div className="page-third-title third_title_stake text-left" style={{ color: 'white' }} >{myDividend} EOS</div>
@@ -324,7 +347,7 @@ class StakePage extends React.Component {
                       <div className="page-dividend-section-title page-sub-title stake_block sub_title_stake"><IntlMessages id="stake.token.pledge" /></div>
                     </Col>
                     <Col span={24} >
-                      <div className="stake-container-body panel-trans">
+                      <div className="stake-container-body panel-trans  stake-container-body-extend">
                         <Row>
                           <Col span={24} >
                             <div className="stake-container-body-inner">
@@ -349,7 +372,9 @@ class StakePage extends React.Component {
                           <Col span={24}>
                             <div className="stake-container-body-inner">
                               <Row >
-                                <Col span={24} className="page-third-title third_title_stake text-left"><IntlMessages id="stake.betx.redemption" /></Col>
+                                <Col span={24} className="page-third-title third_title_stake text-left">
+                                  <IntlMessages id="stake.betx.redemption" />
+                                </Col>
                                 <Col span={24} className="page-third-title third_title_stake panel-trans">
                                   <div className="stake-container-body-inner-input">
                                     <div className="img-container"><CloudinaryImage publicId="betx-logo-grey" options={{ height: 30, crop: 'scale' }} /></div>
@@ -360,9 +385,17 @@ class StakePage extends React.Component {
                                 <Col span={24} className="page-third-title third_title_stake" style={{ color: 'white' }}>
                                   <Row type="flex" justify="space-around" align="middle">
                                     <Col className="text-left" span={12}><IntlMessages id="stake.available" /></Col>
-                                    <Col className="text-right" span={12}>{formatNumberThousands(_.floor(myStake, 2))} BETX</Col>
+                                    <Col className="text-right" span={12}>{formatNumberThousands(_.floor(myStake, 2))} BETX ({fronzeStr} <IntlMessages id="stake.frozen" />)</Col>
                                   </Row>
                                 </Col>
+                                <div className="stake-third-extend">
+                                  <Row type="flex" align="middle" className="page-dividend-detail-bottom claim-bottom">
+                                    <div className="page-third-title third_title_stake text-right"><IntlMessages id="stake.income.withdraw" /></div>
+                                    <div><CloudinaryImage publicId="betx-logo-grey" options={{ height: 30, crop: 'scale' }} /></div>
+                                    <div className="page-third-title third_title_stake text-left" style={{ color: 'white' }} >{availableStr} </div>
+                                    <div className="getStake-btn-holder"><Button className="getStake-btn" onClick={this.onWithdrawBtnClicked}><IntlMessages id="stake.income.button.withdraw" /></Button></div>
+                                  </Row>
+                                </div>
                               </Row>
                             </div>
                           </Col>
@@ -405,6 +438,8 @@ StakePage.propTypes = {
   mySnapshotEffective: PropTypes.number,
   myStake: PropTypes.number,
   myDividend: PropTypes.number,
+  myFrozen: PropTypes.number,
+  myAvailable: PropTypes.number,
   platformSnapshotTotal: PropTypes.number,
   platformDividend: PropTypes.number,
   platformStake: PropTypes.number,
@@ -418,6 +453,7 @@ StakePage.propTypes = {
   stake: PropTypes.func,
   unstake: PropTypes.func,
   claimDividend: PropTypes.func,
+  withdraw: PropTypes.func,
   setErrorMessage: PropTypes.func,
   todayDividend: PropTypes.number,
   getPageData: PropTypes.func,
@@ -437,6 +473,8 @@ StakePage.defaultProps = {
   mySnapshotEffective: 0,
   myStake: 0,
   myDividend: 0,
+  myFrozen: 0,
+  myAvailable: 0,
   platformSnapshotTotal: 0,
   platformDividend: 0,
   platformStake: 0,
@@ -449,6 +487,7 @@ StakePage.defaultProps = {
   stake: undefined,
   unstake: undefined,
   claimDividend: undefined,
+  withdraw: undefined,
   setErrorMessage: undefined,
   todayDividend: undefined,
   getPageData: undefined,
@@ -466,6 +505,8 @@ const mapStateToProps = (state) => ({
   mySnapshotEffective: state.Stake.get('mySnapshotEffective'),
   myStake: state.Stake.get('myStake'),
   myDividend: state.Stake.get('myDividend'),
+  myFrozen: state.Stake.get('myFrozen'),
+  myAvailable: state.Stake.get('myAvailable'),
   platformSnapshotTotal: state.Stake.get('contractSnapshotTotal'),
   platformDividend: state.Stake.get('contractDividend'),
   platformStake: state.Stake.get('contractStake'),
@@ -486,6 +527,7 @@ const mapDispatchToProps = (dispatch) => ({
   unstake: (params) => dispatch(stakeActions.unstake(params)),
   getPageData: (name) => dispatch(appActions.getPageData(name)),
   claimDividend: (params) => dispatch(stakeActions.claimDividend(params)),
+  withdraw: (params) => dispatch(stakeActions.withdraw(params)),
   setErrorMessage: (message) => dispatch(appActions.setErrorMessage(message)),
 });
 

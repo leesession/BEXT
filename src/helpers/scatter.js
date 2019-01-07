@@ -39,6 +39,7 @@ class ScatterHelper {
     this.getTotalBetAmount = this.getTotalBetAmount.bind(this);
     this.stake = this.stake.bind(this);
     this.unstake = this.unstake.bind(this);
+    this.withdraw = this.withdraw.bind(this);
     this.getMyStakeAndDividend = this.getMyStakeAndDividend.bind(this);
     this.getContractSnapshot = this.getContractSnapshot.bind(this);
     this.getContractStakeAndDividend = this.getContractStakeAndDividend.bind(this);
@@ -266,6 +267,7 @@ class ScatterHelper {
         return Promise.resolve(returnResult);
       }
 
+      // Format numbers from 100000 to 10
       _.each(returnResult, (value, key) => {
         if (key === 'ssCount') {
           returnResult[key] = matchRow[key];
@@ -392,6 +394,34 @@ class ScatterHelper {
       contract.claimdivid(data, transactionOptions));
   }
 
+  withdraw(params) {
+    const { api, account } = this;
+
+    const {
+      quantity, username,
+    } = params;
+
+    if (_.isUndefined(username)) {
+      throw new Error('message.warn.loginFirst');
+    }
+
+    // Construct json params
+    const data = {
+      user: username,
+      withdrawAsset: quantity,
+    };
+
+    if (_.isUndefined(api)) {
+      return Promise.reject('error.scatter.notAuthenticated');
+    }
+
+    // Never assume the account's permission/authority. Always take it from the returned account.
+    const transactionOptions = { authorization: [`${account.name}@${account.authority}`] };
+
+    return api.transaction(BETX_DIVID_CONTRACT, (contract) =>
+      contract.withdraw(data, transactionOptions));
+  }
+
   handleScatterError(err) {
     let { message, code } = err;
 
@@ -415,6 +445,8 @@ class ScatterHelper {
                 return Promise.resolve('error.scatter.overdrawnBalance');
               } else if (assertMessageObj.message.indexOf('duplicate transaction') >= 0) {
                 return Promise.resolve('error.scatter.duplicateTransaction');
+              } else if (assertMessageObj.message.indexOf('Stake must be greater than') >= 0) {
+                return Promise.resolve('error.scatter.stakeGreater');
               }
             }
           }

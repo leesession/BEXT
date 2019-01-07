@@ -16,6 +16,8 @@ const actions = {
   GET_BETX_CIRCULATION_RESULT: 'GET_BETX_CIRCULATION_RESULT',
   CLAIM_DIVIDEND: 'CLAIM_DIVIDEND',
   CLAIM_DIVIDEND_RESULT: 'CLAIM_DIVIDEND_RESULT',
+  WITHDRAW: 'WITHDRAW',
+  WITHDRAW_RESULT: 'WITHDRAW_RESULT',
 
   stake: (params) => ({
     type: actions.STAKE,
@@ -45,7 +47,10 @@ const actions = {
     type: actions.CLAIM_DIVIDEND,
     payload: params,
   }),
-
+  withdraw: (params) => ({
+    type: actions.WITHDRAW,
+    payload: params,
+  }),
   getTodayDividend: () => ({
     type: actions.GET_TODAY_DIVIDEND,
   }),
