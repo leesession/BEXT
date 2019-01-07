@@ -7,7 +7,7 @@ import _ from 'lodash';
 import IntlMessages from './utility/intlMessages';
 import betActions from '../redux/bet/actions';
 import { cloudinaryConfig, CloudinaryImage } from '../components/react-cloudinary';
-import { secondsToTime, formatNumberThousands, getRestDaySeconds } from '../helpers/utility';
+import { secondsToTime, formatNumberThousands, getRestSecondsOfTheHour } from '../helpers/utility';
 
 cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
@@ -25,7 +25,7 @@ class BetRank extends React.Component {
       },
       seconds: 0,
       dataArray: [{
-        date: 'today',
+        name: 'today',
       }],
       dataArrayIndex: 0,
     };
@@ -73,7 +73,7 @@ class BetRank extends React.Component {
   componentDidMount() {
     const { startPollBetRank, username } = this.props;
     startPollBetRank({ username });
-    this.startTimer(getRestDaySeconds(8));
+    this.startTimer(getRestSecondsOfTheHour());
   }
 
   componentWillReceiveProps(nextProps) {
@@ -86,12 +86,17 @@ class BetRank extends React.Component {
     }
 
     if (!_.isEmpty(betRank)) {
-      const tableData = _.isUndefined(betRank) ? [] : _.map(betRank.top, (entry) => ({
-        key: entry.rank,
-        bettor: entry.bettor,
-        betAmount: `${formatNumberThousands(_.floor(entry.betAmount, 2))} EOS`,
-        reward: `${formatNumberThousands(_.floor(entry.reward, 2))} EOS`,
-      }));
+      const tableData = _.isUndefined(betRank) ? [] : _.map(betRank.top, (entry) => {
+        const fixedReward = entry.fixedReward === 0 ? '' : `${formatNumberThousands(_.floor(entry.fixedReward, 2))} EOS + `;
+        const floatReward = `${formatNumberThousands(_.floor(entry.floatReward, 2))} EOS`;
+
+        return {
+          key: entry.rank,
+          bettor: entry.bettor,
+          betAmount: `${formatNumberThousands(_.floor(entry.betAmount, 2))} EOS`,
+          reward: `${fixedReward}${floatReward}`,
+        };
+      });
 
       const firstPlace = tableData.shift();
       const secondPlace = tableData.shift();
@@ -99,11 +104,14 @@ class BetRank extends React.Component {
       const myPlace = _.cloneDeep(betRank && betRank.myRank);
 
       if (myPlace) {
+        const fixedReward = myPlace.fixedReward === 0 ? '' : `${formatNumberThousands(_.floor(myPlace.fixedReward, 2))} EOS + `;
+        const floatReward = `${formatNumberThousands(_.floor(myPlace.floatReward, 2))} EOS`;
+
         myPlace.betAmount = `${myPlace.betAmount ? formatNumberThousands(_.floor(myPlace.betAmount, 2)) : 0} EOS`;
-        myPlace.reward = `${myPlace.reward ? formatNumberThousands(_.floor(myPlace.reward, 2)) : 0} EOS`;
+        myPlace.reward = `${fixedReward}${floatReward}`;
       }
 
-      const todayObj = _.find(dataArray, { date: 'today' });
+      const todayObj = _.find(dataArray, { name: 'today' });
 
       todayObj.tableData = tableData;
       todayObj.firstPlace = firstPlace;
@@ -113,23 +121,28 @@ class BetRank extends React.Component {
     }
 
     if (data) {
-      _.each(data, (dailyData) => {
-        const tableData = _.isUndefined(dailyData.value) ? [] : _.map(dailyData.value, (entry) => ({
-          key: entry.rank,
-          bettor: entry.bettor,
-          betAmount: `${formatNumberThousands(_.floor(entry.betAmount, 2))} EOS`,
-          reward: `${formatNumberThousands(_.floor(entry.reward, 2))} EOS`,
-        }));
+      _.each(data, (hourData) => {
+        const tableData = _.isUndefined(hourData.value) ? [] : _.map(hourData.value, (entry) => {
+          const fixedReward = entry.fixedReward === 0 ? '' : `${formatNumberThousands(_.floor(entry.fixedReward, 2))} EOS + `;
+          const floatReward = `${formatNumberThousands(_.floor(entry.floatReward, 2))} EOS`;
+
+          return {
+            key: entry.rank,
+            bettor: entry.bettor,
+            betAmount: `${formatNumberThousands(_.floor(entry.betAmount, 2))} EOS`,
+            reward: `${fixedReward}${floatReward}`,
+          };
+        });
 
         const firstPlace = tableData.shift();
         const secondPlace = tableData.shift();
         const thirdPlace = tableData.shift();
 
-        const matchObj = _.find(dataArray, { date: dailyData.date });
+        const matchObj = _.find(dataArray, { name: hourData.name });
 
         if (_.isUndefined(matchObj)) {
           dataArray.push({
-            date: dailyData.date,
+            name: hourData.name,
             tableData,
             firstPlace,
             secondPlace,
@@ -180,9 +193,10 @@ class BetRank extends React.Component {
 
     // Check if we're at zero.
     if (seconds <= 0) {
+      const secondsOfHour = getRestSecondsOfTheHour();
       this.setState({
-        seconds: getRestDaySeconds(8),
-        time: secondsToTime(getRestDaySeconds(8)),
+        seconds: secondsOfHour,
+        time: secondsToTime(secondsOfHour),
       });
     }
   }
@@ -222,7 +236,7 @@ class BetRank extends React.Component {
     const secondPlace = dataArray[dataArrayIndex] && dataArray[dataArrayIndex].secondPlace;
     const thirdPlace = dataArray[dataArrayIndex] && dataArray[dataArrayIndex].thirdPlace;
     const myPlace = dataArray[dataArrayIndex] && dataArray[dataArrayIndex].myPlace;
-    const date = dataArray[dataArrayIndex] && dataArray[dataArrayIndex].date;
+    const name = dataArray[dataArrayIndex] && dataArray[dataArrayIndex].name;
 
     return (<div className="container rank">
       <div className="rank-container holderBorder">
@@ -232,8 +246,8 @@ class BetRank extends React.Component {
               <Col xs={24} lg={24} className="rank-header">
                 <Button data-direction="prev" disabled={dataArrayIndex + 1 >= dataArray.length} onClick={this.changeDataArrayIndex} className="toggle-rank-btn" shape="circle" icon="left" />
                 <div className="rank-title">
-                  <p className="rank-title-text"><IntlMessages id={date === 'today' ? 'dice.rank.leadboardToday' : 'dice.rank.leadboard'} /></p>
-                  <p className="rank-title-countdown">{date === 'today' ? `${_.padStart(time.h, 2, '0')}:${_.padStart(time.m, 2, '0')}:${_.padStart(time.s, 2, '0')}` : date}</p>
+                  <p className="rank-title-text"><IntlMessages id={name === 'today' ? 'dice.rank.leadboardToday' : 'dice.rank.leadboard'} /></p>
+                  <p className="rank-title-countdown">{name === 'today' ? `${_.padStart(time.h, 2, '0')}:${_.padStart(time.m, 2, '0')}:${_.padStart(time.s, 2, '0')}` : name}</p>
                 </div>
                 <Button data-direction="next" disabled={dataArrayIndex - 1 < 0} onClick={this.changeDataArrayIndex} className="toggle-rank-btn" shape="circle" icon="right" />
               </Col>

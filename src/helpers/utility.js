@@ -350,3 +350,8 @@ export function trimZerosFromAsset(quantity, digits = 4) {
 
   return `${trimmed} ${symbol}`;
 }
+
+export function getRestSecondsOfTheHour() {
+  const dateNow = new Date();
+  return 3600 - ((dateNow.getMinutes() * 60) + dateNow.getSeconds());
+}
