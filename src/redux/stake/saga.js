@@ -7,7 +7,7 @@ import ParseHelper from '../../helpers/parse';
 
 const {
   handleScatterError, getMyStakeAndDividend, getContractSnapshot, getContractStakeAndDividend,
-  stake, unstake, getBETXCirculation, claimDividend,
+  stake, unstake, getBETXCirculation, claimDividend, withdraw,
 } = ScatterHelper;
 
 const {
@@ -189,6 +189,41 @@ function* claimDividendRequest(action) {
   }
 }
 
+function* withdrawRequest(action) {
+  try {
+    const response = yield call(withdraw, action.payload);
+
+    yield put({
+      type: appActions.SET_SUCCESS_MESSAGE,
+      message: {
+        id: {
+          id: 'message.success.withdraw',
+        },
+        values: {
+          asset: action.payload.quantity,
+        },
+      },
+    });
+
+    yield put({
+      type: actions.GET_MY_STAKE_AND_DIVID,
+      username: action.payload.user,
+    });
+
+    // Retrieve BETX balance if success
+    yield put({
+      type: appActions.GET_ACCOUNT,
+      name: action.payload && action.payload.username,
+    });
+  } catch (err) {
+    const message = yield call(handleScatterError, err);
+
+    yield put({
+      type: appActions.SET_ERROR_MESSAGE,
+      message,
+    });
+  }
+}
 
 export default function* () {
   yield all([
@@ -200,5 +235,6 @@ export default function* () {
     takeEvery(actions.GET_CONTRACT_DIVIDEND, getContractDividendRequest),
     takeEvery(actions.GET_BETX_CIRCULATION, getBETXCirculationRequest),
     takeEvery(actions.CLAIM_DIVIDEND, claimDividendRequest),
+    takeEvery(actions.WITHDRAW, withdrawRequest),
   ]);
 }
