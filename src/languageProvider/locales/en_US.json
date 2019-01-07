@@ -188,6 +188,7 @@
   "error.scatter.overdrawnBalance":"Insufficient balance from account.",
   "error.scatter.duplicateTransaction":"Duplicate transaction. Please try again",
   "error.scatter.stakeGreater":"Stake amount must be greater than 1000 BETX",
+  "error.scatter.withdrawAmountInvalid": "Invalid withdraw Amount",
 
   "error.page.usernamenotfound":"EOS username not found.",
   "error.account.cpuInsufficient":"EOS account CPU time insufficient.",

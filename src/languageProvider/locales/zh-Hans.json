@@ -187,6 +187,7 @@
   "error.scatter.overdrawnBalance":"账户没有足够的余额",
   "error.scatter.duplicateTransaction":"重复的交易，请稍后重试",
   "error.scatter.stakeGreater":"BETX质押数量需要大于1000，请增加质押数量",
+  "error.scatter.withdrawAmountInvalid": "无效的提取数额",
 
   "error.page.usernamenotfound":"EOS用户名不存在",
   "error.account.cpuInsufficient":"EOS账户没有足够的CPU Time",

@@ -447,6 +447,8 @@ class ScatterHelper {
                 return Promise.resolve('error.scatter.duplicateTransaction');
               } else if (assertMessageObj.message.indexOf('Stake must be greater than') >= 0) {
                 return Promise.resolve('error.scatter.stakeGreater');
+              } else if (assertMessageObj.message.indexOf('Withdraw amount has to be positive') >= 0) {
+                return Promise.resolve('error.scatter.withdrawAmountInvalid');
               }
             }
           }
