@@ -213,7 +213,7 @@ class ScatterHelper {
     const { api, account } = this;
 
     const {
-      quantity, username,
+      quantity, username, speed,
     } = params;
 
     if (_.isUndefined(username)) {
@@ -224,6 +224,7 @@ class ScatterHelper {
     const data = {
       user: username,
       unstakeAsset: quantity,
+      speed,
     };
 
     if (_.isUndefined(api)) {

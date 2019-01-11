@@ -26,6 +26,16 @@
   "modal.login.description":"连接Scatter以获取账户名称，以及有关账户信息",
   "modal.login.button":"登录",
 
+  "modal.unstake.title":"赎回质押",
+  "modal.unstake.description":"我们为您的赎回提供多种方案，想快速取出代币？请从下方选择一种方案",
+  "modal.unstake.option1.title":"立即赎回",
+  "modal.unstake.option1.text":"您将可以在15秒之内赎回质押的代币",
+  "modal.unstake.option2.title":"2倍速度",
+  "modal.unstake.option2.text":"质押代币在36小时之后可提取",
+  "modal.unstake.option3.title":"正常速度",
+  "modal.unstake.option3.text":"质押代币在72小时之后可提取",
+  "modal.unstake.button":"选择",
+
   "dice.asset.eos":"EOS",
   "dice.asset.betx":"BETX",
   "dice.balance":"{symbol}余额",

@@ -4,6 +4,7 @@ import actions from './actions';
 import appActions from '../app/actions';
 import ScatterHelper from '../../helpers/scatter';
 import ParseHelper from '../../helpers/parse';
+import { delay } from '../../helpers/utility';
 
 const {
   handleScatterError, getMyStakeAndDividend, getContractSnapshot, getContractStakeAndDividend,
@@ -45,7 +46,7 @@ function* stakeRequest(action) {
 
 function* unstakeRequest(action) {
   try {
-    const response = yield call(unstake, action.payload);
+    yield call(unstake, action.payload);
 
     yield put({
       type: appActions.SET_SUCCESS_MESSAGE,
@@ -59,6 +60,12 @@ function* unstakeRequest(action) {
       },
     });
 
+    yield call(delay, 1000);
+    yield put({
+      type: actions.GET_MY_STAKE_AND_DIVID,
+    });
+
+    yield call(delay, 11000);
     yield put({
       type: actions.GET_MY_STAKE_AND_DIVID,
     });

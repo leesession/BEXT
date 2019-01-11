@@ -15,6 +15,7 @@ import appActions from '../redux/app/actions';
 import { appConfig } from '../settings';
 import { formatNumberThousands, secondsToTime, getRestDaySeconds } from '../helpers/utility';
 import LoginModal from '../components/loginModal';
+import UnstakeModal from '../components/unstakeModal';
 
 cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
@@ -33,6 +34,7 @@ class StakePage extends React.Component {
       inputStake: 0,
       inputUnstake: 0,
       isLoginModalVisible: false,
+      isUnstakeModalVisible: false,
     };
 
     this.timer = 0;
@@ -45,6 +47,8 @@ class StakePage extends React.Component {
     this.onInputStakeChange = this.onInputStakeChange.bind(this);
     this.onInputUnstakeChange = this.onInputUnstakeChange.bind(this);
     this.toggleLoginModal = this.toggleLoginModal.bind(this);
+    this.toggleUnstakeModal = this.toggleUnstakeModal.bind(this);
+    this.onSelectUnstakeOption = this.onSelectUnstakeOption.bind(this);
   }
 
   componentWillMount() {
@@ -172,17 +176,18 @@ class StakePage extends React.Component {
       return;
     }
 
-    const quantity = `${_.floor(amount, 4).toFixed(4)} BETX`;
-
-    unstake({
-      username,
-      quantity,
-    });
+    this.toggleUnstakeModal(true);
   }
 
   toggleLoginModal(visible) {
     this.setState({
       isLoginModalVisible: visible,
+    });
+  }
+
+  toggleUnstakeModal(visible) {
+    this.setState({
+      isUnstakeModalVisible: visible,
     });
   }
 
@@ -221,21 +226,39 @@ class StakePage extends React.Component {
     });
   }
 
+  onSelectUnstakeOption(evt) {
+    const { inputUnstake } = this.state;
+    const { username, unstake } = this.props;
+    const { speed } = evt.target.dataset;
+
+    const quantity = `${_.floor(_.toNumber(inputUnstake), 4).toFixed(4)} BETX`;
+
+    unstake({
+      username,
+      quantity,
+      speed,
+    });
+
+    setTimeout(() => {
+      this.toggleUnstakeModal(false);
+    }, 500);
+  }
+
   render() {
     const {
-      intl, pageData,
+      pageData,
       myBetxBalance, mySnapshotTotal, mySnapshotEffective, myStake, myDividend, myFrozen, myAvailable,
-      platformSnapshotTotal, platformDividend, platformStake, locale,
+      platformSnapshotTotal, platformDividend, locale,
     } = this.props;
 
     const {
-      time, inputStake, inputUnstake, isLoginModalVisible,
+      inputStake, inputUnstake, isLoginModalVisible, isUnstakeModalVisible, time,
     } = this.state;
 
     // const termText =
     // (<div><p><IntlMessages id="stake.rule.body1" /></p><p className="highlight"><IntlMessages id="stake.rule.body2" /> </p><p><IntlMessages id="stake.rule.body3" /> </p></div>);
     const termText =
-    (<div><p><IntlMessages id="stake.rule.body1" /></p><div className="formula-img"><CloudinaryImage publicId={`${'betx/first-divid'}-${locale}`} options={{ height: 100, crop: 'scale' }} /></div><p><IntlMessages id="stake.rule.body3" /> </p></div>);
+      (<div><p><IntlMessages id="stake.rule.body1" /></p><div className="formula-img"><CloudinaryImage publicId={`${'betx/first-divid'}-${locale}`} options={{ height: 100, crop: 'scale' }} /></div><p><IntlMessages id="stake.rule.body3" /> </p></div>);
 
 
     const colWidth = {
@@ -257,7 +280,7 @@ class StakePage extends React.Component {
               <h1 className="page-title"><IntlMessages id="stake.title" /></h1>
             </Col>
             <Col {...colWidth} className="border-bottom">
-              <h3 className="page-sub-title sub_title_stake stake_block"><IntlMessages id="stake.dividend.rest" /> ({<Icon type="clock-circle" />} <span style={{ color: 'white', letterSpacing: 2 }}>--:--:--</span>)</h3>
+              <h3 className="page-sub-title sub_title_stake stake_block"><IntlMessages id="stake.dividend.rest" /> ({<Icon type="clock-circle" />} <span style={{ color: 'white', letterSpacing: 2 }}>{time.h}:{time.m}:{time.s}</span>)</h3>
             </Col>
             <Col {...colWidth}>
               <Row gutter={90}>
@@ -420,6 +443,11 @@ class StakePage extends React.Component {
         </div>
 
         <LoginModal isVisible={isLoginModalVisible} closeModal={this.toggleLoginModal} />
+        <UnstakeModal
+          isVisible={isUnstakeModalVisible}
+          closeModal={this.toggleUnstakeModal}
+          onSelect={this.onSelectUnstakeOption}
+        />
       </div>
     );
   }
