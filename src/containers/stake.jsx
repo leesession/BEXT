@@ -407,8 +407,8 @@ class StakePage extends React.Component {
                                 </Col>
                                 <Col span={24} className="page-third-title third_title_stake" style={{ color: 'white' }}>
                                   <Row type="flex" justify="space-around" align="middle">
-                                    <Col className="text-left" span={12}><IntlMessages id="stake.available" /></Col>
-                                    <Col className="text-right" span={12}>{formatNumberThousands(_.floor(myStake, 2))} BETX ({fronzeStr} <IntlMessages id="stake.frozen" />)</Col>
+                                    <Col className="text-left" span={8}><IntlMessages id="stake.available" /></Col>
+                                    <Col className="text-right" span={16}>{formatNumberThousands(_.floor(myStake, 2))} BETX ({fronzeStr} <IntlMessages id="stake.frozen" />)</Col>
                                   </Row>
                                 </Col>
                                 <div className="stake-third-extend">
