@@ -19,7 +19,7 @@ export function getDefaultPath() {
   const getParent = (lastRoute) => {
     const parents = {
       ecommerce: ['shop', 'cart', 'checkout', 'card'],
-      map: ['googlemap', 'leafletmap'],
+      map: ['googlemap'],
       charts: [
         'googleChart',
         'reecharts',
