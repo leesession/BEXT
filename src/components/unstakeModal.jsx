@@ -50,7 +50,7 @@ class UnstakeModal extends React.Component {
       <div className="refmodal-container">
         <div className="refmodal-container-input">
           <section style={{ width: '100%' }}>
-            <Row gutter={24}>
+            <Row gutter={12}>
               <Col xs={24} lg={8}>
                 <div className="unstake-modal-title"><IntlMessages id="modal.unstake.option1.title" /></div>
                 <div className="unstake-modal-text"><IntlMessages id="modal.unstake.option1.text" /></div>
