@@ -256,19 +256,19 @@ class BetRank extends React.Component {
                   <div className="rankingItem">
                     <div className="crown-box second">
                       <span className="crown-text">2</span>
-                      <CloudinaryImage className="crown-img" publicId="betx/crown-silver" />
+                      <CloudinaryImage className="crown-img" publicId="betx/crown-silver" options={{ height: 72, crop: 'scale', format: 'webp' }} />
                     </div>
                   </div>
                   <div className="rankingItem ">
                     <div className="crown-box first">
                       <span className="crown-text">1</span>
-                      <CloudinaryImage className="crown-img" publicId="betx/crown-gold" />
+                      <CloudinaryImage className="crown-img" publicId="betx/crown-gold" options={{ height: 72, crop: 'scale', format: 'webp' }} />
                     </div>
                   </div>
                   <div className="rankingItem ">
                     <div className="crown-box third">
                       <span className="crown-text">3</span>
-                      <CloudinaryImage className="crown-img" publicId="betx/crown-bronze" />
+                      <CloudinaryImage className="crown-img" publicId="betx/crown-bronze" options={{ height: 72, crop: 'scale', format: 'webp' }} />
                     </div>
                   </div>
                 </div>
@@ -293,7 +293,7 @@ class BetRank extends React.Component {
 
               <Col xs={24} lg={0}>
                 <Row className="rank-mine">
-                  <Col span={6}>{myPlace && myPlace.rank ? myPlace.rank : '-' }(<IntlMessages id="dice.rank.me" />)</Col>
+                  <Col span={6}>{myPlace && myPlace.rank ? myPlace.rank : '-'}(<IntlMessages id="dice.rank.me" />)</Col>
                   <Col span={6}>{myPlace && myPlace.bettor ? myPlace.bettor : '-'}</Col>
                   <Col span={6}>{myPlace && myPlace.betAmount ? myPlace.betAmount : '-'}</Col>
                   <Col span={6}>{myPlace && myPlace.reward ? myPlace.reward : '-'}</Col>
@@ -309,7 +309,7 @@ class BetRank extends React.Component {
               bordered={false}
               pagination={false}
               scroll={{ y: 300 }}
-              // style={{ height: '300px' }}
+            // style={{ height: '300px' }}
             />
             <Row className="rank-mine rank-mine-lg">
               <Col span={6}>{myPlace && myPlace.rank ? myPlace.rank : '-'}(<IntlMessages id="dice.rank.me" />)</Col>
