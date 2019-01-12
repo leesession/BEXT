@@ -267,7 +267,8 @@ class StakePage extends React.Component {
       xxl: 24,
     };
 
-    const myExpectedDiv = platformSnapshotTotal === 0 ? 0 : ((1.0 * mySnapshotEffective) / platformSnapshotTotal) * platformDividend;
+    const myExpectedDiv = (pageData && pageData.todayDividend) ? ((1.0 * mySnapshotEffective) / platformSnapshotTotal) * pageData.todayDividend : 0;
+    const divPer10K = (pageData && pageData.todayDividend) ? (1000000 / platformSnapshotTotal) * pageData.todayDividend : 0;
 
     const fronzeStr = formatNumberThousands(_.floor(myFrozen, 2));
     const availableStr = `${formatNumberThousands(_.floor(myAvailable, 2))} BETX`;
@@ -309,26 +310,26 @@ class StakePage extends React.Component {
                         <Row className="border-bottom page-dividend-detail-top">
                           <Col span={12}>
                             <div className="page-dividend-detail-box">
-                              <p className="page-third-title third_title_stake" ><IntlMessages id="stake.income.mySnapshotEffective" /></p>
-                              <p className="page-third-title third_title_stake" >{formatNumberThousands(_.floor(mySnapshotEffective, 2))} BETX</p>
-                            </div>
-                          </Col>
-                          <Col span={12}>
-                            <div className="page-dividend-detail-box">
-                              <p className="page-third-title third_title_stake" ><IntlMessages id="stake.income.mySnapshotTotal" /></p>
-                              <p className="page-third-title third_title_stake" >{formatNumberThousands(_.floor(mySnapshotTotal, 2))} BETX</p>
-                            </div>
-                          </Col>
-                          <Col span={12}>
-                            <div className="page-dividend-detail-box">
                               <p className="page-third-title third_title_stake" ><IntlMessages id="stake.income.platformSnapshot" /></p>
-                              <p className="page-third-title third_title_stake" >{formatNumberThousands(_.floor(platformSnapshotTotal, 2))} BETX</p>
+                              <p className="page-third-title third_title_stake" >{formatNumberThousands(_.floor(platformSnapshotTotal))} BETX</p>
+                            </div>
+                          </Col>
+                          <Col span={12}>
+                            <div className="page-dividend-detail-box">
+                              <p className="page-third-title third_title_stake" ><IntlMessages id="stake.income.per10k" /></p>
+                              <p className="page-third-title third_title_stake" >{formatNumberThousands(_.floor(divPer10K, 4))} EOS</p>
+                            </div>
+                          </Col>
+                          <Col span={12}>
+                            <div className="page-dividend-detail-box">
+                              <p className="page-third-title third_title_stake" ><IntlMessages id="stake.income.mySnapshotEffective" /></p>
+                              <p className="page-third-title third_title_stake" >{formatNumberThousands(_.floor(mySnapshotTotal))} BETX</p>
                             </div>
                           </Col>
                           <Col span={12}>
                             <div className="page-dividend-detail-box">
                               <p className="page-third-title third_title_stake" ><IntlMessages id="stake.income.predicate" /></p>
-                              <p className="page-third-title third_title_stake" >{formatNumberThousands(_.floor(myExpectedDiv, 2))} EOS</p>
+                              <p className="page-third-title third_title_stake" >{formatNumberThousands(_.floor(myExpectedDiv, 4))} EOS</p>
                             </div>
                           </Col>
                           {/* <Col span={12}>
