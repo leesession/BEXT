@@ -295,10 +295,10 @@ class StakePage extends React.Component {
                       </div>
                     </Col>
                     <Col span={12}>
-                      <p className="page-sub-title sub_title_stake"><IntlMessages id="stake.dividend.total" /></p>
+                      <p className="page-sub-title sub_title_stake"><IntlMessages id="stake.dividend.issuedTotal" /></p>
                       <div className="page-third-title panel icon-container third_title_stake">
                         <div><CloudinaryImage publicId="eos-logo-grey" options={{ height: 40, crop: 'scale' }} /></div>
-                        {formatNumberThousands(_.floor(pageData && pageData.currentDividend, 2))} EOS</div>
+                        {formatNumberThousands(_.floor(pageData && pageData.totalDividend, 2))} EOS</div>
                     </Col>
                   </Row>
                   <Row>
@@ -310,7 +310,7 @@ class StakePage extends React.Component {
                         <Row className="border-bottom page-dividend-detail-top">
                           <Col span={12}>
                             <div className="page-dividend-detail-box">
-                              <p className="page-third-title third_title_stake" ><IntlMessages id="stake.income.platformSnapshot" /></p>
+                              <p className="page-third-title third_title_stake" ><IntlMessages id="stake.income.platformTotal" /></p>
                               <p className="page-third-title third_title_stake" >{formatNumberThousands(_.floor(platformSnapshotTotal))} BETX</p>
                             </div>
                           </Col>
@@ -322,8 +322,8 @@ class StakePage extends React.Component {
                           </Col>
                           <Col span={12}>
                             <div className="page-dividend-detail-box">
-                              <p className="page-third-title third_title_stake" ><IntlMessages id="stake.income.mySnapshotEffective" /></p>
-                              <p className="page-third-title third_title_stake" >{formatNumberThousands(_.floor(mySnapshotTotal))} BETX</p>
+                              <p className="page-third-title third_title_stake" ><IntlMessages id="stake.income.myStake" /></p>
+                              <p className="page-third-title third_title_stake" >{formatNumberThousands(_.floor(mySnapshotEffective))} BETX</p>
                             </div>
                           </Col>
                           <Col span={12}>
