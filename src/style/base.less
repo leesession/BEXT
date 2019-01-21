@@ -3,15 +3,16 @@ ALL VARIABLE & MIXING
 * * * * * * * * * * * * * * */
 
 @import url('https://fonts.googleapis.com/css?family=Montserrat:100,300,400,500,700');
-@fontFamily: 'Montserrat', sans-serif;
+@fontFamily: 'Montserrat',
+sans-serif;
 @fontSize: 14px;
-
 @primaryColor: #e8b32f;
 @borderColor: #d5bd7a;
 @panelGrey: #3b3b3d;
 @bgColor: #0f1113;
-@topbarFontColor:#ab9e89;
-
+@topbarFontColor: #ab9e89;
+@footerColor: #3f4142;
+@footerBorderColor: rgba(255, 255, 255, .08);
 /****** Media screen size *****/
 
 @sm-min: 576px;
@@ -19,7 +20,6 @@ ALL VARIABLE & MIXING
 @lg-min: 992px;
 @xl-min: 1200px;
 @xxl-min: 1600px;
-
 @xs-max: (@sm-min - 1); // 575px
 @sm-max: (@md-min - 1); // 767px
 @md-max: (@lg-min - 1); // 991px
@@ -33,7 +33,6 @@ ALL VARIABLE & MIXING
 @xl: ~"only screen and (min-width: @{xl-min})";
 @xl-strict: ~"only screen and (min-width: @{xl-min}) and (max-width: @{xl-max})";
 @xxl: ~"only screen and (min-width: @{xxl-min})";
-
 // @font-face {
 //   font-family: 'Muller Regular';
 //   font-style: normal;
@@ -46,46 +45,45 @@ ALL VARIABLE & MIXING
 //   //      url('../fonts/open-sans-v13-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
 //   //      url('../fonts/open-sans-v13-latin-regular.svg#OpenSans') format('svg'); /* Legacy iOS */
 // }
-
 // Basic font size
 body {
-  font-size: fontSize;
-  font-family: @fontFamily;
-
-  @media @tablet-strict{
-      font-size: 11px;
-  }
-
-  @media @phone{
-    font-size: 8px;
-  }
+    font-size: fontSize;
+    font-family: @fontFamily;
+    @media @tablet-strict {
+        font-size: 11px;
+    }
+    @media @phone {
+        font-size: 8px;
+    }
 }
+
 // Remove <a> underline
 a:hover,
 a:visited,
 a:link,
 a:active {
-  text-decoration: none;
+    text-decoration: none;
 }
 
-ul{
-  padding-inline-start: 0px;
-  li{
-    list-style-type:none;
-  }
+ul {
+    padding-inline-start: 0px;
+    li {
+        list-style-type: none;
+    }
 }
 
 /* global.css */
-@media @phone{
-  .hideOnMobile {
-    display: none;
-  }
+
+@media @phone {
+    .hideOnMobile {
+        display: none;
+    }
 }
 
 @media @tablet {
-  .hideOnLarge {
-    display: none !important;
-  }
+    .hideOnLarge {
+        display: none !important;
+    }
 }
 
 .horizontalWrapper {
@@ -116,85 +114,88 @@ ul{
     }
 }
 
-.ant-layout-content{
+.ant-layout-content {
     background-color: @bgColor;
 }
 
-.ant-layout-footer{
-     background-color: @bgColor;
-     z-index: 0;
-     border: none;
+.ant-layout-footer {
+    border-top: 1px solid @footerBorderColor;
+    background-color: @bgColor;
+    z-index: 0;
 }
 
-    #footer{
-        text-align: center;
-        color: @fontColor;
-        .contact-container{
-          margin-bottom: 18px;
-          ul{
+#footer {
+    text-align: center;
+    color: @footerColor;
+    .contact-container {
+        margin-bottom: 18px;
+        ul {
             display: flex;
             justify-content: center;
-
-            &>*{
-              padding-left:12px;
-              padding-right:12px;
+            &>* {
+                padding-left: 12px;
+                padding-right: 12px;
             }
-
-            .svgicon{
-              path, polygon{
-                fill: #3f4142;
-              }
-
-              &:hover{
-                path, polygon{
-                  fill: #fb0;
-                } 
-              }
+            .svgicon {
+                path,
+                polygon {
+                    fill: #3f4142;
+                }
+                &:hover {
+                    path,
+                    polygon {
+                        fill: #fb0;
+                    }
+                }
             }
-          }
-        }
-
-        .corp-container{
-
         }
     }
+    .corp-container {}
+}
 
 //ant font size overwrite
 .ant-table,
-.ant-tabs-nav-container{
+.ant-tabs-nav-container {
     font-size: 1em !important;
 }
+
 // ant tooltip padding
-.ant-tooltip-inner{
-  padding: 20px 20px;
-}
-// Helper to help .selected to vertically align middle
-.vertical-align-helper {
-  display: inline-block;
-  height: 100%;
-  vertical-align: middle;
-}
-* {
-  -webkit-overflow-scrolling: touch;
-}
-/*custom scrollbar style*/
-@media @desktop{
-  ::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
-  }
-  ::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
-    border-radius: 5px;
-    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
-    background:@borderColor;
-  }
-  ::-webkit-scrollbar-track {/*滚动条里面轨道*/
-    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
-    border-radius: 0;
-    background: rgba(0,0,0,0.1);
-  }
+.ant-tooltip-inner {
+    padding: 20px 20px;
 }
 
-.hide{
-  display:none;
+// Helper to help .selected to vertically align middle
+.vertical-align-helper {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+* {
+    -webkit-overflow-scrolling: touch;
+}
+
+/*custom scrollbar style*/
+
+@media @desktop {
+    ::-webkit-scrollbar {
+        width: 4px;
+        height: 4px;
+    }
+    ::-webkit-scrollbar-thumb {
+        /*滚动条里面小方块*/
+        border-radius: 5px;
+        -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+        background: @borderColor;
+    }
+    ::-webkit-scrollbar-track {
+        /*滚动条里面轨道*/
+        -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+        border-radius: 0;
+        background: rgba(0, 0, 0, 0.1);
+    }
+}
+
+.hide {
+    display: none;
 }

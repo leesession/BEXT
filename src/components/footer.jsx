@@ -36,10 +36,8 @@ class Footer extends React.Component {
     const { intl } = this.props;
     const { hovered, wechatImage } = this.state;
 
-    const width = 36;
-    const height = 36;
-    const grey = '#3f4142';
-    const yellow = '#fb0';
+    const width = 28;
+    const height = 28;
 
     const iconOptions = {
       height,
