@@ -256,19 +256,19 @@ class BetRank extends React.Component {
                   <div className="rankingItem">
                     <div className="crown-box second">
                       <span className="crown-text">2</span>
-                      <CloudinaryImage className="crown-img" publicId="betx/crown-silver" options={{ height: 72, crop: 'scale', format: 'webp' }} />
+                      <CloudinaryImage className="crown-img" publicId="betx/crown-silver" options={{ height: 72, crop: 'scale' }} />
                     </div>
                   </div>
                   <div className="rankingItem ">
                     <div className="crown-box first">
                       <span className="crown-text">1</span>
-                      <CloudinaryImage className="crown-img" publicId="betx/crown-gold" options={{ height: 72, crop: 'scale', format: 'webp' }} />
+                      <CloudinaryImage className="crown-img" publicId="betx/crown-gold" options={{ height: 72, crop: 'scale' }} />
                     </div>
                   </div>
                   <div className="rankingItem ">
                     <div className="crown-box third">
                       <span className="crown-text">3</span>
-                      <CloudinaryImage className="crown-img" publicId="betx/crown-bronze" options={{ height: 72, crop: 'scale', format: 'webp' }} />
+                      <CloudinaryImage className="crown-img" publicId="betx/crown-bronze" options={{ height: 72, crop: 'scale' }} />
                     </div>
                   </div>
                 </div>
