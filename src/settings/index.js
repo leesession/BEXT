@@ -15,7 +15,7 @@ const siteConfig = {
   telegramANN: 'https://t.me/betxnotice',
   contactEmail: 'contact@betx.fun',
   website: 'www.betx.fun',
-  medium: 'https://medium.com/betx',
+  medium: 'https://medium.com/@betx',
   facebook: 'https://www.facebook.com/betxofficial',
   announcement: 'https://betxhelp.zendesk.com/hc/zh-cn/sections/360002532612-%E5%85%AC%E5%91%8A%E4%B8%AD%E5%BF%83',
   terms: 'https://betxhelp.zendesk.com/hc/zh-cn/articles/360018256011',

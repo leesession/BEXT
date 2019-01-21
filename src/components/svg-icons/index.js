@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Mail from './mail';
+import Medium from './medium';
 import Twitter from './twitter';
 import Wechat from './wechat';
 import Telegram from './telegram';
@@ -16,6 +17,8 @@ const SvgIcon = (props) => {
   switch (name) {
     case 'mail':
       return <Mail {...rest} />;
+    case 'medium':
+      return <Medium {...rest} />;
     case 'twitter':
       return <Twitter {...rest} />;
     case 'wechat':

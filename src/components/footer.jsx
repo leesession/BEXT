@@ -52,13 +52,17 @@ class Footer extends React.Component {
           <ul>
             <li>
               <a href={`mailto:${siteConfig.contactEmail}`}>
-                {/* <i className="fa fa-envelope-o" /> */}
                 <SvgIcon name="mail" {...iconOptions} />
               </a>
             </li>
             <li>
+              <a href={siteConfig.medium}>
+                <SvgIcon name="medium" {...iconOptions} target="_blank" />
+              </a>
+            </li>
+            <li>
               <a href={siteConfig.telegramEN}>
-                <SvgIcon name="telegram" {...iconOptions} />
+                <SvgIcon name="telegram" {...iconOptions} target="_blank" />
               </a>
             </li>
             <li>
