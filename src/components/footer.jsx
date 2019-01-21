@@ -2,6 +2,7 @@ import React from 'react';
 import { Popover } from 'antd';
 import { injectIntl, intlShape } from 'react-intl';
 
+import SvgIcon from './svg-icons';
 import { siteConfig } from '../settings';
 import { cloudinaryConfig, CloudinaryImage } from './react-cloudinary';
 
@@ -11,11 +12,11 @@ class Footer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      visible: false,
+      hovered: false,
       wechatImage: undefined,
     };
 
-    this.handleVisibleChange = this.handleVisibleChange.bind(this);
+    this.handleHoverChange = this.handleHoverChange.bind(this);
   }
 
   componentWillMount() {
@@ -25,32 +26,44 @@ class Footer extends React.Component {
     });
   }
 
-  handleVisibleChange = (visible) => {
-    this.setState({ visible });
+  handleHoverChange = (visible) => {
+    this.setState({
+      hovered: visible,
+    });
   }
 
   render() {
     const { intl } = this.props;
-    const { visible, wechatImage } = this.state;
+    const { hovered, wechatImage } = this.state;
+
+    const width = 36;
+    const height = 36;
+    const grey = '#3f4142';
+    const yellow = '#fb0';
+
+    const iconOptions = {
+      height,
+      width,
+    };
 
     return (
       <div id="footer">
         <div className="contact-container">
-
           <ul>
             <li>
               <a href={`mailto:${siteConfig.contactEmail}`}>
-                <i className="fa fa-envelope-o" />
+                {/* <i className="fa fa-envelope-o" /> */}
+                <SvgIcon name="mail" {...iconOptions} />
               </a>
             </li>
             <li>
               <a href={siteConfig.telegramEN}>
-                <i className="fa fa-paper-plane-o" />
+                <SvgIcon name="telegram" {...iconOptions} />
               </a>
             </li>
             <li>
               <a href={siteConfig.twitter} target="_blank">
-                <i className="fa fa-twitter" />
+                <SvgIcon name="twitter" {...iconOptions} />
               </a>
             </li>
             <li>
@@ -58,11 +71,11 @@ class Footer extends React.Component {
                 placement="top"
                 content={wechatImage}
                 title={intl.formatMessage({ id: 'footer.contactus.wechat' })}
-                trigger="click"
-                visible={visible}
-                onVisibleChange={this.handleVisibleChange}
+                trigger="hover"
+                visible={hovered}
+                onVisibleChange={this.handleHoverChange}
               >
-                <span><i className="fa fa-wechat" /></span>
+                <span><SvgIcon name="wechat" {...iconOptions} /></span>
               </Popover>
             </li>
           </ul>
