@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 import { Row, Col, Table, Button } from 'antd';
 import _ from 'lodash';
 
-import IntlMessages from './utility/intlMessages';
-import betActions from '../redux/bet/actions';
-import { cloudinaryConfig, CloudinaryImage } from '../components/react-cloudinary';
-import { secondsToTime, formatNumberThousands, getRestSecondsOfTheHour } from '../helpers/utility';
+import IntlMessages from '../../components/utility/intlMessages';
+import betActions from '../../redux/bet/actions';
+import { cloudinaryConfig, CloudinaryImage } from '../../components/react-cloudinary';
+import { secondsToTime, formatNumberThousands, getRestSecondsOfTheHour } from '../../helpers/utility';
 
 cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
@@ -42,7 +42,7 @@ class BetRank extends React.Component {
       render: (text) => (
         <span>{text}</span>
       ),
-      width: '25%',
+      width: '20%',
     }, {
       title: <IntlMessages id="dice.rank.bettor" />,
       dataIndex: 'bettor',
@@ -50,7 +50,7 @@ class BetRank extends React.Component {
       render: (text) => (
         <span>{text}</span>
       ),
-      width: '25%',
+      width: '20%',
     }, {
       title: <IntlMessages id="dice.rank.wager" />,
       dataIndex: 'betAmount',
@@ -58,7 +58,7 @@ class BetRank extends React.Component {
       render: (text) => (
         <span>{text}</span>
       ),
-      width: '25%',
+      width: '30%',
     }, {
       title: <IntlMessages id="dice.rank.prize" />,
       dataIndex: 'reward',
@@ -66,7 +66,7 @@ class BetRank extends React.Component {
       render: (text) => (
         <span className="ranking-td">{text}</span>
       ),
-      width: '25%',
+      width: '30%',
     }];
   }
 
@@ -239,7 +239,7 @@ class BetRank extends React.Component {
     const name = dataArray[dataArrayIndex] && dataArray[dataArrayIndex].name;
 
     return (<div className="container rank">
-      <div className="rank-container holderBorder">
+      <div className="rank-container box-container">
         <Row>
           <Col xs={24} lg={12}>
             <Row type="flex" justify="center" align="middle" style={{ height: '100%' }}>
@@ -312,10 +312,10 @@ class BetRank extends React.Component {
             // style={{ height: '300px' }}
             />
             <Row className="rank-mine rank-mine-lg">
-              <Col span={6}>{myPlace && myPlace.rank ? myPlace.rank : '-'}(<IntlMessages id="dice.rank.me" />)</Col>
-              <Col span={6}>{myPlace && myPlace.bettor ? myPlace.bettor : '-'}</Col>
+              <Col span={4}>{myPlace && myPlace.rank ? myPlace.rank : '-'}(<IntlMessages id="dice.rank.me" />)</Col>
+              <Col span={7}>{myPlace && myPlace.bettor ? myPlace.bettor : '-'}</Col>
               <Col span={6}>{myPlace && myPlace.betAmount ? myPlace.betAmount : '-'}</Col>
-              <Col span={6}>{myPlace && myPlace.reward ? myPlace.reward : '-'}</Col>
+              <Col span={7}>{myPlace && myPlace.reward ? myPlace.reward : '-'}</Col>
             </Row>
           </Col>
         </Row>

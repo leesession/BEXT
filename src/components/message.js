@@ -40,7 +40,7 @@ class Message extends React.Component {
       return <li className={message.type} ><span className="body">{message.body}</span></li>;
     }
 
-    return (<li className={message.type} ><span className="username" style={{ color: getUsernameColor(message.username) }}>{message.username}</span>
+    return (<li className={message.type} ><span className="username" >{message.username}</span>
       <span className="body">{message.body}</span></li>);
   }
 }

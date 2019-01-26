@@ -62,7 +62,7 @@
   "dice.play.autoBet.switch.on": "开",
   "dice.play.autoBet.switch.off": "关",
   "dice.play.autoTool": "警告：打开自动投注将导致您的赌注继续放置，直到自动投注被关闭。当关闭自动投注时可能会有轻微的延迟，从而导致额外的流动",
-  "dice.play.fairBtn": "公平性验证",
+  "dice.play.fairBtn": "公平性证明",
 
   "dice.alert.comingsoon":"即将上线",
   "dice.send":"发送",
@@ -73,6 +73,16 @@
   "dice.rank.leadboard":"历史排行榜",
   "dice.rank.leadboardToday":"本小时排行榜",
   "dice.rank.me":"我",
+  "chatroom.input.placeholder":"请留言...",
+
+  "buyback.candidates.players": "玩家",
+  "buyback.winner": "中奖玩家",
+  "buyback.candidates": "候选玩家",
+  "buyback.available": "剩余数量",
+  "buyback.expiresAt": "剩余时间",
+  "buyback.expired": "已过期",
+  "buyback.remaining": "剩余额度 {available}/{total} {token}",
+  "buyback.claim": "兑换",
 
   "modal.fair.title":"玩法和公平性",
   "modal.fair.description":"一次公平的下注，需要公平的随机数。\nBETX的做法是，由玩家（Player）和服务端（House）分别生成一个种子（House Seed和Player Seed)，然后把种子交给开源的智能合约，智能合约根据这两个Seed生成一个最终的随机数。\n从数学算法上，最终的随机数是由双方的Seed共同决定的，保证了公平性。而且在玩家下注前，服务端首先公布了House Seed的hash值，开奖后玩家可以验证此House Hash，从而证明服务端没有作弊。",

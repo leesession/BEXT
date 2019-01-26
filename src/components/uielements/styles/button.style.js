@@ -348,6 +348,4 @@ const GhostButtons = ComponentName => styled(ComponentName)`
   }
 `;
 
-export {
-  Buttons, ButtonsGroup, RadioButtons, GhostButtons,
-};
+export { Buttons, ButtonsGroup, RadioButtons, GhostButtons };

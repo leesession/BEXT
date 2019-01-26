@@ -11,6 +11,12 @@ sans-serif;
 @panelGrey: #3b3b3d;
 @bgColor: #0f1113;
 @topbarFontColor: #ab9e89;
+
+@buttonColor: #ffbc00;
+@topBgColor: #191d20;
+@boxBgColor: rgba(255,255,255,.12);
+@boxBgColorLight: rgba(255,255,255,.02);
+
 @footerColor: #3f4142;
 @footerBorderColor: rgba(255, 255, 255, .08);
 /****** Media screen size *****/
@@ -76,7 +82,7 @@ ul {
 
 @media @phone {
     .hideOnMobile {
-        display: none;
+        display: none !important;
     }
 }
 
@@ -179,14 +185,14 @@ ul {
 
 @media @desktop {
     ::-webkit-scrollbar {
-        width: 4px;
-        height: 4px;
+        width: 6px;
+        // height: 4px;
     }
     ::-webkit-scrollbar-thumb {
         /*滚动条里面小方块*/
-        border-radius: 5px;
         -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-        background: @borderColor;
+        background: rgba(255,255,255,.3);
+        height: 45px;
     }
     ::-webkit-scrollbar-track {
         /*滚动条里面轨道*/

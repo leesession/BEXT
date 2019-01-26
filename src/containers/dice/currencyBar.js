@@ -3,10 +3,11 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
+import { Tooltip } from 'antd';
 
 import PropTypes from 'prop-types';
-import betActions from '../redux/bet/actions';
-import { cloudinaryConfig, CloudinaryImage } from '../components/react-cloudinary';
+import betActions from '../../redux/bet/actions';
+import { cloudinaryConfig, CloudinaryImage } from '../../components/react-cloudinary';
 
 cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
@@ -53,12 +54,15 @@ class CurrenyBar extends React.Component {
           'currency-bar-item-highlight': selectedSymbol === item.value,
         });
         return (<div className={itemClassname} key={item.value} onClick={this.onItemClicked} data-value={item.value}>
-          <div className="img-container" data-value={item.value}>
-            <CloudinaryImage publicId={item.imgId} options={{ height: 40, crop: 'scale' }} />
-          </div>
-          <div className="text">
+
+          <Tooltip placement="bottom" title={item.value}>
+            <div className="img-container" data-value={item.value}>
+              <CloudinaryImage publicId={item.imgId} options={{ height: 30, crop: 'scale' }} />
+            </div>
+          </Tooltip>
+          {/* <div className="text">
             {item.value}
-          </div>
+          </div> */}
         </div>);
       })}
     </div>);
