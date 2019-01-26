@@ -6,6 +6,7 @@ import Medium from './medium';
 import Twitter from './twitter';
 import Wechat from './wechat';
 import Telegram from './telegram';
+import AngleDown from './angleDown';
 
 const SvgIcon = (props) => {
   const {
@@ -25,6 +26,8 @@ const SvgIcon = (props) => {
       return <Wechat {...rest} />;
     case 'telegram':
       return <Telegram {...rest} />;
+    case 'angleDown':
+      return <AngleDown {...rest} />;
     default:
       return <Mail {...rest} />;
   }

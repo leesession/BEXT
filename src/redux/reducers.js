@@ -3,6 +3,7 @@ import LanguageSwitcher from './languageSwitcher/reducer';
 import Chat from './chat/reducer';
 import Bet from './bet/reducer';
 import Stake from './stake/reducer';
+import Award from './award/reducer';
 
 export default {
   App,
@@ -10,4 +11,5 @@ export default {
   Chat,
   Bet,
   Stake,
+  Award,
 };

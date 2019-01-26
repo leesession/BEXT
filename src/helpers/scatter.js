@@ -1,4 +1,4 @@
-/* eslint prefer-promise-reject-errors: 0 */
+/* eslint prefer-promise-reject-errors: 0, no-param-reassign: */
 import ScatterJS from 'scatterjs-core';
 import ScatterEOS from 'scatterjs-plugin-eosjs';
 import _ from 'lodash';
@@ -13,12 +13,11 @@ ScatterJS.plugins(new ScatterEOS());
 const BETX_TOKEN_CONTRACT = 'thebetxtoken';
 const BETX_DICE_CONTRACT = 'thebetxowner';
 const BETX_DIVID_CONTRACT = 'thebetxdivid';
+const BETX_AWARD_CONTRACT = 'thebetxaward';
 
 // Same constants as contracts
-const GLOBAL_ID_UNSTAKE_REQUEST = 1;
 const GLOBAL_ID_NEW_DIVIDEND = 2;
 const GLOBAL_ID_STAKE_TOTAL = 3;
-const GLOBAL_ID_CLAIM_ENABLED = 4;
 
 const INITAL_OWNER_BETX_BALANCE = (6600000000 * 0.9) - 23220000;
 
@@ -46,6 +45,7 @@ class ScatterHelper {
     this.getBETXCirculation = this.getBETXCirculation.bind(this);
     this.claimDividend = this.claimDividend.bind(this);
     this.getCurrencyBalance = this.getCurrencyBalance.bind(this);
+    this.getRedeemTable = this.getRedeemTable.bind(this);
   }
 
   // static async createInstance() {
@@ -347,6 +347,39 @@ class ScatterHelper {
       });
 
       return Promise.resolve(returnResult);
+    });
+  }
+
+  getRedeemTable() {
+    const { readEos } = this;
+
+    const options = {
+      json: true,
+      code: BETX_AWARD_CONTRACT,
+      scope: BETX_AWARD_CONTRACT,
+      table: 'redeems',
+      limit: 100,
+    };
+
+    return readEos.getTableRows(options).then((result) => {
+      const rows = result && result.rows;
+
+      let results = _.orderBy(rows, ['id'], ['desc']);
+
+      results = results.slice(0, 3);
+
+      _.each(results, (row) => {
+        try {
+          row.candidateNum = row.candidates === '' ? 0 : row.candidates.split(',').length;
+        } catch (err) {
+          row.candidateNum = 0;
+        }
+
+        row.totalEOS = (row.total / 100000000) * row.ratio;
+        row.availableEOS = (row.available / 100000000) * row.ratio;
+      });
+
+      return Promise.resolve(results);
     });
   }
 

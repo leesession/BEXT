@@ -29,7 +29,7 @@ const appConfig = {
   betHistoryTableSize: 20,
   betChannelReconnectInterval: 5000,
   hugeBetAmount: 250,
-  chatHistoryMemorySize: 500,
+  chatHistoryMemorySize: 100,
   chatChannelReconnectInterval: 5000,
   dividendRatio: 0.01, // Dividend ratio compared to betVolume
   pollBetRankInterval: 5000, // Interval of which rank data polls

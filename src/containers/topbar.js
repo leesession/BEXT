@@ -14,6 +14,7 @@ import Dropdown from '../components/uielements/dropdown';
 import { cloudinaryConfig, CloudinaryImage } from '../components/react-cloudinary';
 import languageSwitcherActions from '../redux/languageSwitcher/actions';
 import StatsWidget from '../components/statsWidget';
+import SvgIcon from '../components/svg-icons';
 
 import IntlMessages from '../components/utility/intlMessages';
 import appActions from '../redux/app/actions';
@@ -271,7 +272,8 @@ class Topbar extends React.PureComponent {
                         <div className="selected">
                           <div className="selected-inner">
                             <img src={_.find(langSettings, { locale }).imgSrc} alt="" />
-                            <i className="fa fa-angle-down" />
+                            {/* <i className="fa fa-angle-down" /> */}
+                            <SvgIcon name="angleDown" height={24} width={24} />
                           </div>
                         </div>
                       </Dropdown>

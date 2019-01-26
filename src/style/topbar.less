@@ -1,4 +1,4 @@
-@height: 80px;
+@height: 72px;
 @heightOnMobile: 60px;
 @greyFontColor: #eee;
 
@@ -289,6 +289,9 @@
 }
 
 ul.menu-list {
+    margin-bottom: 0px;
+
+    @menuColor: rgba(255,255,255,0.6);
     li {
         font-size: 1.4em;
         position: relative;
@@ -298,7 +301,8 @@ ul.menu-list {
         a {
             display: block;
             height: 100%;
-            color: @topbarFontColor;
+            color:@menuColor;
+            font-weight: 600;
 
             i {
                 padding-left: 6px;
@@ -333,7 +337,7 @@ ul.menu-list {
         }
 
         &:hover:after {
-            background-color: @borderColor;
+            background-color: @menuColor;
             width: 100%
         }
 
@@ -458,7 +462,7 @@ ul.menu-list {
                 border: 1px solid @borderColor;
                 .border-radius(100px);
                 padding-left: 15px;
-                padding-right: 15px;
+                padding-right: 6px;
                 cursor: pointer;
                 vertical-align: middle;
 
@@ -466,6 +470,7 @@ ul.menu-list {
                     display: flex;
                     justify-content: center;
                     align-items: center;
+                    height: 28px;
 
                     &>* {
                         display: inline-block;
@@ -479,13 +484,13 @@ ul.menu-list {
                 }
 
                 img {
-                    height: 20px;
+                    height: 16px;
                     width: auto;
-                    margin-right: 8px;
+                    margin-right: 4px;
                     .opacity(0.7);
 
                     @media @phone {
-                        height: 16px
+                        height: 14px
                     }
 
                 }
@@ -504,6 +509,9 @@ ul.menu-list {
 
             }
 
+            path{
+                fill: #fb0;
+            }
         }
 
     }

@@ -73,7 +73,9 @@ class ChatRoom extends React.Component {
   }
 
   render() {
-    const { history, messageNum, refresh } = this.props;
+    const {
+      history, messageNum, refresh, intl,
+    } = this.props;
     const { value } = this.state;
 
     return (
@@ -96,12 +98,12 @@ class ChatRoom extends React.Component {
           </ul>
         </div>
         <form className="form" onSubmit={this.handleSubmit}>
-          <Row gutter={20} type="flex" justify="center">
+          <Row type="flex" justify="end">
             <Col span={16}>
-              <Input type="text" placeholder="" onChange={this.handleChange} value={value} />
+              <Input type="text" placeholder={intl.formatMessage({ id: 'chatroom.input.placeholder' })} onChange={this.handleChange} value={value} />
             </Col>
             <Col span={6}>
-              <Button type="default" htmlType="submit" style={{ fontSize: '1.2em', fontWeight: 800 }} size="large"><IntlMessages id="dice.send" /></Button>
+              <Button type="default" htmlType="submit" size="large"><IntlMessages id="dice.send" /></Button>
             </Col>
           </Row>
           {/* <div className="info"><span>{messageNum} messages, refresh: {refresh}</span></div> */}
