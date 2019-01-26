@@ -45,17 +45,31 @@ class CurrenyBar extends React.Component {
   }
 
   render() {
-    const { selectedSymbol } = this.props;
+    const { selectedSymbol, direction, style } = this.props;
 
-    return (<div className="currency-bar">
+    const componentStyle = _.extend(style, { flexDirection: direction });
+    componentStyle.paddingRight = direction === 'row' ? '0px' : '12px';
+
+
+    return (<div className="currency-bar" style={componentStyle}>
       {_.map(currencyArray, (item) => {
         const itemClassname = classNames({
           'currency-bar-item': true,
           'currency-bar-item-highlight': selectedSymbol === item.value,
         });
-        return (<div className={itemClassname} key={item.value} onClick={this.onItemClicked} data-value={item.value}>
 
-          <Tooltip placement="bottom" title={item.value}>
+        const itemStyle = direction === 'row' ? {
+          marginLeft: '0px', marginRight: '8px', width: '55px', height: '40px',
+        } : { marginBottom: '8px', width: '55px', height: '50px' };
+
+        return (<div
+          className={itemClassname}
+          style={itemStyle}
+          key={item.value}
+          onClick={this.onItemClicked}
+          data-value={item.value}
+        >
+          <Tooltip placement={direction === 'row' ? 'bottom' : 'right'} title={item.value}>
             <div className="img-container" data-value={item.value}>
               <CloudinaryImage publicId={item.imgId} options={{ height: 30, crop: 'scale' }} />
             </div>
@@ -72,11 +86,15 @@ class CurrenyBar extends React.Component {
 CurrenyBar.propTypes = {
   setCurrency: PropTypes.func,
   selectedSymbol: PropTypes.string,
+  direction: PropTypes.string,
+  style: PropTypes.object,
 };
 
 CurrenyBar.defaultProps = {
   setCurrency: undefined,
   selectedSymbol: undefined,
+  direction: undefined,
+  style: undefined,
 };
 
 const mapStateToProps = (state) => ({

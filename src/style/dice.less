@@ -21,10 +21,17 @@
         padding-bottom: 20px;
     }
     .currency-bar {
-        display: flex;
+        // display: flex;
+        display: inline-block;
+        vertical-align: top;
+
+        @media @phone{
+            display: flex;
+        }
+
         .currency-bar-item {
-            height: 40px;
-            width: 60px;
+            height: 50px;
+            width: 50px;
             text-align: center;
             cursor: pointer;
             display: flex;
@@ -32,8 +39,8 @@
             align-items: center; // border: 2px solid @borderColor;
             // border-radius: 10px;
             background-color: @boxBgColorLight;
-            margin-right: 8px;
             @media @phone {
+                width: 60px;
                 border-width: 1px;
                 height: 40px;
                 margin: 0px 4px;
@@ -93,8 +100,10 @@
         .inner-shadow( 0 -240px 240px 0 rgba(0, 0, 0, .3), 0 40px 80px rgba(0, 0, 0, .9));
         position: relative;
         text-align: center;
+        display: inline-block;
 
         @media @phone{
+            width:100%;
             margin-bottom: 20px;
         }
     } // Ranking style
@@ -731,13 +740,13 @@
     #chatroom {
         @fontSize: 1em;
         .chatroom-message-container {
-            padding: 30px 0px 10px 20px;
+            padding: 24px 0px 10px 20px;
             overflow: hidden;
             background-color: rgba(255, 255, 255, .02);
             ul {
                 display: block;
                 color: rgba(255, 255, 255, .5);
-                height: 330px;
+                height: 348px;
                 margin: 0;
                 overflow-y: scroll;
                 font-size: @fontSize;
@@ -809,8 +818,9 @@
         display: flex;
         flex-direction: column;
         overflow-y: scroll;
-        height: 428px;
-        padding: 20px 16px;
+        height: 408px;
+        margin-top: 24px;
+        padding: 0px 20px;
         
         .buyback-item{
             font-size: 1em;
@@ -819,23 +829,30 @@
         }
         .buyback-item-dt, .buyback-item-dd{
             float: left;
-            width: 50%;
         }
 
         .buyback-item-dt{
             text-align: left;
             color:rgba(255,255,255,.7);
             font-weight: 500;
+            width: 40%;
         }
 
         .buyback-item-dd{
             text-align: right;
             color: rgba(255, 255, 255, .5);
+            width: 60%;
         }
 
         .ant-progress-inner{
             border-radius: 0px;
             background-color: rgba(255, 255, 255, .2);
+        }
+    }
+
+    .carousel{
+        .carousel-item{
+            height: 100%;
         }
     }
 

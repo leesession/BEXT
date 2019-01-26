@@ -81,7 +81,7 @@
   "buyback.available": "Available",
   "buyback.expiresAt": "Expires At",
   "buyback.expired": "Expired",
-  "buyback.remaining": "{available}/{total} {token} left",
+  "buyback.remaining": "{available}/{total} {token}",
   "buyback.claim": "Claim",
 
   "modal.fair.title":"Rules & Fairness",

@@ -644,7 +644,7 @@ class DicePage extends React.Component {
               <Col xs={24} lg={6}>
               </Col>
               <Col xs={24} lg={8}>
-                <CurrencyBar />
+                <Carousel className="hideOnLarge" />
               </Col>
               <Col xs={24} lg={10}>
                 <div>
@@ -660,7 +660,8 @@ class DicePage extends React.Component {
               </Col>
               <Col xs={24} lg={12}>
                 <ReactNotification ref={this.notificationDOMRef} />
-                <div className="box-container dice-container">
+                <CurrencyBar direction={view === 'DesktopView' ? 'column' : 'row'} />
+                <div className="box-container dice-container" >
                   {/* <div className="container-header">
                   </div> */}
                   <div className="container-body">

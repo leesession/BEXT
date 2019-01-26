@@ -81,7 +81,7 @@
   "buyback.available": "剩余数量",
   "buyback.expiresAt": "剩余时间",
   "buyback.expired": "已过期",
-  "buyback.remaining": "剩余额度 {available}/{total} {token}",
+  "buyback.remaining": "{available}/{total} {token}",
   "buyback.claim": "兑换",
 
   "modal.fair.title":"玩法和公平性",

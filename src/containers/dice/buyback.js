@@ -34,7 +34,6 @@ class BuyBack extends React.Component {
     // const momentLocale = (locale === 'en') ? 'en' : 'zh-cn';
 
     const redeemList = _.map(redeems, (row) => {
-      console.log(row);
       const lineHeight = 30;
 
       const restMilSeconds = moment(row.expireAt).diff(moment());

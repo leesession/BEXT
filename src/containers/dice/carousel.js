@@ -12,31 +12,35 @@ cloudinaryConfig({ cloud_name: 'forgelab-io' });
 class NewsCarousel extends React.Component {
   constructor(props) {
     super(props);
-
-    const { locale } = props;
-    this.imageArray = [`leaderboard-${locale}`, `buyback-${locale}`];
+    this.imageArray = ['leaderboard-small-zh', 'buyback-small-zh'];
   }
+
   render() {
-    const imageEle = _.map(this.imageArray, (row) => (<div>
-      <CloudinaryImage className="" publicId={`betx/campaign/${row}`} options={{ height: 1000, crop: 'scale' }} />
-    </div>));
-    return (<Carousel autoplay>{imageEle}
+    const { className } = this.props;
+
+    const classes = className ? `${className} carousel` : 'carousel';
+    const imageEle = _.map(this.imageArray, (row) => (
+      <CloudinaryImage className="" publicId={`betx/campaign/${row}`} style={{ height: '100%' }} options={{ width: 1080, crop: 'scale' }} />
+    ));
+    return (<Carousel className={classes} autoplay>{imageEle}
     </Carousel>
     );
   }
 }
 
 NewsCarousel.propTypes = {
-  locale: PropTypes.string,
+  // locale: PropTypes.string,
+  className: PropTypes.string,
 };
 
 NewsCarousel.defaultProps = {
-  locale: 'en',
+  // locale: 'en',
+  className: undefined,
 };
 
 
 const mapStateToProps = (state) => ({
-  locale: state.LanguageSwitcher.language.locale,
+  // locale: state.LanguageSwitcher.language.locale,
 });
 
 export default connect(mapStateToProps, null)(NewsCarousel);
