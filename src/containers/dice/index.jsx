@@ -658,7 +658,16 @@ class DicePage extends React.Component {
                   <BuyBack />
                 </div>
               </Col>
-              <Col xs={24} lg={12}>
+              <Col
+                xs={24}
+                lg={12}
+                style={{
+                  display: 'flex',
+                  flexDirection: view === 'DesktopView' ? 'row' : 'column',
+                  alignItems: 'flex-start',
+                  justifyContent: 'center',
+                }}
+              >
                 <ReactNotification ref={this.notificationDOMRef} />
                 <CurrencyBar direction={view === 'DesktopView' ? 'column' : 'row'} />
                 <div className="box-container dice-container" >
@@ -724,7 +733,7 @@ class DicePage extends React.Component {
                         <div className="box box-input">
                           <div className="box-inner">
                             <Row type="flex" justify="center" align="middle">
-                              <Col xs={18} lg={16}>
+                              <Col xs={18} lg={18}>
                                 <div className="box-input-inner">
                                   <span className="label"><IntlMessages id="dice.play.amount" /></span>
                                   <Input className="box-input-inner-input inputBorder" size="large" onBlur={() => window.scroll(0, 0)} onChange={this.onInputNumberChange} value={betAmount} />
@@ -735,7 +744,6 @@ class DicePage extends React.Component {
                                     <Button type="default" className="box-input-round-btn" shape="circle" icon="plus" size={view === 'DesktopView' ? 'default' : 'small'} onClick={this.onBetAmountButtonClick} data-value="1" />
                                     <Button type="default" className="box-input-round-btn" shape="circle" icon="minus" size={view === 'DesktopView' ? 'default' : 'small'} onClick={this.onBetAmountButtonClick} data-value="-1" />
                                   </Col> */}
-
                             </Row>
                           </div>
                         </div>
