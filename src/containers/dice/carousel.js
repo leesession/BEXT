@@ -20,7 +20,7 @@ class NewsCarousel extends React.Component {
 
     const classes = className ? `${className} carousel` : 'carousel';
     const imageEle = _.map(this.imageArray, (row) => (
-      <CloudinaryImage className="" publicId={`betx/campaign/${row}`} style={{ height: '100%' }} options={{ width: 1080, crop: 'scale' }} />
+      <CloudinaryImage className="" key={row} publicId={`betx/campaign/${row}`} style={{ height: '100%' }} options={{ width: 1080, crop: 'scale' }} />
     ));
     return (<Carousel className={classes} autoplay>{imageEle}
     </Carousel>
