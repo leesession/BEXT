@@ -42,7 +42,7 @@ class BuyBack extends React.Component {
 
       if (restMilSeconds < 0) {
         expiresAt = intl.formatMessage({ id: 'buyback.expired' });
-        btnDisabled = btnDisabled && true;
+        btnDisabled = btnDisabled || true;
       } else {
         const duration = moment.duration(restMilSeconds);
         expiresAt = `${duration.get('hours')}:${duration.get('minutes')}:${duration.get('seconds')}`;
