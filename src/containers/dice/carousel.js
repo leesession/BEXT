@@ -12,7 +12,9 @@ cloudinaryConfig({ cloud_name: 'forgelab-io' });
 class NewsCarousel extends React.Component {
   constructor(props) {
     super(props);
-    this.imageArray = ['leaderboard-small-zh', 'buyback-small-zh'];
+
+    const { locale } = this.props;
+    this.imageArray = [`leaderboard-small-${locale}`, 'buyback-small-zh'];
   }
 
   render() {
@@ -29,18 +31,17 @@ class NewsCarousel extends React.Component {
 }
 
 NewsCarousel.propTypes = {
-  // locale: PropTypes.string,
+  locale: PropTypes.string,
   className: PropTypes.string,
 };
 
 NewsCarousel.defaultProps = {
-  // locale: 'en',
+  locale: 'en',
   className: undefined,
 };
 
-
 const mapStateToProps = (state) => ({
-  // locale: state.LanguageSwitcher.language.locale,
+  locale: state.LanguageSwitcher.language.locale,
 });
 
 export default connect(mapStateToProps, null)(NewsCarousel);
