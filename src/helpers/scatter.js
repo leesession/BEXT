@@ -375,8 +375,8 @@ class ScatterHelper {
           row.candidateNum = 0;
         }
 
-        row.totalEOS = (row.total / 100000000) * row.ratio;
-        row.availableEOS = (row.available / 100000000) * row.ratio;
+        row.totalEOS = _.floor((row.total / 100000000) * row.ratio, 2);
+        row.availableEOS = _.floor((row.available / 100000000) * row.ratio, 2);
       });
 
       return Promise.resolve(results);

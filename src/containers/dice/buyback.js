@@ -36,7 +36,7 @@ class BuyBack extends React.Component {
     const redeemList = _.map(redeems, (row) => {
       const lineHeight = 30;
 
-      const restMilSeconds = moment(row.expireAt).diff(moment());
+      const restMilSeconds = moment.utc(row.expireAt).diff(moment());
       let expiresAt;
       let btnDisabled = (username !== row.winner);
 

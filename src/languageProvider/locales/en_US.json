@@ -79,7 +79,7 @@
   "buyback.winner": "Winner",
   "buyback.candidates": "Candidates",
   "buyback.available": "Available",
-  "buyback.expiresAt": "Expires At",
+  "buyback.expiresAt": "Expires After",
   "buyback.expired": "Expired",
   "buyback.remaining": "{available}/{total} {token}",
   "buyback.claim": "Claim",
