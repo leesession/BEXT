@@ -21,10 +21,9 @@
         padding-bottom: 20px;
     }
     .currency-bar {
-        @media @phone{
+        @media @phone {
             display: flex;
         }
-
         .currency-bar-item {
             height: 50px;
             width: 50px;
@@ -96,9 +95,8 @@
         .inner-shadow( 0 -240px 240px 0 rgba(0, 0, 0, .3), 0 40px 80px rgba(0, 0, 0, .9));
         position: relative;
         text-align: center;
-
-        @media @phone{
-            width:100%;
+        @media @phone {
+            width: 100%;
             margin-bottom: 20px;
         }
     } // Ranking style
@@ -128,8 +126,7 @@
                     &:disabled {
                         color: #555;
                     }
-
-                    @media @phone{
+                    @media @phone {
                         width: 24px;
                         height: 24px;
                     }
@@ -146,7 +143,7 @@
                     }
                 }
                 .rank-title-countdown {
-                    color:rgba(255,255,255,.7);
+                    color: rgba(255, 255, 255, .7);
                     font-size: 2em;
                     letter-spacing: 2px;
                     margin-bottom: 12px;
@@ -589,11 +586,9 @@
                 i {
                     margin-right: 6px;
                 }
-
-                @media @phone{
+                @media @phone {
                     font-size: 1.4em;
                 }
-                
                 &.container-body-btn-description-firstbet {
                     margin-top: 12px;
                 }
@@ -614,7 +609,6 @@
             border-radius: 0px;
             border-bottom: 3px solid #be8d07;
             margin-bottom: 24px;
-            
             @media @phone {
                 width: 100%;
                 margin-bottom: 12px;
@@ -634,8 +628,7 @@
                 color: @primaryColor;
                 font-size: 0.8em;
             }
-
-            @media @phone{
+            @media @phone {
                 font-size: 1.4em;
             }
         }
@@ -758,7 +751,7 @@
                         overflow: hidden;
                         padding-right: 6px;
                         text-align: right;
-                        color:rgba(255,255,255,.7);
+                        color: rgba(255, 255, 255, .7);
                         .transition(all .3s);
                     }
                     /* Input */
@@ -774,7 +767,6 @@
         .form {
             padding-top: 10px;
             padding-bottom: 8px;
-
             opacity: 1; // background-color: @boxBgColor;
             input {
                 border: none;
@@ -784,8 +776,7 @@
                 outline: none;
                 padding-left: 12px;
                 width: 100%;
-                -webkit-appearance: none;
-                // &:focus{
+                -webkit-appearance: none; // &:focus{
                 //     border-color:transparent;
                 // }
                 &::selection {
@@ -804,53 +795,71 @@
             color: white;
         }
     }
-    
     #ann {
         text-align: center;
     }
+    #buyback {
+        padding: 24px 0px 24px 14px;
+        color: rgba(255, 255, 255, .5);
 
-    #buyback{
-        display: flex;
-        flex-direction: column;
-        overflow-y: scroll;
-        height: 408px;
-        margin-top: 24px;
-        padding: 0px 20px;
-        
-        .buyback-item{
-            font-size: 1em;
-            // border-bottom: 1px solid grey;
-            margin-bottom: 12px;
-        }
-        .buyback-item-dt, .buyback-item-dd{
-            float: left;
-        }
-
-        .buyback-item-dt{
+        .buyback-title{
             text-align: left;
-            color:rgba(255,255,255,.7);
-            font-weight: 500;
-            width: 40%;
+            cursor: pointer;
+
+            h3{
+                color: rgba(255, 255, 255, .5);
+                display: inline-block;
+                margin-right: 12px;
+                text-transform: uppercase;
+            }
         }
 
-        .buyback-item-dd{
-            text-align: right;
-            color: rgba(255, 255, 255, .5);
-            width: 60%;
+        @media @xl{
+            padding-left: 20px;
         }
 
-        .ant-progress-inner{
-            border-radius: 0px;
-            background-color: rgba(255, 255, 255, .2);
+        ul {
+            padding-right: 14px;
+            margin-top: 12px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: scroll;
+            height: 338px;
+            
+            .buyback-item {
+                font-size: 1em; // border-bottom: 1px solid grey;
+                margin-bottom: 12px;
+            }
+            .buyback-item-dt,
+            .buyback-item-dd {
+                float: left;
+            }
+            .buyback-item-dt {
+                text-align: left;
+                color: rgba(255, 255, 255, .7);
+                font-weight: 500;
+                width: 40%;
+                overflow: hidden;
+                span {
+                    white-space: nowrap;
+                }
+            }
+            .buyback-item-dd {
+                text-align: right;
+                color: rgba(255, 255, 255, .5);
+                width: 60%;
+            }
+            .ant-progress-inner {
+                border-radius: 0px;
+                background-color: rgba(255, 255, 255, .2);
+            }
         }
     }
-
-    .carousel{
-        .carousel-item{
+    .carousel {
+        .carousel-item {
             height: 100%;
         }
     }
-
     #tables {
         .box-container {
             background-color: transparent;
@@ -876,7 +885,7 @@
                     color: rgba(255, 255, 255, .2); // font-weight: 500;
                     text-align: center;
                     font-size: 1.2em; // background: @panelGrey;
-                    border:none;
+                    border: none;
                     @media @phone {
                         font-size: 0.8em;
                     }
