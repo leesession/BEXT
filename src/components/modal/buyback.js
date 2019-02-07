@@ -67,11 +67,13 @@ class BuybackModal extends React.Component {
     const { inputValue, outAmount } = this.state;
     const { symbol, ratio, total } = this.props;
     const {
-      intl, setVisibility, isVisible,
+      intl, setVisibility, isVisible, view,
     } = this.props;
     const inAmount = _.floor((outAmount / 10000) * ratio, 4);
 
-    console.log('isVisible', isVisible);
+    const btnWidth = view === 'MobileView' ? 120 : 180;
+    const btnHeight = view === 'MobileView' ? 40 : 48;
+
 
     return (<Modal
       className="modal-buyback"
@@ -105,7 +107,7 @@ class BuybackModal extends React.Component {
         /></div>
       </div>
       <div className="form-control centered">
-        <Button type="submit" width={180} height={48} onClick={this.onClaimClicked}><IntlMessages id="modal.buyback.submit" /></Button>
+        <Button type="submit" width={btnWidth} height={btnHeight} onClick={this.onClaimClicked}><IntlMessages id="modal.buyback.submit" /></Button>
       </div>
     </Modal>);
   }
@@ -121,6 +123,7 @@ BuybackModal.propTypes = {
   ratio: PropTypes.number,
   symbol: PropTypes.string, // Symbol of token to be spent, default BETX
   total: PropTypes.string,
+  view: PropTypes.string,
 };
 
 BuybackModal.defaultProps = {
@@ -132,6 +135,7 @@ BuybackModal.defaultProps = {
   ratio: undefined,
   symbol: undefined,
   total: undefined,
+  view: 'MobileView',
 };
 
 const mapStateToProps = (state) => ({
