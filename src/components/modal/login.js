@@ -41,10 +41,13 @@ class LoginModal extends React.Component {
   render() {
     const { inputValue } = this.state;
     const {
-      intl, setVisibility, isVisible,
+      intl, setVisibility, isVisible, view,
     } = this.props;
 
     const descriptions = intl.formatMessage({ id: 'modal.fair.description' }).split('\n');
+
+    const btnWidth = view === 'MobileView' ? 120 : 180;
+    const btnHeight = view === 'MobileView' ? 40 : 48;
 
     const text = _.map(descriptions, (part, partIndex) => <p key={partIndex}>{part}</p>);
     return (
@@ -65,7 +68,7 @@ class LoginModal extends React.Component {
           />
         </div>
         <div className="form-control centered">
-          <Button type="submit" width={180} height={48} onClick={this.onLoginClicked}><IntlMessages id="modal.login.button" /></Button>
+          <Button type="submit" width={btnWidth} height={btnHeight} onClick={this.onLoginClicked}><IntlMessages id="modal.login.button" /></Button>
         </div>
       </Modal>);
   }
@@ -76,12 +79,14 @@ LoginModal.propTypes = {
   isVisible: PropTypes.bool,
   setVisibility: PropTypes.func,
   login: PropTypes.func,
+  view: PropTypes.string,
 };
 
 LoginModal.defaultProps = {
   login: undefined,
   isVisible: false,
   setVisibility: undefined,
+  view: 'MobileView',
 };
 
 const mapStateToProps = (state) => ({

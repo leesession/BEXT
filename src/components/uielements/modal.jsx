@@ -4,9 +4,8 @@ import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { connect } from 'react-redux';
 
-import appActions from '../../redux/app/actions';
+import { device } from '../../config/device';
 
 const ModalWrapper = styled.section`
     width: 100%;
@@ -22,7 +21,7 @@ const ModalWrapper = styled.section`
     transition: all .3s cubic-bezier(.165,.84,.44,1);
 
     .modal-main{
-        max-width: 550px;
+        max-width: 90%;
         display: block;
         position: relative;
         top: 50%;
@@ -42,19 +41,31 @@ const ModalWrapper = styled.section`
         width: 100%;
         float: left;
 
+        @media ${device.tablet} {
+          max-width: 550px;
+        }
+
         h3{
             position: relative;
             color: rgba(255,255,255,.5);
             width: 100%;
             text-transform: uppercase;
-            font-size: 1.4rem;
             margin-bottom: 20px;
             position: relative;
             text-align: center;
+            font-size: 1rem;
+
+            @media ${device.tablet} {
+              font-size: 1.2rem;
+            }
+
+            @media ${device.laptop} {
+              font-size: 1.4rem;
+            }
 
             .modal-close{
-                width: 32px;
-                height: 32px;
+                width: 24px;
+                height: 24px;
                 display: block;
                 border: 1px solid #fff;
                 float: right;
@@ -71,6 +82,11 @@ const ModalWrapper = styled.section`
                 top: 0;
                 right: 0;
                 
+                @media ${device.tablet} {
+                  width: 32px;
+                  height: 32px;
+                }
+
                 &:before{
                     content: '+';
                     color: #fff;
@@ -78,13 +94,18 @@ const ModalWrapper = styled.section`
                     z-index: 2;
                     -webkit-transform: rotate(45deg);
                     transform: rotate(45deg);
-                    font-size: 37px;
+                    font-size: 30px;
                     line-height: 1;
                     font-family: MullerLight;
                     top: -5px;
-                    right: 2px;
+                    right: 1px;
                     transition: all .1s ease-in-out;
                     -webkit-transition: all .1s ease-in-out;
+
+                    @media ${device.tablet} {
+                      font-size: 37px;
+                      right: 2px;
+                    }
                 }
             }
         }
