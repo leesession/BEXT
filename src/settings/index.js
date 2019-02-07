@@ -5,7 +5,7 @@ export default {
 const siteConfig = {
   siteName: 'BETX',
   siteIcon: 'BETX-logo-trans',
-  footerText: 'BETX ©2018 All rights reserved',
+  footerText: 'BETX ©2019 All rights reserved',
 
   twitter: 'https://twitter.com/therealbetx',
   wechatQR: 'qr-wechat-betx',

@@ -54,13 +54,13 @@ class Footer extends React.Component {
               </a>
             </li>
             <li>
-              <a href={siteConfig.medium}>
-                <SvgIcon name="medium" {...iconOptions} target="_blank" />
+              <a href={siteConfig.medium} target="_blank">
+                <SvgIcon name="medium" {...iconOptions} />
               </a>
             </li>
             <li>
-              <a href={siteConfig.telegramEN}>
-                <SvgIcon name="telegram" {...iconOptions} target="_blank" />
+              <a href={siteConfig.telegramEN} target="_blank">
+                <SvgIcon name="telegram" {...iconOptions} />
               </a>
             </li>
             <li>
