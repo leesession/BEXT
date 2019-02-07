@@ -147,8 +147,6 @@ class Modal extends React.Component {
     super(props);
 
     this.el = document.createElement('div');
-
-    this.handleClose = this.handleClose.bind(this);
   }
 
   componentDidMount() {
@@ -159,15 +157,10 @@ class Modal extends React.Component {
     document.body.removeChild(this.el);
   }
 
-  handleClose(evt) {
-    const { setVisibility } = this.props;
-    evt.preventDefault();
-
-    setVisibility(false);
-  }
-
   render() {
-    const { children, title, isVisible } = this.props;
+    const {
+      children, title, isVisible, onClose,
+    } = this.props;
 
     const modalClass = classNames({
       modal: true,
@@ -178,7 +171,7 @@ class Modal extends React.Component {
       <section className="modal-main">
         <h3>
           {title}
-          <a className="modal-close" onClick={this.handleClose}></a>
+          <a className="modal-close" onClick={onClose}></a>
         </h3>
         {children}
       </section>
@@ -197,14 +190,12 @@ Modal.propTypes = {
     PropTypes.node,
   ]).isRequired,
   title: PropTypes.string,
-  setVisibility: PropTypes.func,
-  isVisible: PropTypes.bool,
+  isVisible: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 Modal.defaultProps = {
   title: undefined,
-  setVisibility: undefined,
-  isVisible: false,
 };
 
 export default Modal;
