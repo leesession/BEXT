@@ -50,7 +50,7 @@ class Button extends React.PureComponent {
     const {
       children, ...rest
     } = this.props;
-    return (<ButtonWrapper className="betx-btn" href={null} {...rest}>
+    return (<ButtonWrapper href={null} {...rest}>
       {children}
     </ButtonWrapper>);
   }
