@@ -1,24 +1,18 @@
 /* eslint react/no-array-index-key: 0, no-nested-ternary: 0, react/no-unused-prop-types: 0 */ // Disable "Do not use Array index in keys" for options since they dont have unique identifier
-
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { injectIntl, intlShape } from 'react-intl';
 import { Icon, Row, Col, Table, Tabs, message, Switch, Tooltip } from 'antd';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import moment from 'moment';
-import 'moment/locale/zh-cn';
 import 'animate.css/animate.min.css';
+import CountUp from 'react-countup';
 
-import ReactNotification from '../../components/react-notification-component';
 import BetRank from './betRank';
 import FairModal from '../../components/modal/fairness';
 import Slider from '../../components/uielements/slider';
-import '../../components/react-notification-component/less/notification.less';
 import Carousel from './carousel';
 import BuyBack from './buyback';
-import Dice from '../../components/dice';
 import Chatroom from '../../components/chatroom';
 import betActions from '../../redux/bet/actions';
 import appActions from '../../redux/app/actions';
@@ -40,9 +34,7 @@ const DIVIDEND = 0.98;
 const MAX_FLOAT_DIGITS = 4;
 const SEED_STR_LENGTH = 21;
 
-const MAX_CONCURRENT_AUTOBET = 2;
-
-const { initSocketConnection, deleteCurrentBet } = betActions;
+const { initSocketConnection } = betActions;
 const {
   getIdentity, getAccountInfo, getBalances, transfer, setErrorMessage,
 } = appActions;
@@ -57,6 +49,18 @@ function calculatePayout(winChance) {
 
 function calculatePayoutOnWin(betAmount, payout) {
   return betAmount * payout;
+}
+
+function calculateCountUp(value) {
+  let result = 50;
+
+  if (value > 50) {
+    result = _.random(1, value - 50, false);
+  } else {
+    result = _.random(value + 50, 100, false);
+  }
+
+  return result;
 }
 
 const symbols = [
@@ -107,22 +111,14 @@ function getMaxBySymbol(symbol) {
   return symbolMatch.max;
 }
 
-function prepareTableData(historyQueue, momentLocale) {
-  const tableData = historyQueue.all();
+function getDisabledBySymbol(symbol) {
+  const symbolMatch = _.find(symbols, { symbol });
 
-  const rawBetData = _.isEmpty(tableData) ? [] : _.reverse(_.map(tableData, (bet) => ({
-    key: bet.id,
-    time: moment(bet.time).locale(momentLocale).format('HH:mm:ss'),
-    bettor: bet.bettor,
-    rollUnder: bet.rollUnder,
-    betAmount: bet.betAmount,
-    roll: bet.roll,
-    payout: bet.payout,
-    payoutAsset: bet.payoutAsset,
-    trxUrl: bet.trxUrl,
-  })));
+  if (_.isUndefined(symbolMatch)) {
+    return 10000;
+  }
 
-  return rawBetData;
+  return symbolMatch.disabled;
 }
 
 class DicePage extends React.Component {
@@ -130,8 +126,7 @@ class DicePage extends React.Component {
     super(props);
 
     const betAmount = 1;
-    const rollNumber = DEFAULT_ROLL_NUMBER;
-    const winChance = calculateWinChance(rollNumber);
+    const winChance = calculateWinChance(DEFAULT_ROLL_NUMBER);
     const payout = calculatePayout(winChance);
     const payoutOnWin = calculatePayoutOnWin(betAmount, payout);
     const { intl } = this.props;
@@ -139,21 +134,20 @@ class DicePage extends React.Component {
     this.defaultUsername = `Guest-${_.random(100000, 999999, false)}`;
     this.state = {
       betAmount,
-      rollNumber,
       payout,
       payoutOnWin,
       winChance,
       username: this.defaultUsername,
       seed: randomString(SEED_STR_LENGTH),
-      notifications: [],
       isFairnessModalVisible: false,
       autoBetEnabled: false, // True if auto-bet switch is turned on
-      lastBetNotificationId: undefined, // Guard start of the next auto-bet so we don't start twice
       myBetHistoryFetched: false, // Guard to make sure myBetHistory only fetched once
       sliderValue: DEFAULT_ROLL_NUMBER,
       sliderLabel: {},
+      statePendingBet: undefined,
     };
 
+    const that = this;
     this.desktopColumns = [{
       title: intl.formatMessage({ id: 'dice.history.form.time' }),
       dataIndex: 'time',
@@ -162,6 +156,12 @@ class DicePage extends React.Component {
       title: intl.formatMessage({ id: 'dice.history.form.bettor' }),
       dataIndex: 'bettor',
       key: 'bettor',
+      render: (text, record) => {
+        if (record.bettor === that.state.username) {
+          return (<span className="table-td-highlight">{record.bettor}</span>);
+        }
+        return record.bettor;
+      },
     }, {
       title: intl.formatMessage({ id: 'dice.history.form.under' }),
       dataIndex: 'rollUnder',
@@ -232,53 +232,54 @@ class DicePage extends React.Component {
 
     this.onInputNumberChange = this.onInputNumberChange.bind(this);
     this.onBetAmountButtonClick = this.onBetAmountButtonClick.bind(this);
-    this.getSliderValue = this.getSliderValue.bind(this);
     this.onBetClicked = this.onBetClicked.bind(this);
     this.onLogInClicked = this.onLogInClicked.bind(this);
     this.formatBetAmountStr = this.formatBetAmountStr.bind(this);
     this.setFairnessModalVisibility = this.setFairnessModalVisibility.bind(this);
-    this.notificationDOMRef = React.createRef();
     this.onAutoBetSwitchChange = this.onAutoBetSwitchChange.bind(this);
     this.resetSeed = this.resetSeed.bind(this);
     this.getBalanceBySymbol = this.getBalanceBySymbol.bind(this);
+    this.onSliderChange = this.onSliderChange.bind(this);
+    this.onCountEnd = this.onCountEnd.bind(this);
   }
 
   componentWillMount() {
     const {
-      fetchBetHistory, fetchHugeBetHistory, selectedSymbol, getPageData,
+      getPageData,
     } = this.props;
 
-    fetchBetHistory();
-    fetchHugeBetHistory({ symbol: selectedSymbol, limit: appConfig.hugeBetAmount });
     getPageData('dice');
   }
 
   componentDidMount() {
-    const { initSocketConnectionReq } = this.props;
+    const {
+      initSocketConnectionReq, fetchBetHistory, fetchHugeBetHistory, selectedSymbol,
+    } = this.props;
     initSocketConnectionReq({ collection: 'Bet' });
+    fetchBetHistory();
+    fetchHugeBetHistory({ symbol: selectedSymbol, limit: appConfig.hugeBetAmount });
   }
 
   componentWillReceiveProps(nextProps) {
     const {
-      username, selectedSymbol: newSelectedSymbol, currentBets, errorMessage,
+      username, selectedSymbol: newSelectedSymbol, errorMessage, pendingBet,
     } = nextProps;
 
     const {
-      intl, deleteCurrentBetReq, getBalancesReq, getAccountInfoReq, selectedSymbol, fetchMyBetHistory,
+      intl, getBalancesReq, getAccountInfoReq, selectedSymbol, fetchMyBetHistory, resetPendingBet,
     } = this.props;
     const {
-      notifications,
       username: stateUsername,
-      lastBetNotificationId,
       payout,
       myBetHistoryFetched,
+      statePendingBet,
     } = this.state;
     let { autoBetEnabled } = this.state;
-    const { notificationDOMRef, onBetClicked } = this;
+    const { onBetClicked } = this;
 
     const fieldsToUpdate = {};
 
-    // Update username in state if we received one from props; this means Scatter login succeeded
+    // Update username in state if we received one from props; this means login succeeded
     fieldsToUpdate.username = username || this.defaultUsername;
 
     if (username && username !== this.defaultUsername && !myBetHistoryFetched) {
@@ -298,7 +299,6 @@ class DicePage extends React.Component {
       }
 
       // If current betAmount is less than default amount; set it to default amount when switching symbols
-
       const defaultAmount = getDefaultBySymbol(newSelectedSymbol);
       fieldsToUpdate.betAmount = defaultAmount;
       const payoutOnWin = calculatePayoutOnWin(fieldsToUpdate.betAmount, payout);
@@ -315,102 +315,75 @@ class DicePage extends React.Component {
       }
     }
 
-    // Add or remove notification box based currentBets update
-    _.each(currentBets, (bet) => {
-      const existingNotification = _.find(notifications, { transactionId: bet.transactionId });
 
-      const titleEle = <p className="notification-title">{intl.formatMessage({ id: 'message.success.sentBet' }, { betAmount: bet.betAmount })}</p>;
+    // Update UI if pendingBet has changed
+    if (!_.isEqual(statePendingBet, pendingBet)) {
+      // console.log(`pendingBet has changed ${JSON.stringify(statePendingBet)} -> ${JSON.stringify(pendingBet)}`);
 
-      // Add a new notification is the new bet doesn't have one yet.
-      if (_.isUndefined(existingNotification)) {
-        const messageEle = <p className="notification-message">{intl.formatMessage({ id: 'message.success.waitForBetResult' })}</p>;
-        const notificationId = notificationDOMRef.current.addNotification({
-          isMobile: true,
-          type: 'custom',
-          content: <div className="bet-notification-container">
-            <div className="bet-notification-container-dice">
-              <Dice />
-            </div>
-            <div className="bet-notification-container-text">
-              {titleEle}
-              {messageEle}
-            </div></div>,
-          insert: 'top',
-          container: 'top-center',
-          animationIn: ['animated', 'fadeIn'],
-          animationOut: ['animated', 'fadeOut'],
-          dismissable: { click: false, touch: false },
-          width: 550,
-        });
-
-        notifications.push({ notificationId, transactionId: bet.transactionId });
-      } else if (bet.isResolved) { // Found existing notification of this bet
-        const { notificationId, transactionId } = existingNotification;
-
-        if (!notificationId) { // Can't proceed if notificationId is null
-          return;
+      // pendingBet will have below values
+      // 1. undefined. pendingBet reset case; we will reset state pendingBet
+      // 2. status undefined. Transfer just sent and pendingBet just created case
+      // 3. status defined. Roll result has come back
+      if (_.isUndefined(statePendingBet) && !_.isUndefined(pendingBet) && _.isFunction(this.startCountUp)) { // Just sent transfer case
+        this.startCountUp();
+      } else if (!_.isUndefined(statePendingBet) && _.isUndefined(pendingBet) && _.isFunction(this.resetCountUp)) { // Reset case
+        this.resetCountUp();
+      } else if (pendingBet && pendingBet.status && pendingBet.status !== 'Created') { // This is result returned condition
+        if (!pendingBet.isResolved) {
+          console.error('Pending bet has changed but not resolved ...');
         }
 
-        const containerClass = classNames({
-          'bet-notification-container': true,
-          'bet-notification-container-lose': !bet.isWon,
-        });
+        fieldsToUpdate.sliderLabel = {};
+        fieldsToUpdate.sliderLabel[pendingBet.roll] = pendingBet.roll;
 
-        const messageWin = intl.formatMessage({
-          id: 'message.success.resultWon',
-        }, { roll: bet.roll, payout: bet.payout });
+        const tillResolve = pendingBet.createdAt.diff(statePendingBet.startTime);
+        console.log('Result returned at ', tillResolve);
 
-        const messageLose = intl.formatMessage({
-          id: 'message.success.resultLose',
-        }, { roll: bet.roll, betAmount: bet.betAmount });
-
-        const messageEle = <p className="notification-message">{bet.isWon ? messageWin : messageLose}</p>;
-
-        notificationDOMRef.current.updateNotificationOptions(
-          notificationId,
-          {
-            dismiss: { duration: 5000 },
-            content: <div className={containerClass}>
-              <div className="bet-notification-container-dice">
-                <Dice className="stop-animation" />
-              </div>
-              <div className="bet-notification-container-text">
-                {titleEle}
-                {messageEle}
-              </div>
-            </div>,
-          }
-        );
-
-        // Send the next bet is autobet is enabled; lastBetNotificationId is here to prevent we enter this code twice
-        if (autoBetEnabled && lastBetNotificationId !== notificationId && notifications.length < MAX_CONCURRENT_AUTOBET) {
-          this.setState({
-            lastBetNotificationId: notificationId,
-          });
-          setTimeout(() => {
-            onBetClicked();
-          }, 1500);
-        }
+        resetPendingBet();
 
         setTimeout(() => {
-          if (!notificationDOMRef.current) { return; }
-          // Remove this notification from notification componnent
-          notificationDOMRef.current.removeNotification(notificationId);
-          // Remove this notification from this.state
-          _.remove(notifications, { notificationId });
+          getBalancesReq(username);
+        }, 1000);
 
-          // Remove this notification from state store currentBets
-          deleteCurrentBetReq(transactionId);
-
-          getAccountInfoReq(stateUsername);
-          getBalancesReq(stateUsername);
-        }, 3000);
+        // if (autoBetEnabled) {
+        //   setTimeout(() => {
+        //     onBetClicked();
+        //   }, 1000);
+        // }
       }
-    });
-
-    fieldsToUpdate.notifications = notifications;
+      fieldsToUpdate.statePendingBet = _.cloneDeep(pendingBet);
+    }
 
     this.setState(fieldsToUpdate);
+  }
+
+  onCountEnd() {
+    const { statePendingBet } = this.state;
+
+    // Stop change countUp text if statePendingBet is undefined
+    if (_.isUndefined(statePendingBet)) {
+      return;
+    }
+
+    const currentValue = _.toNumber(this.countUpRef.current.innerText);
+
+    const newEndNum = calculateCountUp(currentValue);
+    this.updateCountUp(newEndNum);
+  }
+
+  onSliderChange(value) {
+    const { betAmount } = this.state;
+
+    const winChance = calculateWinChance(value);
+    const payout = calculatePayout(winChance);
+    const payoutOnWin = calculatePayoutOnWin(betAmount, payout);
+
+    this.setState({
+      sliderValue: value,
+      winChance,
+      payout,
+      payoutOnWin,
+    });
   }
 
   onInputNumberChange(evt) {
@@ -482,7 +455,6 @@ class DicePage extends React.Component {
     const payoutOnWin = calculatePayoutOnWin(betAmount, payout);
 
     this.setState({
-      rollNumber: value,
       winChance,
       payout,
       payoutOnWin,
@@ -496,17 +468,23 @@ class DicePage extends React.Component {
 
   onBetClicked() {
     const {
-      rollNumber, username, seed,
+      sliderValue, username, seed,
     } = this.state;
 
     let { betAmount } = this.state;
 
     const {
-      transferReq, setErrorMessageReq, referrer, selectedSymbol,
+      transferReq, setErrorMessageReq, referrer, selectedSymbol, pendingBet,
     } = this.props;
 
+    // User not logged in case
     if (username === this.defaultUsername) {
       setErrorMessageReq('error.page.usernamenotfound');
+      return;
+    }
+
+    // A Bet is pending case
+    if (!_.isUndefined(pendingBet)) {
       return;
     }
 
@@ -519,11 +497,16 @@ class DicePage extends React.Component {
       });
     }
 
+    // Remove slider label
+    this.setState({
+      sliderLabel: {},
+    });
+
     transferReq({
       bettor: username,
       betAmount,
       betAsset: selectedSymbol,
-      rollUnder: rollNumber,
+      rollUnder: sliderValue,
       referrer,
       seed, // We haven't set up a function for user custom seed
     });
@@ -536,6 +519,8 @@ class DicePage extends React.Component {
 
     const match = _.find(symbols, { symbol });
     const precision = _.isUndefined(match) ? 4 : match.precision;
+
+    console.log('getBalanceBySymbol', symbol, eosBalance, betxBalance, ebtcBalance, eethBalance, eusdBalance);
 
     switch (symbol) {
       case 'EOS':
@@ -615,19 +600,12 @@ class DicePage extends React.Component {
   render() {
     const { desktopColumns, mobileColumns } = this;
     const {
-      betAmount, payoutOnWin, winChance, payout, username, seed, sliderValue, sliderLabel, isFairnessModalVisible,
+      betAmount, payoutOnWin, winChance, payout, username, seed, sliderValue, sliderLabel, isFairnessModalVisible, statePendingBet,
     } = this.state;
 
     const {
-      betHistory, myBetHistory, hugeBetHistory, locale, view, intl, selectedSymbol, pageData,
+      betHistory, myBetHistory, hugeBetHistory, view, intl, selectedSymbol, pageData,
     } = this.props;
-
-    const momentLocale = (locale === 'en') ? 'en' : 'zh-cn';
-
-    // Prepare data for three tables at bottom
-    const allBetData = prepareTableData(betHistory, momentLocale);
-    const myBetData = prepareTableData(myBetHistory, momentLocale);
-    const hugeBetData = prepareTableData(hugeBetHistory, momentLocale);
 
     const columns = view === 'MobileView' ? mobileColumns : desktopColumns;
 
@@ -648,8 +626,46 @@ class DicePage extends React.Component {
     </div>);
 
     const currentSymbol = (selectedSymbol === 'BETX') ? 'EOS' : selectedSymbol;
+    const that = this;
+    const countUpStart = statePendingBet && (statePendingBet.isResolved ? statePendingBet.roll : statePendingBet.rollUnder);
 
-    const rollBtn = null;
+    const countUp = (<CountUp
+      start={countUpStart}
+      end={calculateCountUp(countUpStart)}
+      duration={3}
+      decimals={0}
+      useEasing={false}
+      onEnd={this.onCountEnd}
+    >
+      {({
+        countUpRef, start, reset, update,
+      }) => {
+        that.startCountUp = start;
+        that.updateCountUp = update;
+        that.resetCountUp = reset;
+        that.countUpRef = countUpRef;
+        return (
+          <span ref={countUpRef} />
+        );
+      }
+      }
+    </CountUp>);
+
+    let rollBtn;
+    const rollBtnTextDisplay = statePendingBet ? 'none' : 'inline-block';
+    const rollBtnNumDisplay = statePendingBet ? 'inline-block' : 'none';
+
+    if (getDisabledBySymbol(currentSymbol)) {
+      rollBtn = ( // Roll Button disabled case
+        <Button className="btn-login" width={view === 'MobileView' ? 120 : 200} height={view === 'MobileView' ? 48 : 64} onClick={this.onBetClicked} disabled>
+          {view === 'MobileView' ? <IntlMessages id="dice.button.bet" /> : <IntlMessages id="dice.alert.comingsoon" />}
+        </Button>);
+    } else { // Enabled case
+      rollBtn = (<Button className="btn-login" width={view === 'MobileView' ? 120 : 200} height={view === 'MobileView' ? 48 : 64} onClick={this.onBetClicked}>
+        <div style={{ display: rollBtnNumDisplay }}>{countUp}</div>
+        <span style={{ display: rollBtnTextDisplay }}>{intl.formatMessage({ id: 'dice.button.bet' })}</span>
+      </Button>);
+    }
 
     return (
       <div id="dicepage">
@@ -683,7 +699,6 @@ class DicePage extends React.Component {
                   justifyContent: 'center',
                 }}
               >
-                <ReactNotification ref={this.notificationDOMRef} />
                 <CurrencyBar direction={view === 'DesktopView' ? 'column' : 'row'} />
                 <div className="box-container dice-container" >
                   <div className="container-body">
@@ -744,7 +759,6 @@ class DicePage extends React.Component {
                         end={MAX_SELECT_ROLL_NUMBER}
                         value={sliderValue}
                         labels={sliderLabel}
-                        // onChangeStart={this.handleChangeStart}
                         onChange={this.onSliderChange}
                       />
                     </div>
@@ -752,7 +766,7 @@ class DicePage extends React.Component {
                     <Row className="container-body-btn" type="flex" justify="center" align="middle" >
                       {/* <Col span={24}>{autoBetElement}</Col> */}
                       <Col span={6}>
-                        {this.getBalanceBySymbol(currentSymbol) ? <div className="container-body-btn-balance">{parseAsset(this.getBalanceBySymbol(currentSymbol)).amount}<span className="highlight"> {currentSymbol}</span></div> : null}
+                        {this.getBalanceBySymbol(currentSymbol) ? <div className="container-body-btn-balance">{this.getBalanceBySymbol(currentSymbol)}<span className="highlight"> {currentSymbol}</span></div> : null}
                       </Col>
                       <Col span={12}>
                         {autoBetElement}
@@ -761,7 +775,7 @@ class DicePage extends React.Component {
                           : rollBtn}
                       </Col>
                       <Col span={6}>
-                        {this.getBalanceBySymbol('BETX') ? <div className="container-body-btn-balance">{parseAsset(this.getBalanceBySymbol('BETX')).amount}<span className="highlight"> <IntlMessages id="dice.asset.betx" /></span></div> : null}
+                        {this.getBalanceBySymbol('BETX') ? <div className="container-body-btn-balance">{this.getBalanceBySymbol('BETX')}<span className="highlight"> <IntlMessages id="dice.asset.betx" /></span></div> : null}
                       </Col>
                     </Row>
                   </div>
@@ -790,7 +804,7 @@ class DicePage extends React.Component {
                         <div className="box-container">
                           <Table
                             columns={columns}
-                            dataSource={allBetData}
+                            dataSource={betHistory}
                             bordered={false}
                             showHeader
                             pagination={false}
@@ -801,7 +815,7 @@ class DicePage extends React.Component {
                         <div className="box-container">
                           <Table
                             columns={columns}
-                            dataSource={myBetData}
+                            dataSource={myBetHistory}
                             bordered={false}
                             showHeader
                             pagination={false}
@@ -812,7 +826,7 @@ class DicePage extends React.Component {
                         <div className="box-container">
                           <Table
                             columns={columns}
-                            dataSource={hugeBetData}
+                            dataSource={hugeBetHistory}
                             bordered={false}
                             showHeader
                             pagination={false}
@@ -843,9 +857,9 @@ DicePage.propTypes = {
   locale: PropTypes.string,
   transferReq: PropTypes.func,
   initSocketConnectionReq: PropTypes.func,
-  betHistory: PropTypes.object,
-  myBetHistory: PropTypes.object,
-  hugeBetHistory: PropTypes.object,
+  betHistory: PropTypes.array,
+  myBetHistory: PropTypes.array,
+  hugeBetHistory: PropTypes.array,
   refresh: PropTypes.bool,
   getIdentityReq: PropTypes.func,
   setErrorMessageReq: PropTypes.func,
@@ -855,7 +869,6 @@ DicePage.propTypes = {
   ebtcBalance: PropTypes.number,
   eethBalance: PropTypes.number,
   eusdBalance: PropTypes.number,
-
   intl: intlShape.isRequired,
   successMessage: PropTypes.string,
   fetchBetHistory: PropTypes.func,
@@ -863,14 +876,14 @@ DicePage.propTypes = {
   fetchHugeBetHistory: PropTypes.func,
   referrer: PropTypes.string.isRequired,
   view: PropTypes.string,
-  currentBets: PropTypes.array,
-  deleteCurrentBetReq: PropTypes.func,
   getBalancesReq: PropTypes.func,
   getAccountInfoReq: PropTypes.func,
   selectedSymbol: PropTypes.string,
   pageData: PropTypes.object,
   getPageData: PropTypes.func,
   errorMessage: PropTypes.string,
+  pendingBet: PropTypes.object,
+  resetPendingBet: PropTypes.func,
 };
 
 DicePage.defaultProps = {
@@ -894,14 +907,14 @@ DicePage.defaultProps = {
   fetchMyBetHistory: undefined,
   fetchHugeBetHistory: undefined,
   view: undefined,
-  currentBets: [],
-  deleteCurrentBetReq: undefined,
   getBalancesReq: undefined,
   getAccountInfoReq: undefined,
   selectedSymbol: undefined,
   pageData: undefined,
   getPageData: undefined,
   errorMessage: undefined,
+  pendingBet: undefined,
+  resetPendingBet: undefined,
 };
 
 const mapStateToProps = (state) => ({
@@ -919,10 +932,10 @@ const mapStateToProps = (state) => ({
   successMessage: state.App.get('successMessage'),
   referrer: state.App.get('ref'),
   view: state.App.get('view'),
-  currentBets: state.Bet.get('currentBets'),
   selectedSymbol: state.Bet.get('selectedSymbol'),
   pageData: state.App.get('dicePageData'),
   errorMessage: state.App.get('errorMessage'),
+  pendingBet: state.Bet.get('pendingBet'),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -934,9 +947,9 @@ const mapDispatchToProps = (dispatch) => ({
   fetchBetHistory: () => dispatch(betActions.fetchBetHistory()),
   fetchMyBetHistory: (params) => dispatch(betActions.fetchMyBetHistory(params)),
   fetchHugeBetHistory: (params) => dispatch(betActions.fetchHugeBetHistory(params)),
-  deleteCurrentBetReq: (transactionId) => dispatch(deleteCurrentBet(transactionId)),
   getBalancesReq: (name) => dispatch(getBalances(name)),
   getAccountInfoReq: (name) => dispatch(getAccountInfo(name)),
+  resetPendingBet: () => dispatch(betActions.resetPendingBet()),
 });
 
 // Wrap the component to inject dispatch and state into it

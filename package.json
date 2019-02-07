@@ -19,6 +19,7 @@
     "react": "16.4.2",
     "react-cloudinary": "^0.4.1",
     "react-copy-to-clipboard": "^5.0.1",
+    "react-countup": "^4.1.1",
     "react-dom": "16.4.2",
     "react-intl": "^2.3.0",
     "react-notifications-component": "^1.0.0",

@@ -1,20 +1,19 @@
 import _ from 'lodash';
 import { Map } from 'immutable';
+import moment from 'moment';
 
 import actions from './actions';
 import appActions from '../app/actions';
-import Queue from '../../helpers/queue';
 import { appConfig } from '../../settings';
 import ParseHelper from '../../helpers/parse';
+import { enqueue } from '../../helpers/utility';
 
 const { parseBetReceipt } = ParseHelper;
 
-// const { messageType } = actions;
-
 const initState = new Map({
-  history: new Queue(appConfig.betHistoryMemorySize),
-  myHistory: new Queue(appConfig.betHistoryMemorySize),
-  hugeHistory: new Queue(appConfig.betHistoryMemorySize),
+  history: [],
+  myHistory: [],
+  hugeHistory: [],
   refresh: false,
   dailyVolume: 0,
   allVolume: 0,
@@ -24,6 +23,7 @@ const initState = new Map({
   betRank: undefined,
   username: undefined,
   selectedSymbol: 'EOS',
+  pendingBet: undefined,
 });
 
 /**
@@ -32,12 +32,12 @@ const initState = new Map({
  * @param  {[type]} newBet  [description]
  * @return {boolean}        True if bet history array is updated
  */
-function CreateOrUpdateBetInHistory(betQueue, newBet) {
+function CreateOrUpdateBetInHistory(existingList, newBet) {
   if (_.isUndefined(newBet)) {
     return false;
   }
 
-  const existingBet = _.find(betQueue.all(), { id: newBet.id });
+  const existingBet = _.find(existingList, { key: newBet.key });
 
   // Return early if an existing bet is resolved
   if (!_.isUndefined(existingBet) && existingBet.isResolved) {
@@ -46,7 +46,7 @@ function CreateOrUpdateBetInHistory(betQueue, newBet) {
 
   // Create an object and enqueue if no match is found
   if (_.isUndefined(existingBet)) {
-    betQueue.enq(newBet);
+    enqueue(existingList, newBet, appConfig.betHistoryMemorySize);
   } else {
     _.extend(existingBet, newBet);
   }
@@ -60,25 +60,31 @@ function CreateOrUpdateBetInHistory(betQueue, newBet) {
  * @param {[type]} newBet      [description]
  * @return {boolean}        True if match is found and updated
  */
-function updateCurrentBets(currentBets, newBet) {
-  if (_.isUndefined(newBet)) {
-    return false;
+function getUpdatedPendingBet(oldPendingBet, newBet) {
+  const pendingBet = oldPendingBet;
+
+  // This function should be used to update an existing pendingBet, neither pendingBet nor newBet should be undefined
+  if (_.isUndefined(newBet) || _.isUndefined(oldPendingBet)) {
+    return undefined;
   }
 
-  const matchInCurrentBets = _.find(currentBets, { transactionId: newBet.transferTx });
-
-  // Return early if an existing bet is resolved
-  if (_.isUndefined(matchInCurrentBets)) {
-    return false;
-  } else if (matchInCurrentBets.isResolved) {
-    return false;
+  if (pendingBet.transactionId !== newBet.transferTx) { // Not the bet we are waiting for response for
+    return undefined;
   }
-  matchInCurrentBets.isResolved = true;
-  matchInCurrentBets.payout = newBet.payout;
-  matchInCurrentBets.roll = newBet.roll;
-  matchInCurrentBets.isWon = newBet.roll < newBet.rollUnder;
 
-  return true;
+  if (!newBet.isResolved) { // The pending bet not resolved yet
+    return undefined;
+  }
+
+  pendingBet.payout = newBet.payout;
+  pendingBet.roll = newBet.roll;
+  pendingBet.isWon = newBet.roll < newBet.rollUnder;
+  pendingBet.isResolved = newBet.isResolved;
+  pendingBet.status = newBet.status;
+  pendingBet.createdAt = newBet.createdAt;
+  pendingBet.endTime = newBet.endTime;
+
+  return pendingBet;
 }
 
 export default function (state = initState, action) {
@@ -91,29 +97,17 @@ export default function (state = initState, action) {
       return state.set('username', action.value);
     case actions.FETCH_BET_HISTORY_RESULT:
     {
-      _.each(action.value, (item) => {
-        state.get('history').enq(item);
-      });
-
-      return state
+      return state.set('history', action.value)
         .set('refresh', !state.get('refresh'));
     }
     case actions.FETCH_MY_BET_HISTORY_RESULT:
     {
-      _.each(action.value, (item) => {
-        state.get('myHistory').enq(item);
-      });
-
-      return state
+      return state.set('myHistory', action.value)
         .set('refresh', !state.get('refresh'));
     }
     case actions.FETCH_HUGE_BET_HISTORY_RESULT:
     {
-      _.each(action.value, (item) => {
-        state.get('hugeHistory').enq(item);
-      });
-
-      return state
+      return state.set('hugeHistory', action.value)
         .set('refresh', !state.get('refresh'));
     }
     case actions.BET_OBJECT_CREATED:
@@ -123,21 +117,26 @@ export default function (state = initState, action) {
       let needRefresh = false;
 
       // Update bet history table
-      if (CreateOrUpdateBetInHistory(state.get('history'), newBet)) {
+      const history = state.get('history');
+
+      if (CreateOrUpdateBetInHistory(history, newBet)) {
+        state.set('history', history);
+
         if (newBet.bettor === state.get('username')) {
-          state.get('myHistory').enq(newBet);
+          state.set('myHistory', enqueue(state.get('myHistory'), newBet, appConfig.betHistoryMemorySize));
         }
 
         // Only add bet over than appConfig.hugeBetAmount to huge bet table
         if (newBet.payoutAsset && newBet.payoutAsset.symbol === state.get('selectedSymbol') && newBet.payoutAsset.amount >= appConfig.hugeBetAmount) {
-          state.get('hugeHistory').enq(newBet);
+          state.set('hugeHistory', enqueue(state.get('hugeHistory'), newBet, appConfig.betHistoryMemorySize));
         }
 
         needRefresh = true;
       }
 
-      // Update current bets for notification
-      if (updateCurrentBets(state.get('currentBets'), newBet)) {
+      const updatedPendingBet = getUpdatedPendingBet(state.get('pendingBet'), newBet);
+      if (!_.isUndefined(updatedPendingBet)) {
+        state.set('pendingBet', updatedPendingBet);
         needRefresh = true;
       }
 
@@ -157,33 +156,10 @@ export default function (state = initState, action) {
       return state.set('betxStakeAmount', (action.value && action.value.staked) || 0)
         .set('betxCirculation', (action.value && action.value.issued) || 0);
 
-    case actions.ADD_CURRENT_BET:
-    {
-      const { transactionId } = action.value;
-
-      if (_.isUndefined(_.find(state.get('currentBets'), { transactionId }))) {
-        state.get('currentBets').push(action.value);
-
-        return state
-          .set('refresh', !state.get('refresh'));
-      }
-
-      break;
-    }
-    case actions.DELETE_CURRENT_BET:
-    {
-      const transactionId = action.value;
-
-      // Update notification component
-      const removedElements = _.remove(state.get('currentBets'), { transactionId });
-
-      if (!_.isEmpty(removedElements)) {
-        return state
-          .set('refresh', !state.get('refresh'));
-      }
-      break;
-    }
-
+    case actions.SET_PENDING_BET:
+      return state.set('pendingBet', action.value);
+    case actions.RESET_PENDING_BET:
+      return state.set('pendingBet', undefined);
     case actions.BET_RANK_RESULT:
       return state.set('betRank', action.value)
         .set('refresh', !state.get('refresh'));

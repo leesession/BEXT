@@ -362,3 +362,17 @@ export function getRestSecondsOfTheHour() {
   const dateNow = new Date();
   return 3600 - ((dateNow.getMinutes() * 60) + dateNow.getSeconds());
 }
+
+/**
+ * Insert an item to the front of the list, and remove the last if length is already at the max
+ * @param {array}  list existing list
+ * @param {object} item
+ * @param {number} maxLen length of array
+ * @return {[type]} [description]
+ */export function enqueue(list, item, maxLen) {
+  if (list.length >= maxLen) { // Remove the last element if list is already at max length
+    list.pop();
+  }
+
+  list.unshift(item); // Add the new bet from the front
+}

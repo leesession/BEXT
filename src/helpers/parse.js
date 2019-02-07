@@ -46,18 +46,22 @@ class ParseHelper {
     const payoutAsset = parseObject.get('payoutAsset');
     const payout = (payoutAsset && payoutAsset.amount === 0) ? '' : trimZerosFromAsset(parseObject.get('payout'));
     const resolveTrxId = parseObject.get('t_id');
+    const localTime = moment.utc(parseObject.get('resolved_block_time')).toDate(); // Convert server UTC time to local here
 
     return {
-      id: parseObject.id,
-      time: moment.utc(parseObject.get('resolved_block_time')).toDate(), // Convert server UTC time to local here
+      key: parseObject.id,
+      time: moment(localTime).format('HH:mm:ss'),
       bettor: parseObject.get('bettor'),
       rollUnder: parseObject.get('roll_under'),
       betAmount: trimZerosFromAsset(parseObject.get('bet_amt')),
       roll: parseObject.get('roll'),
       transferTx: parseObject.get('transferTx'),
+      status: parseObject.get('status'),
+      isResolved: parseObject.get('status') === STATUS.RESOLVED,
       payout,
       payoutAsset,
       trxUrl: `https://eostracker.io/transactions/${parseObject.get('resolved_block_num')}/${resolveTrxId}`,
+      endTime: moment(),
     };
   }
 
@@ -109,10 +113,10 @@ class ParseHelper {
     query.limit(appConfig.betHistoryMemorySize);
 
     // Bet history need to be inserted to the queue in ascending order, so we need to reserve the array here
-    return query.find().then((results) => Promise.resolve(_.reverse(_.filter(
+    return query.find().then((results) => Promise.resolve(_.filter(
       _.map(results, (entry) => parseBetReceipt(entry)),
       (o) => !_.isUndefined(o)
-    ))));
+    )));
   }
 
   fetchChatHistory() {

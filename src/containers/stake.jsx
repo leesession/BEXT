@@ -14,7 +14,7 @@ import betActions from '../redux/bet/actions';
 import appActions from '../redux/app/actions';
 import { appConfig } from '../settings';
 import { formatNumberThousands, secondsToTime, getRestDaySeconds } from '../helpers/utility';
-import LoginModal from '../components/loginModal';
+import LoginModal from '../components/modal/login';
 import UnstakeModal from '../components/unstakeModal';
 
 cloudinaryConfig({ cloud_name: 'forgelab-io' });
