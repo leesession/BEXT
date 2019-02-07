@@ -5,16 +5,12 @@ import { injectIntl, intlShape } from 'react-intl';
 
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Row, Col, Tooltip, Progress } from 'antd';
+import { Icon, Tooltip, Progress } from 'antd';
 import Button from '../../components/uielements/button';
 import BuybackModal from '../../components/modal/buyback';
 
-import appActions from '../../redux/app/actions';
 import awardActions from '../../redux/award/actions';
 import IntlMessages from '../../components/utility/intlMessages';
-
-import { cloudinaryConfig, CloudinaryImage } from '../../components/react-cloudinary';
-cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
 class BuyBack extends React.Component {
   constructor(props) {
@@ -23,7 +19,15 @@ class BuyBack extends React.Component {
     const { locale } = props;
     this.imageArray = [`leaderboard-${locale}`, `buyback-${locale}`];
 
+    this.state = {
+      isModalVisible: false,
+      modalParams: {},
+    };
+
     this.onClaimClicked = this.onClaimClicked.bind(this);
+    this.setModalVisibility = this.setModalVisibility.bind(this);
+    this.claimBuyback = this.claimBuyback.bind(this);
+    this.onTitleClicked = this.onTitleClicked.bind(this);
   }
 
   componentWillMount() {
@@ -32,30 +36,58 @@ class BuyBack extends React.Component {
     fetchRedeemTable();
   }
 
-  onClaimClicked(evt) {
-    const { setBuybackModalVisibility } = this.props;
+  setModalVisibility(value) {
+    this.setState({
+      isModalVisible: value,
+    });
+  }
 
+  claimBuyback(params) {
+    const {
+      claimBuyback,
+    } = this.props;
+
+    claimBuyback(params);
+  }
+
+  onTitleClicked() {
+    this.setState({
+      isModalVisible: true,
+      modalParams: {
+        username: undefined, // This has to be undefined to tell modal this is anonymous open
+        symbol: 'BETX', // Hardcode to always use BETX to buy back
+        ratio: 5,
+        total: 100,
+      },
+    });
+  }
+
+  onClaimClicked(evt) {
     const params = _.isEmpty(evt.target.dataset) ? evt.target.parentNode.dataset : evt.target.dataset;
 
     if (_.isEmpty(params)) {
-      console.error('onClaimClicked params is empty!');
+      throw new Error('onClaimClicked params is empty!');
     }
 
     const {
       username, index, ratio, total,
     } = params;
 
-    setBuybackModalVisibility(true, {
-      username,
-      symbol: 'BETX', // Hardcode to always use BETX to buy back
-      redeemIndex: _.toNumber(index),
-      ratio: _.toNumber(ratio),
-      total,
+    this.setState({
+      isModalVisible: true,
+      modalParams: {
+        username,
+        symbol: 'BETX', // Hardcode to always use BETX to buy back
+        redeemIndex: _.toNumber(index),
+        ratio: _.toNumber(ratio),
+        total,
+      },
     });
   }
 
   render() {
     const { redeems, intl, username } = this.props;
+    const { isModalVisible, modalParams } = this.state;
 
     // const momentLocale = (locale === 'en') ? 'en' : 'zh-cn';
 
@@ -64,7 +96,7 @@ class BuyBack extends React.Component {
 
       const restMilSeconds = moment.utc(row.expireAt).diff(moment());
       let expiresAt;
-      let btnDisabled = (username !== row.winner);
+      let btnDisabled = (username !== row.winner || row.availableEOS === 0);
 
       if (restMilSeconds < 0) {
         expiresAt = intl.formatMessage({ id: 'buyback.expired' });
@@ -93,7 +125,7 @@ class BuyBack extends React.Component {
               size="small"
               strokeColor="#ffbc00"
               showInfo={false}
-              format={(percent) => intl.formatMessage({ id: { id: 'buyback.remaining' }, values: { available: row.availableEOS, total: row.totalEOS, token: 'EOS' } })}
+              format={() => intl.formatMessage({ id: { id: 'buyback.remaining' }, values: { available: row.availableEOS, total: row.totalEOS, token: 'EOS' } })}
             /></dd>
           <dt className="buyback-item-dt"><IntlMessages id="buyback.available" /></dt><dd className="buyback-item-dd">{availableText}</dd>
           <dt className="buyback-item-dt"><IntlMessages id="buyback.expiresAt" /></dt><dd className="buyback-item-dd">{expiresAt}</dd>
@@ -103,9 +135,19 @@ class BuyBack extends React.Component {
         </dl></li>);
     });
 
-    return (<ul id="buyback" className="hideOnMobile">{redeemList}
-      <BuybackModal />
-    </ul>
+    return (<div id="buyback">
+      <div className="buyback-title" onClick={this.onTitleClicked}>
+        <h3><IntlMessages id="buyback.title" /></h3>
+        <Icon type="question-circle" className="buyback-title-icon" />
+      </div>
+      <ul className="hideOnMobile">{redeemList}
+        <BuybackModal
+          isVisible={isModalVisible}
+          params={modalParams}
+          onOk={this.claimBuyback}
+          onClose={() => this.setModalVisibility(false)}
+        />
+      </ul></div>
     );
   }
 }
@@ -116,7 +158,7 @@ BuyBack.propTypes = {
   fetchRedeemTable: PropTypes.func,
   redeems: PropTypes.array,
   username: PropTypes.string,
-  setBuybackModalVisibility: PropTypes.func,
+  claimBuyback: PropTypes.func,
 };
 
 BuyBack.defaultProps = {
@@ -124,7 +166,7 @@ BuyBack.defaultProps = {
   fetchRedeemTable: undefined,
   redeems: [],
   username: undefined,
-  setBuybackModalVisibility: undefined,
+  claimBuyback: undefined,
 };
 
 
@@ -135,8 +177,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  setBuybackModalVisibility: (value, params) => dispatch(appActions.setBuybackModalVisibility(value, params)),
   fetchRedeemTable: () => dispatch(awardActions.fetchRedeemTable()),
+  claimBuyback: (params) => dispatch(awardActions.claimBuyback(params)),
 });
 
 
