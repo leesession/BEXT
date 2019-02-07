@@ -71,7 +71,7 @@ class BuyBack extends React.Component {
         btnDisabled = btnDisabled || true;
       } else {
         const duration = moment.duration(restMilSeconds);
-        expiresAt = `${duration.get('hours')}:${duration.get('minutes')}:${duration.get('seconds')}`;
+        expiresAt = moment.utc(duration.as('milliseconds')).format('HH:mm:ss');
       }
 
       const availableText = intl.formatMessage({ id: 'buyback.remaining' }, { available: row.availableEOS, total: row.totalEOS, token: 'EOS' });
