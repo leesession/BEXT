@@ -249,8 +249,10 @@
 }
 
 .topbarWrapper {
-    font-size: 1em;
-    display: flex
+    font-size: 0.8em;
+    text-transform: uppercase;
+    display: flex;
+    font-weight: 500;
 }
 
 .isoLeft, .isoRight {
@@ -263,6 +265,7 @@
     .logo-container {
         a {
             display: block;
+
 
             span {
                 color: white;
@@ -295,14 +298,14 @@ ul.menu-list {
     li {
         font-size: 1.4em;
         position: relative;
-        padding-left: 18px;
-        padding-right: 18px;
+
 
         a {
             display: block;
             height: 100%;
             color:@menuColor;
-            font-weight: 500;
+            padding-left: 12px;
+            padding-right: 12px;
 
             i {
                 padding-left: 6px;
@@ -323,17 +326,17 @@ ul.menu-list {
         &:after {
             content: "";
             display: block;
-            height: 3px;
+            height: 2px;
             bottom: 0;
             background-color: white;
             position: absolute;
             left: 50%;
             .transform(translateX(-50%));
             width: 0;
-            -webkit-transition: width .5s ease, background-color .5s ease;
-            -moz-transition: width .5s ease, background-color .5s ease;
-            -ms-transition: width .5s ease, background-color .5s ease;
-            -o-transition: width .5s ease, background-color .5s ease
+            -webkit-transition: width .4s ease, background-color .4s ease;
+            -moz-transition: width .4s ease, background-color .4s ease;
+            -ms-transition: width .4s ease, background-color .4s ease;
+            -o-transition: width .4s ease, background-color .4s ease
         }
 
         &:hover:after {

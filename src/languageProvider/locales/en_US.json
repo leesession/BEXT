@@ -26,6 +26,11 @@
   "modal.login.description":"Connect to Scatter to retrieve username and account related values.",
   "modal.login.button":"Log In",
 
+  "modal.buyback.title":"Congratulations! BETX Daily Buyback",
+  "modal.buyback.description":"We pick one user from those who have bet over 1000 EOS and buy back total {total} {inSymbol} equivalent of BETX at ratio of {ratio} every day. Please input your {outSymbol} amount below.",
+  "modal.buyback.textConfirm":"By clicking on \"Confirm\" button below you confirm to send {outAmount} {outSymbol} for {inAmount} {inSymbol} ",
+  "modal.buyback.submit":"Confirm",
+
   "modal.unstake.title":"Reclaim Options",
   "modal.unstake.description":"There are a few options offered to reclaim your BETX. Wanna reclaim faster? Choose one from below!",
   "modal.unstake.option1.title":"Instant",
@@ -190,6 +195,7 @@
   "message.success.unstake":"Reclaim {asset} Successfully!",
   "message.success.claimdividend":"Claim {asset} Successfully!",
   "message.success.withdraw":"Withdraw {asset} Successfully!",
+  "message.success.buyback":"Buyback request sent Successfully!",
 
   "message.warn.lessThanMinBet":"The minimum bet amount is {amount} {asset}.",
   "message.warn.greaterThanMaxBet":"The maximum bet amount is {amount} {asset}.",
@@ -208,6 +214,7 @@
   "error.scatter.duplicateTransaction":"Duplicate transaction. Please try again",
   "error.scatter.stakeGreater":"Stake amount must be greater than 1000 BETX",
   "error.scatter.withdrawAmountInvalid": "Invalid withdraw Amount",
+  "error.scatter.invalidUsername": "Invalid username",
 
   "error.page.usernamenotfound":"EOS username not found.",
   "error.account.cpuInsufficient":"EOS account CPU time insufficient.",

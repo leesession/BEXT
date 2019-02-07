@@ -7,7 +7,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Row, Col, Tooltip, Progress } from 'antd';
 import Button from '../../components/uielements/button';
+import BuybackModal from '../../components/modal/buyback';
 
+import appActions from '../../redux/app/actions';
 import awardActions from '../../redux/award/actions';
 import IntlMessages from '../../components/utility/intlMessages';
 
@@ -20,12 +22,36 @@ class BuyBack extends React.Component {
 
     const { locale } = props;
     this.imageArray = [`leaderboard-${locale}`, `buyback-${locale}`];
+
+    this.onClaimClicked = this.onClaimClicked.bind(this);
   }
 
   componentWillMount() {
     const { fetchRedeemTable } = this.props;
 
     fetchRedeemTable();
+  }
+
+  onClaimClicked(evt) {
+    const { setBuybackModalVisibility } = this.props;
+
+    const params = _.isEmpty(evt.target.dataset) ? evt.target.parentNode.dataset : evt.target.dataset;
+
+    if (_.isEmpty(params)) {
+      console.error('onClaimClicked params is empty!');
+    }
+
+    const {
+      username, index, ratio, total,
+    } = params;
+
+    setBuybackModalVisibility(true, {
+      username,
+      symbol: 'BETX', // Hardcode to always use BETX to buy back
+      redeemIndex: _.toNumber(index),
+      ratio: _.toNumber(ratio),
+      total,
+    });
   }
 
   render() {
@@ -72,11 +98,14 @@ class BuyBack extends React.Component {
           <dt className="buyback-item-dt"><IntlMessages id="buyback.available" /></dt><dd className="buyback-item-dd">{availableText}</dd>
           <dt className="buyback-item-dt"><IntlMessages id="buyback.expiresAt" /></dt><dd className="buyback-item-dd">{expiresAt}</dd>
           <dt className="buyback-item-dt" style={{ lineHeight: `${lineHeight}px` }}>&nbsp;</dt><dd className="buyback-item-dd">
-            <Button width={80} height={lineHeight} disabled={btnDisabled} float="right"><IntlMessages id="buyback.claim" /></Button>
+            <Button width={80} height={lineHeight} disabled={btnDisabled} onClick={this.onClaimClicked} data-username={row.winner} data-index={row.id} data-ratio={row.ratio} data-total={row.totalEOS} float="right"><IntlMessages id="buyback.claim" /></Button>
           </dd>
         </dl></li>);
     });
-    return (<ul id="buyback" className="hideOnMobile">{redeemList}</ul>
+
+    return (<ul id="buyback" className="hideOnMobile">{redeemList}
+      <BuybackModal />
+    </ul>
     );
   }
 }
@@ -87,6 +116,7 @@ BuyBack.propTypes = {
   fetchRedeemTable: PropTypes.func,
   redeems: PropTypes.array,
   username: PropTypes.string,
+  setBuybackModalVisibility: PropTypes.func,
 };
 
 BuyBack.defaultProps = {
@@ -94,6 +124,7 @@ BuyBack.defaultProps = {
   fetchRedeemTable: undefined,
   redeems: [],
   username: undefined,
+  setBuybackModalVisibility: undefined,
 };
 
 
@@ -104,6 +135,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  setBuybackModalVisibility: (value, params) => dispatch(appActions.setBuybackModalVisibility(value, params)),
   fetchRedeemTable: () => dispatch(awardActions.fetchRedeemTable()),
 });
 

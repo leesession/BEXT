@@ -33,6 +33,8 @@ const actions = {
   ERROR_MESSAGE: 'ERROR_MESSAGE',
   SET_REF: 'SET_REF',
   TOGGLE_TOPBAR: 'TOGGLE_TOPBAR',
+  SET_BUYBACK_MODAL_VISIBILITY: 'SET_BUYBACK_MODAL_VISIBILITY',
+  BUYBACK_MODAL_VISIBLE: 'BUYBACK_MODAL_VISIBLE',
   toggleAll: (width, height) => {
     const view = getView(width);
     const collapsed = view !== 'DesktopView';
@@ -78,9 +80,13 @@ const actions = {
     type: actions.GET_BALANCES,
     name,
   }),
-
   logout: () => ({
     type: actions.LOG_OUT,
+  }),
+  setBuybackModalVisibility: (value, params) => ({
+    type: actions.SET_BUYBACK_MODAL_VISIBILITY,
+    value,
+    payload: params,
   }),
 };
 

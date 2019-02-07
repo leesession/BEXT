@@ -38,6 +38,11 @@ const appConfig = {
     protocol: 'https',
     host: 'proxy.eosnode.tools',
     port: 443,
+
+    // protocol: 'http',
+    // host: '127.0.0.1',
+    // port: 7777,
+
     chainId: 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906',
   },
   cpuBankUrl: 'https://eoslaomao.com/bankofstaked?ref=betx.fun',

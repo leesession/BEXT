@@ -23,6 +23,8 @@ const initState = new Map({
   isTopbarTransparent: true,
   dicePageData: undefined,
   stakePageData: undefined,
+  buybackModalVisible: false,
+  buybackModalParams: undefined,
 });
 
 export default function appReducer(state = initState, action) {
@@ -72,6 +74,8 @@ export default function appReducer(state = initState, action) {
       return state.set('ref', action.ref);
     case actions.TOGGLE_TOPBAR:
       return state.set('isTopbarTransparent', action.isTransparent);
+    case actions.SET_BUYBACK_MODAL_VISIBILITY:
+      return state.set('buybackModalVisible', action.value).set('buybackModalParams', action.payload);
 
     default:
       return state;

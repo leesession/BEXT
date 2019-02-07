@@ -26,6 +26,11 @@
   "modal.login.description":"连接Scatter以获取账户名称，以及有关账户信息",
   "modal.login.button":"登录",
 
+  "modal.buyback.title":"恭喜! BETX日常回购",
+  "modal.buyback.description":"我们的智能合约每天从下注量超过 1000 EOS 的用户中随机抽取一名，并以{ratio}比例回购 {total} {inSymbol} 等值的代币。请在下方输入{outSymbol}的数量。",
+  "modal.buyback.textConfirm":"点击下方的确认按钮，您确认用{outAmount} {outSymbol}换取{inAmount} {inSymbol}",
+  "modal.buyback.submit":"确认",
+
   "modal.unstake.title":"赎回质押",
   "modal.unstake.description":"我们为您的赎回提供多种方案，想快速取出代币？请从下方选择一种方案",
   "modal.unstake.option1.title":"立即赎回",
@@ -190,6 +195,7 @@
   "message.success.unstake":"成功解除质押 {asset} (您可以在72小时之后提取)",
   "message.success.claimdividend":"成功提取分红 {asset}",
   "message.success.withdraw":"成功提取 {asset}",
+  "message.success.buyback":"回购请求执行成功",
 
   "message.warn.lessThanMinBet":"当前下注允许的最小值为 {amount} {asset}",
   "message.warn.greaterThanMaxBet":"当前下注允许的最大值为 {amount} {asset}.",
@@ -208,6 +214,7 @@
   "error.scatter.duplicateTransaction":"重复的交易，请稍后重试",
   "error.scatter.stakeGreater":"BETX质押数量需要大于1000，请增加质押数量",
   "error.scatter.withdrawAmountInvalid": "无效的提取数额",
+  "error.scatter.invalidUsername": "无效的用户名",
 
   "error.page.usernamenotfound":"EOS用户名不存在",
   "error.account.cpuInsufficient":"EOS账户没有足够的CPU Time",

@@ -54,12 +54,10 @@ Button.propTypes = {
     PropTypes.number,
     PropTypes.string,
   ]).isRequired,
-  onClick: PropTypes.func,
   float: PropTypes.string,
 };
 
 Button.defaultProps = {
-  onClick: undefined,
   float: undefined,
 };
 

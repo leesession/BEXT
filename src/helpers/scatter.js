@@ -46,6 +46,7 @@ class ScatterHelper {
     this.claimDividend = this.claimDividend.bind(this);
     this.getCurrencyBalance = this.getCurrencyBalance.bind(this);
     this.getRedeemTable = this.getRedeemTable.bind(this);
+    this.claimBuyback = this.claimBuyback.bind(this);
   }
 
   // static async createInstance() {
@@ -56,12 +57,16 @@ class ScatterHelper {
   // }
 
   async connect() {
+    const { eosNetwork } = this;
     const that = this;
 
-    const connectionOptions = { initTimeout: 10000 };
+    const connectionOptions = {
+      network: eosNetwork,
+      initTimeout: 10000,
+    };
 
     return ScatterJS.scatter.connect('betx.fun', connectionOptions).then((connected) => {
-    // User does not have Scatter Desktop, Mobile or Classic installed.
+      // User does not have Scatter Desktop, Mobile or Classic installed.
       if (!connected) {
         return false;
       }
@@ -381,6 +386,36 @@ class ScatterHelper {
 
       return Promise.resolve(results);
     });
+  }
+
+  claimBuyback(params) {
+    const { api, account } = this;
+
+    const {
+      username, quantity, redeemIndex,
+    } = params;
+
+    if (_.isUndefined(api)) {
+      return Promise.reject('error.scatter.notAuthenticated');
+    }
+
+    if (_.isUndefined(username)) {
+      return Promise.reject('error.scatter.invalidUsername');
+    }
+
+    // Construct json params
+    const data = {
+      from: username,
+      to: BETX_AWARD_CONTRACT,
+      quantity,
+      memo: redeemIndex,
+    };
+
+    // Never assume the account's permission/authority. Always take it from the returned account.
+    const transactionOptions = { authorization: [`${account.name}@${account.authority}`] };
+
+    return api.transaction(BETX_TOKEN_CONTRACT, (contractObj) =>
+      contractObj.transfer(data, transactionOptions));
   }
 
   /**
