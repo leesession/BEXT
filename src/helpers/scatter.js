@@ -519,6 +519,7 @@ class ScatterHelper {
               } else if (assertMessageObj.message.indexOf('Withdraw amount has to be positive') >= 0) {
                 return Promise.resolve('error.scatter.withdrawAmountInvalid');
               }
+              return Promise.resolve(_.trimStart(assertMessageObj.message, 'assertion failure with message: '));
             }
           }
         }
