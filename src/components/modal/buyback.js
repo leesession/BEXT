@@ -1,13 +1,10 @@
 /* eslint no-bitwise: 0 */
 import _ from 'lodash';
 import React from 'react';
-import { connect } from 'react-redux';
 import { injectIntl, intlShape } from 'react-intl';
 
 import PropTypes from 'prop-types';
 import IntlMessages from '../utility/intlMessages';
-import appActions from '../../redux/app/actions';
-import awardActions from '../../redux/award/actions';
 import Modal from '../uielements/modal';
 import Button from '../uielements/button';
 import Input from '../uielements/input';
@@ -30,11 +27,20 @@ class BuybackModal extends React.Component {
 
   onClaimClicked() {
     const {
-      claimBuyback, username, redeemIndex, symbol,
+      params, onOk, onClose,
     } = this.props;
+
+    const { username, redeemIndex, symbol } = params;
+
+    // Anonymous case
+    if (_.isUndefined(username)) {
+      onClose();
+      return;
+    }
+
     const { outAmount } = this.state;
 
-    claimBuyback({
+    onOk({
       username,
       quantity: `${outAmount.toFixed(4)} ${symbol}`,
       redeemIndex,
@@ -65,21 +71,27 @@ class BuybackModal extends React.Component {
 
   render() {
     const { inputValue, outAmount } = this.state;
-    const { symbol, ratio, total } = this.props;
     const {
-      intl, setVisibility, isVisible, view,
+      intl, setVisibility, isVisible, view, onClose, params,
     } = this.props;
+
+    const {
+      username, symbol, ratio, total,
+    } = params;
+
     const inAmount = _.floor((outAmount / 10000) * ratio, 4);
 
     const btnWidth = view === 'MobileView' ? 120 : 180;
     const btnHeight = view === 'MobileView' ? 40 : 48;
 
+    const isWinner = !_.isUndefined(username);
 
     return (<Modal
       className="modal-buyback"
       isVisible={isVisible}
       setVisibility={setVisibility}
-      title={intl.formatMessage({ id: 'modal.buyback.title' })}
+      onClose={onClose}
+      title={isWinner ? intl.formatMessage({ id: 'modal.buyback.title' }) : intl.formatMessage({ id: 'modal.buyback.titleAnonymous' })}
     >
       <div className="modal-main-box"><IntlMessages
         id="modal.buyback.description"
@@ -87,11 +99,13 @@ class BuybackModal extends React.Component {
           total,
           inSymbol: IN_SYMBOL,
           outSymbol: symbol,
+          outTotal: (total * 10000) / ratio,
           ratio: ratio / 10000,
         }}
-      /></div>
+      />{isWinner ? <IntlMessages id="modal.buyback.askInput" values={{ outSymbol: symbol }} /> : null}
+      </div>
 
-      <div className="form-control">
+      {isWinner ? (<div className="form-control">
         <Input
           type="text"
           name="amount"
@@ -105,9 +119,10 @@ class BuybackModal extends React.Component {
             outAmount, outSymbol: symbol, inAmount, inSymbol: IN_SYMBOL,
           }}
         /></div>
-      </div>
+      </div>) : null}
+
       <div className="form-control centered">
-        <Button type="submit" width={btnWidth} height={btnHeight} onClick={this.onClaimClicked}><IntlMessages id="modal.buyback.submit" /></Button>
+        <Button type="submit" width={btnWidth} height={btnHeight} style={{ margin: '12px auto' }} onClick={this.onClaimClicked}><IntlMessages id={isWinner ? 'modal.buyback.submit' : 'modal.buyback.ok'} /></Button>
       </div>
     </Modal>);
   }
@@ -117,39 +132,17 @@ BuybackModal.propTypes = {
   intl: intlShape.isRequired,
   isVisible: PropTypes.bool,
   setVisibility: PropTypes.func,
-  claimBuyback: PropTypes.func,
-  username: PropTypes.string,
-  redeemIndex: PropTypes.number,
-  ratio: PropTypes.number,
-  symbol: PropTypes.string, // Symbol of token to be spent, default BETX
-  total: PropTypes.string,
+  params: PropTypes.object,
   view: PropTypes.string,
+  onClose: PropTypes.func.isRequired,
+  onOk: PropTypes.func.isRequired,
 };
 
 BuybackModal.defaultProps = {
   isVisible: false,
   setVisibility: undefined,
-  claimBuyback: undefined,
-  username: undefined,
-  redeemIndex: undefined,
-  ratio: undefined,
-  symbol: undefined,
-  total: undefined,
+  params: undefined,
   view: 'MobileView',
 };
 
-const mapStateToProps = (state) => ({
-  isVisible: state.App.get('buybackModalVisible'),
-  username: state.App.get('buybackModalParams') && state.App.get('buybackModalParams').username,
-  symbol: state.App.get('buybackModalParams') && state.App.get('buybackModalParams').symbol,
-  redeemIndex: state.App.get('buybackModalParams') && state.App.get('buybackModalParams').redeemIndex,
-  ratio: state.App.get('buybackModalParams') && state.App.get('buybackModalParams').ratio,
-  total: state.App.get('buybackModalParams') && state.App.get('buybackModalParams').total,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  setVisibility: (value) => dispatch(appActions.setBuybackModalVisibility(value)),
-  claimBuyback: (params) => dispatch(awardActions.claimBuyback(params)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(BuybackModal));
+export default injectIntl(BuybackModal);
