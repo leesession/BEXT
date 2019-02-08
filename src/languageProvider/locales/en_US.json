@@ -30,6 +30,7 @@
   "modal.buyback.title":"Congratulations! BETX Daily Buyback",
   "modal.buyback.description":"We pick one user from those who have bet over 1000 EOS and buy back total {total} {inSymbol} equivalent of BETX (total {outTotal}) at ratio of {ratio} {inSymbol}/{outSymbol} every day. ",
   "modal.buyback.askInput":"Please input your {outSymbol} amount below.",
+  "modal.buyback.showInput":"Hover your mouse on to \"Candidates\" to see qualified candidates for the day, and \"Claim\" button will be enabled when you are selected as winner.",
 
   "modal.buyback.textConfirm":"By clicking on \"Confirm\" button below you confirm to send {outAmount} {outSymbol} for {inAmount} {inSymbol} ",
   "modal.buyback.submit":"Confirm",

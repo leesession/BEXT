@@ -30,6 +30,7 @@
   "modal.buyback.title":"恭喜! BETX日常回购",
   "modal.buyback.description":"我们的智能合约每天从下注量超过 1000 EOS 的用户中随机抽取一名，并以{ratio} {inSymbol}/{outSymbol} 比例回购 {total} {inSymbol} 等值的代币(总共需要{outTotal}BETX)。",
   "modal.buyback.askInput":"请在下方输入{outSymbol}的数量。",
+  "modal.buyback.showInput":"将鼠标悬浮在\"候选人\"上方，可以查看该日符合资格的候选人。当您的账号被选中的当天，\"兑换\"按钮将可点击。",
 
   "modal.buyback.textConfirm":"点击下方的确认按钮，您确认用{outAmount} {outSymbol}换取{inAmount} {inSymbol}",
   "modal.buyback.submit":"确认",

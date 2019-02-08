@@ -114,7 +114,8 @@ class BuyBack extends React.Component {
       >
         <dl>
           <dt className="buyback-item-dt"><IntlMessages id="buyback.winner" /></dt><dd className="buyback-item-dd">{row.winner}</dd>
-          <dt className="buyback-item-dt"><IntlMessages id="buyback.candidates" /></dt><dd className="buyback-item-dd">
+          <dt className="buyback-item-dt"><IntlMessages id="buyback.candidates" /></dt>
+          <dd className="buyback-item-dd cursor-pointer">
             <Tooltip placement="top" title={row.candidates}>
               {row.candidateNum} <IntlMessages id="buyback.candidates.players" />
             </Tooltip>

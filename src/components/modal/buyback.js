@@ -8,6 +8,9 @@ import IntlMessages from '../utility/intlMessages';
 import Modal from '../uielements/modal';
 import Button from '../uielements/button';
 import Input from '../uielements/input';
+import { cloudinaryConfig, CloudinaryImage } from '../../components/react-cloudinary';
+
+cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
 const DEFAULT_OUT_AMOUNT = 0;
 const IN_SYMBOL = 'EOS'; // Hard code to always buy EOS
@@ -93,19 +96,24 @@ class BuybackModal extends React.Component {
       onClose={onClose}
       title={isWinner ? intl.formatMessage({ id: 'modal.buyback.title' }) : intl.formatMessage({ id: 'modal.buyback.titleAnonymous' })}
     >
-      <div className="modal-main-box"><IntlMessages
-        id="modal.buyback.description"
-        values={{
-          total,
-          inSymbol: IN_SYMBOL,
-          outSymbol: symbol,
-          outTotal: (total * 10000) / ratio,
-          ratio: ratio / 10000,
-        }}
-      />{isWinner ? <IntlMessages id="modal.buyback.askInput" values={{ outSymbol: symbol }} /> : null}
+      <div className="modal-main-box">
+        <p>
+          <IntlMessages
+            id="modal.buyback.description"
+            values={{
+              total,
+              inSymbol: IN_SYMBOL,
+              outSymbol: symbol,
+              outTotal: (total * 10000) / ratio,
+              ratio: ratio / 10000,
+            }}
+          />
+        </p>
+        <p>{isWinner ? <IntlMessages id="modal.buyback.askInput" values={{ outSymbol: symbol }} /> : <IntlMessages id="modal.buyback.showInput" />}</p>
+        {isWinner ? null : <div style={{ textAlign: 'center' }}><CloudinaryImage publicId="betx/buyback-showcase" options={{ height: 200, crop: 'scale' }} /></div>}
       </div>
 
-      {isWinner ? (<div className="form-control">
+      {isWinner ? (<div className="form-control centered">
         <Input
           type="text"
           name="amount"
