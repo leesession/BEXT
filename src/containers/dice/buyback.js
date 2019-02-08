@@ -135,12 +135,12 @@ class BuyBack extends React.Component {
         </dl></li>);
     });
 
-    return (<div id="buyback">
+    return (<div id="buyback" className="hideOnMobile">
       <div className="buyback-title" onClick={this.onTitleClicked}>
         <h3><IntlMessages id="buyback.title" /></h3>
         <Icon type="question-circle" className="buyback-title-icon" />
       </div>
-      <ul className="hideOnMobile">{redeemList}
+      <ul>{redeemList}
         <BuybackModal
           isVisible={isModalVisible}
           params={modalParams}
