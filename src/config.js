@@ -5,7 +5,7 @@ export default {
 const siteConfig = {
   siteName: 'BETX',
   siteIcon: 'ion-flash',
-  footerText: '©2018 Created by BETX',
+  footerText: '©2019 Created by BETX',
 };
 
 const themeConfig = {

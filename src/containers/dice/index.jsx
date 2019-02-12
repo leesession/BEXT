@@ -570,7 +570,7 @@ class DicePage extends React.Component {
   render() {
     const { desktopColumns, mobileColumns } = this;
     const {
-      betAmount, payoutOnWin, winChance, payout, username, seed, sliderValue, sliderLabel, isFairnessModalVisible, statePendingBet,
+      betAmount, payoutOnWin, winChance, payout, username, seed, sliderValue, sliderLabel, isFairnessModalVisible, statePendingBet,autoBetEnabled,
     } = this.state;
 
     const {
@@ -585,6 +585,7 @@ class DicePage extends React.Component {
       <IntlMessages id="dice.play.autoBet" />
       <Switch
         disabled={username === this.defaultUsername}
+        checked={autoBetEnabled}
         checkedChildren={intl.formatMessage({ id: 'dice.play.autoBet.switch.on' })}
         unCheckedChildren={intl.formatMessage({ id: 'dice.play.autoBet.switch.off' })}
         onChange={this.onAutoBetSwitchChange}
