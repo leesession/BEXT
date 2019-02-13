@@ -146,21 +146,21 @@ class FAQPage extends React.Component {
       return null;
     } else if (view === 'MobileView') {
       faqElements =
-      (<Collapse accordion className="faq-collapse-mobile">
-        {_.map(content, (item, index) => {
-          const body = _.map(item.body, (bodyItem, innerIndex) => {
-            const parts = intl.formatMessage({ id: bodyItem.text }).split('\n');
-            const text = _.map(parts, (part, partIndex) => <p key={partIndex}>{part}</p>);
-            const img = bodyItem.imgId && <div className="faq-img"><CloudinaryImage publicId={`${bodyItem.imgId}-${locale}`} options={bodyItem.imgOptions} /></div>;
+        (<Collapse accordion className="faq-collapse-mobile">
+          {_.map(content, (item, index) => {
+            const body = _.map(item.body, (bodyItem, innerIndex) => {
+              const parts = intl.formatMessage({ id: bodyItem.text }).split('\n');
+              const text = _.map(parts, (part, partIndex) => <p key={partIndex}>{part}</p>);
+              const img = bodyItem.imgId && <div className="faq-img"><CloudinaryImage publicId={`${bodyItem.imgId}-${locale}`} options={bodyItem.imgOptions} /></div>;
 
-            return (<div key={innerIndex} style={{ marginBottom: '12px' }}><h3>{<IntlMessages id={bodyItem.title} />}</h3>{text}{img}</div>);
-          });
-          return (<Panel header={intl.formatMessage({ id: item.header })} key={index}>
-            <h2 className="tabpane-title">{intl.formatMessage({ id: item.header })}</h2>
-            {body}
-          </Panel>);
-        })}
-      </Collapse>);
+              return (<div key={innerIndex} style={{ marginBottom: '12px' }}><h3>{<IntlMessages id={bodyItem.title} />}</h3>{text}{img}</div>);
+            });
+            return (<Panel header={intl.formatMessage({ id: item.header })} key={index}>
+              <h2 className="tabpane-title">{intl.formatMessage({ id: item.header })}</h2>
+              {body}
+            </Panel>);
+          })}
+        </Collapse>);
     } else {
       faqElements = (<Tabs
         defaultActiveKey="1"
@@ -183,46 +183,18 @@ class FAQPage extends React.Component {
       );
     }
 
-    const colWidth = {
-      xs: 24,
-      xl: 24,
-      xxl: 24,
-    };
 
     return (
       <div id="faq-page">
         <div className="horizontalWrapper">
-          <Row type="flex" justify="center">
-            {/* <Col xs={24} sm={4}>
-            <div className="container">
-              <ul>
-              {_.map(content, item=> (<li><IntlMessages id={item.header} /></li>))}
-              </ul>
+          <h1 className="page-title"><IntlMessages id="faq.title" /></h1>
+          {faqElements}
+          <div id="faq-term">
+            <h2 className="page-sub-title"><IntlMessages id="faq.term.title" /></h2>
+            <div className="page-container">
+              {termTextElement}
             </div>
-          </Col>
-          <Col xs={24} sm={20}>
-            <div className="header">
-            </div>
-            <div className="body">
-            {_.map(content, item=> (<div><h3><IntlMessages id="item.header" /></h3></div>
-              ))}
-            </div>
-          </Col> */}
-            <Col {...colWidth}>
-              <h1 className="page-title"><IntlMessages id="faq.title" /></h1>
-            </Col>
-            <Col {...colWidth}>
-              {faqElements}
-            </Col>
-          </Row>
-          <Row type="flex" justify="center">
-            <Col {...colWidth}>
-              <div className="page-term">
-                <h2 className="page-term-title"><IntlMessages id="faq.term.title" /></h2>
-                {termTextElement}
-              </div>
-            </Col>
-          </Row>
+          </div>
         </div>
       </div>
     );

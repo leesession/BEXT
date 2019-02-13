@@ -1,545 +1,311 @@
-@borderRadius: 20px;
-@fontColor: #939393;
-@titleSize: 3em;
-@subTitleSize: 1.5em;
-@thirdTitleSize: 1.2em;
-
-@phonePadding: 8px;	//padding-left and padding-right for the page on mobile
-
+@fontColor: rgba(255, 255, 255, 0.3);
+@titleSize: 1.5rem;
+@subTitleSize: 1.2rem;
 #faq-page {
-	// .container {
-		// 	border: 1px solid @borderColor;
-		// 	background-color: @panelGrey
-		//
-	// }
 
-	padding-top:120px;
-	padding-bottom: 80px;
-
-	@media @phone{
-		padding-top: 80px;
-		padding-bottom: 45px;
-	}
-	// .wrapper{
-	// 	padding-top:100px;
-	// 	padding-left:@phonePadding;
-	// 	padding-right: @phonePadding;
-	// 	&.wrapper_stake{
-	// 		padding-top: 80px;
-	// 	}
-	// }
-	color:white;
-
-	.page-title {
-		text-align: left;
-		margin-bottom: 32px;
-		color: @fontColor;
-		font-size: @titleSize;
-		font-weight: 400;
-
-		@media @phone{
-			text-align: center;
-			margin-bottom: 12px;
-		}
-	}
-	.tabpane-title{
-		@media @phone {
-			font-size: 1.2em;
-			margin-bottom: 0.5em;
-		}
-	}
-	.page-sub-title {
-		text-align: center;
-		margin: 15px 0;
-		color: @borderColor;
-		font-size: @subTitleSize;
-		font-weight: 300;
-		letter-spacing: 1px;
-		height: 40px;
-		overflow: hidden;
-		&.sub_title_stake{
-			@media @phone{
-				margin: 10px 0;
-				height: auto;
-				font-size: 1.6em;
-			}
-		}
-		&.stake_block{
-			@media @phone{
-				margin: 16px 0;
-			}
-		}
-		@media @phone{
-			height: 35px;
-		}
-	}
-
-	.page-third-title {
-		text-align: center;
-		color: @borderColor;
-		font-size: @thirdTitleSize;
-		font-weight: 300;
-		letter-spacing: 1px;
-	}
-	@media @phone{
-		.faq-img{
-			width:108%;
-			margin-left:-2.5%;
-		}
-		.formula-img{
-			width:110%;
-			max-width:900px;
-			margin-left: -4%;
-			img{
-				width: 100%;
-				height: 4.5em;
-				display: block;
-			}
-		}
+	h3, p, span{
+		color: rgba(255, 255, 255, .5);
 	}
 
 
-
-.page-dividend-section-title{
-			text-align: left;
-			margin-top: 15px;
-			margin-bottom: 15px;
-		}
-
-		.icon-container{
-			padding:20px;
-
-			@media @phone{
-				padding: 12px;
-			}
-
-			&>div:first-child{
-				margin-bottom: 12px;
-			}
-		}
-
-	.page-dividend{
-		margin-top: 30px;
-
-		@media @phone{
-			margin-top: 0px;
-		}
-
-		.page-dividend-detail{
-			margin-top: 30px;
-
-			@media @phone{
-				margin-top: 18px;
-			}
-
-			.page-dividend-detail-box{
-				padding:20px 0;
-				p:first-child:not(.third_title_stake){
-					height: 54px;
-					overflow-y: hidden;
-					padding-left:12px;
-					padding-right:12px;
-				}
-
-				p:last-child{
-					color: white;
-				}
-				@media @phone{
-					padding: 0;
-					margin-bottom:20px;
-				}
-			}
-
-			.page-dividend-detail-top{
-				padding:40px 20px 20px;
-
-				@media @phone{
-					padding: 20px 4px 8px;
-				}
-			}
-		}
-
-	}
-	.claim-bottom{
-		height: 70px;
-		display: flex;
-		justify-content: center;
-
-		@media @phone{
-			height: 50px;
-		}
-
-
-		&>div:nth-of-type(1){
-			max-width: 30%;
-			padding-left: 10px;
-		}
-
-		&>div:nth-of-type(2){
-			padding-left: 12px;
-		}
-		&>div:nth-of-type(3){
-			padding-left:4px;
-			flex-grow: 2;
-		}
-		&>div:last-of-type{
-			height: 100%;
-			min-width: 24%;
-		}
-	}
-	//-------ANTD clear group------
-	.clear-btn {
-		background-color: transparent;
-		color: @bgColor;
-		border: none;
-		font-size: @thirdTitleSize;
-	}
-
-	.clear-input {
-		background-color: transparent;
-		border: none;
-		outline: none;
-
-		&:focus {
-			outline: none;
-		}
-
-	}
-
-	.ant-input:focus {
-		outline: none;
-		border: none;
-	}
-
-	//-------ANTD clear group------
-
-	.border-top {
-		border-top: 2px solid @borderColor;
-	}
-
-	.border-bottom {
-		border-bottom: 2px solid @borderColor;
-	}
-
-	.border-left {
-		border-left: 2px solid @borderColor;
-	}
-
-	.border-right {
-		border-right: 2px solid @borderColor;
-
-		@media @phone{
-			border-right: none;
-		}
-	}
-
-	.margin-top(@value) {
-		margin-top: @value;
-	}
-
-	.text-left {
-		text-align: left;
-	}
-
-	.text-right {
-		text-align: right;
-	}
-
-	.text-center {
-		text-align: center;
-	}
-
-	.panel {
-		border: 1px solid @borderColor;
-		background-color: @panelGrey;
-		border-radius: @borderRadius;
-		overflow: hidden;
-	}
-
-	.panel-trans {
-		border: 1px solid @borderColor;
-		background-color: transparent;
-		border-radius: @borderRadius;
-		overflow: hidden;
-	}
-
-	.getStake-btn-holder {
-		background-color: @borderColor;
-
-		.getStake-btn {
-			background-color: transparent;
-			color: @bgColor;
-			border: none;
-			font-size: @thirdTitleSize;
-			height: 100%;
-			line-height: 100%;
-			width: 100%;
-		}
-
-	}
-
-	.stake-container {
-		.panel-trans {
-			.panel-trans {
-				border-radius: 10px;
-			}
-
-		}
-
-		.page-third-title {
-			margin: 5px 0;
-		}
-
-		.stake-container-body{
-			margin-top: 30px;
-			padding: 30px ;
-
-			@media @phone{
-				margin-top: 18px;
-				padding: 20px 30px;
-			}
-		&.stake-container-body-extend{
-			position: relative;
-			padding-bottom: 80px;
-			.stake-third-extend{
-				position: absolute;
-				bottom:-80px;
-				left: -30px;
-				right: -30px;
-				border-top:2px solid #d5bd7a;
-			}
-			@media @phone{
-				padding-bottom: 70px;
-				.stake-third-extend{
-					bottom:-70px;
-				}
-			}
-		}
-		.stake-container-body-inner{
-
-
-			.stake-container-body-inner-input{
-				display: flex;
-				flex-direction: row;
-				height: 52px;
-
-				@media @phone{
-					height: 45px;
-				}
-
-				&>*{
-					display: inline-block;
-				}
-
-				&>*:nth-child(1){ // Image container
-					height: 100%;
-					width: 100px;
-					position: relative;
-
-					img{
-						position:absolute;
-						top: 50%;
-            left: 50%;
-            .transform(translate(-50%, -50%));
-
-            @media @phone{
-            	width: 24px;
+    .page-container {
+        background-color: @boxBgColor; // border: 1px solid @borderColor;
+        overflow: hidden; // Add on element with overflow
+        min-width: 572px;
+        -webkit-mask-image: -webkit-radial-gradient(white, black);
+        .inner-shadow( 0 -240px 240px 0 rgba(0, 0, 0, .3), 0 40px 80px rgba(0, 0, 0, .9));
+        position: relative;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.3);
+        padding: 36px;
+        @media @phone {
+            padding: 24px;
+            min-width: 100%;
+            margin-bottom: 20px;
+        }
+    }
+    padding-top: 120px;
+    padding-bottom: 80px;
+    @media @phone {
+        padding-top: 80px;
+        padding-bottom: 45px;
+    }
+    .page-title {
+        text-align: left;
+        margin-bottom: 32px;
+        color: @fontColor;
+        font-size: @titleSize;
+        font-weight: 400;
+        @media @phone {
+            text-align: center;
+            margin-bottom: 12px;
+        }
+    }
+    .page-sub-title {
+        text-align: center;
+        font-size: @subTitleSize;
+        color: @fontColor;
+        font-weight: 300;
+        letter-spacing: 1px;
+        height: 40px;
+        overflow: hidden;
+        @media @phone {
+            margin: 10px 0;
+            height: auto;
+            font-size: 1.6em;
+        }
+        @media @phone {
+            height: 35px;
+        }
+    }
+    .box {
+        position: relative;
+        padding: 17px 17px 12px;
+        background: rgba(15, 17, 19, .8);
+        font-size: 0.8em;
+        &.box-no-padding {
+            padding-top: 0px;
+            padding-bottom: 0px;
+            padding-left: 0px;
+            padding-right: 0px;
+        }
+        @media @phone {
+            padding: 0px;
+            margin-top: 24px;
+        }
+        @media @desktop {
+            // margin: 0px 12px;
+        }
+        .box-input-inner {
+            position: relative;
+            .label {
+                position: absolute;
+                top: -2em;
+                @media @phone {}
             }
-					}
-				}
-
-				&>*:nth-child(2){ // Input
-					height: 100%;
-					flex-grow: 2;
-					color: white;
-					font-size: 1em;
-					padding-left: 5px;
-					outline: none;
-
-						&:focus {
-						outline: none;
-						}
-					}
-
-				button{	// button
-					height: 100%;
-					background-color: @borderColor;
-					border-radius: 0px;
-					color: @bgColor;
-					font-size: 0.8em;
-					width: 120px;
-					@media @phone{
-						width: 100px;
-					}
-				}
-			}
-
-		}
+            &.box-input-inner-reward {
+                margin-left: 24px;
+                @media @phone {
+                    margin-left: 12px;
+                }
+            }
+            .box-input-inner-input {
+                padding-right: 32px;
+            }
+        }
+        input.box-input {
+            margin-top: 0px;
+        }
+        span.box-input {
+            display: block;
+        }
+        .box-input {
+            position: relative;
+            height: 48px;
+            line-height: 48px; // font-family: MullerBold;
+            font-size: 1.5em;
+            font-weight: 700;
+            border: 0;
+            outline: 0;
+            background: 0 0;
+            width: 100%;
+            text-align: center;
+            color: rgba(255, 255, 255, .5);
+            @media @phone {
+                height: 40px;
+                line-height: 40px;
+                margin-left: 0px;
+                margin-right: 0px;
+            }
+        }
+        .box-input-inner-addOn {
+            position: absolute;
+            top: 0px;
+            .translate(0, 16px);
+            right: 0;
+            padding-right: 8px;
+            color: @fontColor;
+            font-size: 1em;
+            font-weight: 500;
+            @media @phone {
+                font-size: 0.8rem;
+                top: -6px;
+            }
+        }
+        box-middle {}
+        .box-bottom {
+            height: 24px;
+            line-height: 24px;
+            background: rgba(255, 255, 255, .03);
+            font-size: 1em;
+            color: rgba(255, 255, 255, 0.2);
+            .box-bottom-btn {
+                &:first-of-type {
+                    border-left: none;
+                }
+                text-align: center;
+                cursor: pointer;
+                background: rgba(255, 255, 255, .04);
+                color: rgba(255, 255, 255, .5);
+                float: left;
+                width: 33.333%;
+                border-left: 1px solid rgba(0, 0, 0, .5);
+                border-bottom: 4px solid rgba(0, 0, 0, .2);
+                height: 24px;
+                line-height: 24px;
+                position: relative;
+                z-index: 1;
+            }
+            &.box-bottom-span {
+                span {
+                    text-transform: uppercase;
+                    display: block;
+                    width: 100%;
+                    text-align: left;
+                    padding-left: 12px;
+                }
+            }
+        }
+        .label {
+            color: rgba(255, 255, 255, .3);
+            text-transform: uppercase;
+            word-break: break-word;
+            font-weight: 500; // font-size: 1em;
+            width: 100%;
+            &.label-float-top {
+                position: absolute;
+                top: -20px;
+                left: 0px;
+                text-align: left;
+                @media @phone {
+                    top: -16px;
+                }
+            }
+        }
+        .value {
+            color: rgba(255, 255, 255, .5);
+            font-size: 1.5em;
+            font-weight: 700;
+            @media @phone {
+                padding: 10px 0px;
+            }
+        }
+    }
+    @media @phone {
+        .faq-img {
+            width: 108%;
+            margin-left: -2.5%;
+        }
 	}
-
-	}
-
-	.faq-tabs {
-		.ant-tabs-bar {
-			border: 1px solid @borderColor;
-			background-color: @panelGrey;
-			padding: 10px 0px;
-			.border-radius(@borderRadius);
-
-			.ant-tabs-tab {
-				color: @primaryColor;
-				border: none;
-				margin-bottom: 0px;
-				padding-top: 12px;
-				padding-bottom: 12px;
-				//width: 160px;
-				width:240px;
-				font-size: 1.1em;
-			}
-
-			.ant-tabs-nav-container {
-				margin-right: 2px;
-			}
-
-			.ant-tabs-tab-active {
+	
+    .faq-tabs {
+        .ant-tabs-bar {
+            border: none;
+            background-color: @boxBgColor;
+            padding: 10px 0px;
+            .ant-tabs-tab {
+                color:rgba(255, 255, 255, .5);
+                border: none;
+                margin-bottom: 0px;
+                padding-top: 12px;
+                padding-bottom: 12px; //width: 160px;
+                width: 240px;
+                font-size: 1.1em;
+            }
+            .ant-tabs-nav-container {
+                margin-right: 2px;
+            }
+            .ant-tabs-tab-active {
+				color: @buttonColor;
 				background-color: @bgColor;
-
 			}
-
-			.ant-tabs-ink-bar {
-				width: 0px;
-			}
-
-		}
-
-		.ant-tabs-content {
-			border: none;
-			height: 850px;
-			padding-left: 48px;
-			color: white;
+            .ant-tabs-ink-bar {
+                width: 0px;
+            }
+        }
+        .ant-tabs-content {
+            border: none;
+            height: 850px;
+            padding-left: 48px;
 			text-align: left;
 
-			.ant-tabs-tabpane-active{
-				overflow: scroll;
+			.ant-tabs-tabpane-active {
+				background-color: @boxBgColor; // border: 1px solid @borderColor;
+                overflow-y: scroll;
 				height: 100%;
-			}
-
-			.tabpane-title {
-				color: @primaryColor;
-				font-size: 2em;
-				margin-bottom: 1em;
-				border-bottom: 1px solid @primaryColor;
-			}
-
-			h3 {
-				margin-bottom: 18px;
-
-				span {
-					color: white;
-				}
-
-			}
-
-			p {
-				font-size: 1em;
-				margin-bottom: 12px;
-			}
-
-			img{
-				max-height: 350px;
-				max-width: 100%;
-
-				@media @desktop{
-					max-height: 250px;
-				}
-			}
-
-		}
-
+				padding: 24px 36px;
+            }
+            .tabpane-title {
+                color: rgba(255, 255, 255, .5);
+                font-size: 1.2rem;
+				font-weight: 500;
+				line-height: 2.5rem;
+                text-transform: uppercase;
+                margin-bottom: 1rem;
+                border-bottom: 1px solid @fontColor;
+                @media @phone {
+                    font-size: 1.2em;
+                    margin-bottom: 0.5em;
+                }
+            }
+            h3 {
+                margin-bottom: 18px;
+            }
+            p {
+                font-size: 1em;
+                margin-bottom: 12px;
+            }
+            img {
+                max-height: 350px;
+                max-width: 100%;
+                @media @desktop {
+                    max-height: 250px;
+                }
+            }
+        }
+    }
+    .faq-collapse-mobile {
+        text-align: left;
+        border: none;
+        background: transparent;
+        .ant-collapse-header {
+            font-size: 1em;
+            color: #D4BC7E;
+        }
+        .ant-collapse-content {
+            border-top: 1px solid #D4BC7E;
+            background: #3b3b3d;
+            color: #fff;
+        }
+        .ant-collapse-item {
+            border-bottom: 1px solid #D4BC7E;
+        }
+        .ant-collapse-content-box {
+            h2 {
+                color: rgba(255, 255, 255, 0.8);
+            }
+            h3 {
+                color: rgba(255, 255, 255, 0.8);
+                font-size: 1.1em;
+                margin-bottom: 8px;
+            }
+            p {
+                color: rgba(255, 255, 255, 0.8);
+                font-weight: normal;
+                font-size: 0.9em;
+            }
+            img {
+                width: 100%;
+                margin: 12px auto;
+            }
+        }
 	}
 
-	.faq-collapse-mobile{
-		text-align: left;
-		border-color: #D4BC7E;
-		background:transparent;
-		.ant-collapse-header{
-			font-size: 1em;
-			color: #D4BC7E;
-		}
-		.ant-collapse-content{
-			border-top:1px solid #D4BC7E;
-			background: #3b3b3d;
-			color: #fff;
-		}
-		.ant-collapse-item{
-			border-bottom:1px solid #D4BC7E;
-		}
-		.ant-collapse-content-box{
-			h2{
-				color: rgba(255,255,255,0.8);
-			}
-			h3{
-				color: rgba(255,255,255,0.8);
-				font-size: 1.1em;
-				margin-bottom: 8px;
-			}
-			p{
-				color: rgba(255,255,255,0.8);
-				font-weight: normal;
-				font-size:0.9em;
-			}
+	#faq-term{
+		margin-top: 36px;
 
-			img{
-				width:100%;
-				margin: 12px auto;
-			}
+		.page-term-body-inner{
+			text-align: left;
 		}
 	}
-
-	.page-term {
-		margin-top: 3em;
-
-		.page-term-title {
-			text-align: center;
-			color: @borderColor;
-			font-size: 2em;
-			margin-bottom: 1em;
-		}
-
-		.page-term-body {
-			.page-term-body-inner {
-				text-align: left;
-				padding: 30px 60px;
-				color: white;
-
-				.highlight{
-					color:@borderColor;
-				}
-				&.normal-font{
-					font-size: 1.5em;
-				}
-				@media @phone{
-					padding: 20px;
-				}
-
-				p {
-					font-size: 0.9em;
-					margin-bottom: 8px;
-				}
-
-				.formula-img{
-					img{
-						max-width: 100%;
-					}
-				}
-
-			}
-
-		}
-
-	}
-
 }
-
-
-

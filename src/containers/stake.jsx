@@ -267,12 +267,21 @@ class StakePage extends React.Component {
       xxl: 24,
     };
 
-    const myExpectedDiv = (pageData && pageData.todayDividend) ? ((1.0 * mySnapshotEffective) / platformSnapshotTotal) * pageData.todayDividend : 0;
+    // Left column text
+    const dividendPool = formatNumberThousands(_.floor(pageData && pageData.todayDividend, 2));
     const divPerMil = (pageData && pageData.todayDividend) ? (1000000 / platformSnapshotTotal) * pageData.todayDividend : 0;
 
-    const fronzeStr = formatNumberThousands(_.floor(myFrozen, 2));
-    const availableStr = `${formatNumberThousands(_.floor(myAvailable, 2))} BETX`;
+    const myStakeStr = `${formatNumberThousands(_.floor(myStake, 2))} SBT`;
+    const myExpectedDiv = (pageData && pageData.todayDividend) ? ((1.0 * mySnapshotEffective) / platformSnapshotTotal) * pageData.todayDividend : 0;
+    const myExpectedDivStr = `${formatNumberThousands(_.floor(myExpectedDiv, 2))} STEEM`;
 
+    // Right column text
+    const sbtStake = formatNumberThousands(_.floor(pageData && pageData.staked, 2));
+    const sbtCirculation = formatNumberThousands(_.floor(pageData && pageData.circulation, 2));
+
+    const frozenAmount = formatNumberThousands(_.floor(myFrozen, 2));
+    const availableWithdraw = formatNumberThousands(_.floor(myAvailable, 2));
+    const mySBTBalance = formatNumberThousands(_.floor(myBetxBalance, 2));
     return (
       <div id="faq-page" className="stake-page">
         <div className="horizontalWrapper">
@@ -332,12 +341,6 @@ class StakePage extends React.Component {
                               <p className="page-third-title third_title_stake" >{formatNumberThousands(_.floor(myExpectedDiv, 4))} EOS</p>
                             </div>
                           </Col>
-                          {/* <Col span={12}>
-                          <div className="page-dividend-detail-box">
-                            <p className="page-third-title third_title_stake" ><IntlMessages id="stake.income.betx" /></p>
-                            <p className="page-third-title third_title_stake" >{_.floor(divPerMilBETX,4)} EOS</p>
-                            </div>
-                          </Col> */}
                         </Row>
                         <Row type="flex" align="middle" className="page-dividend-detail-bottom claim-bottom">
                           <div className="page-third-title third_title_stake text-right"><IntlMessages id="stake.income.rest" /></div>
