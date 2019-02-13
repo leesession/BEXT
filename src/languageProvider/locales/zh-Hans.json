@@ -173,7 +173,7 @@
   "stake.income.myStake":"我的质押",
   "stake.income.platformTotal":"平台总质押",
   "stake.income.predicate":"今日预估收益",
-  "stake.income.per10k":"每十万BETX收益",
+  "stake.income.per100k":"每百万BETX收益",
   "stake.income.rest":"我的分红余额",
   "stake.income.withdraw":"提取BETX",
   "stake.income.get":"领取",

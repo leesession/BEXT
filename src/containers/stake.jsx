@@ -268,7 +268,7 @@ class StakePage extends React.Component {
     };
 
     const myExpectedDiv = (pageData && pageData.todayDividend) ? ((1.0 * mySnapshotEffective) / platformSnapshotTotal) * pageData.todayDividend : 0;
-    const divPer10K = (pageData && pageData.todayDividend) ? (1000000 / platformSnapshotTotal) * pageData.todayDividend : 0;
+    const divPerMil = (pageData && pageData.todayDividend) ? (1000000 / platformSnapshotTotal) * pageData.todayDividend : 0;
 
     const fronzeStr = formatNumberThousands(_.floor(myFrozen, 2));
     const availableStr = `${formatNumberThousands(_.floor(myAvailable, 2))} BETX`;
@@ -316,8 +316,8 @@ class StakePage extends React.Component {
                           </Col>
                           <Col span={12}>
                             <div className="page-dividend-detail-box">
-                              <p className="page-third-title third_title_stake" ><IntlMessages id="stake.income.per10k" /></p>
-                              <p className="page-third-title third_title_stake" >{formatNumberThousands(_.floor(divPer10K, 4))} EOS</p>
+                              <p className="page-third-title third_title_stake" ><IntlMessages id="stake.income.per100k" /></p>
+                              <p className="page-third-title third_title_stake" >{formatNumberThousands(_.floor(divPerMil, 4))} EOS</p>
                             </div>
                           </Col>
                           <Col span={12}>
@@ -335,7 +335,7 @@ class StakePage extends React.Component {
                           {/* <Col span={12}>
                           <div className="page-dividend-detail-box">
                             <p className="page-third-title third_title_stake" ><IntlMessages id="stake.income.betx" /></p>
-                            <p className="page-third-title third_title_stake" >{_.floor(DivPer10KBETX,4)} EOS</p>
+                            <p className="page-third-title third_title_stake" >{_.floor(divPerMilBETX,4)} EOS</p>
                             </div>
                           </Col> */}
                         </Row>
