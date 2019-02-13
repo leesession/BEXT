@@ -173,7 +173,7 @@
   "stake.income.myStake":"My Stake",
   "stake.income.platformTotal":"Platform Total Stake",
   "stake.income.predicate":"My Dividend Today",
-  "stake.income.per100k":"Dividend per 1M BETX",
+  "stake.income.per100k":"Dividend/1M BETX",
   "stake.income.rest":"My Available Dividend",
   "stake.income.withdraw":"Withdraw BETX",
   "stake.income.get":"Claim",
