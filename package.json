@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "animate.css": "^3.7.0",
-    "antd": "^3.10.9",
+    "antd": "3.10.9",
     "assert": "^1.4.1",
     "classnames": "^2.2.6",
     "clone": "^2.1.1",
