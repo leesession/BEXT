@@ -761,16 +761,8 @@ class DicePage extends React.Component {
                           : rollBtn}
                       </Col>
                       <Col span={6}>
-                        {this.getBalanceBySymbol('SBD') ? <div className="container-body-btn-balance">{parseAsset(this.getBalanceBySymbol('SBD')).amount}<span className="highlight"> <IntlMessages id="dice.asset.sbd" /></span></div> : null}
+                        {this.getBalanceBySymbol('BETX') ? <div className="container-body-btn-balance">{parseAsset(this.getBalanceBySymbol('BETX')).amount}<span className="highlight"> <IntlMessages id="dice.asset.betx" /></span></div> : null}
                       </Col>
-                      {/* <Col xs={20} lg={16}>
-                            <div className="container-body-btn-description container-body-btn-description-firstbet">
-                              <Tooltip title={(<IntlMessages id="dice.reward.firstbet.tooltip" />)} trigger={screenWidth <= 1024 ? 'click' : 'hover'}>
-                                <Icon type="question-circle" />
-                              </Tooltip>
-                              <IntlMessages id="dice.reward.firstbet" values={{ amount: appConfig.firstBetReward }} />
-                            </div>
-                          </Col> */}
                     </Row>
                   </div>
                 </div>
