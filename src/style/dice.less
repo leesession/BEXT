@@ -95,7 +95,7 @@
     .dice-container {
         .inner-shadow( 0 -240px 240px 0 rgba(0, 0, 0, .3), 0 40px 80px rgba(0, 0, 0, .9));
         min-width: 572px;
-        position: relative;
+        position: relativte;
         text-align: center;
         @media @phone {
             min-width: 100%;
@@ -141,7 +141,7 @@
                     font-size: 1.5em;
                     margin-bottom: 0px;
                     @media @phone {
-                        font-size: 2em;
+                        font-size: 1rem;
                     }
                 }
                 .rank-title-countdown {
@@ -150,7 +150,7 @@
                     letter-spacing: 2px;
                     margin-bottom: 12px;
                     @media @phone {
-                        font-size: 2em;
+                        font-size: 1rem;
                         font-weight: 300;
                     }
                 }
@@ -175,7 +175,7 @@
                 .crown-text {
                     position: absolute;
                     top: 50%;
-                    font-size: 1.2em;
+                    font-size: 1.2rem;
                     font-weight: bold;
                     left: 50%;
                     transform: translate(-50%, -40%)
@@ -200,14 +200,17 @@
                     width: 4em;
                     margin-bottom: 8px;
                     .crown-text {
-                        font-size: 1em;
+                        font-size: 1rem;
                     }
                 }
             }
             .rankingItem {
                 flex: 1 0 0;
-                font-size: 1.2em;
+                font-size: 1.2rem;
                 max-width: 34%;
+                @media @phone {
+                    font-size: 1rem;
+                }
                 span {
                     display: block;
                     width: 100%;
@@ -222,12 +225,10 @@
                         color: #FADC69;
                     }
                     @media @phone {
-                        font-size: 0.8em;
+                        font-size: 0.7rem;
                     }
                 }
-                @media @phone {
-                    font-size: 2em;
-                }
+                
                 &.first {
                     &>span:first-child {
                         font-size: 1.4em;
@@ -239,7 +240,7 @@
                     .description {
                         font-size: 1.0em;
                         @media @phone {
-                            font-size: 0.8em;
+                            font-size: 0.8rem;
                         }
                     }
                     .reward {
@@ -257,7 +258,7 @@
                     .description {
                         font-size: 0.9em;
                         @media @phone {
-                            font-size: 0.7em;
+                            font-size: 0.7rem;
                         }
                     }
                     .reward {
@@ -275,7 +276,7 @@
                     .description {
                         font-size: 0.8em;
                         @media @phone {
-                            font-size: 0.7em;
+                            font-size: 0.7rem;
                         }
                     }
                     .reward {
@@ -288,12 +289,14 @@
         .rank-mine-lg {
             height: 40px;
             background: rgb(30, 30, 30);
-            font-size: 1em;
+            color: rgba(255, 255, 255, .5);
+            font-size: 1rem;
             margin-top: 8px;
             display: flex;
             align-items: center;
-            @media @phone {
-                font-size: 1.5em;
+
+            @media @phone{
+                font-size: 0.7rem;
             }
         } // stylize table
         td {

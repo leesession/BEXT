@@ -19,7 +19,6 @@ const initState = new Map({
   allVolume: 0,
   betxStakeAmount: 0,
   betxCirculation: 0,
-  currentBets: [],
   betRank: undefined,
   username: undefined,
   selectedSymbol: 'EOS',
@@ -55,8 +54,8 @@ function CreateOrUpdateBetInHistory(existingList, newBet) {
 }
 
 /**
- * Create or update currentBets array for UI update
- * @param {[type]} currentBets [description]
+ * Create or update pendingBet for UI update
+ * @param {[type]} oldPendingBet [description]
  * @param {[type]} newBet      [description]
  * @return {boolean}        True if match is found and updated
  */
@@ -82,7 +81,6 @@ function getUpdatedPendingBet(oldPendingBet, newBet) {
   pendingBet.isResolved = newBet.isResolved;
   pendingBet.status = newBet.status;
   pendingBet.createdAt = newBet.createdAt;
-  pendingBet.endTime = newBet.endTime;
 
   return pendingBet;
 }

@@ -1,6 +1,7 @@
 /* eslint no-restricted-syntax:0 */
 import { call, all, takeEvery, put } from 'redux-saga/effects';
 import _ from 'lodash';
+import moment from 'moment';
 
 import actions from './actions';
 import betActions from '../bet/actions';
@@ -150,12 +151,13 @@ function* transferRequest(action) {
 
     // We treat all symbols as their precision is 4
     betAmount = trimZerosFromAsset(betAmount);
-
     yield put({
-      type: betActions.ADD_CURRENT_BET,
+      type: betActions.SET_PENDING_BET,
       value: {
+        transactionId: response.processed.id,
         betAmount,
-        transactionId: response.transaction_id,
+        rollUnder: params.rollUnder,
+        status: 'Created',
       },
     });
   } catch (err) {

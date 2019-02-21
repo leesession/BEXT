@@ -26,10 +26,6 @@ function websocketInitChannel(payload) {
       emitter({ type: actions.MESSAGE_OBJECT_CREATED, data: object });
     const deleteHandler = (object) =>
       emitter({ type: actions.MESSAGE_OBJECT_DELETED, data: object });
-    const enterHandler = (object) =>
-      emitter({ type: actions.MESSAGE_OBJECT_ENTERED, data: object });
-    const leaveHandler = (object) =>
-      emitter({ type: actions.MESSAGE_OBJECT_LEFT, data: object });
     const unsubscribeHandler = () => {
       console.log('unsubscribeHandler emitting MESSAGE_UNSUBSCRIBED');
       return emitter({ type: actions.MESSAGE_UNSUBSCRIBED, payload });
@@ -49,8 +45,6 @@ function websocketInitChannel(payload) {
     subscription.on('update', updateHandler);
     subscription.on('create', createHandler);
     subscription.on('delete', deleteHandler);
-    subscription.on('enter', enterHandler);
-    subscription.on('leave', leaveHandler);
     subscription.on('error', errorHandler);
 
     // the subscriber must return an unsubscribe function

@@ -196,39 +196,14 @@ class DicePage extends React.Component {
     },
     ];
 
-    this.mobileColumns = [{
-      title: intl.formatMessage({ id: 'dice.history.form.bettor' }),
-      dataIndex: 'bettor',
-      key: 'bettor',
-      render: (text) => (
-        <span className="player-td">{text}</span>
-      ),
-    },
-    {
-      title: intl.formatMessage({ id: 'dice.history.form.under' }),
-      dataIndex: 'rollUnder',
-      key: 'rollUnder',
-    },
-    {
-      title: intl.formatMessage({ id: 'dice.history.form.bet' }),
-      dataIndex: 'betAmount',
-      key: 'betAmount',
-    },
-    {
-      title: intl.formatMessage({ id: 'dice.history.form.roll' }),
-      dataIndex: 'roll',
-      key: 'roll',
-      render: (text) => (
-        <span>{text}</span>
-      ),
-    },
-    {
-      title: intl.formatMessage({ id: 'dice.history.form.payout' }),
-      dataIndex: 'payout',
-      key: 'payout',
-      render: (text) => text ? <span className="table-td-highlight">{text}</span> : '',
-    },
-    ];
+    // Only display five columns on Mobile View
+    this.mobileColumns = _.filter(this.desktopColumns, (row) => (
+      row.key === 'bettor' ||
+      row.key === 'rollUnder' ||
+      row.key === 'betAmount' ||
+      row.key === 'roll' ||
+      row.key === 'payout'
+    ));
 
     this.onInputNumberChange = this.onInputNumberChange.bind(this);
     this.onBetAmountButtonClick = this.onBetAmountButtonClick.bind(this);
@@ -336,20 +311,17 @@ class DicePage extends React.Component {
         fieldsToUpdate.sliderLabel = {};
         fieldsToUpdate.sliderLabel[pendingBet.roll] = pendingBet.roll;
 
-        const tillResolve = pendingBet.createdAt.diff(statePendingBet.startTime);
-        console.log('Result returned at ', tillResolve);
-
         resetPendingBet();
 
         setTimeout(() => {
           getBalancesReq(username);
         }, 1000);
 
-        // if (autoBetEnabled) {
-        //   setTimeout(() => {
-        //     onBetClicked();
-        //   }, 1000);
-        // }
+        if (autoBetEnabled) {
+          setTimeout(() => {
+            onBetClicked();
+          }, 1000);
+        }
       }
       fieldsToUpdate.statePendingBet = _.cloneDeep(pendingBet);
     }
@@ -519,8 +491,6 @@ class DicePage extends React.Component {
 
     const match = _.find(symbols, { symbol });
     const precision = _.isUndefined(match) ? 4 : match.precision;
-
-    console.log('getBalanceBySymbol', symbol, eosBalance, betxBalance, ebtcBalance, eethBalance, eusdBalance);
 
     switch (symbol) {
       case 'EOS':
@@ -764,7 +734,6 @@ class DicePage extends React.Component {
                     </div>
 
                     <Row className="container-body-btn" type="flex" justify="center" align="middle" >
-                      {/* <Col span={24}>{autoBetElement}</Col> */}
                       <Col span={6}>
                         {this.getBalanceBySymbol(currentSymbol) ? <div className="container-body-btn-balance">{this.getBalanceBySymbol(currentSymbol)}<span className="highlight"> {currentSymbol}</span></div> : null}
                       </Col>

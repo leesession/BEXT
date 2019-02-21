@@ -61,7 +61,6 @@ class ParseHelper {
       payout,
       payoutAsset,
       trxUrl: `https://eostracker.io/transactions/${parseObject.get('resolved_block_num')}/${resolveTrxId}`,
-      endTime: moment(),
     };
   }
 
