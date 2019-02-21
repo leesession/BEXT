@@ -43,6 +43,10 @@ const ButtonWrapper = styled.a`
       -moz-appearance:    none;
       appearance:         none;
     }
+
+    span{
+      color: black;
+    }
 `;
 
 class Button extends React.PureComponent {

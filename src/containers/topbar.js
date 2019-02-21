@@ -6,19 +6,19 @@ import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import _ from 'lodash';
 import { injectIntl, intlShape } from 'react-intl';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 import classNames from 'classnames';
-import { Layout, Menu, message, Button, Modal } from 'antd';
+import { Layout, Menu, message, Button } from 'antd';
 
 import Dropdown from '../components/uielements/dropdown';
 import { cloudinaryConfig, CloudinaryImage } from '../components/react-cloudinary';
 import languageSwitcherActions from '../redux/languageSwitcher/actions';
-import StatsWidget from '../components/statsWidget';
 import SvgIcon from '../components/svg-icons';
 
 import IntlMessages from '../components/utility/intlMessages';
 import appActions from '../redux/app/actions';
 import { parseQuery } from '../helpers/utility';
+import StatsWidget from '../components/statsWidget';
+import ReferModal from '../components/modal/refer';
 
 const { Header } = Layout;
 const { getIdentity, setRef, logout } = appActions;
@@ -27,13 +27,9 @@ cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
 const menuItems = [
   { path: '/', id: 'topbar.home' },
-  // { path: '/dice', id: 'topbar.dice' },
   { path: '/stake', id: 'topbar.stake' },
-  // { path: '/dealer', id: 'topbar.dealer' },
   { path: '/faq', id: 'topbar.faq' },
-  // { path: '/contact', id: 'topbar.contact' },
   { url: 'https://res.cloudinary.com/forgelab-io/image/upload/v1542534137/BETX-whitepaper-1.0.pdf', id: 'topbar.whitepaper' },
-  // Referrals
   { id: 'topbar.referrals' },
 ];
 
@@ -59,8 +55,8 @@ class Topbar extends React.PureComponent {
     this.state = {
       collapsed: true,
       isLoggedIn: false,
-      refModalVisible: false,
       languageDropdown: null,
+      isReferModalVisible: false,
     };
 
     this.toggleCollapsed = this.toggleCollapsed.bind(this);
@@ -69,6 +65,7 @@ class Topbar extends React.PureComponent {
     this.onLanguageDropdownClicked = this.onLanguageDropdownClicked.bind(this);
     this.onAccountDropdownClicked = this.onAccountDropdownClicked.bind(this);
     this.onLoginClicked = this.onLoginClicked.bind(this);
+    this.setReferModalVisibility = this.setReferModalVisibility.bind(this);
   }
 
   componentWillMount() {
@@ -90,26 +87,32 @@ class Topbar extends React.PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { errorMessage, username, successMessage } = nextProps;
-    const { intl, setErrorMessage, setSuccessMessage } = this.props;
+    const {
+      errorMessage, username, successMessage,
+    } = nextProps;
+    const {
+      intl, setErrorMessage, setSuccessMessage,
+    } = this.props;
     const { isLoggedIn } = this.state;
+
+    const fieldsToUpdate = {};
 
     if (username && !isLoggedIn) {
       message.success(intl.formatMessage({ id: 'topbar.message.welcome' }, { name: username }));
 
       // Make sure login in success only show up once
-      this.setState({
-        isLoggedIn: true,
-      });
+      fieldsToUpdate.isLoggedIn = true;
     }
 
     if (errorMessage) {
       switch (errorMessage) {
-        case 'error.plugin.locked':
-        { const hide = message.loading(intl.formatMessage({ id: errorMessage }), 0);
+        case 'error.scatter.locked':
+        {
+          const hide = message.loading(intl.formatMessage({ id: errorMessage }), 0);
           // Dismiss manually and asynchronously
           setTimeout(hide, 3000);
-          break; }
+          break;
+        }
 
         default:
           message.error(intl.formatMessage({ id: errorMessage }));
@@ -123,6 +126,8 @@ class Topbar extends React.PureComponent {
       message.success(intl.formatMessage(successMessage.id, successMessage.values));
       setSuccessMessage(undefined);
     }
+
+    this.setState(fieldsToUpdate);
   }
 
   componentDidMount() {
@@ -176,16 +181,16 @@ class Topbar extends React.PureComponent {
     getIdentityReq();
   }
 
-  setRefModalVisible(refModalVisible) {
+  setReferModalVisibility(value) {
     this.setState({
-      refModalVisible,
+      isReferModalVisible: value,
       collapsed: true,
     });
   }
 
   render() {
     const {
-      collapsed,
+      collapsed, isReferModalVisible,
     } = this.state;
 
     const {
@@ -203,7 +208,7 @@ class Topbar extends React.PureComponent {
       } else if (item.path) {
         return <li className="hideOnMobile" key={item.id}><Link to={item.path} ><IntlMessages id={item.id} /></Link></li>;
       }
-      return <li className="hideOnMobile" key={item.id}><a href={item.url} onClick={() => this.setRefModalVisible(true)} target="_blank"><IntlMessages id={item.id} /></a></li>;
+      return <li className="hideOnMobile" key={item.id}><a href={item.url} onClick={() => this.setReferModalVisibility(true)} target="_blank"><IntlMessages id={item.id} /></a></li>;
     });
 
     const menuItemElementsMobile = _.map(menuItems, (item) => {
@@ -212,7 +217,7 @@ class Topbar extends React.PureComponent {
       } else if (item.path) {
         return <li role="menuitem" key={item.id}><Link to={item.path} onClick={this.selectedMenu} ><IntlMessages id={item.id} /></Link></li>;
       }
-      return <li role="menuitem" key={item.id}><a href={item.url} onClick={() => this.setRefModalVisible(true)} target="_blank"><IntlMessages id={item.id} /></a></li>;
+      return <li role="menuitem" key={item.id}><a href={item.url} onClick={() => this.setReferModalVisibility(true)} target="_blank"><IntlMessages id={item.id} /></a></li>;
     });
     menuItemElementsMobile.push(<li role="menuitem" key="login"><a href={null} style={{ width: '100%' }} onClick={username ? logoutReq : this.onLoginClicked}><IntlMessages id={username ? 'topbar.account.logout' : 'topbar.login'} /></a></li>);
 
@@ -310,36 +315,13 @@ class Topbar extends React.PureComponent {
         </Header>
 
         {/* Ref Modal */}
-        <Modal
-          className="refModal"
+        <ReferModal
           title={<IntlMessages id="topbar.copy.title" />}
-          centered
-          visible={this.state.refModalVisible}
-          onOk={() => this.setRefModalVisible(false)}
-          onCancel={() => {
-            this.setRefModalVisible(false);
-            this.refs.refText.style.background = 'transparent';
-          }}
-          footer={null}
-        >
-          <div className="refmodal-container">
-            <div className="refmodal-container-input">
-              <div><span ref="refText">{referralLink}</span></div>
-              <div>
-                <CopyToClipboard
-                  text={referralLink}
-                  onCopy={() => {
-                    this.refs.refText.style.background = 'blue';
-                  }}
-                >
-                  <Button size="large" type="primary"><IntlMessages id="topbar.copy" /></Button>
-                </CopyToClipboard>
-              </div>
-            </div>
-            <div>
-              <span><IntlMessages id="topbar.copy.description" /></span></div>
-          </div>
-        </Modal>
+          isVisible={isReferModalVisible}
+          url={referralLink}
+          onClose={() => this.setReferModalVisibility(false)}
+          onOk={() => this.setReferModalVisibility(false)}
+        />
       </div>
     );
   }

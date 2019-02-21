@@ -24,7 +24,8 @@ class ReferModal extends React.Component {
 
     const { isCopied } = this.state;
 
-    const btnWidth = view === 'MobileView' ? 120 : 180;
+    const copyBtnWidth = view === 'MobileView' ? 80 : 180;
+    const okBtnWidth = view === 'MobileView' ? 120 : 180;
     const btnHeight = view === 'MobileView' ? 40 : 48;
 
     return (<Modal
@@ -40,14 +41,14 @@ class ReferModal extends React.Component {
           text={url}
           onCopy={() => this.setState({ isCopied: true })}
         >
-          <Button width={btnWidth} height={btnHeight}><IntlMessages id="topbar.copy" /></Button>
+          <Button width={copyBtnWidth} height={btnHeight}><IntlMessages id="topbar.copy" /></Button>
         </CopyToClipboard>
       </div>
       <div className="modal-main-box">
         <span><IntlMessages id="topbar.copy.description" /></span>
       </div>
       <div className="modal-main-box centered">
-        <Button width={btnWidth} height={btnHeight} onClick={onOk}><IntlMessages id="modal.refer.btnOk" /></Button>
+        <Button width={okBtnWidth} height={btnHeight} onClick={onOk}><IntlMessages id="modal.refer.btnOk" /></Button>
       </div>
     </Modal>);
   }
