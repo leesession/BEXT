@@ -3,103 +3,6 @@
 @greyFontColor: #eee;
 
 .refModal {
-    .ant-modal-title {
-        font-size: 1.5em;
-        text-align: center;
-        color: white
-    }
-
-    .ant-modal-header {
-        background-color: grey;
-        color: white;
-        padding: 30px 30px 30px;
-    }
-
-    .ant-modal-body {
-        padding-bottom: 30px;
-        padding-left: 45px;
-        padding-right: 45px;
-        background-color: grey;
-        color: white;
-        border-radius: 0px 0px 4px 4px;
-
-        @media @phone {
-            padding-top: 0px;
-            padding-left: 30px;
-            padding-right: 30px;
-        }
-
-    }
-
-    & * {
-        border: none
-    }
-
-    .refmodal-container {
-        text-align: center;
-
-        .refmodal-container-description {
-            margin-bottom: 18px;
-        }
-
-        .refmodal-container-button {
-            button {
-                width: 120px;
-            }
-
-        }
-
-        .refmodal-container-input {
-            display: flex;
-            flex-wrap: wrap;
-
-            &>div {
-                margin-bottom: 20px;
-
-                @media @phone {
-                    width: 100%
-                }
-
-                &:first-of-type {
-                    flex-grow: 2;
-                    margin-right: 20px;
-                    background-color: #444444;
-                    padding: 0px 0 0px 10px;
-                    border-radius: 5px;
-                    font-size: 1.5em;
-                    height: 32px;
-
-                    @media @phone {
-                        font-size: 1.2em;
-                        margin-right: 0px;
-                    }
-
-                    span {
-                        text-align: center;
-                        width: 100%;
-                        line-height: 32px;
-
-                        &:hover {
-                            cursor: pointer
-                        }
-
-                    }
-
-                }
-
-                &:nth-of-type(2) {
-                    button {
-                        max-width: 100%;
-                        width: 8em;
-                    }
-
-                }
-
-            }
-
-        }
-
-    }
 
     &.fairModal {
         .refmodal-container {
@@ -319,9 +222,6 @@ ul.menu-list {
             .transition(background-color .5s ease)
         }
 
-        //
-
-
         // Underline style for topbar right
         &:after {
             content: "";
@@ -358,6 +258,7 @@ ul.menu-list {
         background-image: none;
         border: 1px solid transparent;
         vertical-align: middle;
+        outline: none;
 
         .icon-bar {
             width: 22px;
@@ -542,7 +443,7 @@ ul.menu-list {
     .transition(max-height .5s ease);
 
     @media @phone {
-        font-size: 1.4em
+        font-size: 1em;
     }
 
     ul {
@@ -560,6 +461,9 @@ ul.menu-list {
 
         }
 
+        @media @phone{
+            margin-bottom: 0px;
+        }
     }
 
     a {
