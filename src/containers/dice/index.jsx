@@ -15,7 +15,6 @@ import ReactNotification from '../../components/react-notification-component';
 import BetRank from './betRank';
 import FairModal from '../../components/fairModal';
 import '../../components/react-notification-component/less/notification.less';
-// import { cloudinaryConfig, CloudinaryImage } from '../components/react-cloudinary';
 import Carousel from './carousel';
 import BuyBack from './buyback';
 import Slider from '../../components/slider';
@@ -27,8 +26,6 @@ import IntlMessages from '../../components/utility/intlMessages';
 import { appConfig } from '../../settings';
 import { randomString } from '../../helpers/utility';
 import CurrencyBar from './currencyBar';
-
-// cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
 const { TabPane } = Tabs;
 const MAX_BALANCE_STR = 'MAX';
@@ -63,21 +60,31 @@ function calculatePayoutOnWin(betAmount, payout) {
 
 const symbols = [
   {
-    symbol: 'EOS', min: 0.1, max: 10000, precision: 2,
+    symbol: 'EOS', min: 0.1, max: 1000, precision: 2, default: 1,
   },
   {
-    symbol: 'BETX', min: 10, max: 10000, precision: 2,
+    symbol: 'BETX', min: 100, max: 100000, precision: 2, default: 100,
   },
   {
-    symbol: 'EBTC', min: 0.0001, max: 10000, precision: 4,
+    symbol: 'EBTC', min: 0.0001, max: 10000, precision: 4, default: 0.0001,
   },
   {
-    symbol: 'EETH', min: 0.001, max: 10000, precision: 4,
+    symbol: 'EETH', min: 0.001, max: 10000, precision: 4, default: 0.001,
   },
   {
-    symbol: 'EUSD', min: 0.1, max: 10000, precision: 2,
+    symbol: 'EUSD', min: 0.1, max: 10000, precision: 2, default: 1,
   },
 ];
+
+function getDefaultBySymbol(symbol) {
+  const symbolMatch = _.find(symbols, { symbol });
+
+  if (_.isUndefined(symbolMatch)) {
+    return 1;
+  }
+
+  return symbolMatch.default;
+}
 
 function getMinBySymbol(symbol) {
   const symbolMatch = _.find(symbols, { symbol });
@@ -262,6 +269,7 @@ class DicePage extends React.Component {
       lastBetNotificationId,
       payout,
       myBetHistoryFetched,
+      betAmount,
     } = this.state;
     let { autoBetEnabled } = this.state;
     const { notificationDOMRef, onBetClicked } = this;
@@ -277,7 +285,7 @@ class DicePage extends React.Component {
       fieldsToUpdate.myBetHistoryFetched = true;
     }
 
-    // Turn off autobet when switching symbol and change betAmount to min
+    // Turn off autobet when switching symbol and change betAmount to default
     if (newSelectedSymbol !== selectedSymbol) {
       if (autoBetEnabled) {
         autoBetEnabled = false;
@@ -287,7 +295,10 @@ class DicePage extends React.Component {
         }));
       }
 
-      fieldsToUpdate.betAmount = getMinBySymbol(newSelectedSymbol);
+      // If current betAmount is less than default amount; set it to default amount when switching symbols
+
+      const defaultAmount = getDefaultBySymbol(newSelectedSymbol);
+      fieldsToUpdate.betAmount = defaultAmount;
       const payoutOnWin = calculatePayoutOnWin(fieldsToUpdate.betAmount, payout);
       fieldsToUpdate.payoutOnWin = payoutOnWin;
     }
