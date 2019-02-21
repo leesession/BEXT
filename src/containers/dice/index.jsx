@@ -4,7 +4,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { injectIntl, intlShape } from 'react-intl';
-import { Icon, Row, Col, Table, Input, Button, Tabs, message, Switch, Tooltip } from 'antd';
+import { Icon, Row, Col, Table, Tabs, message, Switch, Tooltip } from 'antd';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import moment from 'moment';
@@ -13,19 +13,20 @@ import 'animate.css/animate.min.css';
 
 import ReactNotification from '../../components/react-notification-component';
 import BetRank from './betRank';
-import FairModal from '../../components/fairModal';
+import FairModal from '../../components/modal/fairness';
+import Slider from '../../components/uielements/slider';
 import '../../components/react-notification-component/less/notification.less';
 import Carousel from './carousel';
 import BuyBack from './buyback';
-import Slider from '../../components/slider';
 import Dice from '../../components/dice';
 import Chatroom from '../../components/chatroom';
 import betActions from '../../redux/bet/actions';
 import appActions from '../../redux/app/actions';
 import IntlMessages from '../../components/utility/intlMessages';
 import { appConfig } from '../../settings';
-import { randomString } from '../../helpers/utility';
+import { randomString, parseAsset } from '../../helpers/utility';
 import CurrencyBar from './currencyBar';
+import Button from '../../components/uielements/button';
 
 const { TabPane } = Tabs;
 const MAX_BALANCE_STR = 'MAX';
@@ -145,10 +146,12 @@ class DicePage extends React.Component {
       username: this.defaultUsername,
       seed: randomString(SEED_STR_LENGTH),
       notifications: [],
-      fairModalShow: false,
+      isFairnessModalVisible: false,
       autoBetEnabled: false, // True if auto-bet switch is turned on
       lastBetNotificationId: undefined, // Guard start of the next auto-bet so we don't start twice
       myBetHistoryFetched: false, // Guard to make sure myBetHistory only fetched once
+      sliderValue: DEFAULT_ROLL_NUMBER,
+      sliderLabel: {},
     };
 
     this.desktopColumns = [{
@@ -233,7 +236,7 @@ class DicePage extends React.Component {
     this.onBetClicked = this.onBetClicked.bind(this);
     this.onLogInClicked = this.onLogInClicked.bind(this);
     this.formatBetAmountStr = this.formatBetAmountStr.bind(this);
-    this.toggleFairModal = this.toggleFairModal.bind(this);
+    this.setFairnessModalVisibility = this.setFairnessModalVisibility.bind(this);
     this.notificationDOMRef = React.createRef();
     this.onAutoBetSwitchChange = this.onAutoBetSwitchChange.bind(this);
     this.resetSeed = this.resetSeed.bind(this);
@@ -269,7 +272,6 @@ class DicePage extends React.Component {
       lastBetNotificationId,
       payout,
       myBetHistoryFetched,
-      betAmount,
     } = this.state;
     let { autoBetEnabled } = this.state;
     const { notificationDOMRef, onBetClicked } = this;
@@ -586,9 +588,9 @@ class DicePage extends React.Component {
     return `${parts[0]}.${parts[1].substring(0, MAX_FLOAT_DIGITS)}`;
   }
 
-  toggleFairModal(visible) {
+  setFairnessModalVisibility(value) {
     this.setState({
-      fairModalShow: visible,
+      isFairnessModalVisible: value,
     });
   }
 
@@ -613,7 +615,7 @@ class DicePage extends React.Component {
   render() {
     const { desktopColumns, mobileColumns } = this;
     const {
-      betAmount, payoutOnWin, winChance, payout, rollNumber, username, seed,
+      betAmount, payoutOnWin, winChance, payout, username, seed, sliderValue, sliderLabel, isFairnessModalVisible,
     } = this.state;
 
     const {
@@ -647,6 +649,8 @@ class DicePage extends React.Component {
 
     const currentSymbol = (selectedSymbol === 'BETX') ? 'EOS' : selectedSymbol;
 
+    const rollBtn = null;
+
     return (
       <div id="dicepage">
         <div className="dicepage-top">
@@ -659,7 +663,7 @@ class DicePage extends React.Component {
               </Col>
               <Col xs={24} lg={10}>
                 <div>
-                  <a href={null} onClick={() => this.toggleFairModal(true)} className="fair-btn"><IntlMessages id="dice.play.fairBtn" /></a>
+                  <a href={null} onClick={() => this.setFairnessModalVisibility(true)} className="fair-btn"><IntlMessages id="dice.play.fairBtn" /></a>
                 </div>
               </Col>
             </Row>
@@ -682,133 +686,84 @@ class DicePage extends React.Component {
                 <ReactNotification ref={this.notificationDOMRef} />
                 <CurrencyBar direction={view === 'DesktopView' ? 'column' : 'row'} />
                 <div className="box-container dice-container" >
-                  {/* <div className="container-header">
-                  </div> */}
                   <div className="container-body">
+                    <Row gutter={24}>
+                      <Col xs={24} lg={12} >
+                        <div className="box box-no-padding">
+                          <div className="label label-float-top"><IntlMessages id="dice.play.amount" /></div>
+                          <div className="box-middle">
+                            <input className="box-input" onBlur={() => window.scroll(0, 0)} onChange={this.onInputNumberChange} value={betAmount} />
+                            <span className="box-input-inner-addOn">{selectedSymbol}</span>
+                          </div>
+                          <div className="box-bottom">
+                            <span className="box-bottom-btn" onClick={this.onBetAmountButtonClick} data-value="0.5" >1/2</span>
+                            <span className="box-bottom-btn" onClick={this.onBetAmountButtonClick} data-value="2" >2X</span>
+                            <span className="box-bottom-btn" onClick={this.onBetAmountButtonClick} data-value={MAX_BALANCE_STR} >{MAX_BALANCE_STR}</span>
+                          </div>
+                        </div>
+                      </Col>
+                      <Col xs={24} lg={12} >
+                        <div className="box box-no-padding">
+                          <div className="label label-float-top"><IntlMessages id="dice.reward.total" /></div>
+                          <div className="box-middle">
+                            <span className="box-input">{_.floor(payoutOnWin, 3)}</span>
+                            <span className="box-input-inner-addOn">{selectedSymbol}</span>
+                          </div>
+                          <div className="box-bottom box-bottom-span">
+                            <IntlMessages id="dice.reward.maxbet" values={{ amount: getMaxBySymbol(currentSymbol), symbol: currentSymbol }} />
+                          </div>
+                        </div>
+                      </Col>
+                    </Row>
                     <Row className="container-body-numbers" type="flex">
                       <Col span={8}>
-                        <div className="box box-label">
-                          <div className="box-inner">
-                            <div className="label">{view === 'DesktopView' ? <IntlMessages id="dice.play.rollUnderToWin" /> : <IntlMessages id="dice.play.rollUnder" />}
-                            </div>
-                          </div>
+                        <div className="box">
+                          <div className="label"><IntlMessages id="dice.play.rollUnder" /></div>
+                          <div className="value">{sliderValue}↓</div>
                         </div>
                       </Col>
                       <Col span={8}>
-                        <div className="box box-label">
-                          <div className="box-inner">
-                            <div className="label"><IntlMessages id="dice.play.payout" />
-                            </div>
-                          </div>
+                        <div className="box">
+                          <div className="label"><IntlMessages id="dice.play.payout" /></div>
+                          <div className="value">{_.floor(payout, 3)}X</div>
                         </div>
 
                       </Col>
                       <Col span={8}>
-                        <div className="box box-label">
-                          <div className="box-inner">
-                            <div className="label"><IntlMessages id="dice.play.win" />
-                            </div>
-                          </div>
-                        </div>
-                      </Col>
-                      <Col span={8}>
-                        <div className="box box-value">
-                          <div className="box-inner">
-                            <div className="value">{rollNumber}↓</div>
-                          </div>
-                        </div>
-                      </Col>
-                      <Col span={8}>
-                        <div className="box box-value">
-                          <div className="box-inner">
-                            <div className="value ratio">{_.floor(payout, 3)}X</div>
-                          </div>
-                        </div>
-                      </Col>
-                      <Col span={8}>
-                        <div className="box box-value">
-                          <div className="box-inner">
-                            <div className="value">{(_.floor(winChance, 4) * 100).toFixed(2)}%</div>
-                          </div>
+                        <div className="box">
+                          <div className="label"><IntlMessages id="dice.play.win" /></div>
+                          <div className="value">{(_.floor(winChance, 3) * 100).toFixed(2)}%</div>
                         </div>
                       </Col>
                     </Row>
-                    <Row className="container-body-input" type="flex" justify="center" align="middle">
-                      <Col xs={24} lg={20}>
-                        <div className="container-body-input-slider">
-                          <Slider getValue={this.getSliderValue} defaultValue={DEFAULT_ROLL_NUMBER} min={MIN_SELECT_ROLL_NUMBER} max={MAX_SELECT_ROLL_NUMBER} step={1} />
-                        </div>
-                      </Col>
-                      <Col xs={{ span: 14, order: 2 }} lg={{ span: 8, order: 1 }} >
+                    <div className="container-body-input-slider">
+                      <Slider
+                        min={MIN_ROLL_NUMBER}
+                        max={MAX_ROLL_NUMBER}
+                        start={MIN_SELECT_ROLL_NUMBER}
+                        end={MAX_SELECT_ROLL_NUMBER}
+                        value={sliderValue}
+                        labels={sliderLabel}
+                        // onChangeStart={this.handleChangeStart}
+                        onChange={this.onSliderChange}
+                      />
+                    </div>
 
-                        <div className="box box-input">
-                          <div className="box-inner">
-                            <Row type="flex" justify="center" align="middle">
-                              <Col xs={18} lg={18}>
-                                <div className="box-input-inner">
-                                  <span className="label"><IntlMessages id="dice.play.amount" /></span>
-                                  <Input className="box-input-inner-input inputBorder" size="large" onBlur={() => window.scroll(0, 0)} onChange={this.onInputNumberChange} value={betAmount} />
-                                  <span className="box-input-inner-addOn">{selectedSymbol}</span>
-                                </div>
-                              </Col>
-                              {/* <Col xs={6} lg={8}>
-                                    <Button type="default" className="box-input-round-btn" shape="circle" icon="plus" size={view === 'DesktopView' ? 'default' : 'small'} onClick={this.onBetAmountButtonClick} data-value="1" />
-                                    <Button type="default" className="box-input-round-btn" shape="circle" icon="minus" size={view === 'DesktopView' ? 'default' : 'small'} onClick={this.onBetAmountButtonClick} data-value="-1" />
-                                  </Col> */}
-                            </Row>
-                          </div>
-                        </div>
-                      </Col>
-                      <Col xs={{ span: 24, order: 1 }} lg={{ span: 8, order: 2 }} >
-                        <div className="box box-input">
-                          <div className="box-inner">
-
-                            <div className="inputBorder">
-                              <Row>
-                                <Col span={8}>
-                                  <Button size="large" className="box-input-button" type="default" onClick={this.onBetAmountButtonClick} data-value="0.5" >1/2</Button>
-                                </Col>
-                                <Col span={8}>
-                                  <Button size="large" className="box-input-button" type="default" onClick={this.onBetAmountButtonClick} data-value="2" >2X</Button>
-                                </Col>
-                                <Col span={8}>
-                                  <Button size="large" className="box-input-button" type="default" onClick={this.onBetAmountButtonClick} data-value={MAX_BALANCE_STR} >{MAX_BALANCE_STR}
-                                  </Button>
-                                </Col>
-                              </Row>
-                            </div>
-                          </div>
-                        </div>
-                      </Col>
-                      <Col xs={{ span: 10, order: 3 }} lg={{ span: 8, order: 3 }} >
-                        <div className="box box-input">
-                          <div className="box-inner">
-                            <div className="box-input-inner box-input-inner-reward">
-                              <span className="label"><IntlMessages id="dice.reward.total" /></span>
-                              <Input className="box-input-inner-input inputBorder" size="large" disabled value={_.floor(payoutOnWin, 4)} />
-                              <span className="box-input-inner-addOn">{selectedSymbol}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </Col>
-                    </Row>
                     <Row className="container-body-btn" type="flex" justify="center" align="middle" >
                       {/* <Col span={24}>{autoBetElement}</Col> */}
                       <Col span={6}>
-                        <div className="container-body-btn-description"><IntlMessages id="dice.balance" values={{ symbol: currentSymbol }} /></div>
-                        <div className="container-body-btn-balance">{this.getBalanceBySymbol(currentSymbol)}<span className="highlight"> {currentSymbol}</span></div>
+                        {this.getBalanceBySymbol(currentSymbol) ? <div className="container-body-btn-balance">{parseAsset(this.getBalanceBySymbol(currentSymbol)).amount}<span className="highlight"> {currentSymbol}</span></div> : null}
                       </Col>
                       <Col span={12}>
                         {autoBetElement}
                         {username === this.defaultUsername
-                          ? <Button className="btn-login" size="large" type="primary" onClick={this.onLogInClicked}><IntlMessages id="dice.button.login" /></Button>
-                          : <Button className="btn-login" size="large" type="primary" onClick={this.onBetClicked}><IntlMessages id="dice.button.bet" /></Button>}
+                          ? <Button className="btn-login" width={view === 'MobileView' ? 120 : 200} height={view === 'MobileView' ? 48 : 64} onClick={this.onLogInClicked}><IntlMessages id="dice.button.login" /></Button>
+                          : rollBtn}
                       </Col>
                       <Col span={6}>
-                        <div className="container-body-btn-description"><IntlMessages id="dice.balance" values={{ symbol: 'BETX' }} /></div>
-                        <div className="container-body-btn-balance">{this.getBalanceBySymbol('BETX')}<span className="highlight"> <IntlMessages id="dice.asset.betx" /></span></div>
+                        {this.getBalanceBySymbol('SBD') ? <div className="container-body-btn-balance">{parseAsset(this.getBalanceBySymbol('SBD')).amount}<span className="highlight"> <IntlMessages id="dice.asset.sbd" /></span></div> : null}
                       </Col>
-                      {/*                          <Col xs={20} lg={16}>
+                      {/* <Col xs={20} lg={16}>
                             <div className="container-body-btn-description container-body-btn-description-firstbet">
                               <Tooltip title={(<IntlMessages id="dice.reward.firstbet.tooltip" />)} trigger={screenWidth <= 1024 ? 'click' : 'hover'}>
                                 <Icon type="question-circle" />
@@ -879,10 +834,11 @@ class DicePage extends React.Component {
               </Col>
             </Row>
             <FairModal
-              value={seed}
-              isVisible={this.state.fairModalShow}
+              isVisible={isFairnessModalVisible}
+              seed={seed}
               onReset={this.resetSeed}
-              closeModal={this.toggleFairModal}
+              onOk={() => this.setFairnessModalVisibility(false)}
+              onClose={() => this.setFairnessModalVisibility(false)}
             />
           </div>
         </div>

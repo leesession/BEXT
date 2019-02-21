@@ -105,7 +105,7 @@ class Topbar extends React.PureComponent {
 
     if (errorMessage) {
       switch (errorMessage) {
-        case 'error.scatter.locked':
+        case 'error.plugin.locked':
         { const hide = message.loading(intl.formatMessage({ id: errorMessage }), 0);
           // Dismiss manually and asynchronously
           setTimeout(hide, 3000);

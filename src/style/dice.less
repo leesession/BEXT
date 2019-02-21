@@ -15,6 +15,7 @@
     }
     .dicepage-top {
         background-color: @topBgColor;
+        padding-bottom: 24px;
     }
     .dicepage-bottom {
         background-color: @bgColor;
@@ -93,10 +94,11 @@
     }
     .dice-container {
         .inner-shadow( 0 -240px 240px 0 rgba(0, 0, 0, .3), 0 40px 80px rgba(0, 0, 0, .9));
+        min-width: 572px;
         position: relative;
         text-align: center;
         @media @phone {
-            width: 100%;
+            min-width: 100%;
             margin-bottom: 20px;
         }
     } // Ranking style
@@ -420,158 +422,153 @@
     }
     .container-body {
         color: white;
-        padding: 40px 30px 15px 30px;
+        padding: 42px 28px 15px 28px;
         @media @phone {
             padding: 20px 12px 20px;
         }
         .box {
             position: relative;
+            padding: 17px 17px 12px;
+            background: rgba(15, 17, 19, .8);
+            font-size: 0.8em;
+            &.box-no-padding {
+                padding-top: 0px;
+                padding-bottom: 0px;
+                padding-left: 0px;
+                padding-right: 0px;
+            }
             @media @phone {
                 padding: 0px;
+                margin-top: 24px;
             }
             @media @desktop {
                 // margin: 0px 12px;
             }
-            .box-inner {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                .transform(translate(-50%, -50%));
-                width: 100%;
-            }
-            &.box-label {
-                // height: 60px;
-                @media @phone {
-                    height: 24px;
+            .box-input-inner {
+                position: relative;
+                .label {
+                    position: absolute;
+                    top: -2em;
+                    @media @phone {}
+                }
+                &.box-input-inner-reward {
+                    margin-left: 24px;
+                    @media @phone {
+                        margin-left: 12px;
+                    }
+                }
+                .box-input-inner-input {
+                    padding-right: 32px;
                 }
             }
-            &.box-value {
-                height: 80px;
+            .box-input {
+                position: relative;
+                height: 48px;
+                line-height: 48px; // font-family: MullerBold;
+                font-size: 1.5em;
+                font-weight: 700;
+                border: 0;
+                outline: 0;
+                background: 0 0;
+                width: 100%;
+                text-align: center;
+                color: rgba(255, 255, 255, .5);
                 @media @phone {
                     height: 40px;
-                }
-            }
-            &.box-input {
-                height: 80px;
-                @media @phone {
-                    height: 80px;
+                    line-height: 40px;
                     margin-left: 0px;
                     margin-right: 0px;
                 }
-                .inputBorder {
-                    background-color: transparent;
-                    border: 2px solid @borderColor;
-                    color: white;
-                    border-radius: 10px;
-                    font-size: 1.4em;
-                    height: 60px;
+            }
+            .box-input-inner-addOn {
+                position: absolute;
+                top: 0px;
+                .translate(0, 16px);
+                right: 0;
+                padding-right: 8px;
+                color: @fontColor;
+                font-size: 1em;
+                font-weight: 500;
+                @media @phone {
+                    font-size: 0.8rem;
+                    top: -6px;
+                }
+            }
+            .box-bottom {
+                height: 24px;
+                line-height: 24px;
+                background: rgba(255, 255, 255, .03);
+                font-size: 1em;
+                color: rgba(255, 255, 255, 0.2);
+                .box-bottom-btn {
+                    &:first-of-type {
+                        border-left: none;
+                    }
                     text-align: center;
-                    @media @phone {
-                        height: 45px;
-                    }
-                    .box-input-button {
-                        border: none;
-                        background-color: transparent;
-                        font-size: 0.9em;
-                        color: white;
-                        height: 56px; // minus border
-                        padding: 0px;
-                        @media @phone {
-                            padding: 0px 24px;
-                            height: 41px;
-                            font-size: 1.4em;
-                        }
-                    }
-                }
-                .box-input-inner {
+                    cursor: pointer;
+                    background: rgba(255, 255, 255, .04);
+                    color: rgba(255, 255, 255, .5);
+                    float: left;
+                    width: 33.333%;
+                    border-left: 1px solid rgba(0, 0, 0, .5);
+                    border-bottom: 4px solid rgba(0, 0, 0, .2);
+                    height: 24px;
+                    line-height: 24px;
                     position: relative;
-                    .label {
-                        position: absolute;
-                        top: -2em;
-                        @media @phone {}
-                    }
-                    &.box-input-inner-reward {
-                        margin-left: 24px;
-                        @media @phone {
-                            margin-left: 12px;
-                        }
-                    }
-                    .box-input-inner-input {
-                        padding-right: 32px;
-                    }
-                    .box-input-inner-addOn {
-                        position: absolute;
-                        top: 50%;
-                        .translate(0, -50%);
-                        right: 0;
-                        padding-right: 8px;
-                        color: @fontColor;
-                        font-size: 1em;
-                        font-weight: 500;
-                        @media @phone {
-                            font-size: 1.5em;
-                        }
-                    }
+                    z-index: 1;
+                    .unselectable();
                 }
-                .box-input-round-btn {
-                    display: block;
-                    background-color: @borderColor;
-                    color: black;
-                    margin: 12px auto;
-                    border-color: @borderColor;
-                    @media @phone {
-                        margin: 5px auto;
-                    }
-                    &:focus {
-                        // outline: none;
-                    }
-                    &:hover {
-                        background-color: @primaryColor;
+                &.box-bottom-span {
+                    span {
+                        text-transform: uppercase;
+                        display: block;
+                        width: 100%;
+                        text-align: left;
+                        padding-left: 12px;
                     }
                 }
             }
             .label {
-                color: @fontColor;
+                color: rgba(255, 255, 255, 0.3);
                 text-transform: uppercase;
                 word-break: break-word;
-                font-weight: 500;
-                font-size: 1em;
-                width: 100%; // @media @desktop {
-                //     font-size: 1.3em;
-                // }
-                // @media @xl {
-                //     font-size: 1.4em;
-                // }
+                font-weight: 500; // font-size: 1em;
+                width: 100%;
+                &.label-float-top {
+                    position: absolute;
+                    top: -20px;
+                    left: 0px;
+                    text-align: left;
+                    @media @phone {
+                        top: -16px;
+                    }
+                }
             }
             .value {
-                color: white;
-                font-size: 2em;
+                color: rgba(255, 255, 255, .5);
+                font-size: 1.5em;
+                font-weight: 700;
                 @media @phone {
                     padding: 10px 0px;
-                }
-                &.ratio {
-                    padding: 0px;
-                    font-size: 2.5em; // font-style: italic;
-                    font-weight: 600;
-                    color: @borderColor; // filter: drop-shadow(3px 3px 0px #a27d34);
-                    @media @phone {
-                        font-size: 4em;
-                    }
                 }
             }
         }
         .container-body-numbers {
             // padding-bottom: 20px;
+            background-color: rgba(15, 17, 19, 0.8);
+            margin-top: 20px;
             @media @phone {
                 padding-bottom: 0px;
+                .box {
+                    margin-top: 0px;
+                    padding-top: 12px;
+                }
             }
         }
-        .container-body-input {
-            .container-body-input-slider {
-                margin-bottom: 20px;
-                @media @phone {
-                    margin-bottom: 0px;
-                }
+        .container-body-input-slider {
+            padding: 24px 0 0px;
+            @media @phone {
+                margin-bottom: 0px;
             }
         }
         .container-body-btn {
@@ -595,41 +592,28 @@
             }
         }
         .btn-login {
-            width: 200px;
-            height: 64px;
-            line-height: 64px;
-            margin-top: 20px;
-            font-size: 1.5em;
-            text-transform: uppercase;
-            background-color: #ffbc00;
-            color: black;
-            font-weight: 500;
-            .transition(all .3s);
-            border: none;
-            border-radius: 0px;
-            border-bottom: 3px solid #be8d07;
-            margin-bottom: 24px;
+            display: inline-block;
+            letter-spacing: 1px;
+            margin-top: 18px;
+            margin-bottom: 18px;
+            font-size: 1.2rem;
             @media @phone {
-                width: 100%;
+                margin-top: 12px;
                 margin-bottom: 12px;
-                font-size: 1.8em;
-                letter-spacing: 2px;
-                width: 120px;
-                height: 48px;
-                line-height: 48px;
             }
         }
         .container-body-btn-balance {
             font-size: 1em;
             font-weight: 400;
-            color: white;
             letter-spacing: 2px;
+            color: rgba(255, 255, 255, .5);
             .highlight {
-                color: @primaryColor;
+                color: rgba(255, 255, 255, .2);
                 font-size: 0.8em;
             }
             @media @phone {
-                font-size: 1.4em;
+                font-size: 0.8rem;
+                letter-spacing: 0px;
             }
         }
         .ant-input-number-handler {
@@ -776,7 +760,8 @@
                 outline: none;
                 padding-left: 12px;
                 width: 100%;
-                -webkit-appearance: none; // &:focus{
+                -webkit-appearance: none;
+                color: rgba(255, 255, 255, 0.5); // &:focus{
                 //     border-color:transparent;
                 // }
                 &::selection {
@@ -801,23 +786,19 @@
     #buyback {
         padding: 24px 0px 24px 14px;
         color: rgba(255, 255, 255, .5);
-
-        .buyback-title{
+        .buyback-title {
             text-align: left;
             cursor: pointer;
-
-            h3{
+            h3 {
                 color: rgba(255, 255, 255, .5);
                 display: inline-block;
                 margin-right: 12px;
                 text-transform: uppercase;
             }
         }
-
-        @media @xl{
+        @media @xl {
             padding-left: 20px;
         }
-
         ul {
             padding-right: 14px;
             margin-top: 12px;
@@ -825,7 +806,6 @@
             flex-direction: column;
             overflow-y: scroll;
             height: 338px;
-            
             .buyback-item {
                 font-size: 1em; // border-bottom: 1px solid grey;
                 margin-bottom: 12px;
@@ -1041,6 +1021,18 @@
     }
     100% {
         transform: translateZ(-100px) rotateX(360deg) rotateY(360deg) rotateZ(360deg);
+    }
+}
+
+.modal-fairness {
+    .modal-fairness-input {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        input {
+            margin-top: 0px;
+            margin-right: 18px;
+        }
     }
 }
 

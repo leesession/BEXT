@@ -86,7 +86,7 @@ class ScatterHelper {
 
     if (_.isUndefined(scatter)) {
       connect();
-      return Promise.reject('error.scatter.notconnected');
+      return Promise.reject('error.plugin.notconnected');
     }
 
     const requiredFields = { accounts: [network] };
@@ -129,7 +129,7 @@ class ScatterHelper {
     };
 
     if (_.isUndefined(api)) {
-      return Promise.reject('error.scatter.notAuthenticated');
+      return Promise.reject('error.plugin.notAuthenticated');
     }
 
     // Never assume the account's permission/authority. Always take it from the returned account.
@@ -204,7 +204,7 @@ class ScatterHelper {
     };
 
     if (_.isUndefined(api)) {
-      return Promise.reject('error.scatter.notAuthenticated');
+      return Promise.reject('error.plugin.notAuthenticated');
     }
 
     // Never assume the account's permission/authority. Always take it from the returned account.
@@ -233,7 +233,7 @@ class ScatterHelper {
     };
 
     if (_.isUndefined(api)) {
-      return Promise.reject('error.scatter.notAuthenticated');
+      return Promise.reject('error.plugin.notAuthenticated');
     }
 
     // Never assume the account's permission/authority. Always take it from the returned account.
@@ -396,11 +396,11 @@ class ScatterHelper {
     } = params;
 
     if (_.isUndefined(api)) {
-      return Promise.reject('error.scatter.notAuthenticated');
+      return Promise.reject('error.plugin.notAuthenticated');
     }
 
     if (_.isUndefined(username)) {
-      return Promise.reject('error.scatter.invalidUsername');
+      return Promise.reject('error.plugin.invalidUsername');
     }
 
     // Construct json params
@@ -453,7 +453,7 @@ class ScatterHelper {
     };
 
     if (_.isUndefined(api)) {
-      return Promise.reject('error.scatter.notAuthenticated');
+      return Promise.reject('error.plugin.notAuthenticated');
     }
 
     // Never assume the account's permission/authority. Always take it from the returned account.
@@ -481,7 +481,7 @@ class ScatterHelper {
     };
 
     if (_.isUndefined(api)) {
-      return Promise.reject('error.scatter.notAuthenticated');
+      return Promise.reject('error.plugin.notAuthenticated');
     }
 
     // Never assume the account's permission/authority. Always take it from the returned account.
@@ -509,22 +509,22 @@ class ScatterHelper {
 
             if (assertMessageObj) {
               if (assertMessageObj.message.indexOf('Bet less than max') >= 0) {
-                return Promise.resolve('error.scatter.betLessThanMax');
+                return Promise.resolve('error.plugin.betLessThanMax');
               } else if (assertMessageObj.message.indexOf('overdrawn balance') >= 0 || assertMessageObj.message.indexOf('no balance object found') >= 0) {
-                return Promise.resolve('error.scatter.overdrawnBalance');
+                return Promise.resolve('error.plugin.overdrawnBalance');
               } else if (assertMessageObj.message.indexOf('duplicate transaction') >= 0) {
-                return Promise.resolve('error.scatter.duplicateTransaction');
+                return Promise.resolve('error.plugin.duplicateTransaction');
               } else if (assertMessageObj.message.indexOf('Stake must be greater than') >= 0) {
-                return Promise.resolve('error.scatter.stakeGreater');
+                return Promise.resolve('error.plugin.stakeGreater');
               } else if (assertMessageObj.message.indexOf('Withdraw amount has to be positive') >= 0) {
-                return Promise.resolve('error.scatter.withdrawAmountInvalid');
+                return Promise.resolve('error.plugin.withdrawAmountInvalid');
               }
               return Promise.resolve(_.trimStart(assertMessageObj.message, 'assertion failure with message: '));
             }
           }
         }
       } catch (parseError) {
-        // 2. Plain str case such ass "error.scatter.blabla"
+        // 2. Plain str case such ass "error.plugin.blabla"
         // TODO: need to format all errors in this function
         return Promise.resolve(err);
       }
@@ -532,11 +532,11 @@ class ScatterHelper {
 
     switch (code) {
       case 402: // Scatter is locked
-        message = 'error.scatter.rejected';
+        message = 'error.plugin.rejected';
         break;
 
       case 423: // Scatter is locked
-        message = 'error.scatter.locked';
+        message = 'error.plugin.locked';
         break;
 
       case 3080004: // tx_cpu_usage_exceeded
