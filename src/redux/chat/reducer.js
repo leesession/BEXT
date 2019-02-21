@@ -42,8 +42,7 @@ export default function (state = initState, action) {
       return state.set('history', _.map(action.data, (message) => convertMessageToJSON(message)))
         .set('refresh', !state.get('refresh'));
     case actions.MESSAGE_CLEAR:
-      state.get('history').clear();
-      return state
+      return state.set('history', initState.history)
         .set('refresh', !state.get('refresh'));
     default:
       return state;
