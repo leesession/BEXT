@@ -18,6 +18,7 @@ class ChatRoom extends React.Component {
     super(props);
 
     this.state = {
+      isEnabled: true, // Switch to turn and off chat input and sendMessageReq function; value not changed by any code
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -49,45 +50,41 @@ class ChatRoom extends React.Component {
 
   handleSubmit(event) {
     const { sendMessageReq, username, intl } = this.props;
-    const { value } = this.state;
+    const { value, isEnabled } = this.state;
 
     event.preventDefault();
 
+    if (isEnabled) {
     // Return is input string is empty
-    if (value === '' || _.trim(value) === '') {
-      message.warn(intl.formatMessage({ id: 'message.warn.emptyInput' }));
+      if (value === '' || _.trim(value) === '') {
+        message.warn(intl.formatMessage({ id: 'message.warn.emptyInput' }));
+        this.setState({
+          value: '',
+        });
+        return;
+      }
+
+      sendMessageReq({
+        username,
+        body: value,
+      });
+
       this.setState({
         value: '',
       });
-      return;
+    } else {
+      message.warn(intl.formatMessage({ id: 'message.warn.chatDisabled' }));
     }
-
-    sendMessageReq({
-      username,
-      body: value,
-    });
-
-    this.setState({
-      value: '',
-    });
   }
 
   render() {
     const {
       history, messageNum, refresh, intl,
     } = this.props;
-    const { value } = this.state;
+    const { value, isEnabled } = this.state;
 
     return (
       <div id="chatroom">
-        {/* <Row>
-          <Col span={24}>
-          聊天室
-          </Col>
-          <Col span={10} offset={14}>
-          <Button>English</Button>
-          </Col>
-        </Row> */}
         <div className="chatroom-message-container">
           <ul ref={(ele) => { this.myRef = ele; }}>
             {
@@ -100,7 +97,7 @@ class ChatRoom extends React.Component {
         <form className="form" onSubmit={this.handleSubmit}>
           <Row type="flex" justify="end">
             <Col span={16}>
-              <Input type="text" placeholder={intl.formatMessage({ id: 'chatroom.input.placeholder' })} onChange={this.handleChange} value={value} />
+              <Input type="text" placeholder={intl.formatMessage({ id: 'chatroom.input.placeholder' })} onChange={this.handleChange} value={value} disabled={!isEnabled} />
             </Col>
             <Col span={6}>
               <Button type="default" htmlType="submit" size="large"><IntlMessages id="dice.send" /></Button>
