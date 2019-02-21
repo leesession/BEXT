@@ -3,7 +3,9 @@ import { Map } from 'immutable';
 
 import actions from './actions';
 
-import Queue from '../../helpers/queue';
+import { enqueue } from '../../helpers/utility';
+import { appConfig } from '../../settings';
+
 const { messageType } = actions;
 
 function convertMessageToJSON(message) {
@@ -15,10 +17,8 @@ function convertMessageToJSON(message) {
   };
 }
 
-
 const initState = new Map({
-  history: new Queue(),
-  messageNum: 0,
+  history: [],
   refresh: false,
 });
 
@@ -29,26 +29,17 @@ export default function (state = initState, action) {
       return state
         .set('refresh', !state.get('refresh'));
     case actions.MESSAGE_OBJECT_CREATED:
-      state.get('history').enq(convertMessageToJSON(action.data));
-
-      return state
-        .set('messageNum', state.get('history').size() + 1)
-        .set('refresh', !state.get('refresh'));
-    case actions.MESSAGE_CHANNEL_UPDATE:
-      break;
+      enqueue(state.get('history'), convertMessageToJSON(action.data), appConfig.chatHistoryMemorySize);
+      return state.set('refresh', !state.get('refresh'));
     case actions.MESSAGE_SUBSCRIBED:
-      state.get('history').enq({
+      enqueue(state.get('history'), {
         type: messageType.system,
         body: 'Established connection with server',
-      });
-      return state
-        .set('refresh', !state.get('refresh'));
+      }, appConfig.chatHistoryMemorySize);
 
+      return state.set('refresh', !state.get('refresh'));
     case actions.FETCH_CHAT_HISTORY_RESULT:
-      _.each(action.data, (message) => {
-        state.get('history').enq(convertMessageToJSON(message));
-      });
-      return state
+      return state.set('history', _.map(action.data, (message) => convertMessageToJSON(message)))
         .set('refresh', !state.get('refresh'));
     case actions.MESSAGE_CLEAR:
       state.get('history').clear();
@@ -57,5 +48,4 @@ export default function (state = initState, action) {
     default:
       return state;
   }
-  return state;
 }

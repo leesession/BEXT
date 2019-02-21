@@ -120,11 +120,11 @@ class ParseHelper {
 
   fetchChatHistory() {
     const query = new Parse.Query(ParseMessage);
-    query.descending('updatedAt');
+    query.descending('createdAt');
     query.limit(appConfig.chatHistoryMemorySize);
 
     // Chat history need to be inserted to the queue in ascending order, so we need to reserve the array here
-    return query.find().then(((results) => Promise.resolve(_.reverse(results))));
+    return query.find().then(((results) => Promise.resolve(results)));
   }
 
   getBetVolume() {

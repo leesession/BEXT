@@ -1,3 +1,4 @@
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col, Input, Button, message } from 'antd';
@@ -19,6 +20,7 @@ class ChatRoom extends React.Component {
 
     this.state = {
       isEnabled: true, // Switch to turn and off chat input and sendMessageReq function; value not changed by any code
+      historyArray: [],
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -37,6 +39,26 @@ class ChatRoom extends React.Component {
 
   componentDidUpdate() {
     this.myRef.scrollTop = this.myRef.scrollHeight;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { history } = nextProps;
+
+    const fieldsToUpdate = {};
+
+    // Construct historyArray elements in reverse order to make sure the most recent is at the bottom
+    if (!_.isEmpty(history)) {
+      const historyArray = [];
+
+      for (let i = history.length - 1; i >= 0; i -= 1) {
+        const messageObj = history[i];
+        historyArray.push(<Message message={messageObj} key={messageObj.id || i} />);
+      }
+
+      fieldsToUpdate.historyArray = historyArray;
+    }
+
+    this.setState(fieldsToUpdate);
   }
 
   componentWillUnmount() {
@@ -79,19 +101,15 @@ class ChatRoom extends React.Component {
 
   render() {
     const {
-      history, messageNum, refresh, intl,
+      refresh, intl,
     } = this.props;
-    const { value, isEnabled } = this.state;
+    const { value, isEnabled, historyArray } = this.state;
 
     return (
       <div id="chatroom">
         <div className="chatroom-message-container">
           <ul ref={(ele) => { this.myRef = ele; }}>
-            {
-              !_.isEmpty(history.all()) &&
-              _.map(history.all(), (messageObj, index) =>
-                <Message message={messageObj} key={messageObj.id || index} />)
-            }
+            {historyArray}
           </ul>
         </div>
         <form className="form" onSubmit={this.handleSubmit}>
@@ -103,7 +121,6 @@ class ChatRoom extends React.Component {
               <Button type="default" htmlType="submit" size="large"><IntlMessages id="dice.send" /></Button>
             </Col>
           </Row>
-          {/* <div className="info"><span>{messageNum} messages, refresh: {refresh}</span></div> */}
         </form>
       </div>
     );
@@ -111,8 +128,7 @@ class ChatRoom extends React.Component {
 }
 
 ChatRoom.propTypes = {
-  history: PropTypes.object,
-  messageNum: PropTypes.number,
+  history: PropTypes.array,
   initSocketConnectionReq: PropTypes.func,
   sendMessageReq: PropTypes.func,
   clearMessageHistoryReq: PropTypes.func,
@@ -124,7 +140,6 @@ ChatRoom.propTypes = {
 
 ChatRoom.defaultProps = {
   history: undefined,
-  messageNum: 0,
   initSocketConnectionReq: undefined,
   sendMessageReq: undefined,
   refresh: undefined,
@@ -135,7 +150,6 @@ ChatRoom.defaultProps = {
 
 const mapStateToProps = (state) => ({
   history: state.Chat.get('history'),
-  messageNum: state.Chat.get('messageNum'),
   refresh: state.Chat.get('refresh'),
 });
 

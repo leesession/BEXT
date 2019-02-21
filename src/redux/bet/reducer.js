@@ -121,12 +121,12 @@ export default function (state = initState, action) {
         state.set('history', history);
 
         if (newBet.bettor === state.get('username')) {
-          state.set('myHistory', enqueue(state.get('myHistory'), newBet, appConfig.betHistoryMemorySize));
+          enqueue(state.get('myHistory'), newBet, appConfig.betHistoryMemorySize);
         }
 
         // Only add bet over than appConfig.hugeBetAmount to huge bet table
         if (newBet.payoutAsset && newBet.payoutAsset.symbol === state.get('selectedSymbol') && newBet.payoutAsset.amount >= appConfig.hugeBetAmount) {
-          state.set('hugeHistory', enqueue(state.get('hugeHistory'), newBet, appConfig.betHistoryMemorySize));
+          enqueue(state.get('hugeHistory'), newBet, appConfig.betHistoryMemorySize);
         }
 
         needRefresh = true;
