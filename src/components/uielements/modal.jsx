@@ -40,7 +40,8 @@ const ModalWrapper = styled.section`
         transform-origin: center center;
         width: 100%;
         float: left;
-
+        color: rgba(255,255,255,.5);
+        
         @media ${device.tablet} {
           max-width: 550px;
         }
@@ -111,22 +112,35 @@ const ModalWrapper = styled.section`
         }
 
         .modal-main-box{
+          position: relative;
           padding: 10px 12px;
+          color: rgba(255,255,255,.5);
+        }
 
-          span{
-            color: rgba(255,255,255,.5);
-          }
+        .modal-main-margin-bottom{
+          margin-bottom: 20px;
         }
 
         .form-control {
             position: relative;
         }
 
+        .modal-error {
+          margin-top: 12px;
+          margin-bottom: 12px;
+          display: block;
+          color: orangered;
+        }
+        
         .centered{
             text-align: center;
             >*{
                 display: inline-block;
             }
+        }
+
+        .modal-link {
+          color: #ffbc00;
         }
     }
 
@@ -159,7 +173,7 @@ class Modal extends React.Component {
 
   render() {
     const {
-      children, title, isVisible, onClose,
+      children, title, isVisible, onClose, className,
     } = this.props;
 
     const modalClass = classNames({
@@ -168,7 +182,7 @@ class Modal extends React.Component {
     });
 
     const modalEle = (<ModalWrapper className={modalClass}>
-      <section className="modal-main">
+      <section className={`modal-main ${className}`}>
         <h3>
           {title}
           <a className="modal-close" onClick={onClose}></a>
@@ -189,13 +203,17 @@ Modal.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]).isRequired,
-  title: PropTypes.string,
+  title: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.string,
+  ]).isRequired,
   isVisible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  className: PropTypes.string,
 };
 
 Modal.defaultProps = {
-  title: undefined,
+  className: '',
 };
 
 export default Modal;
