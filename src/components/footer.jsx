@@ -26,7 +26,7 @@ class Footer extends React.Component {
     });
   }
 
-  handleHoverChange = (visible) => {
+  handleHoverChange(visible) {
     this.setState({
       hovered: visible,
     });

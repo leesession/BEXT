@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import { ThemeProvider } from 'styled-components';
 import { LocaleProvider } from 'antd';
 import { IntlProvider } from 'react-intl';
+import 'babel-polyfill';
+
 import { unregister } from './registerServiceWorker';
 import themes from './config/themes';
 import DashApp from './dashApp';
