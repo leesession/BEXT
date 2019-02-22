@@ -45,7 +45,10 @@ LoginModal.propTypes = {
   isVisible: PropTypes.bool,
   setVisibility: PropTypes.func,
   view: PropTypes.string,
-  title: PropTypes.string,
+  title: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.string,
+  ]),
   onClose: PropTypes.func.isRequired,
   onOk: PropTypes.func.isRequired,
 };

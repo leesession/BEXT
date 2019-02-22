@@ -10,12 +10,8 @@ import { delay } from '../../helpers/utility';
 import { appConfig } from '../../settings';
 
 const {
-  subscribe, unsubscribe, fetchBetHistory, handleParseError, getBetVolume, getBetRank,
+  subscribe, unsubscribe, fetchBetHistory, handleParseError, getBetRank,
 } = ParseHelper;
-
-const {
-  handleScatterError,
-} = ScatterHelper;
 
 let betRankPollStarted = false;
 let betrankPollParams;
@@ -141,25 +137,6 @@ export function* fetchHugeBetHistoryRequest(action) {
   }
 }
 
-export function* getBetVolumeRequest() {
-  try {
-    const result = yield call(getBetVolume);
-    yield put({
-      type: actions.GET_BET_VOLUME_RESULT,
-      value: result,
-    });
-  } catch (err) {
-    const message = yield call(handleParseError, err);
-
-    // yield put({
-    //   type: actions.SET_ERROR_MESSAGE,
-    //   message,
-    // });
-
-    // console.log(message);
-  }
-}
-
 export function* startPollBetRankRequest(action) {
   betrankPollParams = action.payload;
 
@@ -204,7 +181,6 @@ export default function* topicSaga() {
     takeEvery(actions.FETCH_BET_HISTORY, fetchBetHistoryRequest),
     takeEvery(actions.FETCH_MY_BET_HISTORY, fetchMyBetHistoryRequest),
     takeEvery(actions.FETCH_HUGE_BET_HISTORY, fetchHugeBetHistoryRequest),
-    takeEvery(actions.GET_BET_VOLUME, getBetVolumeRequest),
     takeEvery(actions.START_POLL_BET_RANK, startPollBetRankRequest),
     takeEvery(actions.GET_BET_RANK_LIST, getBetRankList),
   ]);

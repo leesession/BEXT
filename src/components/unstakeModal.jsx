@@ -28,10 +28,9 @@ class UnstakeModal extends React.Component {
     }
   }
 
-
   render() {
     const { visible } = this.state;
-    const { intl, value, onSelect } = this.props;
+    const { intl, onSelect } = this.props;
     const descriptions = intl.formatMessage({ id: 'modal.unstake.description' }).split('\n');
 
     const text = _.map(descriptions, (part, partIndex) => <p key={partIndex}>{part}</p>);
@@ -78,7 +77,7 @@ UnstakeModal.propTypes = {
   intl: intlShape.isRequired,
   isVisible: PropTypes.bool.isRequired,
   closeModal: PropTypes.func,
-  value: PropTypes.string.isRequired,
+  // value: PropTypes.string.isRequired,
   onSelect: PropTypes.func.isRequired,
 };
 

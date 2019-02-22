@@ -188,8 +188,8 @@
   "stake.token.betx":"Stake BETX (1000 BETX minimum)",
   "stake.action.pledge":"Stake",
   "stake.action.redemption":"Reclaim",
-  "stake.available":"Available",
-  "stake.frozen":"Frozen",
+  "stake.available":"Available: {amount} {symbol}",
+  "stake.unstakeAvailable":"Available: {available} ({frozenAmount} frozen)",
 
   "footer.contactus.email":"Email",
   "footer.contactus.telegram":"Telegram",

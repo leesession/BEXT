@@ -7,17 +7,13 @@ import ParseHelper from '../../helpers/parse';
 import { delay } from '../../helpers/utility';
 
 const {
-  handleScatterError, getMyStakeAndDividend, getContractSnapshot, getContractStakeAndDividend,
-  stake, unstake, getBETXCirculation, claimDividend, withdraw,
+  handleScatterError, getMyStakeAndDividend,
+  stake, unstake, claimDividend, withdraw,
 } = ScatterHelper;
-
-const {
-  getTodayDividend,
-} = ParseHelper;
 
 function* stakeRequest(action) {
   try {
-    const response = yield call(stake, action.payload);
+    yield call(stake, action.payload);
 
     yield put({
       type: appActions.SET_SUCCESS_MESSAGE,
@@ -31,8 +27,15 @@ function* stakeRequest(action) {
       },
     });
 
+    // Get new myStake amount
     yield put({
       type: actions.GET_MY_STAKE_AND_DIVID,
+    });
+
+    // Get new BETX balance
+    yield put({
+      type: appActions.GET_BALANCES,
+      name: action.payload.username,
     });
   } catch (err) {
     const message = yield call(handleScatterError, err);
@@ -95,70 +98,6 @@ function* getMyStakeAndDividendRequest(action) {
   }
 }
 
-function* getContractSnapshotRequest() {
-  try {
-    const response = yield call(getContractSnapshot);
-
-    yield put({
-      type: actions.GET_CONTRACT_SNAPSHOT_RESULT,
-      value: response,
-    });
-  } catch (err) {
-    const message = yield call(handleScatterError, err);
-
-    // Silence error message
-    console.log(err);
-  }
-}
-
-function* getTodayDividendRequest() {
-  try {
-    const response = yield call(getTodayDividend);
-
-    yield put({
-      type: actions.GET_TODAY_DIVIDEND_RESULT,
-      value: response,
-    });
-  } catch (err) {
-    const message = yield call(handleScatterError, err);
-
-    // Silence error message
-    console.log(err);
-  }
-}
-
-function* getContractDividendRequest() {
-  try {
-    const response = yield call(getContractStakeAndDividend);
-
-    yield put({
-      type: actions.GET_CONTRACT_DIVIDEND_RESULT,
-      value: response,
-    });
-  } catch (err) {
-    const message = yield call(handleScatterError, err);
-
-    // Silence error message
-    console.log(err);
-  }
-}
-
-
-function* getBETXCirculationRequest() {
-  try {
-    const response = yield call(getBETXCirculation);
-
-    yield put({
-      type: actions.GET_BETX_CIRCULATION_RESULT,
-      value: response,
-    });
-  } catch (err) {
-    const message = yield call(handleScatterError, err);
-
-    // Silence error message
-    console.log(err);
-  }
-}
 
 function* claimDividendRequest(action) {
   try {
@@ -198,7 +137,7 @@ function* claimDividendRequest(action) {
 
 function* withdrawRequest(action) {
   try {
-    const response = yield call(withdraw, action.payload);
+    yield call(withdraw, action.payload);
 
     yield put({
       type: appActions.SET_SUCCESS_MESSAGE,
@@ -214,13 +153,13 @@ function* withdrawRequest(action) {
 
     yield put({
       type: actions.GET_MY_STAKE_AND_DIVID,
-      username: action.payload.user,
+      username: action.payload.username,
     });
 
     // Retrieve BETX balance if success
     yield put({
-      type: appActions.GET_ACCOUNT,
-      name: action.payload && action.payload.username,
+      type: appActions.GET_BALANCES,
+      name: action.payload.username,
     });
   } catch (err) {
     const message = yield call(handleScatterError, err);
@@ -237,10 +176,6 @@ export default function* () {
     takeEvery(actions.STAKE, stakeRequest),
     takeEvery(actions.UNSTAKE, unstakeRequest),
     takeEvery(actions.GET_MY_STAKE_AND_DIVID, getMyStakeAndDividendRequest),
-    takeEvery(actions.GET_CONTRACT_SNAPSHOT, getContractSnapshotRequest),
-    takeEvery(actions.GET_TODAY_DIVIDEND, getTodayDividendRequest),
-    takeEvery(actions.GET_CONTRACT_DIVIDEND, getContractDividendRequest),
-    takeEvery(actions.GET_BETX_CIRCULATION, getBETXCirculationRequest),
     takeEvery(actions.CLAIM_DIVIDEND, claimDividendRequest),
     takeEvery(actions.WITHDRAW, withdrawRequest),
   ]);

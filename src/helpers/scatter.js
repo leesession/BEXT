@@ -15,12 +15,6 @@ const BETX_DICE_CONTRACT = 'thebetxowner';
 const BETX_DIVID_CONTRACT = 'thebetxdivid';
 const BETX_AWARD_CONTRACT = 'thebetxaward';
 
-// Same constants as contracts
-const GLOBAL_ID_NEW_DIVIDEND = 2;
-const GLOBAL_ID_STAKE_TOTAL = 3;
-
-const INITAL_OWNER_BETX_BALANCE = (6600000000 * 0.9) - 23220000;
-
 class ScatterHelper {
   constructor() {
     this.network = appConfig.eosNetwork;
@@ -40,21 +34,11 @@ class ScatterHelper {
     this.unstake = this.unstake.bind(this);
     this.withdraw = this.withdraw.bind(this);
     this.getMyStakeAndDividend = this.getMyStakeAndDividend.bind(this);
-    this.getContractSnapshot = this.getContractSnapshot.bind(this);
-    this.getContractStakeAndDividend = this.getContractStakeAndDividend.bind(this);
-    this.getBETXCirculation = this.getBETXCirculation.bind(this);
     this.claimDividend = this.claimDividend.bind(this);
     this.getCurrencyBalance = this.getCurrencyBalance.bind(this);
     this.getRedeemTable = this.getRedeemTable.bind(this);
     this.claimBuyback = this.claimBuyback.bind(this);
   }
-
-  // static async createInstance() {
-  //   const scatterHelper = new ScatterHelper();
-  //   await scatterHelper.connect();
-
-  //   return scatterHelper;
-  // }
 
   async connect() {
     const { eosNetwork } = this;
@@ -286,75 +270,6 @@ class ScatterHelper {
     });
   }
 
-  getContractSnapshot() {
-    const { readEos } = this;
-
-    const options = {
-      json: true,
-      code: BETX_DIVID_CONTRACT,
-      scope: BETX_DIVID_CONTRACT,
-      table: 'snapshots',
-      limit: 1000,
-    };
-
-    return readEos.getTableRows(options).then((result) => {
-      const rows = result && result.rows;
-      const lastRow = _.last(rows);
-
-      const returnResult = {
-        total: 0,
-        effective: 0,
-        eosBalance: 0,
-        betxBalance: 0,
-        userCount: 0,
-      };
-
-      if (_.isUndefined(lastRow)) {
-        return Promise.resolve(returnResult);
-      }
-
-      _.each(returnResult, (value, key) => {
-        if (key === 'userCount') {
-          returnResult[key] = lastRow[key];
-        } else {
-          returnResult[key] = (1.0 * lastRow[key]) / 10000;
-        }
-      });
-
-      return Promise.resolve(returnResult);
-    });
-  }
-
-  getContractStakeAndDividend() {
-    const { readEos } = this;
-
-    const options = {
-      json: true,
-      code: BETX_DIVID_CONTRACT,
-      scope: BETX_DIVID_CONTRACT,
-      table: 'globalvars',
-    };
-
-    return readEos.getTableRows(options).then((result) => {
-      const rows = result && result.rows;
-
-      const returnResult = {
-        stake: 0,
-        dividend: 0,
-      };
-
-      _.each(rows, (row) => {
-        if (row.id === GLOBAL_ID_STAKE_TOTAL) {
-          returnResult.stake = (1.0 * row.val) / 10000;
-        } else if (row.id === GLOBAL_ID_NEW_DIVIDEND) {
-          returnResult.dividend = (1.0 * row.val) / 10000;
-        }
-      });
-
-      return Promise.resolve(returnResult);
-    });
-  }
-
   getRedeemTable() {
     const { readEos } = this;
 
@@ -416,23 +331,6 @@ class ScatterHelper {
 
     return api.transaction(BETX_TOKEN_CONTRACT, (contractObj) =>
       contractObj.transfer(data, transactionOptions));
-  }
-
-  /**
- * Get BETX circulation, done by deduct currency thebetxowner balance from initial balance
- * @return {[type]} [description]
- */
-  getBETXCirculation() {
-    const { readEos } = this;
-    return readEos.getCurrencyBalance(BETX_TOKEN_CONTRACT, BETX_DICE_CONTRACT, 'BETX').then((result) => {
-      if (!_.isEmpty(result)) {
-        const balObj = parseAsset(result[0]);
-        if (balObj && balObj.amount) {
-          return Promise.resolve(INITAL_OWNER_BETX_BALANCE - _.toNumber(balObj.amount));
-        }
-      }
-      return Promise.resolve(0);
-    });
   }
 
   claimDividend(params) {
@@ -550,7 +448,5 @@ class ScatterHelper {
     return Promise.resolve(message);
   }
 }
-
-// const scatterHelper = await ScatterHelper.createInstance();
 
 export default new ScatterHelper();

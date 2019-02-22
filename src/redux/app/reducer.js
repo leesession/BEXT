@@ -40,7 +40,6 @@ export default function appReducer(state = initState, action) {
       break;
     case actions.GET_PAGE_DATA_RESULT:
       return state.set(`${action.name}PageData`, action.value);
-
     case actions.GET_USERNAME_RESULT:
       return state.set('username', action.value);
     case actions.GET_CPU_USAGE_RESULT:

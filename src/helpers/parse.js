@@ -24,12 +24,10 @@ class ParseHelper {
     this.sendMessage = this.sendMessage.bind(this);
     this.fetchBetHistory = this.fetchBetHistory.bind(this);
     this.fetchChatHistory = this.fetchChatHistory.bind(this);
-    this.handleParseError = this.handleParseError.bind(this);
     this.parseBetReceipt = this.parseBetReceipt.bind(this);
-    this.getBetVolume = this.getBetVolume.bind(this);
     this.getBetRank = this.getBetRank.bind(this);
-    this.getTodayDividend = this.getTodayDividend.bind(this);
     this.getPageData = this.getPageData.bind(this);
+    this.handleParseError = this.handleParseError.bind(this);
   }
 
   /**
@@ -127,23 +125,8 @@ class ParseHelper {
     return query.find().then(((results) => Promise.resolve(results)));
   }
 
-  getBetVolume() {
-    return this.parse.Cloud.run('getBetVolume', { types: ['day', 'all'] });
-  }
-
   getBetRank(params) {
     return this.parse.Cloud.run('getBetRank', params);
-  }
-
-  getTodayDividend() {
-    return this.parse.Cloud.run('getTodayDividend').then((result) => {
-      const parsedAmount = _.toNumber(parseAsset(result).amount);
-      if (_.isNaN(parsedAmount)) {
-        return Promise.resolve(0);
-      }
-
-      return Promise.resolve(parsedAmount);
-    });
   }
 
   /**

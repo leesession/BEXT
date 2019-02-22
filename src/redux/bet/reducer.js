@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import { Map } from 'immutable';
-import moment from 'moment';
 
 import actions from './actions';
 import appActions from '../app/actions';
@@ -15,10 +14,6 @@ const initState = new Map({
   myHistory: [],
   hugeHistory: [],
   refresh: false,
-  dailyVolume: 0,
-  allVolume: 0,
-  betxStakeAmount: 0,
-  betxCirculation: 0,
   betRank: undefined,
   username: undefined,
   selectedSymbol: 'EOS',
@@ -88,7 +83,6 @@ function getUpdatedPendingBet(oldPendingBet, newBet) {
 export default function (state = initState, action) {
   switch (action.type) {
     case actions.INIT_SOCKET_CONNECTION_BET:
-
       return state
         .set('refresh', !state.get('refresh'));
     case appActions.GET_USERNAME_RESULT:
@@ -147,13 +141,6 @@ export default function (state = initState, action) {
     }
     case actions.BET_CHANNEL_UPDATE:
       break;
-    case actions.GET_BET_VOLUME_RESULT:
-      return state.set('dailyVolume', (action.value && action.value.day) || 0)
-        .set('allVolume', (action.value && action.value.all) || 0);
-    case actions.GET_BETX_STAKE_AMOUNT_RESULT:
-      return state.set('betxStakeAmount', (action.value && action.value.staked) || 0)
-        .set('betxCirculation', (action.value && action.value.issued) || 0);
-
     case actions.SET_PENDING_BET:
       return state.set('pendingBet', action.value);
     case actions.RESET_PENDING_BET:

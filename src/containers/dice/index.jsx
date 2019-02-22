@@ -570,7 +570,7 @@ class DicePage extends React.Component {
   render() {
     const { desktopColumns, mobileColumns } = this;
     const {
-      betAmount, payoutOnWin, winChance, payout, username, seed, sliderValue, sliderLabel, isFairnessModalVisible, statePendingBet,autoBetEnabled,
+      betAmount, payoutOnWin, winChance, payout, username, seed, sliderValue, sliderLabel, isFairnessModalVisible, statePendingBet, autoBetEnabled,
     } = this.state;
 
     const {

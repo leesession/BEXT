@@ -16,10 +16,6 @@ const actions = {
   BET_CHANNEL_UPDATE: 'BET_CHANNEL_UPDATE',
   BET_CHANNEL_ERROR: 'BET_CHANNEL_ERROR',
   BET_OBJECT_CREATED: 'BET_OBJECT_CREATED',
-  GET_BET_VOLUME: 'GET_BET_VOLUME',
-  GET_BET_VOLUME_RESULT: 'GET_BET_VOLUME_RESULT',
-  GET_BETX_STAKE_AMOUNT: 'GET_BETX_STAKE_AMOUNT',
-  GET_BETX_STAKE_AMOUNT_RESULT: 'GET_BETX_STAKE_AMOUNT_RESULT',
   SET_PENDING_BET: 'SET_PENDING_BET',
   RESET_PENDING_BET: 'RESET_PENDING_BET',
   START_POLL_BET_RANK: 'START_POLL_BET_RANK',
@@ -40,12 +36,6 @@ const actions = {
   fetchHugeBetHistory: (params) => ({
     type: actions.FETCH_HUGE_BET_HISTORY,
     payload: params,
-  }),
-  getBetVolume: () => ({
-    type: actions.GET_BET_VOLUME,
-  }),
-  getBETXStakeAmount: () => ({
-    type: actions.GET_BETX_STAKE_AMOUNT,
   }),
   startPollBetRank: (params) => ({
     type: actions.START_POLL_BET_RANK,
