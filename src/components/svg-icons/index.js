@@ -33,12 +33,12 @@ const SvgIcon = (props) => {
   }
 };
 
-// SvgIcon.propTypes = {
-//   name: PropTypes.string,
-// };
+SvgIcon.propTypes = {
+  name: PropTypes.string,
+};
 
-// SvgIcon.defaultProps = {
-//   name: undefined,
-// };
+SvgIcon.defaultProps = {
+  name: undefined,
+};
 
 export default SvgIcon;
