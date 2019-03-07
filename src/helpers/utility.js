@@ -370,6 +370,10 @@ export function getRestSecondsOfTheHour() {
  * @param {number} maxLen length of array
  * @return {[type]} [description]
  */export function enqueue(list, item, maxLen) {
+  if (_.isUndefined(list)) {
+    return;
+  }
+
   if (list.length >= maxLen) { // Remove the last element if list is already at max length
     list.pop();
   }
