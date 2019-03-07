@@ -329,6 +329,12 @@ class DicePage extends React.Component {
     this.setState(fieldsToUpdate);
   }
 
+  componentWillUnmount() {
+    const { closeSocketConnection } = this.props;
+
+    closeSocketConnection();
+  }
+
   onCountEnd() {
     const { statePendingBet } = this.state;
 
@@ -854,6 +860,7 @@ DicePage.propTypes = {
   errorMessage: PropTypes.string,
   pendingBet: PropTypes.object,
   resetPendingBet: PropTypes.func,
+  closeSocketConnection: PropTypes.func,
 };
 
 DicePage.defaultProps = {
@@ -885,6 +892,7 @@ DicePage.defaultProps = {
   errorMessage: undefined,
   pendingBet: undefined,
   resetPendingBet: undefined,
+  closeSocketConnection: undefined,
 };
 
 const mapStateToProps = (state) => ({
@@ -920,6 +928,7 @@ const mapDispatchToProps = (dispatch) => ({
   getBalancesReq: (name) => dispatch(getBalances(name)),
   getAccountInfoReq: (name) => dispatch(getAccountInfo(name)),
   resetPendingBet: () => dispatch(betActions.resetPendingBet()),
+  closeSocketConnection: () => dispatch(betActions.closeSocketConnection()),
 });
 
 // Wrap the component to inject dispatch and state into it

@@ -26,6 +26,9 @@ const actions = {
     type: actions.INIT_SOCKET_CONNECTION_BET,
     payload: obj,
   }),
+  closeSocketConnection: () => ({
+    type: actions.CLOSE_SOCKET_CONNECTION_BET,
+  }),
   fetchBetHistory: () => ({
     type: actions.FETCH_BET_HISTORY,
   }),

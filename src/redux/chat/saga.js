@@ -4,12 +4,12 @@ import { all, take, takeEvery, put, call } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import actions from './actions';
 import ParseHelper from '../../helpers/parse';
-import { delay } from '../../helpers/utility';
-import { appConfig } from '../../settings';
 
 const {
   subscribe, unsubscribe, sendMessage, fetchChatHistory, handleParseError,
 } = ParseHelper;
+
+let chatChannel;
 
 function websocketInitChannel(payload) {
   return eventChannel((emitter) => {
@@ -26,10 +26,7 @@ function websocketInitChannel(payload) {
       emitter({ type: actions.MESSAGE_OBJECT_CREATED, data: object });
     const deleteHandler = (object) =>
       emitter({ type: actions.MESSAGE_OBJECT_DELETED, data: object });
-    const unsubscribeHandler = () => {
-      console.log('unsubscribeHandler emitting MESSAGE_UNSUBSCRIBED');
-      return emitter({ type: actions.MESSAGE_UNSUBSCRIBED, payload });
-    };
+    const unsubscribeHandler = () => emitter({ type: actions.MESSAGE_UNSUBSCRIBED, payload });
 
     const errorHandler = (object) => {
       // console.log('errorHandler.event', errorEvent);
@@ -52,7 +49,7 @@ function websocketInitChannel(payload) {
     const unsubscribeChannel = () => {
       // Close the connection
       unsubscribe(subscription);
-      console.log('unsubscribeChannel() emitting MESSAGE_UNSUBSCRIBED');
+      console.log('Chat channel unsubscribed.');
     };
 
     // unsubscribe function, this gets called when we close the channel
@@ -61,8 +58,6 @@ function websocketInitChannel(payload) {
 }
 
 export function* initLiveMessages(action) {
-  let chatChannel;
-
   try {
     chatChannel = yield call(websocketInitChannel, action.payload);
 
@@ -76,6 +71,12 @@ export function* initLiveMessages(action) {
   }
 }
 
+export function closeSocketRequest() {
+  if (chatChannel) {
+    chatChannel.close();
+  }
+}
+
 export function* sendMessageRequest(action) {
   try {
     const res = yield call(sendMessage, action.payload);
@@ -85,7 +86,6 @@ export function* sendMessageRequest(action) {
     console.error(message);
   }
 }
-
 
 export function* fetchChatHistoryRequest() {
   try {
@@ -105,6 +105,7 @@ export function* fetchChatHistoryRequest() {
 export default function* topicSaga() {
   yield all([
     takeEvery(actions.INIT_SOCKET_CONNECTION_MESSAGE, initLiveMessages),
+    takeEvery(actions.CLOSE_SOCKET_CONNECTION_MESSAGE, closeSocketRequest),
     takeEvery(actions.SEND_MESSAGE, sendMessageRequest),
     takeEvery(actions.FETCH_CHAT_HISTORY, fetchChatHistoryRequest),
   ]);

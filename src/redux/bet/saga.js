@@ -5,7 +5,6 @@ import { eventChannel } from 'redux-saga';
 import actions from './actions';
 import appActions from '../app/actions';
 import ParseHelper from '../../helpers/parse';
-import ScatterHelper from '../../helpers/scatter';
 import { delay } from '../../helpers/utility';
 import { appConfig } from '../../settings';
 
@@ -15,6 +14,7 @@ const {
 
 let betRankPollStarted = false;
 let betrankPollParams;
+let betChannel;
 
 function websocketInitChannel(payload) {
   return eventChannel((emitter) => {
@@ -29,10 +29,7 @@ function websocketInitChannel(payload) {
       emitter({ type: actions.BET_OBJECT_UPDATED, data: object });
     const createHandler = (object) =>
       emitter({ type: actions.BET_OBJECT_CREATED, data: object });
-    const unsubscribeHandler = () => {
-      console.log('unsubscribeHandler() emitting BET_UNSUBSCRIBED');
-      return emitter({ type: actions.BET_UNSUBSCRIBED, payload });
-    };
+    const unsubscribeHandler = () => emitter({ type: actions.BET_UNSUBSCRIBED, payload });
 
     const errorHandler = (object) => {
       // create an Error object and put it into the channel
@@ -53,7 +50,7 @@ function websocketInitChannel(payload) {
     const unsubscribeChannel = () => {
       // Close the connection
       unsubscribe(subscription);
-      console.log('unsubscribeChannel() emitting BET_UNSUBSCRIBED');
+      console.log('Bet channel unsubscribed.');
     };
 
     // unsubscribe function, this gets called when we close the channel
@@ -62,8 +59,6 @@ function websocketInitChannel(payload) {
 }
 
 export function* initLiveBetHistory(action) {
-  let betChannel;
-
   try {
     betChannel = yield call(websocketInitChannel, action.payload);
 
@@ -76,6 +71,12 @@ export function* initLiveBetHistory(action) {
     console.error('socket error:', err);
     // socketChannel is still open in catch block
     // if we want end the socketChannel, we need close it explicitly
+  }
+}
+
+export function* closeSocketRequest() {
+  if (betChannel) {
+    betChannel.close();
   }
 }
 
@@ -178,6 +179,7 @@ export function* getBetRankList() {
 export default function* topicSaga() {
   yield all([
     takeEvery(actions.INIT_SOCKET_CONNECTION_BET, initLiveBetHistory),
+    takeEvery(actions.CLOSE_SOCKET_CONNECTION_BET, closeSocketRequest),
     takeEvery(actions.FETCH_BET_HISTORY, fetchBetHistoryRequest),
     takeEvery(actions.FETCH_MY_BET_HISTORY, fetchMyBetHistoryRequest),
     takeEvery(actions.FETCH_HUGE_BET_HISTORY, fetchHugeBetHistoryRequest),

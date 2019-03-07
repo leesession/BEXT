@@ -62,8 +62,9 @@ class ChatRoom extends React.Component {
   }
 
   componentWillUnmount() {
-    const { clearMessageHistoryReq } = this.props;
+    const { clearMessageHistoryReq, closeSocketConnection } = this.props;
     clearMessageHistoryReq();
+    closeSocketConnection();
   }
 
   handleChange(event) {
@@ -136,6 +137,7 @@ ChatRoom.propTypes = {
   fetchChatHistoryReq: PropTypes.func,
   username: PropTypes.string,
   intl: intlShape.isRequired,
+  closeSocketConnection: PropTypes.func,
 };
 
 ChatRoom.defaultProps = {
@@ -146,6 +148,7 @@ ChatRoom.defaultProps = {
   fetchChatHistoryReq: undefined,
   username: undefined,
   clearMessageHistoryReq: undefined,
+  closeSocketConnection: undefined,
 };
 
 const mapStateToProps = (state) => ({
@@ -158,6 +161,7 @@ const mapDispatchToProps = (dispatch) => ({
   sendMessageReq: (obj) => dispatch(sendMessage(obj)),
   fetchChatHistoryReq: () => dispatch(fetchChatHistory()),
   clearMessageHistoryReq: () => dispatch(clearMessage()),
+  closeSocketConnection: () => dispatch(chatActions.closeSocketConnection()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(ChatRoom));
