@@ -376,7 +376,7 @@ class StakePage extends React.Component {
                           <div className="label label-float-top"><IntlMessages id="stake.betx.pledge" /></div>
                           <div className="box-middle">
                             <span className="box-input">{totalStakeStr}</span>
-                            <span className="box-input-inner-addOn">EOS</span>
+                            <span className="box-input-inner-addOn">BETX</span>
                           </div>
                         </div>
                       </Col>
@@ -385,7 +385,7 @@ class StakePage extends React.Component {
                           <div className="label label-float-top"><IntlMessages id="stake.betx.circulate" /></div>
                           <div className="box-middle">
                             <span className="box-input">{circulationStr}</span>
-                            <span className="box-input-inner-addOn">EOS</span>
+                            <span className="box-input-inner-addOn">BETX</span>
                           </div>
                         </div>
                       </Col>
