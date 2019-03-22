@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="240px" height="240px" viewBox="0 0 240 240" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.1 (51147) - http://www.bohemiancoding.com/sketch -->
+    <title>Rectangle 17</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <radialGradient cx="50%" cy="50%" fx="50%" fy="50%" r="92.7565855%" gradientTransform="translate(0.500000,0.500000),scale(1.000000,0.867725),rotate(90.000000),translate(-0.500000,-0.500000)" id="radialGradient-1">
+            <stop stop-color="#B3DA0C" offset="0%"></stop>
+            <stop stop-color="#7CB305" offset="100%"></stop>
+        </radialGradient>
+        <filter x="-9.3%" y="-8.5%" width="118.5%" height="118.5%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="4" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.25 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+    </defs>
+    <g id="首页" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-26">
+            <g id="Group-23-Copy" transform="translate(18.000000, 3.000000)">
+                <polygon id="Polygon-3-Copy-3" fill="url(#radialGradient-1)" points="101.52381 0 203.047619 58.5 203.047619 175.5 101.52381 234 1.66977543e-13 175.5 1.0125234e-13 58.5"></polygon>
+                <g id="Group-24-Copy-4" filter="url(#filter-2)" transform="translate(100.884046, 116.393908) rotate(45.000000) translate(-100.884046, -116.393908) translate(33.384046, 48.893908)" fill="#FFFFFF">
+                    <polygon id="Polygon-2" points="67.9429867 28.9183673 108.906241 52.5788497 108.906241 99.8998145 67.9429867 123.560297 26.9797326 99.8998145 26.9797326 52.5788497"></polygon>
+                    <polygon id="Polygon-2-Copy" points="67.9429867 0 86.3375445 10.8078747 86.3375445 32.423624 67.9429867 21.6157493 49.5484289 32.423624 49.5484289 10.8078747"></polygon>
+                    <polygon id="Path-14-Copy" fill-rule="nonzero" transform="translate(99.523654, 109.803989) scale(-1, 1) translate(-99.523654, -109.803989) " points="90.7134759 134.952381 83.7134759 134.952381 83.7134759 101.95129 111.648999 84.6555966 115.333832 90.6072358 90.7134759 105.850413"></polygon>
+                    <polygon id="Path-14-Copy-5" fill-rule="nonzero" transform="translate(84.632821, 27.430458) scale(-1, -1) translate(-84.632821, -27.430458) " points="75.8226433 23.476882 75.8226433 52.5788497 68.8226433 52.5788497 68.8226433 19.5777592 96.7581668 2.2820654 100.442999 8.23370454"></polygon>
+                    <polygon id="Path-14-Copy-7" fill-rule="nonzero" transform="translate(102.151448, 44.080427) scale(-1, -1) translate(-102.151448, -44.080427) " points="93.3412698 69.2288188 86.3412698 69.2288188 86.3412698 36.2277283 114.276793 18.9320345 117.961626 24.8836736 93.3412698 40.1268511"></polygon>
+                    <polygon id="Path-14-Copy-6" fill-rule="nonzero" transform="translate(49.595568, 27.430458) scale(1, -1) translate(-49.595568, -27.430458) " points="40.7853903 52.5788497 33.7853903 52.5788497 33.7853903 19.5777592 61.7209138 2.2820654 65.4057464 8.23370454 40.7853903 23.476882"></polygon>
+                    <polygon id="Path-14-Copy-8" fill-rule="nonzero" transform="translate(32.076942, 44.080427) scale(1, -1) translate(-32.076942, -44.080427) " points="23.2667638 40.1268511 23.2667638 69.2288188 16.2667638 69.2288188 16.2667638 36.2277283 44.2022873 18.9320345 47.8871199 24.8836736"></polygon>
+                    <polygon id="Path-14-Copy-4" fill-rule="nonzero" transform="translate(118.794143, 94.906648) scale(-1, 1) translate(-118.794143, -94.906648) " points="109.983965 120.05504 102.983965 120.05504 102.983965 87.0539497 130.919488 69.7582559 134.604321 75.709895 109.983965 90.9530725"></polygon>
+                    <polygon id="Path-14-Copy-2" fill-rule="nonzero" points="27.6464205 134.952381 20.6464205 134.952381 20.6464205 101.95129 48.5819439 84.6555966 52.2667765 90.6072358 27.6464205 105.850413"></polygon>
+                    <polygon id="Path-14-Copy-3" fill-rule="nonzero" points="7.5 90.9530725 7.5 120.05504 0.5 120.05504 0.5 87.0539497 28.4355234 69.7582559 32.1203561 75.709895"></polygon>
+                </g>
+            </g>
+            <rect id="Rectangle-17" fill="#FFFFFF" opacity="0" x="0" y="0" width="240" height="240"></rect>
+        </g>
+    </g>
+</svg>

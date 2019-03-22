@@ -129,43 +129,122 @@ ul {
     background-color: @bgColor;
     z-index: 0;
 }
+@media @phone {
+    .ant-layout-footer{
+        padding: 10px;
+    }
+}
 
 #footer {
     text-align: center;
     color: @footerColor;
     #part{
-        padding: 20px 0;
+        padding: 20px 30px;
         width: 100%;
         overflow: hidden;
-        ul{
+        .contain+.contain{
+            padding-top: 30px;
+        }
+        >.contain{
             display: flex;
-            justify-content: center;
-            li{
-                width: 250px;
-                height: 70px;
-                overflow: hidden;
-                margin-right: 10px;
-                a{
-                    display: flex;
-                    img{
-                        width: 70px;
-                        height: 70px;
-                    }
-                    >div{
-                        margin-left: 10px;
-                        font-size: 18px;
-                        color: #fff;
-                        div:last-child{
-                            font-size: 14px;
-                            color: #53567E;
-                            margin-top: 2px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            >.series{
+                width: 20%;
+                font-size: 20px;
+                color: #fff;
+                padding-top: 10px;
+                box-sizing: border-box;
+                text-align: left;
+            }
+            >ul{
+                width: 80%;
+                display: flex;
+                flex-wrap: wrap;
+                margin: 0;
+                box-sizing: border-box;
+                li{
+                    width: 33.33%;
+                    height: 70px;
+                    overflow: hidden;
+                    padding-right: 20px;
+                    box-sizing: border-box;
+                    margin-bottom: 30px;
+                    a{
+                        display: flex;
+                        span{
+                            display: inline-block;
+                            width: 70px;
+                            height: 70px;
+                            background-repeat: no-repeat;
+                            background-size: contain;
+                            background-position: center;
                         }
-                    }
-                }     
-             }
+                        >div{
+                            display: flex;
+                            flex-wrap: wrap;
+                            align-items: center;
+                            margin-left: 10px;
+                            font-size: 18px;
+                            color: #fff;
+                            height: 70px;
+                            overflow: hidden;
+                            width: 70%;
+                            div{
+                                width: 100%;
+                            }
+                            div:last-child{
+                                font-size: 14px;
+                                color: #53567E;
+                                margin-top: 2px;
+                                height: 42px;
+                                overflow:hidden; 
+                                text-overflow:ellipsis;
+                                display:-webkit-box; 
+                                -webkit-box-orient:vertical;
+                                -webkit-line-clamp:2; 
+                            }
+                        }
+                    }     
+                 }
+            }
         }
     
     }
+    @media @phone {
+             #part{
+             padding: 0;
+             .contain+.contain{
+                 padding-top: 1rem;
+             }
+             >.contain{
+                >.series{
+                    font-size: 18px;
+                }
+                >ul{
+                    padding-left: 5px;
+                    font-size: 16px;
+                    li{
+                        width: 100%;
+                        padding: 0;
+                        a{
+                        
+                            >div{
+                                font-size: 18px;
+                                div{
+                                    width: 100%;
+                                }
+                                div:last-child{
+                                    font-size: 13px;
+                                    color: #53567E;
+                                }
+                            }
+                        }
+                    }
+                }
+             }
+         }
+     }
+
     .contact-container {
         margin-bottom: 18px;
         ul {
