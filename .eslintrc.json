@@ -24,6 +24,7 @@
   },
   "rules":
   {
+    "linebreak-style": ["error", "windows"],
     "arrow-parens": [
       "error",
       "always"

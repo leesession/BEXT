@@ -5,6 +5,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import SvgIcon from './svg-icons';
 import { siteConfig } from '../settings';
 import { cloudinaryConfig, CloudinaryImage } from './react-cloudinary';
+import Listdetail from './partner/index'
 
 cloudinaryConfig({ cloud_name: 'forgelab-io' });
 
@@ -46,6 +47,7 @@ class Footer extends React.Component {
 
     return (
       <div id="footer">
+          <Listdetail/>
         <div className="contact-container">
           <ul>
             <li>

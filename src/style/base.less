@@ -133,6 +133,39 @@ ul {
 #footer {
     text-align: center;
     color: @footerColor;
+    #part{
+        padding: 20px 0;
+        width: 100%;
+        overflow: hidden;
+        ul{
+            display: flex;
+            justify-content: center;
+            li{
+                width: 250px;
+                height: 70px;
+                overflow: hidden;
+                margin-right: 10px;
+                a{
+                    display: flex;
+                    img{
+                        width: 70px;
+                        height: 70px;
+                    }
+                    >div{
+                        margin-left: 10px;
+                        font-size: 18px;
+                        color: #fff;
+                        div:last-child{
+                            font-size: 14px;
+                            color: #53567E;
+                            margin-top: 2px;
+                        }
+                    }
+                }     
+             }
+        }
+    
+    }
     .contact-container {
         margin-bottom: 18px;
         ul {
