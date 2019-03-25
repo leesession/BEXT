@@ -213,8 +213,7 @@ ul {
                             div:last-child{
                                 font-size: 14px;
                                 color: #53567E;
-                                margin-top: 2px;
-                                height: 42px;
+                                min-height: 21px;
                                 line-height: 21px;
                                 overflow:hidden; 
                                 text-overflow:ellipsis;
@@ -229,9 +228,11 @@ ul {
         }
     
     }
+    // 用于 手机端LOGO模块
     @media @phone {
              #part{
              padding: 0;
+             padding-bottom: 20px;
              .contain+.contain{
                  padding-top: 1rem;
              }
